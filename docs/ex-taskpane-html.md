@@ -7,7 +7,7 @@ This document demonstrates creating a Task Pane Add-in first in an empty project
 This example creates an Office Task Pane Add-in as HTML within an empty project folder.
 
 ```bash
-$ yo officeaddin --skip-install
+$ yo office --skip-install
 ```
 
 ### Prompt Responses:
@@ -67,7 +67,7 @@ $ yo nodehttps
 Now run the Office Add-in generator:
 
 ```bash
-$ yo officeaddin --skip-install
+$ yo office --skip-install
 ```
 ### Prompt Responses:
 

@@ -7,7 +7,7 @@ This document demonstrates creating a Content Add-in first in an empty project a
 This example creates an Office Content Add-in as Angular within an empty project folder.
 
 ```bash
-$ yo officeaddin --skip-install
+$ yo office --skip-install
 ```
 
 ### Prompt Responses
@@ -69,7 +69,7 @@ $ yo nodehttps
 Now run the Office Add-in generator:
 
 ```bash
-$ yo officeaddin --skip-install
+$ yo office --skip-install
 ```
 ### Prompt Responses:
 
