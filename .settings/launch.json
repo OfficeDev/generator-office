@@ -1,0 +1,19 @@
+{
+  "version": "0.1.0",
+  "configurations": [
+    {
+      "name": "Launch yo",
+      "type": "node",
+      //  NOTE: this should be the result of running `which yo` on your system...
+      //        for the typical NPM install & config, this is usually /usr/local/bin/yo
+      //        however others (as below) may have global NPM packages setup in a 
+      //        different path as common to avoid using sudo on OS X 
+      "program": "/usr/local/bin/yo",
+      "args": [
+        "office",
+        "--skip-install"
+      ],
+      "stopOnEntry": false
+    }
+  ]
+}

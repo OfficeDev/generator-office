@@ -1,0 +1,74 @@
+{
+  "name": "generator-office",
+  "version": "0.1.0",
+  "description": "Yeoman generator for creating Microsoft Office projects using any text editor.",
+  "licenses": [
+    {
+      "type": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "author": "OfficeDev",
+  "contributors": [
+    "Connell, Andrew <me@andrewconnell.com>",
+    "Thake, Jeremy <jthake@microsoft.com>"
+  ],
+  "maintainers": [
+    {
+      "name": "andrewconnell",
+      "email": "me@andrewconnell.com"
+    },
+    {
+      "name": "ms-office",
+      "email": "jthake@microsoft.com"
+    }
+  ],
+  "homepage": "https://github.com/office-dev/generator-office",
+  "main": "index.js",
+  "preferGlobal": true,
+  "scripts": {
+    "install": "tsd install",
+    "test": "./node_modules/mocha/bin/_mocha -R spec ./test/*",
+    "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/office-dev/generator-office.git"
+  },
+  "bugs": {
+    "url": "https://github.com/office-dev/generator-office/issues"
+  },
+  "files": [
+    "generators"
+  ],
+  "keywords": [
+    "yeoman-generator",
+    "office",
+    "office-add-in",
+    "add-in",
+    "outlook",
+    "excel",
+    "word",
+    "powerpoint"
+  ],
+  "dependencies": {
+    "chalk": "^1.0.0",
+    "deep-extend": "^0.4.0",
+    "uuid": "^2.0.1",
+    "yeoman-generator": "^0.19.0",
+    "yosay": "^1.0.2"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chalk": "^1.1.0",
+    "coveralls": "^2.11.4",
+    "gulp": "^3.9.0",
+    "gulp-node-inspector": "0.0.4",
+    "istanbul": "^0.3.18",
+    "mocha": "*",
+    "mockery": "^1.4.0",
+    "validator": "^4.0.3",
+    "which": "^1.1.1",
+    "xml2js": "^0.4.10"
+  }
+}

@@ -1,0 +1,16 @@
+﻿/* Page-specific styling */
+
+/* Formatting for the sample buttons */
+
+#set-subject {
+    width: 100px;
+    margin-right: 5px;
+}
+
+#get-subject {
+    width: 100px;
+}
+
+#add-to-recipients {
+    width: 205px;
+}

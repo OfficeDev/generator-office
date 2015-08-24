@@ -1,0 +1,11 @@
+{
+  "name": "<%= rootProjectName %>",
+  "version": "0.1.0",
+  "dependencies": {
+    "microsoft.office.js": "*",
+    "jquery": "~1.9.1",
+    "angular": "~1.4.4",
+    "angular-route": "~1.4.4",
+    "angular-sanitize": "~1.4.4"
+  }
+}

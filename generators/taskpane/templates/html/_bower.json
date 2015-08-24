@@ -1,0 +1,8 @@
+{
+  "name": "<%= rootProjectName %>",
+  "version": "0.1.0",
+  "dependencies": {
+    "microsoft.office.js": "*",
+    "jquery": "~1.9.1"
+  }
+}

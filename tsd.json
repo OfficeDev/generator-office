@@ -1,0 +1,36 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "tools/typings",
+  "bundle": "tools/typings/tsd.d.ts",
+  "installed": {
+    "mocha/mocha.d.ts": {
+      "commit": "5109e1269d6ab8e8e73b1a5e85d8ceb836d3099f"
+    },
+    "node/node.d.ts": {
+      "commit": "5109e1269d6ab8e8e73b1a5e85d8ceb836d3099f"
+    },
+    "chai/chai.d.ts": {
+      "commit": "5109e1269d6ab8e8e73b1a5e85d8ceb836d3099f"
+    },
+    "gulp/gulp.d.ts": {
+      "commit": "c5a2f44bab06cf9f2bcc14530171daac1cebff6c"
+    },
+    "chalk/chalk.d.ts": {
+      "commit": "c5a2f44bab06cf9f2bcc14530171daac1cebff6c"
+    },
+    "xml2js/xml2js.d.ts": {
+      "commit": "c5a2f44bab06cf9f2bcc14530171daac1cebff6c"
+    },
+    "uuid/UUID.d.ts": {
+      "commit": "c5a2f44bab06cf9f2bcc14530171daac1cebff6c"
+    },
+    "yeoman-generator/yeoman-generator.d.ts": {
+      "commit": "c5a2f44bab06cf9f2bcc14530171daac1cebff6c"
+    },
+    "mockery/mockery.d.ts": {
+      "commit": "c5a2f44bab06cf9f2bcc14530171daac1cebff6c"
+    }
+  }
+}
