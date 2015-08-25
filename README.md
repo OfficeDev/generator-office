@@ -17,10 +17,10 @@ Choose to create the Office projects using plain HTML, CSS & JavaScript (*mirror
 
 ## Install
 
-Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org):
+Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org). The project files created by the generator leverage client side packages in [bower](http://bower.io) so you will want to install that as well:
 
 ```bash
-$ npm install -g yo generator-office
+$ npm install -g yo generator-office bower
 ```
 
 ## Usage:
@@ -84,7 +84,7 @@ Running the main generator will prompt you for the type of Office project to cre
 
 ## Running the Generated Site
 
-All generators create a `gulpfile.js`. This uses the [gulp-webserver](npmjs.com/package/gulp-webserver) task to start a HTTPS server. This server includes a self-signed SSL cert that your development enviroment must trust (this involves adding it to your trusted root certificates). Start the local HTTPS site on `https://localhost:8443/` and launch a browser to this site using:
+All generators create a `gulpfile.js`. This uses the [gulp-webserver](https://www.npmjs.com/package/gulp-webserver) task to start a HTTPS server. This server includes a self-signed SSL cert that your development enviroment must trust (this involves adding it to your trusted root certificates). Start the local HTTPS site on `https://localhost:8443/` and launch a browser to this site using:
 
 ```bash
 $ gulp serve-static
