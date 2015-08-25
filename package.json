@@ -1,11 +1,11 @@
 {
   "name": "generator-office",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Yeoman generator for creating Microsoft Office projects using any text editor.",
   "licenses": [
     {
-      "type": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+      "type": "MIT",
+      "url": "https://github.com/officedev/generator-office/blob/master/LICENSE"
     }
   ],
   "author": "OfficeDev",
@@ -27,7 +27,7 @@
   "main": "index.js",
   "preferGlobal": true,
   "scripts": {
-    "tsd-install": "tsd install",
+    "dev-install": "tsd install",
     "test": "./node_modules/mocha/bin/_mocha -R spec ./test/*",
     "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*"
   },
@@ -60,7 +60,6 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
-    "chalk": "^1.1.0",
     "coveralls": "^2.11.4",
     "gulp": "^3.9.0",
     "gulp-node-inspector": "0.0.4",
