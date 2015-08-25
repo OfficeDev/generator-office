@@ -1,6 +1,6 @@
 {
   "name": "generator-office",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Yeoman generator for creating Microsoft Office projects using any text editor.",
   "licenses": [
     {
@@ -23,7 +23,7 @@
       "email": "jthake@microsoft.com"
     }
   ],
-  "homepage": "https://github.com/office-dev/generator-office",
+  "homepage": "https://github.com/officedev/generator-office",
   "main": "index.js",
   "preferGlobal": true,
   "scripts": {
@@ -33,10 +33,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/office-dev/generator-office.git"
+    "url": "git+https://github.com/officedev/generator-office.git"
   },
   "bugs": {
-    "url": "https://github.com/office-dev/generator-office/issues"
+    "url": "https://github.com/officedev/generator-office/issues"
   },
   "files": [
     "generators"
