@@ -253,7 +253,7 @@ describe('office:taskpane', function () {
         });
 
         it('has correct start page', function (done) {
-          expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://{addin-host-site}/app/home/home.html');
+          expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/app/home/home.html');
           done();
         });
 
@@ -386,7 +386,7 @@ describe('office:taskpane', function () {
         });
 
         it('has correct start page', function (done) {
-          expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://{addin-host-site}/index.html');
+          expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/index.html');
           done();
         });
 
@@ -606,7 +606,7 @@ describe('office:taskpane', function () {
         });
 
         it('has correct start page', function (done) {
-          expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://{addin-host-site}/app/home/home.html');
+          expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/app/home/home.html');
           done();
         });
 
@@ -748,7 +748,7 @@ describe('office:taskpane', function () {
         });
 
         it('has correct start page', function (done) {
-          expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://{addin-host-site}/index.html');
+          expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/index.html');
           done();
         });
 

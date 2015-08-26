@@ -63,11 +63,11 @@ module.exports = generators.Base.extend({
         {
           name: 'root-path',
           message: 'Root folder of project?'
-            + ' Default to current directory\n (' + this.destinationRoot() + '), or specify relative path\n'
-            + '  from current (src / public): ',
+          + ' Default to current directory\n (' + this.destinationRoot() + '), or specify relative path\n'
+          + '  from current (src / public): ',
           default: 'current folder',
           when: this.options['root-path'] === undefined,
-          filter: function (response) {
+          filter: /* istanbul ignore next */ function (response) {
             if (response === 'current folder')
               return '';
             else
@@ -173,12 +173,15 @@ module.exports = generators.Base.extend({
           this.genConfig.rootProjectName = packageJson.name;
         
           // update devDependencies
+          /* istanbul ignore else */
           if (!packageJson.devDependencies) {
             packageJson.devDependencies = {}
           }
+          /* istanbul ignore else */
           if (!packageJson.devDependencies['gulp']) {
             packageJson.devDependencies['gulp'] = "^3.9.0"
           }
+          /* istanbul ignore else */
           if (!packageJson.devDependencies['gulp-webserver']) {
             packageJson.devDependencies['gulp-webserver'] = "^0.9.1"
           }
@@ -283,7 +286,7 @@ module.exports = generators.Base.extend({
         switch (this.genConfig.tech) {
           case 'html':
             // determine startpage for addin
-            this.genConfig.startPage = 'https://{addin-host-site}/app/home/home.html';
+            this.genConfig.startPage = 'https://localhost:8443/app/home/home.html';
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
@@ -297,7 +300,7 @@ module.exports = generators.Base.extend({
             break;
           case 'ng':
             // determine startpage for addin
-            this.genConfig.startPage = 'https://{addin-host-site}/index.html';
+            this.genConfig.startPage = 'https://localhost:8443/index.html';
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
@@ -313,7 +316,7 @@ module.exports = generators.Base.extend({
             break;
         }
       }
-      
+
       done();
     } // app()
   }, // writing()

@@ -258,7 +258,7 @@ describe('office:mail', function () {
         });
 
         it('has correct start page', function (done) {
-          expect(manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://{addin-host-site}/appcompose/home/home.html');
+          expect(manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/appcompose/home/home.html');
           done();
         });
 
@@ -397,7 +397,7 @@ describe('office:mail', function () {
         });
 
         it('has correct start page', function (done) {
-          expect(manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://{addin-host-site}/appcompose/index.html');
+          expect(manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/appcompose/index.html');
           done();
         });
 
@@ -622,7 +622,7 @@ describe('office:mail', function () {
         });
 
         it('has correct start page', function (done) {
-          expect(manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://{addin-host-site}/appcompose/home/home.html');
+          expect(manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/appcompose/home/home.html');
           done();
         });
 
@@ -770,7 +770,7 @@ describe('office:mail', function () {
         });
 
         it('has correct start page', function (done) {
-          expect(manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://{addin-host-site}/appcompose/index.html');
+          expect(manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/appcompose/index.html');
           done();
         });
 
