@@ -285,7 +285,7 @@ module.exports = generators.Base.extend({
         switch (this.genConfig.tech) {
           case 'html':
             // determine startpage for addin
-            this.genConfig.startPage = 'https://{addin-host-site}/appcompose/home/home.html';
+            this.genConfig.startPage = 'https://localhost:8443/appcompose/home/home.html';
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
@@ -305,7 +305,7 @@ module.exports = generators.Base.extend({
             break;
           case 'ng':
             // determine startpage for addin
-            this.genConfig.startPage = 'https://{addin-host-site}/appcompose/index.html';
+            this.genConfig.startPage = 'https://localhost:8443/appcompose/index.html';
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
