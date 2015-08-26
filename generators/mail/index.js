@@ -19,13 +19,13 @@ module.exports = generators.Base.extend({
       defaults: false,
       desc: 'Skip running package managers (NPM, bower, etc) post scaffolding'
     });
-    
+
     this.option('name', {
       type: String,
       desc: 'Title of the Office Add-in',
       required: false
     });
-    
+
     this.option('root-path', {
       type: String,
       desc: 'Relative path where the Add-in should be created (blank = current directory)',
@@ -46,7 +46,7 @@ module.exports = generators.Base.extend({
    */
   prompting: {
 
-    askFor: function () {      
+    askFor: function () {
       var done = this.async();
 
       var prompts = [
@@ -127,13 +127,13 @@ module.exports = generators.Base.extend({
       this.genConfig.rootProjectName = this.genConfig.projectInternalName;
 
       // path to package.json
-      var pathToPackageJson = this.destinationPath('/package.json');
+      var pathToPackageJson = this.destinationPath('package.json');
       
       // if package.json doesn't exist
       if (!this.fs.exists(pathToPackageJson)) {
         // copy package.json to target
-        this.fs.copyTpl(this.templatePath('/common/_package.json'),
-          this.destinationPath('/package.json'),
+        this.fs.copyTpl(this.templatePath('common/_package.json'),
+          this.destinationPath('package.json'),
           this.genConfig);
       } else {
         // load package.json
@@ -168,19 +168,19 @@ module.exports = generators.Base.extend({
     upsertBower: function () {
       var done = this.async();
 
-      var pathToBowerJson = this.destinationPath('/bower.json');
+      var pathToBowerJson = this.destinationPath('bower.json');
       // if doesn't exist...
       if (!this.fs.exists(pathToBowerJson)) {
         // copy bower.json => project
         switch (this.genConfig.tech) {
           case "ng":
-            this.fs.copyTpl(this.templatePath('/ng/_bower.json'),
-              this.destinationPath('/bower.json'),
+            this.fs.copyTpl(this.templatePath('ng/_bower.json'),
+              this.destinationPath('bower.json'),
               this.genConfig);
             break;
           case "html":
-            this.fs.copyTpl(this.templatePath('/html/_bower.json'),
-              this.destinationPath('/bower.json'),
+            this.fs.copyTpl(this.templatePath('html/_bower.json'),
+              this.destinationPath('bower.json'),
               this.genConfig);
             break;
         }
@@ -221,6 +221,11 @@ module.exports = generators.Base.extend({
     }, // upsertBower()
 
     app: function () {
+      // helper function to build path to the file off root path
+      this._parseTargetPath = function (file) {
+        return path.join(this.genConfig['root-path'], file);
+      };
+
       var done = this.async();
 
       // copy .bowerrc => project
@@ -233,9 +238,10 @@ module.exports = generators.Base.extend({
       this.genConfig.projectId = guid.v4();
 
       // create common assets
-      this.fs.copy(this.templatePath('/common/gulpfile.js'), this.destinationPath('/gulpfile.js'));      this.fs.copy(this.templatePath('/common/content/Office.css'), this.destinationPath(this.genConfig['root-path'] + '/content/Office.css'));
-      this.fs.copy(this.templatePath('/common/images/close.png'), this.destinationPath(this.genConfig['root-path'] + '/images/close.png'));
-      this.fs.copy(this.templatePath('/common/scripts/MicrosoftAjax.js'), this.destinationPath(this.genConfig['root-path'] + '/scripts/MicrosoftAjax.js'));
+      this.fs.copy(this.templatePath('common/gulpfile.js'), this.destinationPath('gulpfile.js'));
+      this.fs.copy(this.templatePath('common/content/Office.css'), this.destinationPath(this._parseTargetPath('content/Office.css')));
+      this.fs.copy(this.templatePath('common/images/close.png'), this.destinationPath(this._parseTargetPath('images/close.png')));
+      this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'), this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
 
       switch (this.genConfig.tech) {
         case 'html':
@@ -243,43 +249,43 @@ module.exports = generators.Base.extend({
           this.genConfig.startPage = 'https://{addin-host-site}/appcompose/home/home.html';
 
           // create the manifest file
-          this.fs.copyTpl(this.templatePath('/common/manifest.xml'), this.destinationPath('/manifest.xml'), this.genConfig);
+          this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
 
           // copy addin files
-          this.fs.copy(this.templatePath('/html/appcompose/app.css'), this.destinationPath(this.genConfig['root-path'] + '/appcompose/app.css'));
-          this.fs.copy(this.templatePath('/html/appcompose/app.js'), this.destinationPath(this.genConfig['root-path'] + '/appcompose/app.js'));
-          this.fs.copy(this.templatePath('/html/appcompose/home/home.html'), this.destinationPath(this.genConfig['root-path'] + '/appcompose/home/home.html'));
-          this.fs.copy(this.templatePath('/html/appcompose/home/home.css'), this.destinationPath(this.genConfig['root-path'] + '/appcompose/home/home.css'));
-          this.fs.copy(this.templatePath('/html/appcompose/home/home.js'), this.destinationPath(this.genConfig['root-path'] + '/appcompose/home/home.js'));
+          this.fs.copy(this.templatePath('html/appcompose/app.css'), this.destinationPath(this._parseTargetPath('appcompose/app.css')));
+          this.fs.copy(this.templatePath('html/appcompose/app.js'), this.destinationPath(this._parseTargetPath('appcompose/app.js')));
+          this.fs.copy(this.templatePath('html/appcompose/home/home.html'), this.destinationPath(this._parseTargetPath('appcompose/home/home.html')));
+          this.fs.copy(this.templatePath('html/appcompose/home/home.css'), this.destinationPath(this._parseTargetPath('appcompose/home/home.css')));
+          this.fs.copy(this.templatePath('html/appcompose/home/home.js'), this.destinationPath(this._parseTargetPath('appcompose/home/home.js')));
 
-          this.fs.copy(this.templatePath('/html/appread/app.css'), this.destinationPath(this.genConfig['root-path'] + '/appread/app.css'));
-          this.fs.copy(this.templatePath('/html/appread/app.js'), this.destinationPath(this.genConfig['root-path'] + '/appread/app.js'));
-          this.fs.copy(this.templatePath('/html/appread/home/home.html'), this.destinationPath(this.genConfig['root-path'] + '/appread/home/home.html'));
-          this.fs.copy(this.templatePath('/html/appread/home/home.css'), this.destinationPath(this.genConfig['root-path'] + '/appread/home/home.css'));
-          this.fs.copy(this.templatePath('/html/appread/home/home.js'), this.destinationPath(this.genConfig['root-path'] + '/appread/home/home.js'));
+          this.fs.copy(this.templatePath('html/appread/app.css'), this.destinationPath(this._parseTargetPath('appread/app.css')));
+          this.fs.copy(this.templatePath('html/appread/app.js'), this.destinationPath(this._parseTargetPath('appread/app.js')));
+          this.fs.copy(this.templatePath('html/appread/home/home.html'), this.destinationPath(this._parseTargetPath('appread/home/home.html')));
+          this.fs.copy(this.templatePath('html/appread/home/home.css'), this.destinationPath(this._parseTargetPath('appread/home/home.css')));
+          this.fs.copy(this.templatePath('html/appread/home/home.js'), this.destinationPath(this._parseTargetPath('appread/home/home.js')));
           break;
         case 'ng':
           // determine startpage for addin
           this.genConfig.startPage = 'https://{addin-host-site}/appcompose/index.html';
 
           // create the manifest file
-          this.fs.copyTpl(this.templatePath('/common/manifest.xml'), this.destinationPath('/manifest.xml'), this.genConfig);
+          this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
 
           // copy addin files
           this.genConfig.startPage = '{https-addin-host-site}/index.html';
-          this.fs.copy(this.templatePath('/ng/appcompose/index.html'), this.destinationPath(this.genConfig['root-path'] + '/appcompose/index.html'));
-          this.fs.copy(this.templatePath('/ng/appcompose/app.module.js'), this.destinationPath(this.genConfig['root-path'] + '/appcompose/app.module.js'));
-          this.fs.copy(this.templatePath('/ng/appcompose/app.routes.js'), this.destinationPath(this.genConfig['root-path'] + '/appcompose/app.routes.js'));
-          this.fs.copy(this.templatePath('/ng/appcompose/home/home.controller.js'), this.destinationPath(this.genConfig['root-path'] + '/appcompose/home/home.controller.js'));
-          this.fs.copy(this.templatePath('/ng/appcompose/home/home.html'), this.destinationPath(this.genConfig['root-path'] + '/appcompose/home/home.html'));
-          this.fs.copy(this.templatePath('/ng/appcompose/services/data.service.js'), this.destinationPath(this.genConfig['root-path'] + '/appcompose/services/data.service.js'));
+          this.fs.copy(this.templatePath('ng/appcompose/index.html'), this.destinationPath(this._parseTargetPath('appcompose/index.html')));
+          this.fs.copy(this.templatePath('ng/appcompose/app.module.js'), this.destinationPath(this._parseTargetPath('appcompose/app.module.js')));
+          this.fs.copy(this.templatePath('ng/appcompose/app.routes.js'), this.destinationPath(this._parseTargetPath('appcompose/app.routes.js')));
+          this.fs.copy(this.templatePath('ng/appcompose/home/home.controller.js'), this.destinationPath(this._parseTargetPath('appcompose/home/home.controller.js')));
+          this.fs.copy(this.templatePath('ng/appcompose/home/home.html'), this.destinationPath(this._parseTargetPath('appcompose/home/home.html')));
+          this.fs.copy(this.templatePath('ng/appcompose/services/data.service.js'), this.destinationPath(this._parseTargetPath('appcompose/services/data.service.js')));
 
-          this.fs.copy(this.templatePath('/ng/appread/index.html'), this.destinationPath(this.genConfig['root-path'] + '/appread/index.html'));
-          this.fs.copy(this.templatePath('/ng/appread/app.module.js'), this.destinationPath(this.genConfig['root-path'] + '/appread/app.module.js'));
-          this.fs.copy(this.templatePath('/ng/appread/app.routes.js'), this.destinationPath(this.genConfig['root-path'] + '/appread/app.routes.js'));
-          this.fs.copy(this.templatePath('/ng/appread/home/home.controller.js'), this.destinationPath(this.genConfig['root-path'] + '/appread/home/home.controller.js'));
-          this.fs.copy(this.templatePath('/ng/appread/home/home.html'), this.destinationPath(this.genConfig['root-path'] + '/appread/home/home.html'));
-          this.fs.copy(this.templatePath('/ng/appread/services/data.service.js'), this.destinationPath(this.genConfig['root-path'] + '/appread/services/data.service.js'));
+          this.fs.copy(this.templatePath('ng/appread/index.html'), this.destinationPath(this._parseTargetPath('appread/index.html')));
+          this.fs.copy(this.templatePath('ng/appread/app.module.js'), this.destinationPath(this._parseTargetPath('appread/app.module.js')));
+          this.fs.copy(this.templatePath('ng/appread/app.routes.js'), this.destinationPath(this._parseTargetPath('appread/app.routes.js')));
+          this.fs.copy(this.templatePath('ng/appread/home/home.controller.js'), this.destinationPath(this._parseTargetPath('appread/home/home.controller.js')));
+          this.fs.copy(this.templatePath('ng/appread/home/home.html'), this.destinationPath(this._parseTargetPath('appread/home/home.html')));
+          this.fs.copy(this.templatePath('ng/appread/services/data.service.js'), this.destinationPath(this._parseTargetPath('appread/services/data.service.js')));
           break;
       }
 
