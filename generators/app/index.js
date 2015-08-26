@@ -59,7 +59,7 @@ module.exports = generators.Base.extend({
         // friendly name of the generator
         {
           name: 'name',
-          message: 'What is the name of the project (the display name)?',
+          message: 'Project name (display name):',
           default: 'My Office Project',
           when: this.options.name === undefined
         },
@@ -67,9 +67,9 @@ module.exports = generators.Base.extend({
         //  generator is being executed, or within a subfolder?
         {
           name: 'root-path',
-          message: 'What is the root folder where this project should be created?\n'
-          + '   The default is the current directory (' + this.destinationRoot() + '),\n'
-          + '   or specify a relative path from the current directory (src/public)?',
+          message: 'Root folder of project?'
+            + ' Default to current directory\n (' + this.destinationRoot() + '), or specify relative path\n'
+            + '  from current (src / public): ',
           default: 'current folder',
           when: this.options['root-path'] === undefined,
           filter: function (response) {
@@ -82,7 +82,7 @@ module.exports = generators.Base.extend({
         // type of project - this will dictate which subgenerator to call
         {
           name: 'type',
-          message: 'What type of Office Project do you want to create?',
+          message: 'Office project type:',
           type: 'list',
           choices: [
             {
@@ -102,17 +102,19 @@ module.exports = generators.Base.extend({
         // technology used to create the addin (html / angular / etc)
         {
           name: 'tech',
-          message: 'What technology do you want to buld your project with?',
+          message: 'Technology to use:',
           type: 'list',
           when: this.options.tech === undefined,
           choices: [
             {
               name: 'HTML, CSS & JavaScript',
               value: 'html'
-            },
-            {
+            }, {
               name: 'Angular',
               value: 'ng'
+            }, {
+              name: 'Manifest.xml only (no application source files)',
+              value: 'manifest-only'
             }]
         }];
         

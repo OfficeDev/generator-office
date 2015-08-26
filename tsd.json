@@ -31,6 +31,12 @@
     },
     "mockery/mockery.d.ts": {
       "commit": "c5a2f44bab06cf9f2bcc14530171daac1cebff6c"
+    },
+    "gulp-istanbul/gulp-istanbul.d.ts": {
+      "commit": "fa8d9683f37d07ed79617a6e037916c6718aeb11"
+    },
+    "gulp-mocha/gulp-mocha.d.ts": {
+      "commit": "fa8d9683f37d07ed79617a6e037916c6718aeb11"
     }
   }
 }

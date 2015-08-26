@@ -1,6 +1,6 @@
 # Microsoft Office Project Generator
 
-[![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office) [![Build Status](https://travis-ci.org/OfficeDev/generator-office.svg)](https://travis-ci.org/OfficeDev/generator-office) [![Coverage Status](https://coveralls.io/repos/OfficeDev/generator-office/badge.svg?branch=master&service=github)](https://coveralls.io/github/OfficeDev/generator-office?branch=master)
+[![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office) [![Build Status](https://travis-ci.org/OfficeDev/generator-office.svg)](https://travis-ci.org/OfficeDev/generator-office) [![Coverage Status](https://coveralls.io/repos/OfficeDev/generator-office/badge.svg?branch=master&service=github)](https://coveralls.io/github/OfficeDev/generator-office?branch=master) [![Dependency Status](https://david-dm.org/officedev/generator-office.svg)](https://david-dm.org/officedev/generator-office)
 
 > [Yeoman](http://yeoman.io) generator for creating Microsoft Office projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
 
@@ -63,9 +63,9 @@ Relative path where the project should be created (blank = current directory). I
   - Default: undefined / null
   - Optional  
 
-### `--tech:[ 'html' | 'ng' ]`
+### `--tech:[ 'html' | 'ng' | 'manifest-only' ]`
 
-Technology to use for the project. The supported options include HTML (`html`) or Angular (`ng`).
+Technology to use for the project. The supported options include HTML (`html`) or Angular (`ng`). You can also use Manifest.xml only (`manifest-only`) which will create only the `manifest.xml` for an an Office addin.
 
   - Type: String
   - Default: undefined / null
