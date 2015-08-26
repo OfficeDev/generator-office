@@ -85,9 +85,72 @@ describe('office:taskpane', function () {
     });
 
     /**
+     * Test addin when technology = manifest-only
+     */
+    describe('technology:manifest-only', function () {
+      before(function (done) {
+        //set language to html
+        options.tech = 'manifest-only';
+        options.startPage = 'https://localhost:8443/manifest-only/index.html';
+
+        // run the generator
+        helpers.run(path.join(__dirname, '../generators/taskpane'))
+          .withOptions(options)
+          .on('end', done);
+      });
+
+      after(function () {
+        mockery.disable();
+      });
+
+      /**
+       * All expected files are created.
+       */
+      it('creates expected files', function (done) {
+        assert.file('manifest.xml');
+        done();
+      });
+
+      /**
+       * manfiest.xml is good
+       */
+      describe('manifest.xml contents', function () {
+        var manifest = {};
+
+        before(function (done) {
+          var parser = new Xml2Js.Parser();
+          fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
+            parser.parseString(manifestContent, function (err, manifestJson) {
+              manifest = manifestJson;
+
+              done();
+            });
+          });
+        });
+
+        it('has valid ID', function (done) {
+          expect(validator.isUUID(manifest.OfficeApp.Id)).to.be.true;;
+          done();
+        });
+
+        it('has correct display name', function (done) {
+          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal('My Office Add-in');
+          done();
+        });
+
+        it('has correct start page', function (done) {
+          expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/manifest-only/index.html');
+          done();
+        });
+
+      }); //describe('manifest.xml contents')
+
+    }); // describe('technology:manifest-only')
+
+    /**
      * Test addin when technology = html
      */
-    describe('addin technology:html', function () {
+    describe('technology:html', function () {
 
       before(function (done) {
         //set language to html
@@ -364,11 +427,74 @@ describe('office:taskpane', function () {
       options.rootPath = addinRootPath;
       done();
     });
+    
+    /**
+     * Test addin when technology = manifest-only
+     */
+    describe('technology:manifest-only', function () {
+      before(function (done) {
+        //set language to html
+        options.tech = 'manifest-only';
+        options.startPage = 'https://localhost:8443/manifest-only/index.html';
 
+        // run the generator
+        helpers.run(path.join(__dirname, '../generators/taskpane'))
+          .withOptions(options)
+          .on('end', done);
+      });
+
+      after(function () {
+        mockery.disable();
+      });
+
+      /**
+       * All expected files are created.
+       */
+      it('creates expected files', function (done) {
+        assert.file('manifest.xml');
+        done();
+      });
+
+      /**
+       * manfiest.xml is good
+       */
+      describe('manifest.xml contents', function () {
+        var manifest = {};
+
+        before(function (done) {
+          var parser = new Xml2Js.Parser();
+          fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
+            parser.parseString(manifestContent, function (err, manifestJson) {
+              manifest = manifestJson;
+
+              done();
+            });
+          });
+        });
+
+        it('has valid ID', function (done) {
+          expect(validator.isUUID(manifest.OfficeApp.Id)).to.be.true;;
+          done();
+        });
+
+        it('has correct display name', function (done) {
+          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal('My Office Add-in');
+          done();
+        });
+
+        it('has correct start page', function (done) {
+          expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/manifest-only/index.html');
+          done();
+        });
+
+      }); //describe('manifest.xml contents')
+
+    }); // describe('technology:manifest-only')
+    
     /**
      * Test addin when technology = html
      */
-    describe('addin technology:html', function () {
+    describe('technology:html', function () {
 
       before(function (done) {
         //set language to html

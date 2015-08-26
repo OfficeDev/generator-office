@@ -12,10 +12,10 @@ $ yo office --skip-install
 
 ### Prompt Responses
 
-- **What is the name of the Add-in (the display name)?** My Office Add-in
-- **What is the root folder where this Add-in should be craeted?** {blank} 
-- **What type of Office Add-in do you want to create?** Content Add-in
-- **What technology do you want to buld your Add-in with?** Html, CSS & JavaScript
+- **Project name (the display name):** My Office Add-in
+- **Root folder of the project:** {blank} 
+- **Office project type:** Content Add-in
+- **Technology to use:** Html, CSS & JavaScript
 
 ```
 .
@@ -71,10 +71,10 @@ $ yo office --skip-install
 ```
 ### Prompt Responses:
 
-- **What is the name of the Add-in (the display name)?** My Office Add-in
-- **What is the root folder where this Add-in should be craeted?** src/public 
-- **What type of Office Add-in do you want to create?** Content Add-in
-- **What technology do you want to buld your Add-in with?** Html, CSS & JavaScript
+- **Project name (the display name):** My Office Add-in
+- **Root folder of the project:** src/public 
+- **Office project type:** Content Add-in
+- **Technology to use:** Html, CSS & JavaScript
 
 ### Results:
 

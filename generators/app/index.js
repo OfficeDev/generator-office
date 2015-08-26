@@ -109,10 +109,12 @@ module.exports = generators.Base.extend({
             {
               name: 'HTML, CSS & JavaScript',
               value: 'html'
-            },
-            {
+            }, {
               name: 'Angular',
               value: 'ng'
+            }, {
+              name: 'Manifest.xml only (no application source files)',
+              value: 'manifest-only'
             }]
         }];
         
