@@ -6,6 +6,23 @@ var inspector = require('gulp-node-inspector');
 var chalk = require('chalk');
 var which = require('which');
 var path = require('path');
+var istanbul = require('gulp-istanbul');
+var mocha = require('gulp-mocha');
+
+/**
+ * test
+ */
+gulp.task('test', function (done) {
+  gulp.src(['generators/**/.js'])
+    .pipe(istanbul()) // covering files
+    .pipe(istanbul.hookRequire()) // force 'require' to return coverd files
+    .on('finish', function () {
+      gulp.src(['test/*.js'])
+        .pipe(mocha()) // run tests
+        .pipe(istanbul.writeReports()) // write coverage reports
+        .on('end', done);
+    });
+});
 
 /**
  * Setup node inspector to debug app.
@@ -25,7 +42,7 @@ gulp.task('node-inspector', function () {
  */
 gulp.task('run-yo', function () {
   console.log(chalk.yellow('BE AWARE!!! - Running this with default options will scaffold the project in the generator\'s source folder.'));
-  
+
   spawn('node',
     [
       '--debug',
