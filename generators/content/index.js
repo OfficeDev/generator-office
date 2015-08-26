@@ -54,7 +54,7 @@ module.exports = generators.Base.extend({
         // friendly name of the generator
         {
           name: 'name',
-          message: 'What is the name of the Add-in (the display name)?',
+          message: 'Project name (display name):',
           default: 'My Office Add-in',
           when: this.options.name === undefined
         },
@@ -62,9 +62,9 @@ module.exports = generators.Base.extend({
         //  generator is being executed, or within a subfolder?
         {
           name: 'root-path',
-          message: 'What is the root folder where this Add-in should be created?\n'
-          + '   The default is the current directory (' + this.destinationRoot() + '),\n'
-          + '   or specify a relative path from the current directory (src/public)?',
+          message: 'Root folder of project?'
+            + ' Default to current directory\n (' + this.destinationRoot() + '), or specify relative path\n'
+            + '  from current (src / public): ',
           default: 'current folder',
           when: this.options['root-path'] === undefined,
           filter: function (response) {
@@ -77,7 +77,7 @@ module.exports = generators.Base.extend({
         // technology used to create the addin (html / angular / etc)
         {
           name: 'tech',
-          message: 'What technology do you want to buld your Add-in with?',
+          message: 'Technology to use:',
           type: 'list',
           when: this.options.tech === undefined,
           choices: [
