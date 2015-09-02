@@ -70,6 +70,8 @@ describe('office:taskpane', function () {
           'package.json',
           'gulpfile.js',
           'manifest.xml',
+          'tsd.json',
+          'jsconfig.json',
           'index.html',
           'app/app.module.js',
           'app/app.routes.js',

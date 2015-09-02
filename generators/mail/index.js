@@ -287,6 +287,10 @@ module.exports = generators.Base.extend({
             // determine startpage for addin
             this.genConfig.startPage = 'https://localhost:8443/appcompose/home/home.html';
 
+            // copy tsd & jsconfig files
+            this.fs.copy(this.templatePath('html/_tsd.json'), this.destinationPath('tsd.json'));
+            this.fs.copy(this.templatePath('common/_jsconfig.json'), this.destinationPath('jsconfig.json'));
+
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
 
@@ -306,6 +310,10 @@ module.exports = generators.Base.extend({
           case 'ng':
             // determine startpage for addin
             this.genConfig.startPage = 'https://localhost:8443/appcompose/index.html';
+
+            // copy tsd & jsconfig files
+            this.fs.copy(this.templatePath('html/_tsd.json'), this.destinationPath('tsd.json'));
+            this.fs.copy(this.templatePath('common/_jsconfig.json'), this.destinationPath('jsconfig.json'));
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);

@@ -72,6 +72,8 @@ describe('office:taskpane', function () {
           'gulpfile.js',
           'package.json',
           'manifest.xml',
+          'tsd.json',
+          'jsconfig.json',
           addinRootPath + '/index.html',
           addinRootPath + '/app/app.module.js',
           addinRootPath + '/app/app.routes.js',

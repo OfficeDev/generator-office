@@ -69,6 +69,8 @@ describe('office:content', function () {
           'package.json',
           'gulpfile.js',
           'manifest.xml',
+          'tsd.json',
+          'jsconfig.json',
           'app/app.js',
           'app/app.css',
           'app/home/home.js',

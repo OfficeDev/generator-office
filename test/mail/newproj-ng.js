@@ -69,6 +69,8 @@ describe('office:mail', function () {
           'package.json',
           'gulpfile.js',
           'manifest.xml',
+          'tsd.json',
+          'jsconfig.json',
           'appcompose/index.html',
           'appcompose/app.module.js',
           'appcompose/app.routes.js',

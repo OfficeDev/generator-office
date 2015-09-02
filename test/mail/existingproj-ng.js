@@ -71,6 +71,8 @@ describe('office:mail', function () {
           'gulpfile.js',
           'package.json',
           'manifest.xml',
+          'tsd.json',
+          'jsconfig.json',
           addinRootPath + '/appcompose/index.html',
           addinRootPath + '/appcompose/app.module.js',
           addinRootPath + '/appcompose/app.routes.js',
