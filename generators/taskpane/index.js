@@ -133,9 +133,15 @@ module.exports = generators.Base.extend({
    * save configurations & config project
    */
   configuring: function () {
+    // take name submitted and strip everything out non-alphanumeric or space
+    var projectName = this.genConfig.name;
+    projectName = projectName.replace(/[^\w\s\-]/g, '');
+    projectName = projectName.replace(/\s{2,}/g, ' ');
+    projectName = projectName.trim();
+    
     // add the result of the question to the generator configuration object
-    this.genConfig.projectInternalName = this.genConfig.name.toLowerCase().replace(/ /g, "-");
-    this.genConfig.projectDisplayName = this.genConfig.name;
+    this.genConfig.projectInternalName = projectName.toLowerCase().replace(/ /g, "-");
+    this.genConfig.projectDisplayName = projectName;
     this.genConfig.rootPath = this.genConfig['root-path'];
   }, // configuring()
   
@@ -224,9 +230,11 @@ module.exports = generators.Base.extend({
           var bowerJson = this.fs.readJSON(pathToBowerJson, 'utf8');
 
           // all addins need these
+          /* istanbul ignore else */
           if (!bowerJson.dependencies["microsoft.office.js"]) {
             bowerJson.dependencies["microsoft.office.js"] = "*";
           }
+          /* istanbul ignore else */
           if (!bowerJson.dependencies["jquery"]) {
             bowerJson.dependencies["jquery"] = "~1.9.1";
           }
@@ -234,12 +242,15 @@ module.exports = generators.Base.extend({
           switch (this.genConfig.tech) {
             // if angular...
             case "ng":
+              /* istanbul ignore else */
               if (!bowerJson.dependencies["angular"]) {
                 bowerJson.dependencies["angular"] = "~1.4.4";
               }
+              /* istanbul ignore else */
               if (!bowerJson.dependencies["angular-route"]) {
                 bowerJson.dependencies["angular-route"] = "~1.4.4";
               }
+              /* istanbul ignore else */
               if (!bowerJson.dependencies["angular-sanitize"]) {
                 bowerJson.dependencies["angular-sanitize"] = "~1.4.4";
               }
@@ -279,13 +290,27 @@ module.exports = generators.Base.extend({
         // create common assets
         this.fs.copy(this.templatePath('common/gulpfile.js'), this.destinationPath('gulpfile.js'));
         this.fs.copy(this.templatePath('common/content/Office.css'), this.destinationPath(this._parseTargetPath('content/Office.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.css'), this.destinationPath(this._parseTargetPath('content/fabric.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.min.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.rtl.css'), this.destinationPath(this._parseTargetPath('content/fabric.rtl.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.rtl.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.rtl.min.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.components.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.components.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.min.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.min.css')));
         this.fs.copy(this.templatePath('common/images/close.png'), this.destinationPath(this._parseTargetPath('images/close.png')));
         this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'), this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
+        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.js'), this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.js')));
+        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.min.js'), this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.min.js')));
 
         switch (this.genConfig.tech) {
           case 'html':
             // determine startpage for addin
             this.genConfig.startPage = 'https://localhost:8443/app/home/home.html';
+
+            // copy tsd & jsconfig files
+            this.fs.copy(this.templatePath('html/_tsd.json'), this.destinationPath('tsd.json'));
+            this.fs.copy(this.templatePath('common/_jsconfig.json'), this.destinationPath('jsconfig.json'));
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
@@ -300,6 +325,10 @@ module.exports = generators.Base.extend({
           case 'ng':
             // determine startpage for addin
             this.genConfig.startPage = 'https://localhost:8443/index.html';
+
+            // copy tsd & jsconfig files
+            this.fs.copy(this.templatePath('ng/_tsd.json'), this.destinationPath('tsd.json'));
+            this.fs.copy(this.templatePath('common/_jsconfig.json'), this.destinationPath('jsconfig.json'));
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
@@ -331,7 +360,6 @@ module.exports = generators.Base.extend({
 
     if (!this.options['skip-install'] && this.genConfig.tech !== 'manifest-only') {
       this.npmInstall();
-      this.bowerInstall();
     }
 
   } // install ()

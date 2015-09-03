@@ -26,7 +26,7 @@ var app = (function () {
       $('#notification-message-header').text(header);
       $('#notification-message-body').text(text);
       $('#notification-message').slideDown('fast');
-    };Í
+    };
   };
 
   return app;
