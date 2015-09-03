@@ -1,7 +1,12 @@
 var fs = require('fs');
 var assert = require('yeoman-generator').assert;
 
-function _assertObjectContains (obj, content) {
+/**
+ * Helper function to check contents of object.
+ */
+exports.assertObjectContains = _assertObjectContains;
+
+function _assertObjectContains(obj, content) {
   Object.keys(content).forEach(function (key) {
     if (typeof content[key] === 'object') {
       _assertObjectContains(content[key], obj[key]);
@@ -10,11 +15,6 @@ function _assertObjectContains (obj, content) {
     assert.equal(content[key], obj[key]);
   });
 };
-
-/**
- * Helper function to check contents of object.
- */
-exports.assertObjectContains = _assertObjectContains;
 
 /**
  * Helper function to check contents of JSON file.
@@ -26,7 +26,7 @@ exports.assertJSONFileContains = function (filename, content) {
 
 /**
  * Setup an existing project in the test folder.
- * @generator {RunContext} - The generator being run.
+ * @param {RunContext} generator - The generator being run.
  */
 exports.setupExistingProject = function (generator) {
   var existingPackage = {
@@ -38,6 +38,7 @@ exports.setupExistingProject = function (generator) {
       express: '^4.12.2'
     }
   };
+  
   // write the package.json file
   generator.fs.writeJSON(generator.destinationPath('package.json'), existingPackage);
   // write out static content

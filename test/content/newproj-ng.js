@@ -22,7 +22,7 @@ var options = {};
 
 describe('office:content', function () {
 
-  before(function (done) {
+  beforeEach(function (done) {
     options = {
       name: 'My Office Add-in'
     };
@@ -30,11 +30,42 @@ describe('office:content', function () {
   });
 
   /**
+   * Test scrubbing of name with illegal characters
+   */
+  it('project name is alphanumeric only', function (done) {
+    options = {
+      name: 'Some\'s bad * character$ ~!@#$%^&*()',
+      rootPath: '',
+      tech: 'ng',
+      startPage: 'https://localhost:8443/manifest-only/index.html'
+    };
+    
+    // run generator
+    helpers.run(path.join(__dirname, '../../generators/content'))
+      .withOptions(options)
+      .on('end', function () {
+        var expected = {
+          name: 'somes-bad-character',
+          version: '0.1.0',
+          devDependencies: {
+            gulp: '^3.9.0',
+            'gulp-webserver': '^0.9.1'
+          }
+        };
+
+        assert.file('package.json');
+        util.assertJSONFileContains('package.json', expected);
+
+        done();
+      });
+  });
+
+  /**
    * Test addin when running on empty folder.
    */
   describe('run on new project (empty folder)', function () {
 
-    before(function (done) {
+    beforeEach(function (done) {
       // set to current folder
       options.rootPath = '';
       done();
@@ -45,7 +76,7 @@ describe('office:content', function () {
      */
     describe('addin technology:ng', function () {
 
-      before(function (done) {
+      beforeEach(function (done) {
         //set language to html
         options.tech = 'ng';
 
@@ -130,7 +161,7 @@ describe('office:content', function () {
       describe('manifest.xml contents', function () {
         var manifest = {};
 
-        before(function (done) {
+        beforeEach(function (done) {
           var parser = new Xml2Js.Parser();
           fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
             parser.parseString(manifestContent, function (err, manifestJson) {

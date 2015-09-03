@@ -23,7 +23,7 @@ var options = {};
 
 describe('office:taskpane', function () {
 
-  before(function (done) {
+  beforeEach(function (done) {
     options = {
       name: 'My Office Add-in'
     };
@@ -35,7 +35,7 @@ describe('office:taskpane', function () {
    */
   describe('run on new project (empty folder)', function () {
 
-    before(function (done) {
+    beforeEach(function (done) {
       // set to current folder
       options.rootPath = '';
       done();
@@ -45,7 +45,7 @@ describe('office:taskpane', function () {
      * Test addin when technology = manifest-only
      */
     describe('technology:manifest-only', function () {
-      before(function (done) {
+      beforeEach(function (done) {
         //set language to html
         options.tech = 'manifest-only';
         options.startPage = 'https://localhost:8443/manifest-only/index.html';
@@ -74,7 +74,7 @@ describe('office:taskpane', function () {
       describe('manifest.xml contents', function () {
         var manifest = {};
 
-        before(function (done) {
+        beforeEach(function (done) {
           var parser = new Xml2Js.Parser();
           fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
             parser.parseString(manifestContent, function (err, manifestJson) {

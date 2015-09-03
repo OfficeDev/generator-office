@@ -23,7 +23,7 @@ var options = {};
 
 describe('office:taskpane', function () {
 
-  before(function (done) {
+  beforeEach(function (done) {
     options = {
       name: 'My Office Add-in'
     };
@@ -35,7 +35,7 @@ describe('office:taskpane', function () {
     
     // generator ran at 'src/public' so for files
     //  in the root, need to back up to the root
-    before(function (done) {
+    beforeEach(function (done) {
       // set to current folder
       options.rootPath = addinRootPath;
       done();
@@ -46,7 +46,7 @@ describe('office:taskpane', function () {
      */
     describe('technology:html', function () {
 
-      before(function (done) {
+      beforeEach(function (done) {
         //set language to html
         options.tech = 'html';
 
@@ -136,7 +136,7 @@ describe('office:taskpane', function () {
       describe('manifest.xml contents', function () {
         var manifest = {};
 
-        before(function (done) {
+        beforeEach(function (done) {
           var parser = new Xml2Js.Parser();
           fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
             parser.parseString(manifestContent, function (err, manifestJson) {

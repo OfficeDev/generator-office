@@ -134,9 +134,15 @@ module.exports = generators.Base.extend({
    * save configurations & config project
    */
   configuring: function () {
+    // take name submitted and strip everything out non-alphanumeric or space
+    var projectName = this.genConfig.name;
+    projectName = projectName.replace(/[^\w\s\-]/g, '');
+    projectName = projectName.replace(/\s{2,}/g, ' ');
+    projectName = projectName.trim();
+    
     // add the result of the question to the generator configuration object
-    this.genConfig.projectnternalName = this.genConfig.name.toLowerCase().replace(/ /g, "-");
-    this.genConfig.projectDisplayName = this.genConfig.name;
+    this.genConfig.projectInternalName = projectName.toLowerCase().replace(/ /g, "-");
+    this.genConfig.projectDisplayName = projectName;
     this.genConfig.rootPath = this.genConfig['root-path'];
   }, // configuring()
   
@@ -154,7 +160,7 @@ module.exports = generators.Base.extend({
         var done = this.async();
       
         // default name for the root project = addin project
-        this.genConfig.rootProjectName = this.genConfig.projectnternalName;
+        this.genConfig.rootProjectName = this.genConfig.projectInternalName;
 
         // path to package.json
         var pathToPackageJson = this.destinationPath('package.json');

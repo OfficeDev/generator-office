@@ -22,11 +22,42 @@ var options = {};
 
 describe('office:mail', function () {
 
-  before(function (done) {
+  beforeEach(function (done) {
     options = {
       name: 'My Office Add-in'
     };
     done();
+  });
+   
+  /**
+   * Test scrubbing of name with illegal characters
+   */
+  it('project name is alphanumeric only', function (done) {
+    options = {
+      name: 'Some\'s bad * character$ ~!@#$%^&*()',
+      rootPath: '',
+      tech: 'html',
+      startPage: 'https://localhost:8443/manifest-only/index.html'
+    };
+    
+    // run generator
+    helpers.run(path.join(__dirname, '../../generators/mail'))
+      .withOptions(options)
+      .on('end', function () {
+        var expected = {
+          name: 'somes-bad-character',
+          version: '0.1.0',
+          devDependencies: {
+            gulp: '^3.9.0',
+            'gulp-webserver': '^0.9.1'
+          }
+        };
+
+        assert.file('package.json');
+        util.assertJSONFileContains('package.json', expected);
+
+        done();
+      });
   });
   
   describe('run on existing project (non-empty folder)', function () {
@@ -34,7 +65,7 @@ describe('office:mail', function () {
     
     // generator ran at 'src/public' so for files
     //  in the root, need to back up to the root
-    before(function (done) {
+    beforeEach(function (done) {
       // set to current folder
       options.rootPath = addinRootPath;
       done();
@@ -45,7 +76,7 @@ describe('office:mail', function () {
      */
     describe('addin technology:html', function () {
 
-      before(function (done) {
+      beforeEach(function (done) {
         //set language to html
         options.tech = 'html';
 
@@ -140,7 +171,7 @@ describe('office:mail', function () {
       describe('manifest.xml contents', function () {
         var manifest = {};
 
-        before(function (done) {
+        beforeEach(function (done) {
           var parser = new Xml2Js.Parser();
           fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
             parser.parseString(manifestContent, function (err, manifestJson) {

@@ -22,7 +22,7 @@ var options = {};
 
 describe('office:content', function () {
 
-  before(function (done) {
+  beforeEach(function (done) {
     options = {
       name: 'My Office Add-in'
     };
@@ -37,7 +37,7 @@ describe('office:content', function () {
     
     // generator ran at 'src/public' so for files
     //  in the root, need to back up to the root
-    before(function (done) {
+    beforeEach(function (done) {
       // set to current folder
       options.rootPath = addinRootPath;
       done();
@@ -48,7 +48,7 @@ describe('office:content', function () {
      * Test addin when technology = manifest-only
      */
     describe('technology:manifest-only', function () {
-      before(function (done) {
+      beforeEach(function (done) {
         //set language to html
         options.tech = 'manifest-only';
         options.startPage = 'https://localhost:8443/manifest-only/index.html';
@@ -77,7 +77,7 @@ describe('office:content', function () {
       describe('manifest.xml contents', function () {
         var manifest = {};
 
-        before(function (done) {
+        beforeEach(function (done) {
           var parser = new Xml2Js.Parser();
           fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
             parser.parseString(manifestContent, function (err, manifestJson) {
