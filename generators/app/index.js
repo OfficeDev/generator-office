@@ -122,41 +122,6 @@ module.exports = generators.Base.extend({
               name: 'Manifest.xml only (no application source files)',
               value: 'manifest-only'
             }]
-        },
-        // office client application that can host the addin         
-        {
-          name: 'clients',
-          message: 'Supported Office applications:',
-          type: 'checkbox',
-          choices: [
-            {
-              name: 'Word',
-              value: 'docx',
-              checked: true
-            },
-            {
-              name: 'Excel',
-              value: 'xlsx',
-              checked: true
-            },
-            {
-              name: 'PowerPoint',
-              value: 'pptx',
-              checked: true
-            },
-            {
-              name: 'Project',
-              value: 'mpp',
-              checked: true
-            }
-          ],
-          when: this.options.clients === undefined,
-          validate: function (clientsAnswer) {
-            if (clientsAnswer.length < 1) {
-              return 'Must select at least one Office application';
-            }
-            return true;
-          }
         }];
         
       // trigger prompts
@@ -166,7 +131,58 @@ module.exports = generators.Base.extend({
         done();
       }.bind(this));
 
-    } // askFor()
+    }, // askFor()
+    
+    askForOfficeClients: function () {
+      // if it's a mail addin, don't ask for Office client
+      if (this.genConfig.type === 'mail')
+        return;
+
+      var done = this.async();
+
+      // office client application that can host the addin
+      var prompts = [{
+        name: 'clients',
+        message: 'Supported Office applications:',
+        type: 'checkbox',
+        choices: [
+          {
+            name: 'Word',
+            value: 'Document',
+            checked: true
+          },
+          {
+            name: 'Excel',
+            value: 'Workbook',
+            checked: true
+          },
+          {
+            name: 'PowerPoint',
+            value: 'Presentation',
+            checked: true
+          },
+          {
+            name: 'Project',
+            value: 'Project',
+            checked: true
+          }
+        ],
+        when: this.options.clients === undefined,
+        validate: function (clientsAnswer) {
+          if (clientsAnswer.length < 1) {
+            return 'Must select at least one Office application';
+          }
+          return true;
+        }
+      }];
+        
+      // trigger prompts
+      this.prompt(prompts, function (responses) {
+        this.genConfig = extend(this.genConfig, responses);
+        done();
+      }.bind(this));
+
+    } // askForOfficeClients()
     
   }, // prompting()
 

@@ -31,7 +31,6 @@ describe('office:app', function () {
         rootPath: '',
         type: 'mail',
         tech: 'html',
-        clients: ['Document', 'Workbook'],
         'skip-install': true
       }
 
