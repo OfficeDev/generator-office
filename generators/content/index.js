@@ -231,9 +231,11 @@ module.exports = generators.Base.extend({
           var bowerJson = this.fs.readJSON(pathToBowerJson, 'utf8');
 
           // all addins need these
+          /* istanbul ignore else */
           if (!bowerJson.dependencies["microsoft.office.js"]) {
             bowerJson.dependencies["microsoft.office.js"] = "*";
           }
+          /* istanbul ignore else */
           if (!bowerJson.dependencies["jquery"]) {
             bowerJson.dependencies["jquery"] = "~1.9.1";
           }
@@ -241,12 +243,15 @@ module.exports = generators.Base.extend({
           switch (this.genConfig.tech) {
             // if angular...
             case "ng":
+              /* istanbul ignore else */
               if (!bowerJson.dependencies["angular"]) {
                 bowerJson.dependencies["angular"] = "~1.4.4";
               }
+              /* istanbul ignore else */
               if (!bowerJson.dependencies["angular-route"]) {
                 bowerJson.dependencies["angular-route"] = "~1.4.4";
               }
+              /* istanbul ignore else */
               if (!bowerJson.dependencies["angular-sanitize"]) {
                 bowerJson.dependencies["angular-sanitize"] = "~1.4.4";
               }

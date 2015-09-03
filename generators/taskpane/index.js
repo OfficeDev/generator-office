@@ -230,9 +230,11 @@ module.exports = generators.Base.extend({
           var bowerJson = this.fs.readJSON(pathToBowerJson, 'utf8');
 
           // all addins need these
+          /* istanbul ignore else */
           if (!bowerJson.dependencies["microsoft.office.js"]) {
             bowerJson.dependencies["microsoft.office.js"] = "*";
           }
+          /* istanbul ignore else */
           if (!bowerJson.dependencies["jquery"]) {
             bowerJson.dependencies["jquery"] = "~1.9.1";
           }
@@ -240,12 +242,15 @@ module.exports = generators.Base.extend({
           switch (this.genConfig.tech) {
             // if angular...
             case "ng":
+              /* istanbul ignore else */
               if (!bowerJson.dependencies["angular"]) {
                 bowerJson.dependencies["angular"] = "~1.4.4";
               }
+              /* istanbul ignore else */
               if (!bowerJson.dependencies["angular-route"]) {
                 bowerJson.dependencies["angular-route"] = "~1.4.4";
               }
+              /* istanbul ignore else */
               if (!bowerJson.dependencies["angular-sanitize"]) {
                 bowerJson.dependencies["angular-sanitize"] = "~1.4.4";
               }
@@ -292,7 +297,7 @@ module.exports = generators.Base.extend({
         this.fs.copy(this.templatePath('common/content/fabric.components.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.css')));
         this.fs.copy(this.templatePath('common/content/fabric.components.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.min.css')));
         this.fs.copy(this.templatePath('common/content/fabric.components.rtl.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.min.css')));     
+        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.min.css')));
         this.fs.copy(this.templatePath('common/images/close.png'), this.destinationPath(this._parseTargetPath('images/close.png')));
         this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'), this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
         this.fs.copy(this.templatePath('common/scripts/jquery.fabric.js'), this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.js')));

@@ -29,6 +29,7 @@ exports.assertJSONFileContains = function (filename, content) {
  * @param {RunContext} generator - The generator being run.
  */
 exports.setupExistingProject = function (generator) {
+  // create existing package.json file
   var existingPackage = {
     name: 'ProjectName',
     description: 'HTTPS site using Express and Node.js',
@@ -37,10 +38,21 @@ exports.setupExistingProject = function (generator) {
     dependencies: {
       express: '^4.12.2'
     }
-  };
-  
+  };  
   // write the package.json file
   generator.fs.writeJSON(generator.destinationPath('package.json'), existingPackage);
+  
+  // create existing bower.json file
+  var existingBower = {
+    name: "ProjectName",
+    version: "0.1.0",
+    dependencies: {
+      "jquery": "~1.9.1"
+    }
+  }
+  // write the bower.json file
+  generator.fs.writeJSON(generator.destinationPath('bower.json'), existingBower);
+  
   // write out static content
   generator.fs.write(generator.destinationPath('public/index.html'), 'foo');
   generator.fs.write(generator.destinationPath('public/content/site.css'), 'foo');
