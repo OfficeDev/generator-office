@@ -29,7 +29,7 @@ describe('office:taskpane', function () {
     };
     done();
   });
-  
+
   describe('run on existing project (non-empty folder)', function () {
     var addinRootPath = 'src/public';
     
@@ -82,8 +82,18 @@ describe('office:taskpane', function () {
           addinRootPath + '/app/home/home.html',
           addinRootPath + '/app/home/home.css',
           addinRootPath + '/content/Office.css',
+          addinRootPath + '/content/fabric.components.css',
+          addinRootPath + '/content/fabric.components.min.css',
+          addinRootPath + '/content/fabric.components.rtl.css',
+          addinRootPath + '/content/fabric.components.rtl.min.css',
+          addinRootPath + '/content/fabric.css',
+          addinRootPath + '/content/fabric.min.css',
+          addinRootPath + '/content/fabric.rtl.css',
+          addinRootPath + '/content/fabric.rtl.min.css',
           addinRootPath + '/images/close.png',
-          addinRootPath + '/scripts/MicrosoftAjax.js'
+          addinRootPath + '/scripts/MicrosoftAjax.js',
+          addinRootPath + '/scripts/jquery.fabric.js',
+          addinRootPath + '/scripts/jquery.fabric.min.js'
         ];
         assert.file(expected);
         done();

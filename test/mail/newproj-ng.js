@@ -115,8 +115,18 @@ describe('office:mail', function () {
           'appread/home/home.html',
           'appread/services/data.service.js',
           'content/Office.css',
+          'content/fabric.components.css',
+          'content/fabric.components.min.css',
+          'content/fabric.components.rtl.css',
+          'content/fabric.components.rtl.min.css',
+          'content/fabric.css',
+          'content/fabric.min.css',
+          'content/fabric.rtl.css',
+          'content/fabric.rtl.min.css',
           'images/close.png',
-          'scripts/MicrosoftAjax.js'
+          'scripts/MicrosoftAjax.js',
+          'scripts/jquery.fabric.js',
+          'scripts/jquery.fabric.min.js'
         ];
         assert.file(expected);
         done();
