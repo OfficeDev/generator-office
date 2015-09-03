@@ -8,20 +8,39 @@ var which = require('which');
 var path = require('path');
 var istanbul = require('gulp-istanbul');
 var mocha = require('gulp-mocha');
+var gutil = require('gulp-util');
+
+var cwd = process.cwd();
 
 /**
- * test
+ * Handle errors by writing to the log, then emit an end event.
  */
-gulp.task('test', function (done) {
-  gulp.src(['generators/**/.js'])
+function handleError(err) {
+  gutil.log(err.toString());
+  this.emit('end');
+};
+
+/**
+ * Run all tests with code coverage.
+ */
+gulp.task('run-tests', function (done) {
+  gulp.src([path.join(cwd, 'generators/**/.js')])
     .pipe(istanbul()) // covering files
     .pipe(istanbul.hookRequire()) // force 'require' to return coverd files
     .on('finish', function () {
-      gulp.src(['test/*.js'])
+      gulp.src([path.join(cwd, 'test/**/*.js')])
         .pipe(mocha()) // run tests
+        .on('error', handleError)
         .pipe(istanbul.writeReports()) // write coverage reports
         .on('end', done);
     });
+});
+
+/**
+ * Watch for changes in any files within tests or generators & rerun tests.
+ */
+gulp.task('watch-tests', function (done) {
+  gulp.watch(['generators/**', 'test/**'], ['run-tests']);
 });
 
 /**
