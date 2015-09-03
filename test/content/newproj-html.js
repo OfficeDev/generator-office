@@ -194,6 +194,31 @@ describe('office:content', function () {
         });
 
       }); //describe('manifest.xml contents')
+      
+      /**
+       * tsd.json is good
+       */
+      describe('tsd.json contents', function () {
+        var tsd = {};
+
+        beforeEach(function (done) {
+          fs.readFile('tsd.json', 'utf8', function (err, tsdJson) {
+            tsd = JSON.parse(tsdJson);
+
+            done();
+          });
+        });
+
+        it ('has correct *.d.ts references', function (done) {
+          expect(tsd.installed).to.exist;
+          expect(tsd.installed["jquery/jquery.d.ts"]).to.exist;
+          expect(tsd.installed["angularjs/angular.d.ts"]).to.not.exist;
+          expect(tsd.installed["angularjs/angular-route.d.ts"]).to.not.exist;
+          expect(tsd.installed["angularjs/angular-sanitize.d.ts"]).to.not.exist;
+          done();
+        });
+
+      }); // describe('tsd.json contents')
 
       /**
        * gulpfile.js is good

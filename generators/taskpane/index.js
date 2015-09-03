@@ -322,7 +322,7 @@ module.exports = generators.Base.extend({
             this.genConfig.startPage = 'https://localhost:8443/index.html';
 
             // copy tsd & jsconfig files
-            this.fs.copy(this.templatePath('html/_tsd.json'), this.destinationPath('tsd.json'));
+            this.fs.copy(this.templatePath('ng/_tsd.json'), this.destinationPath('tsd.json'));
             this.fs.copy(this.templatePath('common/_jsconfig.json'), this.destinationPath('jsconfig.json'));
 
             // create the manifest file
