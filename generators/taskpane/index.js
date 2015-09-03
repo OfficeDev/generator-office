@@ -355,7 +355,6 @@ module.exports = generators.Base.extend({
 
     if (!this.options['skip-install'] && this.genConfig.tech !== 'manifest-only') {
       this.npmInstall();
-      this.bowerInstall();
     }
 
   } // install ()

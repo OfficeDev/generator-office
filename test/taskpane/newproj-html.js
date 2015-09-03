@@ -151,6 +151,9 @@ describe('office:taskpane', function () {
         var expected = {
           name: 'my-office-add-in',
           version: '0.1.0',
+          scripts: {
+            postinstall: "bower install"
+          },
           devDependencies: {
             gulp: '^3.9.0',
             'gulp-webserver': '^0.9.1'

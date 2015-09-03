@@ -155,6 +155,9 @@ describe('office:mail', function () {
         var expected = {
           name: 'my-office-add-in',
           version: '0.1.0',
+          scripts: {
+            postinstall: "bower install"
+          },
           devDependencies: {
             gulp: '^3.9.0',
             'gulp-webserver': '^0.9.1'
@@ -214,7 +217,7 @@ describe('office:mail', function () {
           });
         });
 
-        it ('has correct *.d.ts references', function (done) {
+        it('has correct *.d.ts references', function (done) {
           expect(tsd.installed).to.exist;
           expect(tsd.installed["jquery/jquery.d.ts"]).to.exist;
           expect(tsd.installed["angularjs/angular.d.ts"]).to.not.exist;
@@ -229,14 +232,14 @@ describe('office:mail', function () {
        * gulpfile.js is good
        */
       describe('gulpfule.js contents', function () {
-      
+
         it('contains task \'serve-static\'', function (done) {
-          
+
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'serve-static\',');
           done();
         });
-      
+
       }); // describe('gulpfile.js contents')
 
     }); // describe('technology:html')

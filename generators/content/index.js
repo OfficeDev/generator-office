@@ -293,7 +293,7 @@ module.exports = generators.Base.extend({
         this.fs.copy(this.templatePath('common/content/fabric.components.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.css')));
         this.fs.copy(this.templatePath('common/content/fabric.components.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.min.css')));
         this.fs.copy(this.templatePath('common/content/fabric.components.rtl.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.min.css')));     
+        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.min.css')));
         this.fs.copy(this.templatePath('common/images/close.png'), this.destinationPath(this._parseTargetPath('images/close.png')));
         this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'), this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
         this.fs.copy(this.templatePath('common/scripts/jquery.fabric.js'), this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.js')));
@@ -357,7 +357,6 @@ module.exports = generators.Base.extend({
 
     if (!this.options['skip-install'] && this.genConfig.tech !== 'manifest-only') {
       this.npmInstall();
-      this.bowerInstall();
     }
 
   } // install ()
