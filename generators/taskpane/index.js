@@ -5,6 +5,8 @@ var chalk = require('chalk');
 var path = require('path');
 var extend = require('deep-extend');
 var guid = require('uuid');
+var Xml2Js = require('xml2js');
+var _ = require('lodash');
 
 module.exports = generators.Base.extend({
   /**
@@ -37,7 +39,13 @@ module.exports = generators.Base.extend({
       desc: 'Technology to use for the Add-in (html = HTML; ng = Angular)',
       required: false
     });
-    
+
+    this.option('clients', {
+      type: String,
+      desc: 'Office client product that can host the add-in',
+      required: false
+    });
+
     // create global config object on this generator
     this.genConfig = {};
   }, // constructor()
@@ -91,6 +99,41 @@ module.exports = generators.Base.extend({
               name: 'Manifest.xml only (no application source files)',
               value: 'manifest-only'
             }]
+        },
+        // office client application that can host the addin         
+        {
+          name: 'clients',
+          message: 'Supported Office applications:',
+          type: 'checkbox',
+          choices: [
+            {
+              name: 'Word',
+              value: 'Document',
+              checked: true
+            },
+            {
+              name: 'Excel',
+              value: 'Workbook',
+              checked: true
+            },
+            {
+              name: 'PowerPoint',
+              value: 'Presentation',
+              checked: true
+            },
+            {
+              name: 'Project',
+              value: 'Project',
+              checked: true
+            }
+          ],
+          when: this.options.clients === undefined,
+          validate: function (clientsAnswer) {
+            if (clientsAnswer.length < 1) {
+              return 'Must select at least one Office application';
+            }
+            return true;
+          }
         }];
         
       // trigger prompts
@@ -345,7 +388,49 @@ module.exports = generators.Base.extend({
         }
       }
       done();
-    } // app()
+    }, // app()
+    
+    /**
+     * Update the manifest.xml <Hosts> element with the selected
+     * Office client hosts supported by this addin.
+     */
+    updateManifestHosts: function () {
+      var done = this.async();
+      
+      // workaround to 'this' context issue
+      var yoGenerator = this;
+      
+      // load manifest.xml
+      var manifestXml = yoGenerator.fs.read(yoGenerator.destinationPath('manifest.xml'));
+      
+      // convert it to JSON
+      var parser = new Xml2Js.Parser();
+      parser.parseString(manifestXml, function (err, manifestJson) {
+        // create array of selected Office products
+        var supportedHostsJson = [];
+        _.forEach(yoGenerator.genConfig.clients, function (officeClient) {
+          supportedHostsJson.push({
+            '$': {
+              Name: officeClient
+            }
+          })
+        });
+        // create host entry
+        manifestJson.OfficeApp.Hosts[0] = {
+          Host: supportedHostsJson
+        };
+
+        // convert JSON => XML
+        var xmlBuilder = new Xml2Js.Builder();
+        var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
+
+        // write updated manifest
+        yoGenerator.fs.write(yoGenerator.destinationPath('manifest.xml'), updatedManifestXml);
+
+        done();
+      });
+    } // updateManifestHosts()
+    
   }, // writing()
     
   /**

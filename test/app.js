@@ -31,6 +31,7 @@ describe('office:app', function () {
         rootPath: '',
         type: 'mail',
         tech: 'html',
+        clients: ['Document', 'Workbook'],
         'skip-install': true
       }
 
@@ -70,6 +71,7 @@ describe('office:app', function () {
         rootPath: '',
         type: 'taskpane',
         tech: 'html',
+        clients: ['Document', 'Workbook'],
         'skip-install': true
       }
 
@@ -109,6 +111,7 @@ describe('office:app', function () {
         rootPath: '',
         type: 'content',
         tech: 'html',
+        clients: ['Document', 'Workbook'],
         'skip-install': true
 
       }

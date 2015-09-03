@@ -35,6 +35,12 @@ module.exports = generators.Base.extend({
       required: false
     });
 
+    this.option('clients', {
+      type: String,
+      desc: 'Office client product that can host the add-in',
+      required: false
+    });
+
   }, // constructor()
   
   /**
@@ -116,6 +122,41 @@ module.exports = generators.Base.extend({
               name: 'Manifest.xml only (no application source files)',
               value: 'manifest-only'
             }]
+        },
+        // office client application that can host the addin         
+        {
+          name: 'clients',
+          message: 'Supported Office applications:',
+          type: 'checkbox',
+          choices: [
+            {
+              name: 'Word',
+              value: 'docx',
+              checked: true
+            },
+            {
+              name: 'Excel',
+              value: 'xlsx',
+              checked: true
+            },
+            {
+              name: 'PowerPoint',
+              value: 'pptx',
+              checked: true
+            },
+            {
+              name: 'Project',
+              value: 'mpp',
+              checked: true
+            }
+          ],
+          when: this.options.clients === undefined,
+          validate: function (clientsAnswer) {
+            if (clientsAnswer.length < 1) {
+              return 'Must select at least one Office application';
+            }
+            return true;
+          }
         }];
         
       // trigger prompts
@@ -141,6 +182,7 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
+            clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
           }
         }, {
@@ -156,6 +198,7 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
+            clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
           }
         }, {
@@ -170,6 +213,7 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
+            clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
           }
         }, {

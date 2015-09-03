@@ -9,10 +9,6 @@
   <HighResolutionIconUrl></HighResolutionIconUrl>
   <SupportUrl></SupportUrl>
   <Hosts>
-    <Host Name="Workbook" />
-    <Host Name="Presentation" />
-    <Host Name="Project" />
-    <Host Name="Document" />
   </Hosts>
   <DefaultSettings>
     <SourceLocation DefaultValue="<%= startPage %>" />
