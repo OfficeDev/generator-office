@@ -41,6 +41,12 @@ module.exports = generators.Base.extend({
       required: false
     });
 
+    this.option('outlookForm', {
+      type: String,
+      desc: 'Supported Outlook forms',
+      required: false
+    });
+
   }, // constructor()
   
   /**
@@ -182,8 +188,58 @@ module.exports = generators.Base.extend({
         done();
       }.bind(this));
 
-    } // askForOfficeClients()
-    
+    }, // askForOfficeClients()
+
+    askForOutlookForms: function () {
+      // if it's a mail addin, ask for Outlook forms
+      if (this.genConfig.type !== 'mail')
+        return;
+
+      var done = this.async();
+
+      // outlook form options
+      var prompts = [{
+        name: 'outlookForm',
+        message: 'Supported Outlook forms:',
+        type: 'checkbox',
+        choices: [
+          {
+            name: 'E-Mail message - read form',
+            value: 'mail-read',
+            checked: true
+          },
+          {
+            name: 'E-Mail message - compose form',
+            value: 'mail-compose',
+            checked: true
+          },
+          {
+            name: 'Appointment - read form',
+            value: 'appointment-read',
+            checked: true
+          },
+          {
+            name: 'Appointment - compose form',
+            value: 'appointment-compose',
+            checked: true
+          }
+        ],
+        when: this.options.outlookForm === undefined,
+        validate: function (answers) {
+          if (answers.length < 1) {
+            return 'Must select at least one Outlook form type';
+          }
+          return true;
+        }
+      }];      
+
+      // trigger prompts
+      this.prompt(prompts, function (responses) {
+        this.genConfig = extend(this.genConfig, responses);
+        done();
+      }.bind(this));
+    }
+
   }, // prompting()
 
   default: function () {
@@ -198,7 +254,7 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
-            clients: this.genConfig.clients,
+            outlookForm: this.genConfig.outlookForm,
             'skip-install': this.options['skip-install']
           }
         }, {

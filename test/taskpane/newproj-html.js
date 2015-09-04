@@ -203,8 +203,8 @@ describe('office:taskpane', function () {
         });
 
         /**
-      * Word present in host entry. 
-      */
+         * Word present in host entry. 
+         */
         it('includes Word in Hosts', function (done) {
           var found = false;
           _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
