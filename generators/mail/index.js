@@ -3,8 +3,10 @@
 var generators = require('yeoman-generator');
 var chalk = require('chalk');
 var path = require('path');
+var _ = require('lodash');
 var extend = require('deep-extend');
 var guid = require('uuid');
+var Xml2Js = require('xml2js');
 
 module.exports = generators.Base.extend({
   /**
@@ -37,6 +39,13 @@ module.exports = generators.Base.extend({
       desc: 'Technology to use for the Add-in (html = HTML; ng = Angular)',
       required: false
     });
+
+    this.option('outlookForm', {
+      type: String,
+      desc: 'Supported Outlook forms',
+      required: false
+    });
+
     // create global config object on this generator
     this.genConfig = {};
   }, // constructor()
@@ -90,6 +99,40 @@ module.exports = generators.Base.extend({
               name: 'Manifest.xml only (no application source files)',
               value: 'manifest-only'
             }]
+        },
+        {
+          name: 'outlookForm',
+          message: 'Supported Outlook forms:',
+          type: 'checkbox',
+          choices: [
+            {
+              name: 'E-Mail message - read form',
+              value: 'mail-read',
+              checked: true
+            },
+            {
+              name: 'E-Mail message - compose form',
+              value: 'mail-compose',
+              checked: true
+            },
+            {
+              name: 'Appointment - read form',
+              value: 'appointment-read',
+              checked: true
+            },
+            {
+              name: 'Appointment - compose form',
+              value: 'appointment-compose',
+              checked: true
+            }
+          ],
+          when: this.options.outlookForm === undefined,
+          validate: /* istanbul ignore next */ function (answers) {
+            if (answers.length < 1) {
+              return 'Must select at least one Outlook form type';
+            }
+            return true;
+          }
         }];
         
       // trigger prompts
@@ -278,6 +321,9 @@ module.exports = generators.Base.extend({
       this.genConfig.projectId = guid.v4();
 
       if (this.genConfig.tech === 'manifest-only') {
+        // set start page same for both forms
+        this.genConfig.startPageReadForm = this.genConfig.startPage;
+        this.genConfig.startPageEditForm = this.genConfig.startPage;
         // create the manifest file
         this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
       } else {
@@ -306,7 +352,8 @@ module.exports = generators.Base.extend({
         switch (this.genConfig.tech) {
           case 'html':
             // determine startpage for addin
-            this.genConfig.startPage = 'https://localhost:8443/appcompose/home/home.html';
+            this.genConfig.startPageReadForm = 'https://localhost:8443/appread/home/home.html';
+            this.genConfig.startPageEditForm = 'https://localhost:8443/appcompose/home/home.html';
 
             // copy tsd & jsconfig files
             this.fs.copy(this.templatePath('html/_tsd.json'), this.destinationPath('tsd.json'));
@@ -330,7 +377,8 @@ module.exports = generators.Base.extend({
             break;
           case 'ng':
             // determine startpage for addin
-            this.genConfig.startPage = 'https://localhost:8443/appcompose/index.html';
+            this.genConfig.startPageReadForm = 'https://localhost:8443/appread/index.html';
+            this.genConfig.startPageEditForm = 'https://localhost:8443/appcompose/index.html';
 
             // copy tsd & jsconfig files
             this.fs.copy(this.templatePath('ng/_tsd.json'), this.destinationPath('tsd.json'));
@@ -359,7 +407,114 @@ module.exports = generators.Base.extend({
       }
 
       done();
-    } // app()
+    }, // app()
+    
+    /**
+     * Update the manifest.xml to reflect the selected
+     * Outlook client forms supported by this addin. 
+     */
+    updateManifestForms: function () {
+      var done = this.async();
+      
+      // workaround to 'this' context issue
+      var yoGenerator = this;
+      
+      // load manifest.xml
+      var manifestXml = yoGenerator.fs.read(yoGenerator.destinationPath('manifest.xml'));
+
+      // convert it to JSON
+      var parser = new Xml2Js.Parser();
+      parser.parseString(manifestXml, function (err, manifestJson) {
+
+        // if mail/appointment read not present, remove the form setting
+        _.remove(manifestJson.OfficeApp.FormSettings[0].Form, function (formSetting) {
+          if (formSetting.$['xsl:type'] === 'ItemRead') {
+            return true;
+          } else {
+            return false;
+          }
+        });
+
+        // if mail/appointment edit not present, remove the form setting
+        _.remove(manifestJson.OfficeApp.FormSettings[0].Form, function (formSetting) {
+          if (formSetting.$['xsl:type'] === 'ItemEdit') {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        
+        // create array of selected form types
+        var supportedFormTypesJson = [];
+        _.forEach(yoGenerator.genConfig.outlookForm, function (formType) {
+          switch (formType) {
+            case 'mail-read':
+              supportedFormTypesJson.push({
+                '$': {
+                  'xsi:type': 'ItemIs',
+                  ItemType: 'Message',
+                  FormType: 'Read'
+                }
+              });
+              break;
+            case 'mail-compose':
+              supportedFormTypesJson.push({
+                '$': {
+                  'xsi:type': 'ItemIs',
+                  ItemType: 'Message',
+                  FormType: 'Edit'
+                }
+              });
+              break;
+            case 'appointment-read':
+              supportedFormTypesJson.push({
+                '$': {
+                  'xsi:type': 'ItemIs',
+                  ItemType: 'Appointment',
+                  FormType: 'Read'
+                }
+              });
+              break;
+            case 'appointment-compose':
+              supportedFormTypesJson.push({
+                '$': {
+                  'xsi:type': 'ItemIs',
+                  ItemType: 'Appointment',
+                  FormType: 'Edit'
+                }
+              });
+              break;
+          };
+        });
+
+        var ruleEntry = undefined;
+        // if only one rule, add it        
+        if (supportedFormTypesJson.length == 1) {
+          ruleEntry = supportedFormTypesJson[0];
+        } else {
+          // create container of rules & ad it
+          ruleEntry = {
+            '$': {
+              'xsi:type': "RuleCollection",
+              Mode: 'Or',
+            },
+            Rule: supportedFormTypesJson
+          };
+        }
+        // add the rule to the manifest
+        manifestJson.OfficeApp.Rule[0] = ruleEntry;
+        
+        // convert JSON => XML
+        var xmlBuilder = new Xml2Js.Builder();
+        var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
+        
+        // write updated manifest
+        yoGenerator.fs.write(yoGenerator.destinationPath('manifest.xml'), updatedManifestXml);
+
+        done();
+      });
+
+    } // updateManifestForms()
   }, // writing()
     
   /**

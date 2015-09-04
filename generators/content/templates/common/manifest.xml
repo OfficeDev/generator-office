@@ -6,12 +6,8 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
   <Description DefaultValue="[Task pane Add-in description]"/>
-  <HighResolutionIconUrl></HighResolutionIconUrl>
   <SupportUrl></SupportUrl>
   <Hosts>
-    <Host Name="Workbook" />
-    <Host Name="Presentation" />
-    <Host Name="Database" />
   </Hosts>
   <DefaultSettings>
     <SourceLocation DefaultValue="<%= startPage %>" />

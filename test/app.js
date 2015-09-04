@@ -31,6 +31,7 @@ describe('office:app', function () {
         rootPath: '',
         type: 'mail',
         tech: 'html',
+        outlookForm: ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'],
         'skip-install': true
       }
 
@@ -70,6 +71,7 @@ describe('office:app', function () {
         rootPath: '',
         type: 'taskpane',
         tech: 'html',
+        clients: ['Document', 'Workbook'],
         'skip-install': true
       }
 
@@ -98,7 +100,7 @@ describe('office:app', function () {
 
     });
 
-  }); // describe('runs taskpane subgenerator')
+  }); // describe('runs content subgenerator')
 
   describe('runs content subgenerator', function () {
 
@@ -109,6 +111,7 @@ describe('office:app', function () {
         rootPath: '',
         type: 'content',
         tech: 'html',
+        clients: ['Document', 'Workbook'],
         'skip-install': true
 
       }

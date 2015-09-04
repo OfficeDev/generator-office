@@ -55,9 +55,11 @@
   "dependencies": {
     "chalk": "^1.0.0",
     "deep-extend": "^0.4.0",
+    "lodash": "^3.10.1",
     "uuid": "^2.0.1",
     "yeoman-generator": "^0.20.3",
-    "yosay": "^1.0.2"
+    "yosay": "^1.0.2",
+    "xml2js": "^0.4.10"
   },
   "devDependencies": {
     "chai": "^3.2.0",
@@ -71,7 +73,6 @@
     "mocha": "*",
     "mockery": "^1.4.0",
     "validator": "^4.0.3",
-    "which": "^1.1.1",
-    "xml2js": "^0.4.10"
+    "which": "^1.1.1"
   }
 }
