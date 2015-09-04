@@ -35,6 +35,18 @@ module.exports = generators.Base.extend({
       required: false
     });
 
+    this.option('clients', {
+      type: String,
+      desc: 'Office client product that can host the add-in',
+      required: false
+    });
+
+    this.option('outlookForm', {
+      type: String,
+      desc: 'Supported Outlook forms',
+      required: false
+    });
+
   }, // constructor()
   
   /**
@@ -125,8 +137,109 @@ module.exports = generators.Base.extend({
         done();
       }.bind(this));
 
-    } // askFor()
+    }, // askFor()
     
+    askForOfficeClients: function () {
+      // if it's a mail addin, don't ask for Office client
+      if (this.genConfig.type === 'mail')
+        return;
+
+      var done = this.async();
+
+      // office client application that can host the addin
+      var prompts = [{
+        name: 'clients',
+        message: 'Supported Office applications:',
+        type: 'checkbox',
+        choices: [
+          {
+            name: 'Word',
+            value: 'Document',
+            checked: true
+          },
+          {
+            name: 'Excel',
+            value: 'Workbook',
+            checked: true
+          },
+          {
+            name: 'PowerPoint',
+            value: 'Presentation',
+            checked: true
+          },
+          {
+            name: 'Project',
+            value: 'Project',
+            checked: true
+          }
+        ],
+        when: this.options.clients === undefined,
+        validate: /* istanbul ignore next */ function (clientsAnswer) {
+          if (clientsAnswer.length < 1) {
+            return 'Must select at least one Office application';
+          }
+          return true;
+        }
+      }];
+        
+      // trigger prompts
+      this.prompt(prompts, function (responses) {
+        this.genConfig = extend(this.genConfig, responses);
+        done();
+      }.bind(this));
+
+    }, // askForOfficeClients()
+
+    askForOutlookForms: function () {
+      // if it's a mail addin, ask for Outlook forms
+      if (this.genConfig.type !== 'mail')
+        return;
+
+      var done = this.async();
+
+      // outlook form options
+      var prompts = [{
+        name: 'outlookForm',
+        message: 'Supported Outlook forms:',
+        type: 'checkbox',
+        choices: [
+          {
+            name: 'E-Mail message - read form',
+            value: 'mail-read',
+            checked: true
+          },
+          {
+            name: 'E-Mail message - compose form',
+            value: 'mail-compose',
+            checked: true
+          },
+          {
+            name: 'Appointment - read form',
+            value: 'appointment-read',
+            checked: true
+          },
+          {
+            name: 'Appointment - compose form',
+            value: 'appointment-compose',
+            checked: true
+          }
+        ],
+        when: this.options.outlookForm === undefined,
+        validate: /* istanbul ignore next */ function (answers) {
+          if (answers.length < 1) {
+            return 'Must select at least one Outlook form type';
+          }
+          return true;
+        }
+      }];      
+
+      // trigger prompts
+      this.prompt(prompts, function (responses) {
+        this.genConfig = extend(this.genConfig, responses);
+        done();
+      }.bind(this));
+    }
+
   }, // prompting()
 
   default: function () {
@@ -141,6 +254,7 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
+            outlookForm: this.genConfig.outlookForm,
             'skip-install': this.options['skip-install']
           }
         }, {
@@ -156,6 +270,7 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
+            clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
           }
         }, {
@@ -170,6 +285,7 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
+            clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
           }
         }, {

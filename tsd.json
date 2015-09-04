@@ -37,6 +37,9 @@
     },
     "gulp-mocha/gulp-mocha.d.ts": {
       "commit": "fa8d9683f37d07ed79617a6e037916c6718aeb11"
+    },
+    "lodash/lodash.d.ts": {
+      "commit": "9ce3cd4ded7536d40b8d65264ad729f442f5a052"
     }
   }
 }

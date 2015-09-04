@@ -3,6 +3,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 var mockery = require('mockery');
 var assert = require('yeoman-generator').assert;
 var helpers = require('yeoman-generator').test;
@@ -84,6 +85,9 @@ describe('office:content', function () {
         //set language to html
         options.tech = 'html';
 
+        // set products
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
+
         // run the generator
         helpers.run(path.join(__dirname, '../../generators/content'))
           .withOptions(options)
@@ -127,7 +131,7 @@ describe('office:content', function () {
           addinRootPath + '/images/close.png',
           addinRootPath + '/scripts/MicrosoftAjax.js',
           addinRootPath + '/scripts/jquery.fabric.js',
-          addinRootPath + '/scripts/jquery.fabric.min.js'          
+          addinRootPath + '/scripts/jquery.fabric.min.js'
         ];
         assert.file(expected);
         done();
@@ -206,6 +210,66 @@ describe('office:content', function () {
           done();
         });
 
+        /**
+         * Word present in host entry. 
+         */
+        it('includes Word in Hosts', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Document') {
+              found = true;
+            }
+          });
+          expect(found, '<Host Name="Document"/> exist').to.be.true;
+
+          done();
+        });
+
+        /**
+         * Excel present in host entry. 
+         */
+        it('includes Excel in Hosts', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Workbook') {
+              found = true;
+            }
+          });
+          expect(found, '<Host Name="Workbook"/> exist').to.be.true;
+
+          done();
+        });
+
+        /**
+         * PowerPoint present in host entry. 
+         */
+        it('includes PowerPoint in Hosts', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Presentation') {
+              found = true;
+            }
+          });
+          expect(found, '<Host Name="Presentation"/> exist').to.be.true;
+
+          done();
+        });
+
+        /**
+         * Project present in host entry. 
+         */
+        it('includes Project in Hosts', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Project') {
+              found = true;
+            }
+          });
+          expect(found, '<Host Name="Project"/> exist').to.be.true;
+
+          done();
+        });
+
       }); //describe('manifest.xml contents')
       
       /**
@@ -222,7 +286,7 @@ describe('office:content', function () {
           });
         });
 
-        it ('has correct *.d.ts references', function (done) {
+        it('has correct *.d.ts references', function (done) {
           expect(tsd.installed).to.exist;
           expect(tsd.installed["jquery/jquery.d.ts"]).to.exist;
           expect(tsd.installed["angularjs/angular.d.ts"]).to.not.exist;

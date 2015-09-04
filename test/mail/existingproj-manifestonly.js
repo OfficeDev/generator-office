@@ -3,6 +3,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 var mockery = require('mockery');
 var assert = require('yeoman-generator').assert;
 var helpers = require('yeoman-generator').test;
@@ -28,7 +29,7 @@ describe('office:mail', function () {
     };
     done();
   });
-  
+
   describe('run on existing project (non-empty folder)', function () {
     var addinRootPath = 'src/public';
     
@@ -47,6 +48,10 @@ describe('office:mail', function () {
       beforeEach(function (done) {
         //set language to html
         options.tech = 'manifest-only';
+
+        // set outlook form type
+        options.outlookForm = ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'];
+
         options.startPage = 'https://localhost:8443/manifest-only/index.html';
 
         // run the generator
@@ -96,6 +101,104 @@ describe('office:mail', function () {
 
         it('has correct start page', function (done) {
           expect(manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/manifest-only/index.html');
+          done();
+        });
+
+        /**
+      * Form for ItemRead present
+      */
+        it('includes form for ItemRead', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.FormSettings[0].Form, function (formSetting) {
+            if (formSetting.$['xsi:type'] === 'ItemRead') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Form xsi:type="ItemRead"> exist').to.be.true;
+          done();
+        });
+        
+        /**
+         * Form for ItemEdit present
+         */
+        it('includes form for ItemEdit', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.FormSettings[0].Form, function (formSetting) {
+            if (formSetting.$['xsi:type'] === 'ItemEdit') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Form xsi:type="ItemEdit"> exist').to.be.true;
+          done();
+        });
+        
+        /**
+         * Rule for Mail Read present
+         */
+        it('includes rule for mail read', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
+            if (rule.$['xsi:type'] === 'ItemIs' &&
+              rule.$.ItemType === 'Message' &&
+              rule.$.FormType === 'Read') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Rule xsi:type="ItemIs" ItemType="Message" FormType="Read" />').to.be.true;
+          done();
+        });
+        
+        /**
+         * Rule for Mail Edit present
+         */
+        it('includes rule for mail edit', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
+            if (rule.$['xsi:type'] === 'ItemIs' &&
+              rule.$.ItemType === 'Message' &&
+              rule.$.FormType === 'Edit') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit" />').to.be.true;
+          done();
+        });
+        
+        /**
+         * Rule for Appointment Read present
+         */
+        it('includes rule for appointment read', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
+            if (rule.$['xsi:type'] === 'ItemIs' &&
+              rule.$.ItemType === 'Appointment' &&
+              rule.$.FormType === 'Read') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Rule xsi:type="ItemIs" ItemType="Appointment" FormType="Read" />').to.be.true;
+          done();
+        });
+        
+        /**
+         * Rule for Appointment Edit present
+         */
+        it('includes rule for appointment edit', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
+            if (rule.$['xsi:type'] === 'ItemIs' &&
+              rule.$.ItemType === 'Appointment' &&
+              rule.$.FormType === 'Edit') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Rule xsi:type="ItemIs" ItemType="Appointment" FormType="Edit" />').to.be.true;
           done();
         });
 

@@ -3,6 +3,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 var mockery = require('mockery');
 var assert = require('yeoman-generator').assert;
 var helpers = require('yeoman-generator').test;
@@ -49,6 +50,9 @@ describe('office:taskpane', function () {
         //set language to html
         options.tech = 'manifest-only';
         options.startPage = 'https://localhost:8443/manifest-only/index.html';
+
+        // set products
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
 
         // run the generator
         helpers.run(path.join(__dirname, '../../generators/taskpane'))
@@ -97,6 +101,66 @@ describe('office:taskpane', function () {
 
         it('has correct start page', function (done) {
           expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/manifest-only/index.html');
+          done();
+        });
+
+        /**
+        * Word present in host entry. 
+        */
+        it('includes Word in Hosts', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Document') {
+              found = true;
+            }
+          });
+          expect(found, '<Host Name="Document"/> exist').to.be.true;
+
+          done();
+        });
+
+        /**
+         * Excel present in host entry. 
+         */
+        it('includes Excel in Hosts', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Workbook') {
+              found = true;
+            }
+          });
+          expect(found, '<Host Name="Workbook"/> exist').to.be.true;
+
+          done();
+        });
+
+        /**
+         * PowerPoint present in host entry. 
+         */
+        it('includes PowerPoint in Hosts', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Presentation') {
+              found = true;
+            }
+          });
+          expect(found, '<Host Name="Presentation"/> exist').to.be.true;
+
+          done();
+        });
+
+        /**
+         * Project present in host entry. 
+         */
+        it('includes Project in Hosts', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Project') {
+              found = true;
+            }
+          });
+          expect(found, '<Host Name="Project"/> exist').to.be.true;
+
           done();
         });
 

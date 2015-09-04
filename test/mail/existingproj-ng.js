@@ -3,6 +3,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 var mockery = require('mockery');
 var assert = require('yeoman-generator').assert;
 var helpers = require('yeoman-generator').test;
@@ -37,6 +38,7 @@ describe('office:mail', function () {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
       tech: 'ng',
+      outlookForm: ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'],
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
     
@@ -79,6 +81,9 @@ describe('office:mail', function () {
       beforeEach(function (done) {
         //set language to html
         options.tech = 'ng';
+
+        // set outlook form type
+        options.outlookForm = ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'];
 
         helpers.run(path.join(__dirname, '../../generators/mail'))
           .withOptions(options)
@@ -128,7 +133,7 @@ describe('office:mail', function () {
           addinRootPath + '/images/close.png',
           addinRootPath + '/scripts/MicrosoftAjax.js',
           addinRootPath + '/scripts/jquery.fabric.js',
-          addinRootPath + '/scripts/jquery.fabric.min.js'          
+          addinRootPath + '/scripts/jquery.fabric.min.js'
         ];
 
 
@@ -208,7 +213,113 @@ describe('office:mail', function () {
         });
 
         it('has correct start page', function (done) {
-          expect(manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/appcompose/index.html');
+          var valid = false;
+          var subject = manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue;
+
+          if (subject === 'https://localhost:8443/appcompose/index.html' ||
+            subject === 'https://localhost:8443/appread/index.html') {
+            valid = true;
+          }
+
+          expect(valid, 'start page is not valid compose or edit form').to.be.true;
+          done();
+        });
+
+        /**
+         * Form for ItemRead present
+         */
+        it('includes form for ItemRead', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.FormSettings[0].Form, function (formSetting) {
+            if (formSetting.$['xsi:type'] === 'ItemRead') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Form xsi:type="ItemRead"> exist').to.be.true;
+          done();
+        });
+        
+        /**
+         * Form for ItemEdit present
+         */
+        it('includes form for ItemEdit', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.FormSettings[0].Form, function (formSetting) {
+            if (formSetting.$['xsi:type'] === 'ItemEdit') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Form xsi:type="ItemEdit"> exist').to.be.true;
+          done();
+        });
+        
+        /**
+         * Rule for Mail Read present
+         */
+        it('includes rule for mail read', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
+            if (rule.$['xsi:type'] === 'ItemIs' &&
+              rule.$.ItemType === 'Message' &&
+              rule.$.FormType === 'Read') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Rule xsi:type="ItemIs" ItemType="Message" FormType="Read" />').to.be.true;
+          done();
+        });
+        
+        /**
+         * Rule for Mail Edit present
+         */
+        it('includes rule for mail edit', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
+            if (rule.$['xsi:type'] === 'ItemIs' &&
+              rule.$.ItemType === 'Message' &&
+              rule.$.FormType === 'Edit') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit" />').to.be.true;
+          done();
+        });
+        
+        /**
+         * Rule for Appointment Read present
+         */
+        it('includes rule for appointment read', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
+            if (rule.$['xsi:type'] === 'ItemIs' &&
+              rule.$.ItemType === 'Appointment' &&
+              rule.$.FormType === 'Read') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Rule xsi:type="ItemIs" ItemType="Appointment" FormType="Read" />').to.be.true;
+          done();
+        });
+        
+        /**
+         * Rule for Appointment Edit present
+         */
+        it('includes rule for appointment edit', function (done) {
+          var found = false;
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
+            if (rule.$['xsi:type'] === 'ItemIs' &&
+              rule.$.ItemType === 'Appointment' &&
+              rule.$.FormType === 'Edit') {
+              found = true;
+            }
+          });
+
+          expect(found, '<Rule xsi:type="ItemIs" ItemType="Appointment" FormType="Edit" />').to.be.true;
           done();
         });
 
@@ -228,7 +339,7 @@ describe('office:mail', function () {
           });
         });
 
-        it ('has correct *.d.ts references', function (done) {
+        it('has correct *.d.ts references', function (done) {
           expect(tsd.installed).to.exist;
           expect(tsd.installed["jquery/jquery.d.ts"]).to.exist;
           expect(tsd.installed["angularjs/angular.d.ts"]).to.exist;
@@ -243,14 +354,14 @@ describe('office:mail', function () {
        * gulpfile.js is good
        */
       describe('gulpfule.js contents', function () {
-      
+
         it('contains task \'serve-static\'', function (done) {
-          
+
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'serve-static\',');
           done();
         });
-      
+
       }); // describe('gulpfile.js contents')
 
     }); // describe('technology:ng')
