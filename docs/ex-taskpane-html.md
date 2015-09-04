@@ -16,11 +16,15 @@ $ yo office --skip-install
 - **Root folder of the project:** {blank} 
 - **Office project type:** Task Pane Add-in
 - **Technology to use:** Html, CSS & JavaScript
+- **Supported Office Applications:** Word, Excel, PowerPoint, Project
 
 ```
 .
 ├── .bowerrc
 ├── bower.json
+├── gulpfile.js
+├── jsconfig.json
+├── tsd.json
 ├── app
 │   ├── app.css
 │   ├── app.js
@@ -75,6 +79,7 @@ $ yo office --skip-install
 - **Root folder of the project:** src/public
 - **Office project type:** Task Pane Add-in
 - **Technology to use:** Html, CSS & JavaScript
+- **Supported Office Applications:** Word, Excel, PowerPoint, Project
 
 ### Results:
 
@@ -82,8 +87,11 @@ $ yo office --skip-install
 .
 ├── .bowerrc
 ├── bower.json
+├── gulpfile.js
+├── jsconfig.json
 ├── manifest.xml
 ├── package.json
+├── tsd.json
 └── src
     ├── public
     │   ├── app

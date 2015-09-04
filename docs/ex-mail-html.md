@@ -16,12 +16,16 @@ $ yo office --skip-install
 - **Root folder of the project:** {blank} 
 - **Office project type:** Mail Add-in (read & compose forms)
 - **Technology to use:** Html, CSS & JavaScript
+- **Supported Outlook forms:** E-Mail message - read form, Appointment - read form
 
 ```
 .
 ├── .bowerrc
 ├── bower.json
+├── gulpfile.js
+├── jsconfig.json
 ├── manifest.xml
+├── tsd.json
 ├── appcompose
 │   ├── app.css
 │   ├── app.js
@@ -82,6 +86,7 @@ $ yo office --skip-install
 - **Root folder of the project:** src/public 
 - **Office project type:** Mail Add-in (read & compose forms)
 - **Technology to use:** Html, CSS & JavaScript
+- **Supported Outlook forms:** E-Mail message - read form, Appointment - read form
 
 ### Results:
 
@@ -89,8 +94,11 @@ $ yo office --skip-install
 .
 ├── .bowerrc
 ├── bower.json
+├── gulpfile.js
+├── jsconfig.json
 ├── manifest.xml
 ├── package.json
+├── tsd.json
 └── src
     ├── public
     │   ├── appcompose
