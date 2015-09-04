@@ -127,7 +127,7 @@ module.exports = generators.Base.extend({
             }
           ],
           when: this.options.outlookForm === undefined,
-          validate: function (answers) {
+          validate: /* istanbul ignore next */ function (answers) {
             if (answers.length < 1) {
               return 'Must select at least one Outlook form type';
             }

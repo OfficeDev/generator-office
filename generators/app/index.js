@@ -174,7 +174,7 @@ module.exports = generators.Base.extend({
           }
         ],
         when: this.options.clients === undefined,
-        validate: function (clientsAnswer) {
+        validate: /* istanbul ignore next */ function (clientsAnswer) {
           if (clientsAnswer.length < 1) {
             return 'Must select at least one Office application';
           }
@@ -225,7 +225,7 @@ module.exports = generators.Base.extend({
           }
         ],
         when: this.options.outlookForm === undefined,
-        validate: function (answers) {
+        validate: /* istanbul ignore next */ function (answers) {
           if (answers.length < 1) {
             return 'Must select at least one Outlook form type';
           }
