@@ -22,6 +22,8 @@ Choose to create the Office projects using plain HTML, CSS & JavaScript (*mirror
 
 Check out the announcement blog post: [Office Dev Center Blog - Creating Office Add-ins with any editor - Introducing YO OFFICE!](http://dev.office.com/blogs/creating-office-add-ins-with-any-editor-introducing-yo-office) 
 
+Read up on [how to use the generator to create Office Add-ins with Visual Studio Code](https://code.visualstudio.com/Docs/runtimes/office).
+
 ## YO Office Demo
 ![](docs/assets/generatoroffice.png)
 
