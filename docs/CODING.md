@@ -4,8 +4,8 @@ Refer to the existing code & tests for examples of coding guidelines for this pr
 
 All code must pass the [JSHint](http://www.jshint.com) & [JSCS](http://jscs.info) rules defined in this project which are defined in the following config files:
 
-- JSHint Settings: [.jshintrc](../.jshint)
-- JSCS Settings: [.jscsrc](../.jscsrc)
+- JSHint Settings: [.jshintrc](/OfficeDev/generator-office/.jshint)
+- JSCS Settings: [.jscsrc](/OfficeDev/generator-office/.jscsrc)
 
 ## Coding Style
 
@@ -50,7 +50,7 @@ While coding, you can automatically run this using the **autotest** task:
 $ gulp autotest
 ```
 
-To generate a code coverage report, after running tests, open the [code coverage report](../coverage/lcov-report/index.html) in a browser.
+To generate a code coverage report, after running tests, open the code coverage report found in `/coverage/lcov-report/index.html` in a browser.
 
 ## Documentation
 
