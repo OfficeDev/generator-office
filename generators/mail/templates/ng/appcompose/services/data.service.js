@@ -1,14 +1,14 @@
-(function () {
+(function(){
   'use strict';
 
   angular.module('officeAddin')
-    .service('dataService', ['$q', dataService]);
+         .service('dataService', ['$q', dataService]);
 
   /**
    * Custom Angular service.
    */
-  function dataService($q) {
-    
+  function dataService($q){
+
     // public signature of the service
     return {
       getData: getData
@@ -16,7 +16,7 @@
 
     /** *********************************************************** */
 
-    function getData() {
+    function getData(){
       var deferred = $q.defer();
 
       deferred.resolve([
@@ -28,6 +28,6 @@
 
       return deferred.promise;
     }
-    
+
   }
 })();

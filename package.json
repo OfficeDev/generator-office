@@ -65,14 +65,25 @@
     "chai": "^3.2.0",
     "coveralls": "^2.11.4",
     "gulp": "^3.9.0",
+    "gulp-debug": "^2.1.0",
+    "gulp-if": "^1.2.5",
     "gulp-istanbul": "^0.10.0",
+    "gulp-jscs": "^2.0.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-load-plugins": "^0.10.0",
     "gulp-mocha": "^2.1.3",
     "gulp-node-inspector": "0.0.4",
+    "gulp-print": "^1.1.0",
+    "gulp-task-listing": "^1.0.1",
     "gulp-util": "^3.0.6",
     "istanbul": "^0.3.18",
+    "jscs": "^2.1.1",
+    "jscs-jsdoc": "^1.1.0",
+    "jshint-stylish": "^2.0.1",
     "mocha": "*",
     "mockery": "^1.4.0",
     "validator": "^4.0.3",
-    "which": "^1.1.1"
+    "which": "^1.1.1",
+    "yargs": "^3.24.0"
   }
 }
