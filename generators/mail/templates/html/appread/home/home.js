@@ -1,11 +1,9 @@
-﻿/// <reference path="../App.js" />
-
-(function () {
-  "use strict";
+(function(){
+  'use strict';
 
   // The Office initialize function must be run each time a new page is loaded
-  Office.initialize = function (reason) {
-    $(document).ready(function () {
+  Office.initialize = function(reason){
+    jQuery(document).ready(function(){
       app.initialize();
 
       displayItemDetails();
@@ -13,9 +11,9 @@
   };
 
   // Displays the "Subject" and "From" fields, based on the current mail item
-  function displayItemDetails() {
+  function displayItemDetails(){
     var item = Office.cast.item.toItemRead(Office.context.mailbox.item);
-    $('#subject').text(item.subject);
+    jQuery('#subject').text(item.subject);
 
     var from;
     if (item.itemType === Office.MailboxEnums.ItemType.Message) {
@@ -25,8 +23,8 @@
     }
 
     if (from) {
-      $('#from').text(from.displayName);
-      $('#from').click(function () {
+      jQuery('#from').text(from.displayName);
+      jQuery('#from').click(function(){
         app.showNotification(from.displayName, from.emailAddress);
       });
     }

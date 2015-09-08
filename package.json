@@ -1,6 +1,6 @@
 {
   "name": "generator-office",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Yeoman generator for creating Microsoft Office projects using any text editor.",
   "licenses": [
     {
@@ -29,8 +29,8 @@
   "scripts": {
     "dev-install": "tsd install",
     "test": "./node_modules/mocha/bin/_mocha -R dot test/**",
-    "test-coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R min test/**",
-    "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec test/**"
+    "test-coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R min -t 100000 test/**",
+    "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec -t 100000 test/**"
   },
   "repository": {
     "type": "git",
@@ -65,14 +65,25 @@
     "chai": "^3.2.0",
     "coveralls": "^2.11.4",
     "gulp": "^3.9.0",
+    "gulp-debug": "^2.1.0",
+    "gulp-if": "^1.2.5",
     "gulp-istanbul": "^0.10.0",
+    "gulp-jscs": "^2.0.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-load-plugins": "^0.10.0",
     "gulp-mocha": "^2.1.3",
     "gulp-node-inspector": "0.0.4",
+    "gulp-print": "^1.1.0",
+    "gulp-task-listing": "^1.0.1",
     "gulp-util": "^3.0.6",
     "istanbul": "^0.3.18",
+    "jscs": "^2.1.1",
+    "jscs-jsdoc": "^1.1.0",
+    "jshint-stylish": "^2.0.1",
     "mocha": "*",
     "mockery": "^1.4.0",
     "validator": "^4.0.3",
-    "which": "^1.1.1"
+    "which": "^1.1.1",
+    "yargs": "^3.24.0"
   }
 }
