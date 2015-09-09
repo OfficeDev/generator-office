@@ -1,10 +1,10 @@
 If you would like to become an active contributor to this project please read the following guidelines.
 
 ## Reporting Bugs & Issues
-If you have any bugs or issues with the generator. Please submit them in the Issues for this repo.
+If you have any bugs or issues with the generator. Please submit them in the [Issues](/OfficeDev/generator-office/issues) for this repo.
 
 ## Submitting Feature Requests & Design Change Requests
-Feature requests and Design Change Requests (DCRs) are an important part of the lifecycle of any software project. Please log these as Issues in the repo. 
+Feature requests and Design Change Requests (DCRs) are an important part of the lifecycle of any software project. Please log these as [Issues](/OfficeDev/generator-office/issues) in the repo. 
 
 When opening any feature requests, consider including as much information as possible, including: 
 
@@ -16,8 +16,16 @@ When opening any feature requests, consider including as much information as pos
 - A miniature test plan or list of test scenarios is always helpful.
 
 ## Contributing Code
-We encourage contributions to the repo through Pull Requests. The first time you do this you will be prompted by our CLA bot at Microsoft to agree to our Contributor License Agreement. AFter this we will review your code and work with you on merging it into the repo.
+As you can see from this repo, we are using unit tests to test the generator.  We will only accept pull requests that have full unit test coverage & conform to the coding style guides.
 
-As you can see from this repo, we are using unit tests to test the generator.  We will only accept pull requests that have full unit test coverage.
+Please feel free to reach out to the team if you have any questions on contributing. You can create an issue if you are having problems and @ mention [@jthake](/jthake) & [@andrewconnell](/andrewconnell).
 
-Please feel free to reach out to the team if you have any questions on contributing. You can create an issue if you are having problems and at mention jthake and andrewconnell.
+## Submitting Pull Requests
+- Before submitting any significant pull requests, open an issue and explain your idea / suggestion before coding.
+- Significant PR's submitted with no "heads up" will go through a slow review process and are not likely to be accepted.
+- All code must meet the project's [Coding Conventions & Guidelines](docs/CODING.md) the covers:
+  - coding style
+  - testing
+  - documentation
+- Send pull request **ONLY TO THE DEV BRANCH** of this repo. 
+- Please make sure you have included tests with your submission. *Pull requests without sufficient tests will not be accepted*.

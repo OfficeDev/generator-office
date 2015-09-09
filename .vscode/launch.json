@@ -8,11 +8,16 @@
       //        for the typical NPM install & config, this is usually /usr/local/bin/yo
       //        however others (as below) may have global NPM packages setup in a 
       //        different path as common to avoid using sudo on OS X 
-      "program": "/usr/local/bin/yo",
+      "program": "/Users/ac/.npm-packages/bin/yo",
       "args": [
         "office",
         "--skip-install"
       ],
+      "cwd": "/Users/ac/Dev/Scratch/myaddin",
+      "env": {
+        "DEBUG":"yeoman:generator"
+      },
+      
       "stopOnEntry": false
     }
   ]

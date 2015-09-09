@@ -6,20 +6,20 @@ var assert = require('yeoman-generator').assert;
  */
 exports.assertObjectContains = _assertObjectContains;
 
-function _assertObjectContains(obj, content) {
-  Object.keys(content).forEach(function (key) {
+function _assertObjectContains(obj, content){
+  Object.keys(content).forEach(function(key){
     if (typeof content[key] === 'object') {
       _assertObjectContains(content[key], obj[key]);
       return;
     }
     assert.equal(content[key], obj[key]);
   });
-};
+}
 
 /**
  * Helper function to check contents of JSON file.
  */
-exports.assertJSONFileContains = function (filename, content) {
+exports.assertJSONFileContains = function(filename, content){
   var obj = JSON.parse(fs.readFileSync(filename, 'utf8'));
   _assertObjectContains(obj, content);
 };
@@ -28,7 +28,7 @@ exports.assertJSONFileContains = function (filename, content) {
  * Setup an existing project in the test folder.
  * @param {RunContext} generator - The generator being run.
  */
-exports.setupExistingProject = function (generator) {
+exports.setupExistingProject = function(generator){
   // create existing package.json file
   var existingPackage = {
     name: 'ProjectName',
@@ -38,21 +38,22 @@ exports.setupExistingProject = function (generator) {
     dependencies: {
       express: '^4.12.2'
     }
-  };  
+  };
   // write the package.json file
   generator.fs.writeJSON(generator.destinationPath('package.json'), existingPackage);
-  
+
   // create existing bower.json file
   var existingBower = {
-    name: "ProjectName",
-    version: "0.1.0",
+    name: 'ProjectName',
+    version: '0.1.0',
     dependencies: {
-      "jquery": "~1.9.1"
+      'jquery': '~1.9.1'
     }
-  }
+  };
+
   // write the bower.json file
   generator.fs.writeJSON(generator.destinationPath('bower.json'), existingBower);
-  
+
   // write out static content
   generator.fs.write(generator.destinationPath('public/index.html'), 'foo');
   generator.fs.write(generator.destinationPath('public/content/site.css'), 'foo');
