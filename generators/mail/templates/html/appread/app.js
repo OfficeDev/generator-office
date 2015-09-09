@@ -1,11 +1,13 @@
-var app = (function(){  // jshint ignore:line
-  'use strict';
+﻿/* Common app functionality */
 
-  var self = {};
+var app = (function () {
+  "use strict";
+
+  var app = {};
 
   // Common initialization function (to be called from each page)
-  self.initialize = function(){
-    jQuery('body').append(
+  app.initialize = function () {
+    $('body').append(
       '<div id="notification-message">' +
       '<div class="padding">' +
       '<div id="notification-message-close"></div>' +
@@ -14,17 +16,18 @@ var app = (function(){  // jshint ignore:line
       '</div>' +
       '</div>');
 
-    jQuery('#notification-message-close').click(function(){
-      jQuery('#notification-message').hide();
+    $('#notification-message-close').click(function () {
+      $('#notification-message').hide();
     });
 
+
     // After initialization, expose a common notification function
-    self.showNotification = function(header, text){
-      jQuery('#notification-message-header').text(header);
-      jQuery('#notification-message-body').text(text);
-      jQuery('#notification-message').slideDown('fast');
+    app.showNotification = function (header, text) {
+      $('#notification-message-header').text(header);
+      $('#notification-message-body').text(text);
+      $('#notification-message').slideDown('fast');
     };
   };
 
-  return self;
+  return app;
 })();

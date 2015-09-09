@@ -1,12 +1,6 @@
-# Microsoft Office Project Generator - YO OFFICE!
+# Microsoft Office Project Generator
 
-[![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office)
-[![Downloads](http://img.shields.io/npm/dm/generator-office.svg)](https://npmjs.org/package/generator-office)
-[![Build Status](https://travis-ci.org/OfficeDev/generator-office.svg)](https://travis-ci.org/OfficeDev/generator-office)
-[![Coverage Status](https://coveralls.io/repos/OfficeDev/generator-office/badge.svg?branch=master&service=github)](https://coveralls.io/github/OfficeDev/generator-office?branch=master)
-[![Dependency Status](https://david-dm.org/officedev/generator-office.svg)](https://david-dm.org/officedev/generator-office)
-[![devDependency Status](https://david-dm.org/officedev/generator-office/dev-status.svg)](https://david-dm.org/officedev/generator-office#info=devDependencies)
-[![Slack Network](http://officedev.herokuapp.com/badge.svg)](http://officedev.herokuapp.com/)
+[![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office) [![Build Status](https://travis-ci.org/OfficeDev/generator-office.svg)](https://travis-ci.org/OfficeDev/generator-office) [![Coverage Status](https://coveralls.io/repos/OfficeDev/generator-office/badge.svg?branch=master&service=github)](https://coveralls.io/github/OfficeDev/generator-office?branch=master) [![Dependency Status](https://david-dm.org/officedev/generator-office.svg)](https://david-dm.org/officedev/generator-office)
 
 > [Yeoman](http://yeoman.io) generator for creating Microsoft Office projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
 
@@ -19,16 +13,7 @@ Like other Yeoman generators, this simply creates the scaffolding of files for y
 - Office Task Pane Add-ins
 - Office Content Add-ins
 
-Choose to create the Office projects using plain HTML, CSS & JavaScript (*mirroring the same projects that Visual Studio creates*) or create Angular-based projects.
-
-Check out the announcement blog post: [Office Dev Center Blog - Creating Office Add-ins with any editor - Introducing YO OFFICE!](http://dev.office.com/blogs/creating-office-add-ins-with-any-editor-introducing-yo-office) 
-
-Read up on [how to use the generator to create Office Add-ins with Visual Studio Code](https://code.visualstudio.com/Docs/runtimes/office).
-
-## YO Office Demo
-![](docs/assets/generatoroffice.png)
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/78b18BLVosM" frameborder="0" allowfullscreen></iframe>
+Choose to create the Office projects using plain HTML, CSS & JavaScript (*mirroring the same projects that Visual Studio creates*) or create Angular-based projects. 
 
 ## Install
 

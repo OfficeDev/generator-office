@@ -1,19 +1,22 @@
-(function(){
-  'use strict';
+﻿/// <reference path="../App.js" />
+
+(function () {
+  "use strict";
 
   // The initialize function must be run each time a new page is loaded
-  Office.initialize = function(reason){
-    jQuery(document).ready(function(){
+  Office.initialize = function (reason) {
+    $(document).ready(function () {
       app.initialize();
-      jQuery('#get-data-from-selection').click(getDataFromSelection);
+
+      $('#get-data-from-selection').click(getDataFromSelection);
     });
   };
 
   // Reads data from current document selection and displays a notification
-  function getDataFromSelection(){
+  function getDataFromSelection() {
     if (Office.context.document.getSelectedDataAsync) {
       Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
-        function(result){
+        function (result) {
           if (result.status === Office.AsyncResultStatus.Succeeded) {
             app.showNotification('The selected text is:', '"' + result.value + '"');
           } else {
@@ -22,7 +25,7 @@
         }
         );
     } else {
-      app.showNotification('Error:', 'Reading selection data not supported by host application.');
+      app.showNotification('Error:', 'Reading selection data is not supported by this host application.');
     }
   }
 })();

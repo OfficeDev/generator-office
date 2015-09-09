@@ -1,4 +1,4 @@
-(function(){
+(function () {
   'use strict';
 
   var officeAddin = angular.module('officeAddin');
@@ -6,7 +6,7 @@
   // load routes
   officeAddin.config(['$routeProvider', routeConfigurator]);
 
-  function routeConfigurator($routeProvider){
+  function routeConfigurator($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'app/home/home.html',
@@ -14,8 +14,6 @@
         controllerAs: 'vm'
       });
 
-    $routeProvider.otherwise({
-      redirectTo: '/'
-    });
+    $routeProvider.otherwise({ redirectTo: '/' });
   }
 })();

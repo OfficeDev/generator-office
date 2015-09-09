@@ -12,7 +12,7 @@ module.exports = generators.Base.extend({
   /**
    * Setup the generator
    */
-  constructor: function(){
+  constructor: function () {
     generators.Base.apply(this, arguments);
 
     this.option('skip-install', {
@@ -49,13 +49,13 @@ module.exports = generators.Base.extend({
     // create global config object on this generator
     this.genConfig = {};
   }, // constructor()
-
+  
   /**
    * Prompt users for options
    */
   prompting: {
 
-    askFor: function(){
+    askFor: function () {
       var done = this.async();
 
       var prompts = [
@@ -66,7 +66,7 @@ module.exports = generators.Base.extend({
           default: 'My Office Add-in',
           when: this.options.name === undefined
         },
-        // root path where the addin should be created; should go in current folder where
+        // root path where the addin should be created; should go in current folder where 
         //  generator is being executed, or within a subfolder?
         {
           name: 'root-path',
@@ -75,12 +75,11 @@ module.exports = generators.Base.extend({
           + '  from current (src / public): ',
           default: 'current folder',
           when: this.options['root-path'] === undefined,
-          filter: /* istanbul ignore next */ function(response){
-            if (response === 'current folder'){
+          filter: /* istanbul ignore next */ function (response) {
+            if (response === 'current folder')
               return '';
-            } else {
+            else
               return response;
-            }
           }
         },
         // technology used to create the addin (html / angular / etc)
@@ -128,30 +127,29 @@ module.exports = generators.Base.extend({
             }
           ],
           when: this.options.outlookForm === undefined,
-          validate: /* istanbul ignore next */ function(answers){
+          validate: /* istanbul ignore next */ function (answers) {
             if (answers.length < 1) {
               return 'Must select at least one Outlook form type';
             }
             return true;
           }
         }];
-
+        
       // trigger prompts
-      this.prompt(prompts, function(responses){
+      this.prompt(prompts, function (responses) {
         this.genConfig = extend(this.genConfig, this.options);
         this.genConfig = extend(this.genConfig, responses);
         done();
       }.bind(this));
 
     }, // askFor()
-
+    
     /**
      * If user specified tech:manifest-only, prompt for start page.
      */
-    askForStartPage: function(){
-      if (this.genConfig.tech !== 'manifest-only'){
+    askForStartPage: function () {
+      if (this.genConfig.tech !== 'manifest-only')
         return;
-      }
 
       var done = this.async();
 
@@ -162,53 +160,53 @@ module.exports = generators.Base.extend({
           message: 'Add-in start URL:',
           when: this.options.startPage === undefined,
         }];
-
+        
       // trigger prompts
-      this.prompt(prompts, function(responses){
+      this.prompt(prompts, function (responses) {
         this.genConfig = extend(this.genConfig, responses);
         done();
       }.bind(this));
 
     } // askForStartPage()
 
-
+    
   }, // prompting()
-
+  
   /**
    * save configurations & config project
    */
-  configuring: function(){
+  configuring: function () {
     // take name submitted and strip everything out non-alphanumeric or space
     var projectName = this.genConfig.name;
     projectName = projectName.replace(/[^\w\s\-]/g, '');
     projectName = projectName.replace(/\s{2,}/g, ' ');
     projectName = projectName.trim();
-
+    
     // add the result of the question to the generator configuration object
-    this.genConfig.projectInternalName = projectName.toLowerCase().replace(/ /g, '-');
+    this.genConfig.projectInternalName = projectName.toLowerCase().replace(/ /g, "-");
     this.genConfig.projectDisplayName = projectName;
     this.genConfig.rootPath = this.genConfig['root-path'];
   }, // configuring()
-
+  
   /**
    * write generator specific files
    */
   writing: {
     /**
-     * If there is already a package.json in the root of this project,
+     * If there is already a package.json in the root of this project, 
      * get the name of the project from that file as that should be used
      * in bower.json & update packages.
      */
-    upsertPackage: function(){
+    upsertPackage: function () {
       if (this.genConfig.tech !== 'manifest-only') {
         var done = this.async();
-
+      
         // default name for the root project = addin project
         this.genConfig.rootProjectName = this.genConfig.projectInternalName;
 
         // path to package.json
         var pathToPackageJson = this.destinationPath('package.json');
-
+      
         // if package.json doesn't exist
         if (!this.fs.exists(pathToPackageJson)) {
           // copy package.json to target
@@ -218,22 +216,22 @@ module.exports = generators.Base.extend({
         } else {
           // load package.json
           var packageJson = this.fs.readJSON(pathToPackageJson, 'utf8');
-
+        
           // .. get it's name property
           this.genConfig.rootProjectName = packageJson.name;
-
+        
           // update devDependencies
           /* istanbul ignore else */
           if (!packageJson.devDependencies) {
-            packageJson.devDependencies = {};
+            packageJson.devDependencies = {}
           }
           /* istanbul ignore else */
           if (!packageJson.devDependencies['gulp']) {
-            packageJson.devDependencies['gulp'] = '^3.9.0';
+            packageJson.devDependencies['gulp'] = "^3.9.0"
           }
           /* istanbul ignore else */
           if (!packageJson.devDependencies['gulp-webserver']) {
-            packageJson.devDependencies['gulp-webserver'] = '^0.9.1';
+            packageJson.devDependencies['gulp-webserver'] = "^0.9.1"
           }
 
           // overwrite existing package.json
@@ -244,100 +242,76 @@ module.exports = generators.Base.extend({
         done();
       }
     }, // upsertPackage()
-
+        
     /**
      * If bower.json already exists in the root of this project, update it
-     * with the necessary addin packages.
+     * with the necessary addin packages.  
      */
-    upsertBower: function(){
+    upsertBower: function () {
       if (this.genConfig.tech !== 'manifest-only') {
-        /**
-         * Copies bower.json from appropriate template => target.
-         *
-         * @param {Object} yoGenerator - Yeoman generator.
-         * @param {string} addinTech - Technology to use for the addin.
-         */
-        this._copyBower = function(yoGenerator, addinTech){
-          switch (addinTech) {
-            case 'ng':
-              yoGenerator.fs.copyTpl(yoGenerator.templatePath('ng/_bower.json'),
-                yoGenerator.destinationPath('bower.json'),
-                yoGenerator.genConfig);
-              break;
-            case 'html':
-              yoGenerator.fs.copyTpl(yoGenerator.templatePath('html/_bower.json'),
-                yoGenerator.destinationPath('bower.json'),
-                yoGenerator.genConfig);
-              break;
-          }
-        };
-
-        /**
-         * Update existing bower.json with the necessary references.
-         *
-         * @param {Object} yoGenerator - Yeoman generator.
-         * @param {string} addinTech - Technology to use for the addin.
-         */
-        this._updateBower = function(yoGenerator, addinTech){
-          // verify the necessary package references are present in bower.json...
-          //  if not, add them
-          var bowerJson = yoGenerator.fs.readJSON(pathToBowerJson, 'utf8');
-
-          // all addins need these
-          /* istanbul ignore else */
-          if (!bowerJson.dependencies['microsoft.office.js']) {
-            bowerJson.dependencies['microsoft.office.js'] = '*';
-          }
-          /* istanbul ignore else */
-          if (!bowerJson.dependencies['jquery']) {
-            bowerJson.dependencies['jquery'] = '~1.9.1';
-          }
-
-          switch (addinTech) {
-            // if angular...
-            case 'ng':
-              /* istanbul ignore else */
-              if (!bowerJson.dependencies['angular']) {
-                bowerJson.dependencies['angular'] = '~1.4.4';
-              }
-              /* istanbul ignore else */
-              if (!bowerJson.dependencies['angular-route']) {
-                bowerJson.dependencies['angular-route'] = '~1.4.4';
-              }
-              /* istanbul ignore else */
-              if (!bowerJson.dependencies['angular-sanitize']) {
-                bowerJson.dependencies['angular-sanitize'] = '~1.4.4';
-              }
-              break;
-          }
-
-          // overwrite existing bower.json
-          yoGenerator.log(chalk.yellow('Adding additional packages to bower.json'));
-          yoGenerator.fs.writeJSON(pathToBowerJson, bowerJson);
-        };
-
-        // workaround to 'this' context issue
-        var yoGenerator = this;
-
         var done = this.async();
 
         var pathToBowerJson = this.destinationPath('bower.json');
         // if doesn't exist...
         if (!this.fs.exists(pathToBowerJson)) {
           // copy bower.json => project
-          this._copyBower(yoGenerator, yoGenerator.genConfig.tech);
+          switch (this.genConfig.tech) {
+            case "ng":
+              this.fs.copyTpl(this.templatePath('ng/_bower.json'),
+                this.destinationPath('bower.json'),
+                this.genConfig);
+              break;
+            case "html":
+              this.fs.copyTpl(this.templatePath('html/_bower.json'),
+                this.destinationPath('bower.json'),
+                this.genConfig);
+              break;
+          }
         } else {
-          // update bower.json => project
-          this._updateBower(yoGenerator, yoGenerator.genConfig.tech);
+          // verify the necessary package references are present in bower.json...
+          //  if not, add them
+          var bowerJson = this.fs.readJSON(pathToBowerJson, 'utf8');
+
+          // all addins need these
+          /* istanbul ignore else */
+          if (!bowerJson.dependencies["microsoft.office.js"]) {
+            bowerJson.dependencies["microsoft.office.js"] = "*";
+          }
+          /* istanbul ignore else */
+          if (!bowerJson.dependencies["jquery"]) {
+            bowerJson.dependencies["jquery"] = "~1.9.1";
+          }
+
+          switch (this.genConfig.tech) {
+            // if angular...
+            case "ng":
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies["angular"]) {
+                bowerJson.dependencies["angular"] = "~1.4.4";
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies["angular-route"]) {
+                bowerJson.dependencies["angular-route"] = "~1.4.4";
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies["angular-sanitize"]) {
+                bowerJson.dependencies["angular-sanitize"] = "~1.4.4";
+              }
+              break;
+          }
+        
+          // overwrite existing bower.json
+          this.log(chalk.yellow('Adding additional packages to bower.json'));
+          this.fs.writeJSON(pathToBowerJson, bowerJson);
         }
 
         done();
       }
     }, // upsertBower()
 
-    app: function(){
+    app: function () {
       // helper function to build path to the file off root path
-      this._parseTargetPath = function(file){
+      this._parseTargetPath = function (file) {
         return path.join(this.genConfig['root-path'], file);
       };
 
@@ -351,44 +325,29 @@ module.exports = generators.Base.extend({
         this.genConfig.startPageReadForm = this.genConfig.startPage;
         this.genConfig.startPageEditForm = this.genConfig.startPage;
         // create the manifest file
-        this.fs.copyTpl(this.templatePath('common/manifest.xml'),
-                        this.destinationPath('manifest.xml'),
-                        this.genConfig);
+        this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
       } else {
         // copy .bowerrc => project
-        this.fs.copyTpl(this.templatePath('common/_bowerrc'),
-                        this.destinationPath('.bowerrc'),
-                        this.genConfig);
+        this.fs.copyTpl(
+          this.templatePath('common/_bowerrc'),
+          this.destinationPath('.bowerrc'),
+          this.genConfig);
 
         // create common assets
-        this.fs.copy(this.templatePath('common/gulpfile.js'),
-                     this.destinationPath('gulpfile.js'));
-        this.fs.copy(this.templatePath('common/content/Office.css'),
-                     this.destinationPath(this._parseTargetPath('content/Office.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.rtl.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.rtl.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.rtl.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.rtl.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.min.css')));
-        this.fs.copy(this.templatePath('common/images/close.png'),
-                     this.destinationPath(this._parseTargetPath('images/close.png')));
-        this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'),
-                     this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
-        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.js'),
-                     this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.js')));
-        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.min.js'),
-                     this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.min.js')));
+        this.fs.copy(this.templatePath('common/gulpfile.js'), this.destinationPath('gulpfile.js'));
+        this.fs.copy(this.templatePath('common/content/Office.css'), this.destinationPath(this._parseTargetPath('content/Office.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.css'), this.destinationPath(this._parseTargetPath('content/fabric.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.min.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.rtl.css'), this.destinationPath(this._parseTargetPath('content/fabric.rtl.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.rtl.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.rtl.min.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.components.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.components.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.min.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.css')));
+        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.min.css'), this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.min.css')));
+        this.fs.copy(this.templatePath('common/images/close.png'), this.destinationPath(this._parseTargetPath('images/close.png')));
+        this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'), this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
+        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.js'), this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.js')));
+        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.min.js'), this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.min.js')));
 
         switch (this.genConfig.tech) {
           case 'html':
@@ -397,38 +356,24 @@ module.exports = generators.Base.extend({
             this.genConfig.startPageEditForm = 'https://localhost:8443/appcompose/home/home.html';
 
             // copy tsd & jsconfig files
-            this.fs.copy(this.templatePath('html/_tsd.json'),
-                         this.destinationPath('tsd.json'));
-            this.fs.copy(this.templatePath('common/_jsconfig.json'),
-                         this.destinationPath('jsconfig.json'));
+            this.fs.copy(this.templatePath('html/_tsd.json'), this.destinationPath('tsd.json'));
+            this.fs.copy(this.templatePath('common/_jsconfig.json'), this.destinationPath('jsconfig.json'));
 
             // create the manifest file
-            this.fs.copyTpl(this.templatePath('common/manifest.xml'),
-                            this.destinationPath('manifest.xml'),
-                            this.genConfig);
+            this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
 
             // copy addin files
-            this.fs.copy(this.templatePath('html/appcompose/app.css'),
-                         this.destinationPath(this._parseTargetPath('appcompose/app.css')));
-            this.fs.copy(this.templatePath('html/appcompose/app.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/app.js')));
-            this.fs.copy(this.templatePath('html/appcompose/home/home.html'),
-                         this.destinationPath(this._parseTargetPath('appcompose/home/home.html')));
-            this.fs.copy(this.templatePath('html/appcompose/home/home.css'),
-                         this.destinationPath(this._parseTargetPath('appcompose/home/home.css')));
-            this.fs.copy(this.templatePath('html/appcompose/home/home.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/home/home.js')));
+            this.fs.copy(this.templatePath('html/appcompose/app.css'), this.destinationPath(this._parseTargetPath('appcompose/app.css')));
+            this.fs.copy(this.templatePath('html/appcompose/app.js'), this.destinationPath(this._parseTargetPath('appcompose/app.js')));
+            this.fs.copy(this.templatePath('html/appcompose/home/home.html'), this.destinationPath(this._parseTargetPath('appcompose/home/home.html')));
+            this.fs.copy(this.templatePath('html/appcompose/home/home.css'), this.destinationPath(this._parseTargetPath('appcompose/home/home.css')));
+            this.fs.copy(this.templatePath('html/appcompose/home/home.js'), this.destinationPath(this._parseTargetPath('appcompose/home/home.js')));
 
-            this.fs.copy(this.templatePath('html/appread/app.css'),
-                         this.destinationPath(this._parseTargetPath('appread/app.css')));
-            this.fs.copy(this.templatePath('html/appread/app.js'),
-                         this.destinationPath(this._parseTargetPath('appread/app.js')));
-            this.fs.copy(this.templatePath('html/appread/home/home.html'),
-                         this.destinationPath(this._parseTargetPath('appread/home/home.html')));
-            this.fs.copy(this.templatePath('html/appread/home/home.css'),
-                         this.destinationPath(this._parseTargetPath('appread/home/home.css')));
-            this.fs.copy(this.templatePath('html/appread/home/home.js'),
-                         this.destinationPath(this._parseTargetPath('appread/home/home.js')));
+            this.fs.copy(this.templatePath('html/appread/app.css'), this.destinationPath(this._parseTargetPath('appread/app.css')));
+            this.fs.copy(this.templatePath('html/appread/app.js'), this.destinationPath(this._parseTargetPath('appread/app.js')));
+            this.fs.copy(this.templatePath('html/appread/home/home.html'), this.destinationPath(this._parseTargetPath('appread/home/home.html')));
+            this.fs.copy(this.templatePath('html/appread/home/home.css'), this.destinationPath(this._parseTargetPath('appread/home/home.css')));
+            this.fs.copy(this.templatePath('html/appread/home/home.js'), this.destinationPath(this._parseTargetPath('appread/home/home.js')));
             break;
           case 'ng':
             // determine startpage for addin
@@ -436,69 +381,53 @@ module.exports = generators.Base.extend({
             this.genConfig.startPageEditForm = 'https://localhost:8443/appcompose/index.html';
 
             // copy tsd & jsconfig files
-            this.fs.copy(this.templatePath('ng/_tsd.json'),
-                         this.destinationPath('tsd.json'));
-            this.fs.copy(this.templatePath('common/_jsconfig.json'),
-                         this.destinationPath('jsconfig.json'));
+            this.fs.copy(this.templatePath('ng/_tsd.json'), this.destinationPath('tsd.json'));
+            this.fs.copy(this.templatePath('common/_jsconfig.json'), this.destinationPath('jsconfig.json'));
 
             // create the manifest file
-            this.fs.copyTpl(this.templatePath('common/manifest.xml'),
-                            this.destinationPath('manifest.xml'),
-                            this.genConfig);
+            this.fs.copyTpl(this.templatePath('common/manifest.xml'), this.destinationPath('manifest.xml'), this.genConfig);
 
             // copy addin files
             this.genConfig.startPage = '{https-addin-host-site}/index.html';
-            this.fs.copy(this.templatePath('ng/appcompose/index.html'),
-                         this.destinationPath(this._parseTargetPath('appcompose/index.html')));
-            this.fs.copy(this.templatePath('ng/appcompose/app.module.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/app.module.js')));
-            this.fs.copy(this.templatePath('ng/appcompose/app.routes.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/app.routes.js')));
-            this.fs.copy(this.templatePath('ng/appcompose/home/home.controller.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/home/home.controller.js')));
-            this.fs.copy(this.templatePath('ng/appcompose/home/home.html'),
-                         this.destinationPath(this._parseTargetPath('appcompose/home/home.html')));
-            this.fs.copy(this.templatePath('ng/appcompose/services/data.service.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/services/data.service.js')));
+            this.fs.copy(this.templatePath('ng/appcompose/index.html'), this.destinationPath(this._parseTargetPath('appcompose/index.html')));
+            this.fs.copy(this.templatePath('ng/appcompose/app.module.js'), this.destinationPath(this._parseTargetPath('appcompose/app.module.js')));
+            this.fs.copy(this.templatePath('ng/appcompose/app.routes.js'), this.destinationPath(this._parseTargetPath('appcompose/app.routes.js')));
+            this.fs.copy(this.templatePath('ng/appcompose/home/home.controller.js'), this.destinationPath(this._parseTargetPath('appcompose/home/home.controller.js')));
+            this.fs.copy(this.templatePath('ng/appcompose/home/home.html'), this.destinationPath(this._parseTargetPath('appcompose/home/home.html')));
+            this.fs.copy(this.templatePath('ng/appcompose/services/data.service.js'), this.destinationPath(this._parseTargetPath('appcompose/services/data.service.js')));
 
-            this.fs.copy(this.templatePath('ng/appread/index.html'),
-                         this.destinationPath(this._parseTargetPath('appread/index.html')));
-            this.fs.copy(this.templatePath('ng/appread/app.module.js'),
-                         this.destinationPath(this._parseTargetPath('appread/app.module.js')));
-            this.fs.copy(this.templatePath('ng/appread/app.routes.js'),
-                         this.destinationPath(this._parseTargetPath('appread/app.routes.js')));
-            this.fs.copy(this.templatePath('ng/appread/home/home.controller.js'),
-                         this.destinationPath(this._parseTargetPath('appread/home/home.controller.js')));
-            this.fs.copy(this.templatePath('ng/appread/home/home.html'),
-                         this.destinationPath(this._parseTargetPath('appread/home/home.html')));
-            this.fs.copy(this.templatePath('ng/appread/services/data.service.js'),
-                         this.destinationPath(this._parseTargetPath('appread/services/data.service.js')));
+            this.fs.copy(this.templatePath('ng/appread/index.html'), this.destinationPath(this._parseTargetPath('appread/index.html')));
+            this.fs.copy(this.templatePath('ng/appread/app.module.js'), this.destinationPath(this._parseTargetPath('appread/app.module.js')));
+            this.fs.copy(this.templatePath('ng/appread/app.routes.js'), this.destinationPath(this._parseTargetPath('appread/app.routes.js')));
+            this.fs.copy(this.templatePath('ng/appread/home/home.controller.js'), this.destinationPath(this._parseTargetPath('appread/home/home.controller.js')));
+            this.fs.copy(this.templatePath('ng/appread/home/home.html'), this.destinationPath(this._parseTargetPath('appread/home/home.html')));
+            this.fs.copy(this.templatePath('ng/appread/services/data.service.js'), this.destinationPath(this._parseTargetPath('appread/services/data.service.js')));
             break;
         }
       }
 
       done();
     }, // app()
-
+    
     /**
      * Update the manifest.xml to reflect the selected
-     * Outlook client forms supported by this addin.
+     * Outlook client forms supported by this addin. 
      */
-    updateManifestForms: function(){
+    updateManifestForms: function () {
       var done = this.async();
-
+      
       // workaround to 'this' context issue
       var yoGenerator = this;
-
+      
       // load manifest.xml
       var manifestXml = yoGenerator.fs.read(yoGenerator.destinationPath('manifest.xml'));
 
       // convert it to JSON
       var parser = new Xml2Js.Parser();
-      parser.parseString(manifestXml, function(err, manifestJson){
+      parser.parseString(manifestXml, function (err, manifestJson) {
 
         // if mail/appointment read not present, remove the form setting
-        _.remove(manifestJson.OfficeApp.FormSettings[0].Form, function(formSetting){
+        _.remove(manifestJson.OfficeApp.FormSettings[0].Form, function (formSetting) {
           if (formSetting.$['xsl:type'] === 'ItemRead') {
             return true;
           } else {
@@ -507,17 +436,17 @@ module.exports = generators.Base.extend({
         });
 
         // if mail/appointment edit not present, remove the form setting
-        _.remove(manifestJson.OfficeApp.FormSettings[0].Form, function(formSetting){
+        _.remove(manifestJson.OfficeApp.FormSettings[0].Form, function (formSetting) {
           if (formSetting.$['xsl:type'] === 'ItemEdit') {
             return true;
           } else {
             return false;
           }
         });
-
+        
         // create array of selected form types
         var supportedFormTypesJson = [];
-        _.forEach(yoGenerator.genConfig.outlookForm, function(formType){
+        _.forEach(yoGenerator.genConfig.outlookForm, function (formType) {
           switch (formType) {
             case 'mail-read':
               supportedFormTypesJson.push({
@@ -555,18 +484,18 @@ module.exports = generators.Base.extend({
                 }
               });
               break;
-          }
+          };
         });
 
-        var ruleEntry;
-        // if only one rule, add it
-        if (supportedFormTypesJson.length === 1) {
+        var ruleEntry = undefined;
+        // if only one rule, add it        
+        if (supportedFormTypesJson.length == 1) {
           ruleEntry = supportedFormTypesJson[0];
         } else {
           // create container of rules & ad it
           ruleEntry = {
             '$': {
-              'xsi:type': 'RuleCollection',
+              'xsi:type': "RuleCollection",
               Mode: 'Or',
             },
             Rule: supportedFormTypesJson
@@ -574,11 +503,11 @@ module.exports = generators.Base.extend({
         }
         // add the rule to the manifest
         manifestJson.OfficeApp.Rule[0] = ruleEntry;
-
+        
         // convert JSON => XML
         var xmlBuilder = new Xml2Js.Builder();
         var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
-
+        
         // write updated manifest
         yoGenerator.fs.write(yoGenerator.destinationPath('manifest.xml'), updatedManifestXml);
 
@@ -587,23 +516,23 @@ module.exports = generators.Base.extend({
 
     } // updateManifestForms()
   }, // writing()
-
+    
   /**
    * conflict resolution
    */
-  // conflicts: { },
+  // conflicts: { }, 
 
   /**
    * run installations (bower, npm, tsd, etc)
    */
-  install: function(){
+  install: function () {
 
     if (!this.options['skip-install'] && this.genConfig.tech !== 'manifest-only') {
       this.npmInstall();
     }
 
   } // install ()
-
+    
   /**
    * last cleanup, goodbye, etc
    */

@@ -10,21 +10,21 @@ var validator = require('validator');
 var chai = require('chai'),
   expect = chai.expect;
 
-// generator prompt responses
+// generator prompt responses 
 var promptResponses = {};
 
 
 
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
-describe('office:app', function(){
-
+describe('office:app', function () {
+  
   // set timeouts to 5s
   this.timeout(10000);
 
-  describe('runs mail subgenerator', function(){
+  describe('runs mail subgenerator', function () {
 
-    beforeEach(function(done){
+    before(function (done) {
       // setup generator prompts
       var options = {
         name: 'My First Addin',
@@ -33,7 +33,7 @@ describe('office:app', function(){
         tech: 'html',
         outlookForm: ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'],
         'skip-install': true
-      };
+      }
 
       // run the generator
       helpers.run(path.join(__dirname, '../generators/app'))
@@ -41,16 +41,16 @@ describe('office:app', function(){
         .on('end', done);
     });
 
-    it('manifest.xml is for mail addin', function(done){
+    it('manifest.xml is for mail addin', function (done) {
 
       // verify manifest.xml exists
       assert.file('manifest.xml');
 
       // load manifest.xml as JSON
       var parser = new Xml2Js.Parser();
-      fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
-        parser.parseString(manifestContent, function(err, manifestJson){
-
+      fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
+        parser.parseString(manifestContent, function (err, manifestJson) {
+          
           // check addin type
           expect(manifestJson.OfficeApp.$['xsi:type']).to.equal('MailApp');
 
@@ -62,9 +62,9 @@ describe('office:app', function(){
 
   }); // describe('runs mail subgenerator')
 
-  describe('runs taskpane subgenerator', function(){
+  describe('runs taskpane subgenerator', function () {
 
-    beforeEach(function(done){
+    before(function (done) {
       // setup generator prompts
       var options = {
         name: 'My First Addin',
@@ -73,7 +73,7 @@ describe('office:app', function(){
         tech: 'html',
         clients: ['Document', 'Workbook'],
         'skip-install': true
-      };
+      }
 
       // run the generator
       helpers.run(path.join(__dirname, '../generators/app'))
@@ -81,16 +81,16 @@ describe('office:app', function(){
         .on('end', done);
     });
 
-    it('manifest.xml is for taskpane addin', function(done){
+    it('manifest.xml is for taskpane addin', function (done) {
 
       // verify manifest.xml exists
       assert.file('manifest.xml');
 
       // load manifest.xml as JSON
       var parser = new Xml2Js.Parser();
-      fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
-        parser.parseString(manifestContent, function(err, manifestJson){
-
+      fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
+        parser.parseString(manifestContent, function (err, manifestJson) {
+          
           // check addin type
           expect(manifestJson.OfficeApp.$['xsi:type']).to.equal('TaskPaneApp');
 
@@ -102,9 +102,9 @@ describe('office:app', function(){
 
   }); // describe('runs content subgenerator')
 
-  describe('runs content subgenerator', function(){
+  describe('runs content subgenerator', function () {
 
-    beforeEach(function(done){
+    before(function (done) {
       // setup generator prompts
       var options = {
         name: 'My First Addin',
@@ -113,7 +113,8 @@ describe('office:app', function(){
         tech: 'html',
         clients: ['Document', 'Workbook'],
         'skip-install': true
-      };
+
+      }
 
       // run the generator
       helpers.run(path.join(__dirname, '../generators/app'))
@@ -121,16 +122,16 @@ describe('office:app', function(){
         .on('end', done);
     });
 
-    it('manifest.xml is for content addin', function(done){
+    it('manifest.xml is for content addin', function (done) {
 
       // verify manifest.xml exists
       assert.file('manifest.xml');
 
       // load manifest.xml as JSON
       var parser = new Xml2Js.Parser();
-      fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
-        parser.parseString(manifestContent, function(err, manifestJson){
-
+      fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
+        parser.parseString(manifestContent, function (err, manifestJson) {
+          
           // check addin type
           expect(manifestJson.OfficeApp.$['xsi:type']).to.equal('ContentApp');
 

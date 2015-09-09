@@ -1,4 +1,4 @@
-(function(){
+(function () {
   'use strict';
 
   // create
@@ -8,7 +8,7 @@
   ]);
 
   // configure
-  officeAddin.config(['$logProvider', function($logProvider){
+  officeAddin.config(['$logProvider', function ($logProvider) {
     // set debug logging to on
     if ($logProvider.debugEnabled) {
       $logProvider.debugEnabled(true);
@@ -16,8 +16,8 @@
   }]);
 
   // when Office has initalized, manually bootstrap the app
-  Office.initialize = function(){
-    console.log('>>> Office.initialize()');
+  Office.initialize = function () {
+    console.log(">>> Office.initialize()");
     angular.bootstrap(jQuery('#container'), ['officeAddin']);
   };
 

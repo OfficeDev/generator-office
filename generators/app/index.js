@@ -6,7 +6,7 @@ var yosay = require('yosay');
 var extend = require('deep-extend');
 
 module.exports = generators.Base.extend({
-  constructor: function(){
+  constructor: function () {
 
     generators.Base.apply(this, arguments);
 
@@ -48,17 +48,13 @@ module.exports = generators.Base.extend({
     });
 
   }, // constructor()
-
+  
   /**
    * Generator initalization
    */
-  initializing: function(){
-    this.log(yosay('Welcome to the ' +
-      chalk.red('Office Project') +
-      ' generator, by ' +
-      chalk.red('@OfficeDev') +
-      '! Let\'s create a project together!'));
-
+  initializing: function () {
+    this.log(yosay('Welcome to the ' + chalk.red('Office Project') + ' generator, by ' + chalk.red('@OfficeDev') + '! Let\'s create a project together!'));
+    
     // generator configuration
     this.genConfig = {};
   }, // initializing()
@@ -68,7 +64,7 @@ module.exports = generators.Base.extend({
    */
   prompting: {
 
-    askFor: function(){
+    askFor: function () {
       var done = this.async();
 
       var prompts = [
@@ -79,23 +75,20 @@ module.exports = generators.Base.extend({
           default: 'My Office Project',
           when: this.options.name === undefined
         },
-        // root path where the addin should be created; should go in current folder where
+        // root path where the addin should be created; should go in current folder where 
         //  generator is being executed, or within a subfolder?
         {
           name: 'root-path',
           message: 'Root folder of project?'
-          + ' Default to current directory\n'
-          + ' (' + this.destinationRoot() + '),'
-          + ' or specify relative path\n'
-          + ' from current (src / public): ',
+          + ' Default to current directory\n (' + this.destinationRoot() + '), or specify relative path\n'
+          + '  from current (src / public): ',
           default: 'current folder',
           when: this.options['root-path'] === undefined,
-          filter: /* istanbul ignore next */ function(response){
-            if (response === 'current folder') {
+          filter: /* istanbul ignore next */ function (response) {
+            if (response === 'current folder')
               return '';
-            } else {
+            else
               return response;
-            }
           }
         },
         // type of project - this will dictate which subgenerator to call
@@ -136,21 +129,20 @@ module.exports = generators.Base.extend({
               value: 'manifest-only'
             }]
         }];
-
+        
       // trigger prompts
-      this.prompt(prompts, function(responses){
+      this.prompt(prompts, function (responses) {
         this.genConfig = extend(this.genConfig, this.options);
         this.genConfig = extend(this.genConfig, responses);
         done();
       }.bind(this));
 
     }, // askFor()
-
-    askForOfficeClients: function(){
+    
+    askForOfficeClients: function () {
       // if it's a mail addin, don't ask for Office client
-      if (this.genConfig.type === 'mail') {
+      if (this.genConfig.type === 'mail')
         return;
-      }
 
       var done = this.async();
 
@@ -182,27 +174,26 @@ module.exports = generators.Base.extend({
           }
         ],
         when: this.options.clients === undefined,
-        validate: /* istanbul ignore next */ function(clientsAnswer){
+        validate: /* istanbul ignore next */ function (clientsAnswer) {
           if (clientsAnswer.length < 1) {
             return 'Must select at least one Office application';
           }
           return true;
         }
       }];
-
+        
       // trigger prompts
-      this.prompt(prompts, function(responses){
+      this.prompt(prompts, function (responses) {
         this.genConfig = extend(this.genConfig, responses);
         done();
       }.bind(this));
 
     }, // askForOfficeClients()
 
-    askForOutlookForms: function(){
+    askForOutlookForms: function () {
       // if it's a mail addin, ask for Outlook forms
-      if (this.genConfig.type !== 'mail') {
+      if (this.genConfig.type !== 'mail')
         return;
-      }
 
       var done = this.async();
 
@@ -234,16 +225,16 @@ module.exports = generators.Base.extend({
           }
         ],
         when: this.options.outlookForm === undefined,
-        validate: /* istanbul ignore next */ function(answers){
+        validate: /* istanbul ignore next */ function (answers) {
           if (answers.length < 1) {
             return 'Must select at least one Outlook form type';
           }
           return true;
         }
-      }];
+      }];      
 
       // trigger prompts
-      this.prompt(prompts, function(responses){
+      this.prompt(prompts, function (responses) {
         this.genConfig = extend(this.genConfig, responses);
         done();
       }.bind(this));
@@ -251,7 +242,7 @@ module.exports = generators.Base.extend({
 
   }, // prompting()
 
-  default: function(){
+  default: function () {
 
     // determine which subgenerator to call
     switch (this.genConfig.type) {
@@ -270,7 +261,7 @@ module.exports = generators.Base.extend({
             local: require.resolve('../mail')
           });
         break;
-
+      
       // Taskpane Office Add-in
       case 'taskpane':
         // execute subgenerator
@@ -308,17 +299,17 @@ module.exports = generators.Base.extend({
    * write generator specific files
    */
   // writing: { },
-
+  
   /**
    * conflict resolution
    */
-  // conflicts: { },
+  // conflicts: { }, 
 
   /**
    * run installations (bower, npm, tsd, etc)
    */
   // install: { },
-
+  
   /**
    * last cleanup, goodbye, etc
    */

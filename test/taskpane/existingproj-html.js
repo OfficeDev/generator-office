@@ -1,4 +1,4 @@
-/* jshint expr:true */
+
 'use strict';
 
 var fs = require('fs');
@@ -16,39 +16,39 @@ var chai = require('chai'),
 var util = require('./../_testUtils');
 
 
-// sub:generator options
+// sub:generator options 
 var options = {};
 
 
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
-describe('office:taskpane', function(){
+describe('office:taskpane', function () {
 
-  beforeEach(function(done){
+  beforeEach(function (done) {
     options = {
       name: 'My Office Add-in'
     };
     done();
   });
 
-  describe('run on existing project (non-empty folder)', function(){
+  describe('run on existing project (non-empty folder)', function () {
     var addinRootPath = 'src/public';
-
+    
     // generator ran at 'src/public' so for files
     //  in the root, need to back up to the root
-    beforeEach(function(done){
+    beforeEach(function (done) {
       // set to current folder
       options.rootPath = addinRootPath;
       done();
     });
-
+    
     /**
      * Test addin when technology = html
      */
-    describe('technology:html', function(){
+    describe('technology:html', function () {
 
-      beforeEach(function(done){
-        // set language to html
+      beforeEach(function (done) {
+        //set language to html
         options.tech = 'html';
 
         // set products
@@ -57,21 +57,21 @@ describe('office:taskpane', function(){
         // run the generator
         helpers.run(path.join(__dirname, '../../generators/taskpane'))
           .withOptions(options)
-          .on('ready', function(gen){
+          .on('ready', function (gen) {
             util.setupExistingProject(gen);
           }.bind(this))
           .on('end', done);
 
       });
 
-      afterEach(function(){
+      after(function () {
         mockery.disable();
       });
 
       /**
        * All expected files are created.
        */
-      it('creates expected files', function(done){
+      it('creates expected files', function (done) {
         var expected = [
           '.bowerrc',
           'bower.json',
@@ -106,7 +106,7 @@ describe('office:taskpane', function(){
       /**
        * bower.json is good
        */
-      it('bower.json contains correct values', function(done){
+      it('bower.json contains correct values', function (done) {
         var expected = {
           name: 'ProjectName',
           version: '0.1.0',
@@ -124,7 +124,7 @@ describe('office:taskpane', function(){
       /**
        * package.json is good
        */
-      it('package.json contains correct values', function(done){
+      it('package.json contains correct values', function (done) {
         var expected = {
           name: 'ProjectName',
           description: 'HTTPS site using Express and Node.js',
@@ -147,13 +147,13 @@ describe('office:taskpane', function(){
       /**
        * manfiest.xml is good
        */
-      describe('manifest.xml contents', function(){
+      describe('manifest.xml contents', function () {
         var manifest = {};
 
-        beforeEach(function(done){
+        beforeEach(function (done) {
           var parser = new Xml2Js.Parser();
-          fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
-            parser.parseString(manifestContent, function(err, manifestJson){
+          fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
+            parser.parseString(manifestContent, function (err, manifestJson) {
               manifest = manifestJson;
 
               done();
@@ -161,29 +161,28 @@ describe('office:taskpane', function(){
           });
         });
 
-        it('has valid ID', function(done){
-          expect(validator.isUUID(manifest.OfficeApp.Id)).to.be.true;
+        it('has valid ID', function (done) {
+          expect(validator.isUUID(manifest.OfficeApp.Id)).to.be.true;;
           done();
         });
 
-        it('has correct display name', function(done){
+        it('has correct display name', function (done) {
           expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal('My Office Add-in');
           done();
         });
 
-        it('has correct start page', function(done){
-          var subject = manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue;
-          expect(subject).to.equal('https://localhost:8443/app/home/home.html');
+        it('has correct start page', function (done) {
+          expect(manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue).to.equal('https://localhost:8443/app/home/home.html');
           done();
         });
 
         /**
-         * Word present in host entry.
+         * Word present in host entry. 
          */
-        it('includes Word in Hosts', function(done){
+        it('includes Word in Hosts', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
-            if (h.$.Name === 'Document') {
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Document') {
               found = true;
             }
           });
@@ -193,12 +192,12 @@ describe('office:taskpane', function(){
         });
 
         /**
-         * Excel present in host entry.
+         * Excel present in host entry. 
          */
-        it('includes Excel in Hosts', function(done){
+        it('includes Excel in Hosts', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
-            if (h.$.Name === 'Workbook') {
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Workbook') {
               found = true;
             }
           });
@@ -208,12 +207,12 @@ describe('office:taskpane', function(){
         });
 
         /**
-         * PowerPoint present in host entry.
+         * PowerPoint present in host entry. 
          */
-        it('includes PowerPoint in Hosts', function(done){
+        it('includes PowerPoint in Hosts', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
-            if (h.$.Name === 'Presentation') {
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Presentation') {
               found = true;
             }
           });
@@ -223,12 +222,12 @@ describe('office:taskpane', function(){
         });
 
         /**
-         * Project present in host entry.
+         * Project present in host entry. 
          */
-        it('includes Project in Hosts', function(done){
+        it('includes Project in Hosts', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
-            if (h.$.Name === 'Project') {
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
+            if (h.$.Name == 'Project') {
               found = true;
             }
           });
@@ -237,39 +236,39 @@ describe('office:taskpane', function(){
           done();
         });
 
-      }); // describe('manifest.xml contents')
+      }); //describe('manifest.xml contents')
 
       /**
        * tsd.json is good
        */
-      describe('tsd.json contents', function(){
+      describe('tsd.json contents', function () {
         var tsd = {};
 
-        beforeEach(function(done){
-          fs.readFile('tsd.json', 'utf8', function(err, tsdJson){
+        beforeEach(function (done) {
+          fs.readFile('tsd.json', 'utf8', function (err, tsdJson) {
             tsd = JSON.parse(tsdJson);
 
             done();
           });
         });
 
-        it('has correct *.d.ts references', function(done){
+        it('has correct *.d.ts references', function (done) {
           expect(tsd.installed).to.exist;
-          expect(tsd.installed['jquery/jquery.d.ts']).to.exist;
-          expect(tsd.installed['angularjs/angular.d.ts']).to.not.exist;
-          expect(tsd.installed['angularjs/angular-route.d.ts']).to.not.exist;
-          expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.not.exist;
+          expect(tsd.installed["jquery/jquery.d.ts"]).to.exist;
+          expect(tsd.installed["angularjs/angular.d.ts"]).to.not.exist;
+          expect(tsd.installed["angularjs/angular-route.d.ts"]).to.not.exist;
+          expect(tsd.installed["angularjs/angular-sanitize.d.ts"]).to.not.exist;
           done();
         });
 
       }); // describe('tsd.json contents')
-
+      
       /**
        * gulpfile.js is good
        */
-      describe('gulpfule.js contents', function(){
+      describe('gulpfule.js contents', function () {
 
-        it('contains task \'serve-static\'', function(done){
+        it('contains task \'serve-static\'', function (done) {
 
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'serve-static\',');
@@ -279,7 +278,7 @@ describe('office:taskpane', function(){
       }); // describe('gulpfile.js contents')
 
     }); // describe('technology:html')
-
+    
   }); // describe('run on existing project (non-empty folder)')
 
 });

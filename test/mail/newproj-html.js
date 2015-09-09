@@ -1,4 +1,4 @@
-/* jshint expr:true */
+
 'use strict';
 
 var fs = require('fs');
@@ -16,24 +16,24 @@ var chai = require('chai'),
 var util = require('./../_testUtils');
 
 
-// sub:generator options
+// sub:generator options 
 var options = {};
 
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
-describe('office:mail', function(){
+describe('office:mail', function () {
 
-  beforeEach(function(done){
+  beforeEach(function (done) {
     options = {
       name: 'My Office Add-in'
     };
     done();
   });
-
+   
   /**
    * Test scrubbing of name with illegal characters
    */
-  it('project name is alphanumeric only', function(done){
+  it('project name is alphanumeric only', function (done) {
     options = {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
@@ -41,11 +41,11 @@ describe('office:mail', function(){
       outlookForm: ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'],
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
-
+    
     // run generator
     helpers.run(path.join(__dirname, '../../generators/mail'))
       .withOptions(options)
-      .on('end', function(){
+      .on('end', function () {
         var expected = {
           name: 'somes-bad-character',
           version: '0.1.0',
@@ -61,13 +61,13 @@ describe('office:mail', function(){
         done();
       });
   });
-
+  
   /**
    * Test addin when running on empty folder.
    */
-  describe('run on new project (empty folder)', function(){
+  describe('run on new project (empty folder)', function () {
 
-    beforeEach(function(done){
+    beforeEach(function (done) {
       // set to current folder
       options.rootPath = '';
       done();
@@ -76,10 +76,10 @@ describe('office:mail', function(){
     /**
      * Test addin when technology = html
      */
-    describe('addin technology:html', function(){
+    describe('addin technology:html', function () {
 
-      beforeEach(function(done){
-        // set language to html
+      beforeEach(function (done) {
+        //set language to html
         options.tech = 'html';
 
         // set outlook form type
@@ -91,14 +91,14 @@ describe('office:mail', function(){
           .on('end', done);
       });
 
-      afterEach(function(){
+      after(function () {
         mockery.disable();
       });
 
       /**
        * All expected files are created.
        */
-      it('creates expected files', function(done){
+      it('creates expected files', function (done) {
         var expected = [
           '.bowerrc',
           'bower.json',
@@ -138,7 +138,7 @@ describe('office:mail', function(){
       /**
        * bower.json is good
        */
-      it('bower.json contains correct values', function(done){
+      it('bower.json contains correct values', function (done) {
         var expected = {
           name: 'my-office-add-in',
           version: '0.1.0',
@@ -156,12 +156,12 @@ describe('office:mail', function(){
       /**
        * package.json is good
        */
-      it('package.json contains correct values', function(done){
+      it('package.json contains correct values', function (done) {
         var expected = {
           name: 'my-office-add-in',
           version: '0.1.0',
           scripts: {
-            postinstall: 'bower install'
+            postinstall: "bower install"
           },
           devDependencies: {
             gulp: '^3.9.0',
@@ -177,13 +177,13 @@ describe('office:mail', function(){
       /**
        * manfiest.xml is good
        */
-      describe('manifest.xml contents', function(){
+      describe('manifest.xml contents', function () {
         var manifest = {};
 
-        beforeEach(function(done){
+        beforeEach(function (done) {
           var parser = new Xml2Js.Parser();
-          fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
-            parser.parseString(manifestContent, function(err, manifestJson){
+          fs.readFile('manifest.xml', 'utf8', function (err, manifestContent) {
+            parser.parseString(manifestContent, function (err, manifestJson) {
               manifest = manifestJson;
 
               done();
@@ -191,17 +191,17 @@ describe('office:mail', function(){
           });
         });
 
-        it('has valid ID', function(done){
-          expect(validator.isUUID(manifest.OfficeApp.Id)).to.be.true;
+        it('has valid ID', function (done) {
+          expect(validator.isUUID(manifest.OfficeApp.Id)).to.be.true;;
           done();
         });
 
-        it('has correct display name', function(done){
+        it('has correct display name', function (done) {
           expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal('My Office Add-in');
           done();
         });
 
-        it('has correct start page', function(done){
+        it('has correct start page', function (done) {
           var valid = false;
           var subject = manifest.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue;
 
@@ -213,13 +213,13 @@ describe('office:mail', function(){
           expect(valid, 'start page is not valid compose or edit form').to.be.true;
           done();
         });
-
+        
         /**
          * Form for ItemRead present
          */
-        it('includes form for ItemRead', function(done){
+        it('includes form for ItemRead', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.FormSettings[0].Form, function(formSetting){
+          _.forEach(manifest.OfficeApp.FormSettings[0].Form, function (formSetting) {
             if (formSetting.$['xsi:type'] === 'ItemRead') {
               found = true;
             }
@@ -228,13 +228,13 @@ describe('office:mail', function(){
           expect(found, '<Form xsi:type="ItemRead"> exist').to.be.true;
           done();
         });
-
+        
         /**
          * Form for ItemEdit present
          */
-        it('includes form for ItemEdit', function(done){
+        it('includes form for ItemEdit', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.FormSettings[0].Form, function(formSetting){
+          _.forEach(manifest.OfficeApp.FormSettings[0].Form, function (formSetting) {
             if (formSetting.$['xsi:type'] === 'ItemEdit') {
               found = true;
             }
@@ -243,13 +243,13 @@ describe('office:mail', function(){
           expect(found, '<Form xsi:type="ItemEdit"> exist').to.be.true;
           done();
         });
-
+        
         /**
          * Rule for Mail Read present
          */
-        it('includes rule for mail read', function(done){
+        it('includes rule for mail read', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Rule[0].Rule, function(rule){
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
             if (rule.$['xsi:type'] === 'ItemIs' &&
               rule.$.ItemType === 'Message' &&
               rule.$.FormType === 'Read') {
@@ -260,13 +260,13 @@ describe('office:mail', function(){
           expect(found, '<Rule xsi:type="ItemIs" ItemType="Message" FormType="Read" />').to.be.true;
           done();
         });
-
+        
         /**
          * Rule for Mail Edit present
          */
-        it('includes rule for mail edit', function(done){
+        it('includes rule for mail edit', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Rule[0].Rule, function(rule){
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
             if (rule.$['xsi:type'] === 'ItemIs' &&
               rule.$.ItemType === 'Message' &&
               rule.$.FormType === 'Edit') {
@@ -277,13 +277,13 @@ describe('office:mail', function(){
           expect(found, '<Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit" />').to.be.true;
           done();
         });
-
+        
         /**
          * Rule for Appointment Read present
          */
-        it('includes rule for appointment read', function(done){
+        it('includes rule for appointment read', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Rule[0].Rule, function(rule){
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
             if (rule.$['xsi:type'] === 'ItemIs' &&
               rule.$.ItemType === 'Appointment' &&
               rule.$.FormType === 'Read') {
@@ -294,13 +294,13 @@ describe('office:mail', function(){
           expect(found, '<Rule xsi:type="ItemIs" ItemType="Appointment" FormType="Read" />').to.be.true;
           done();
         });
-
+        
         /**
          * Rule for Appointment Edit present
          */
-        it('includes rule for appointment edit', function(done){
+        it('includes rule for appointment edit', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Rule[0].Rule, function(rule){
+          _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
             if (rule.$['xsi:type'] === 'ItemIs' &&
               rule.$.ItemType === 'Appointment' &&
               rule.$.FormType === 'Edit') {
@@ -312,28 +312,28 @@ describe('office:mail', function(){
           done();
         });
 
-      }); // describe('manifest.xml contents')
-
+      }); //describe('manifest.xml contents')
+      
       /**
        * tsd.json is good
        */
-      describe('tsd.json contents', function(){
+      describe('tsd.json contents', function () {
         var tsd = {};
 
-        beforeEach(function(done){
-          fs.readFile('tsd.json', 'utf8', function(err, tsdJson){
+        beforeEach(function (done) {
+          fs.readFile('tsd.json', 'utf8', function (err, tsdJson) {
             tsd = JSON.parse(tsdJson);
 
             done();
           });
         });
 
-        it('has correct *.d.ts references', function(done){
+        it('has correct *.d.ts references', function (done) {
           expect(tsd.installed).to.exist;
-          expect(tsd.installed['jquery/jquery.d.ts']).to.exist;
-          expect(tsd.installed['angularjs/angular.d.ts']).to.not.exist;
-          expect(tsd.installed['angularjs/angular-route.d.ts']).to.not.exist;
-          expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.not.exist;
+          expect(tsd.installed["jquery/jquery.d.ts"]).to.exist;
+          expect(tsd.installed["angularjs/angular.d.ts"]).to.not.exist;
+          expect(tsd.installed["angularjs/angular-route.d.ts"]).to.not.exist;
+          expect(tsd.installed["angularjs/angular-sanitize.d.ts"]).to.not.exist;
           done();
         });
 
@@ -342,9 +342,9 @@ describe('office:mail', function(){
       /**
        * gulpfile.js is good
        */
-      describe('gulpfule.js contents', function(){
+      describe('gulpfule.js contents', function () {
 
-        it('contains task \'serve-static\'', function(done){
+        it('contains task \'serve-static\'', function (done) {
 
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'serve-static\',');
@@ -354,7 +354,7 @@ describe('office:mail', function(){
       }); // describe('gulpfile.js contents')
 
     }); // describe('technology:html')
-
+      
   }); // describe('run on new project (empty folder)')
 
 });
