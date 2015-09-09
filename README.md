@@ -8,7 +8,7 @@
 [![devDependency Status](https://david-dm.org/officedev/generator-office/dev-status.svg)](https://david-dm.org/officedev/generator-office#info=devDependencies)
 [![Slack Network](http://officedev.herokuapp.com/badge.svg)](http://officedev.herokuapp.com/)
 
-> [Yeoman](http://yeoman.io) generator for creating Microsoft Office projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
+[Yeoman](http://yeoman.io) generator for creating Microsoft Office projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
 
 - use a editor other than Visual Studio
 - interested in using a technology other than plain HTML, CSS & JavaScript
@@ -25,10 +25,14 @@ Check out the announcement blog post: [Office Dev Center Blog - Creating Office 
 
 Read up on [how to use the generator to create Office Add-ins with Visual Studio Code](https://code.visualstudio.com/Docs/runtimes/office).
 
-## YO Office Demo
+If you are interested in contributing, read the the [Contributing Guidelines](docs/contributing.md). 
+
+## YO Office Demo (screenshot & video)
 ![](docs/assets/generatoroffice.png)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/78b18BLVosM" frameborder="0" allowfullscreen></iframe>
+
+***
 
 ## Install
 
@@ -38,7 +42,7 @@ Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requi
 $ npm install -g yo generator-office bower
 ```
 
-## Usage:
+## Usage
 
 ```bash
 $ yo office [options]
@@ -48,7 +52,29 @@ The generator is intented to be run from within a folder where you want the proj
 
 > Note: Office Add-ins must be hosted, even in development, in a **HTTPS** site. You can create a simple HTTPS hosted site using Node.js using the [nodehttps](https://www.npmjs.com/package/generator-nodehttps) generator. 
 
-## Options:
+## Sub Generators
+
+Running the main generator will prompt you for the type of Office project to create. This triggers the execution of one of the included sub generators. You can instead call one of these sub generators directly to bypass that question:
+
+  - `office:mail` - creates a Mail Add-in
+  - `office:taskpane` - creates a Task Pane Add-in
+  - `office:content` - creates a Content Add-in
+
+> Remember you can see the options of each sub generators by running `$ yo office:[sub] --help`
+
+## Running the Generated Site
+
+All generators create a `gulpfile.js`. This uses the [gulp-webserver](https://www.npmjs.com/package/gulp-webserver) task to start a HTTPS server. This server includes a self-signed SSL cert that your development enviroment must trust (this involves adding it to your trusted root certificates). Start the local HTTPS site on `https://localhost:8443/` and launch a browser to this site using:
+
+```bash
+$ gulp serve-static
+```
+
+You can add the `open` property set to a URL to have your default browser open & navigate to when running this task.
+
+## Examples
+
+Refer to the [docs](docs) for example executions & output of the generator.## Command Line Options:
 
 List of supported options. If these are not provided, the generator will prompt you for the values before scaffolding the project.
 
@@ -105,35 +131,3 @@ The type of form within Outlook that can host the add-in.
   - Type: String[]
   - Default: undefined / null
   - Optional  
-
-## Sub Generators
-
-Running the main generator will prompt you for the type of Office project to create. This triggers the execution of one of the included sub generators. You can instead call one of these sub generators directly to bypass that question:
-
-  - `office:mail` - creates a Mail Add-in
-  - `office:taskpane` - creates a Task Pane Add-in
-  - `office:content` - creates a Content Add-in
-
-> Remember you can see the options of each sub generators by running `$ yo office:[sub] --help`
-
-## Running the Generated Site
-
-All generators create a `gulpfile.js`. This uses the [gulp-webserver](https://www.npmjs.com/package/gulp-webserver) task to start a HTTPS server. This server includes a self-signed SSL cert that your development enviroment must trust (this involves adding it to your trusted root certificates). Start the local HTTPS site on `https://localhost:8443/` and launch a browser to this site using:
-
-```bash
-$ gulp serve-static
-```
-
-You can add the `open` property set to a URL to have your default browser open & navigate to when running this task.
-
-## Examples
-
-Refer to the [docs](docs) for example executions & output of the generator.
-
-## Running Tests
-
-Test the generator by running:
-
-```bash
-$ npm test
-```
