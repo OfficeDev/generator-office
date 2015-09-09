@@ -43,22 +43,6 @@ gulp.task('vet', function(){
 });
 
 /**
- * Apply JS style guidelines to all JS files.
- */
-gulp.task('stylejs', function(){
-  log('Apply JS style guidelines to JS files');
-
-  return gulp
-    .src(config.allJs, {base: './'})
-    .pipe($.if(args.verbose, $.print()))
-    .pipe($.jscs({
-      configPath: '.jscsrc',
-      fix: true
-    }))
-    .pipe(gulp.dest('./'));
-});
-
-/**
  * Run all tests with code coverage.
  */
 gulp.task('test', function(done){
@@ -120,13 +104,6 @@ gulp.task('debug-yo', ['run-yo', 'node-inspector']);
  */
 gulp.task('autotest', function(done){
   gulp.watch(['generators/**', 'test/**'], ['vet', 'test']);
-});
-
-/**
- * Watch for changes in any JS files & automatically styles them.
- */
-gulp.task('autostylejs', function(done){
-  gulp.watch('./**/*.js', ['style-js']);
 });
 
 /**
