@@ -6,7 +6,7 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
   <Description DefaultValue="[Task pane Add-in description]"/>
-  <SupportUrl></SupportUrl>
+  <SupportUrl DefaultValue="[Support URL]"/>
   <Hosts>
   </Hosts>
   <DefaultSettings>
