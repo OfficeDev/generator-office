@@ -60,19 +60,6 @@ gulp.task('test', function(done){
 });
 
 /**
- * Setup node inspector to debug app.
- */
-gulp.task('node-inspector', function(){
-  // start node inspector
-  return gulp.src([])
-    .pipe($.inspector({
-      debugPort: 5858,
-      webHost: '127.0.0.1',
-      webPort: 8080
-    }));
-});
-
-/**
  * Run the Yeoman generator in debug mode.
  */
 gulp.task('run-yo', function(){
@@ -89,11 +76,6 @@ gulp.task('run-yo', function(){
       stdio: 'inherit'
     });
 });
-
-/**
- * Run Yeoman in debug mode & fire up node inspector for debugging.
- */
-gulp.task('debug-yo', ['run-yo', 'node-inspector']);
 
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 /*                         auto / watch tasks                                */

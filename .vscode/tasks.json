@@ -5,7 +5,7 @@
   "args": [],
   "tasks": [
     {
-      "taskName": "run-tests",
+      "taskName": "test",
       "isTestCommand": true,
       "isBuildCommand": false
     }
