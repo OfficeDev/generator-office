@@ -49,8 +49,11 @@ describe('office:content', function(){
           name: 'somes-bad-character',
           version: '0.1.0',
           devDependencies: {
+            chalk: '^1.1.1',
             gulp: '^3.9.0',
-            'gulp-webserver': '^0.9.1'
+            'gulp-webserver': '^0.9.1',
+            minimist: '^1.2.0',
+            xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
 
@@ -112,6 +115,7 @@ describe('office:content', function(){
           'gulpfile.js',
           'package.json',
           'manifest.xml',
+          'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
           addinRootPath + '/app/app.js',
@@ -168,8 +172,11 @@ describe('office:content', function(){
             express: '^4.12.2'
           },
           devDependencies: {
+            chalk: '^1.1.1',
             gulp: '^3.9.0',
-            'gulp-webserver': '^0.9.1'
+            'gulp-webserver': '^0.9.1',
+            minimist: '^1.2.0',
+            xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
 
@@ -307,6 +314,12 @@ describe('office:content', function(){
 
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'serve-static\',');
+          done();
+        });
+        
+        it('contains task \'validate-xml\'', function(done){
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate-xml\',');
           done();
         });
 

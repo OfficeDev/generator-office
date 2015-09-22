@@ -49,8 +49,11 @@ describe('office:mail', function(){
           name: 'somes-bad-character',
           version: '0.1.0',
           devDependencies: {
+            chalk: '^1.1.1',
             gulp: '^3.9.0',
-            'gulp-webserver': '^0.9.1'
+            'gulp-webserver': '^0.9.1',
+            minimist: '^1.2.0',
+            xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
 
@@ -104,6 +107,7 @@ describe('office:mail', function(){
           'package.json',
           'gulpfile.js',
           'manifest.xml',
+          'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
           'appcompose/index.html',
@@ -168,8 +172,11 @@ describe('office:mail', function(){
             postinstall: 'bower install'
           },
           devDependencies: {
+            chalk: '^1.1.1',
             gulp: '^3.9.0',
-            'gulp-webserver': '^0.9.1'
+            'gulp-webserver': '^0.9.1',
+            minimist: '^1.2.0',
+            xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
 
@@ -353,6 +360,12 @@ describe('office:mail', function(){
 
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'serve-static\',');
+          done();
+        });
+        
+        it('contains task \'validate-xml\'', function(done){
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate-xml\',');
           done();
         });
 
