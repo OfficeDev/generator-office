@@ -143,4 +143,16 @@ In the __index.html__ file add references to the newly added __app.config.js__ a
 <script src="app/home/home.controller.js"></script>
 ```
 
+### Register app domains required to complete AAD authentication from Office clients
+
+In the __manifest.xml__ file, just before the __Hosts__ element, add the following snippet:
+
+```xml
+<AppDomains>
+  <AppDomain>https://login.windows.net</AppDomain>
+  <AppDomain>https://login.microsoftonline.net</AppDomain>
+  <AppDomain>https://login.microsoftonline.com</AppDomain>
+</AppDomains>
+```
+
 This step concludes the configuration steps necessary to add ADAL JS support to your Office add-in created using the Yeoman Office Generator. Assuming you have enabled the implicit authentication flow for your application in Azure AD, you should be able to interact with Office 365 APIs or Microsoft Graph within your application. 
