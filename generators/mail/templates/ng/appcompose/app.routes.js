@@ -9,7 +9,7 @@
   function routeConfigurator($routeProvider){
     $routeProvider
       .when('/', {
-        templateUrl: 'appcompose/home/home.html',
+        templateUrl: 'home/home.html',
         controller: 'homeController',
         controllerAs: 'vm'
       });
