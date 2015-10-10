@@ -228,12 +228,24 @@ module.exports = generators.Base.extend({
             packageJson.devDependencies = {};
           }
           /* istanbul ignore else */
+          if (!packageJson.devDependencies['chalk']) {
+            packageJson.devDependencies['chalk'] = '^1.1.1';
+          }
+          /* istanbul ignore else */
           if (!packageJson.devDependencies['gulp']) {
             packageJson.devDependencies['gulp'] = '^3.9.0';
           }
           /* istanbul ignore else */
           if (!packageJson.devDependencies['gulp-webserver']) {
             packageJson.devDependencies['gulp-webserver'] = '^0.9.1';
+          }
+          /* istanbul ignore else */
+          if (!packageJson.devDependencies['minimist']) {
+            packageJson.devDependencies['minimist'] = '^1.2.0';
+          }
+          /* istanbul ignore else */
+          if (!packageJson.devDependencies['xmllint']) {
+            packageJson.devDependencies['xmllint'] = 'git+https://github.com/kripken/xml.js.git';
           }
 
           // overwrite existing package.json
@@ -408,6 +420,8 @@ module.exports = generators.Base.extend({
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
                             this.destinationPath('manifest.xml'),
                             this.genConfig);
+            this.fs.copy(this.templatePath('common/manifest.xsd'),
+                         this.destinationPath('manifest.xsd'));
 
             // copy addin files
             this.fs.copy(this.templatePath('html/appcompose/app.css'),
@@ -447,6 +461,8 @@ module.exports = generators.Base.extend({
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
                             this.destinationPath('manifest.xml'),
                             this.genConfig);
+            this.fs.copy(this.templatePath('common/manifest.xsd'),
+                         this.destinationPath('manifest.xsd'));
 
             // copy addin files
             this.genConfig.startPage = '{https-addin-host-site}/index.html';
