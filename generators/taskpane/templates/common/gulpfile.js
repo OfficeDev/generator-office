@@ -33,6 +33,8 @@ gulp.task('validate-xml', function () {
     schema: xsd
   });
   
+  validateHighResolutionIconUrl(xml, result);
+  
   if (resultsAsJson) {
     console.log(JSON.stringify(result));
   }
@@ -48,3 +50,16 @@ gulp.task('validate-xml', function () {
     }
   }
 });
+
+function validateHighResolutionIconUrl(xml, result) {
+  if (xml && result) {
+    if (xml.indexOf('<HighResolutionIconUrl ') > -1 &&
+      xml.indexOf('<HighResolutionIconUrl DefaultValue="https://') < 0) {
+        if (result.errors === null) {
+          result.errors = [];
+        }
+        
+        result.errors.push('The value of the HighResolutionIconUrl attribute contains an unsupported URL. You can only use https:// URLs.');
+    }
+  }
+}
