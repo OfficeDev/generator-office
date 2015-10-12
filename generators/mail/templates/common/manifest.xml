@@ -7,8 +7,8 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
   <Description DefaultValue="[Task pane Add-in description]"/>
-  <HighResolutionIconUrl DefaultValue="https://localhost:8443/images/icon.png"/>
-  <SupportUrl DefaultValue="https://localhost:8443"/>
+  <HighResolutionIconUrl DefaultValue="[Icon URL]"/>
+  <SupportUrl DefaultValue="[Support URL]"/>
   <Hosts>
     <Host Name="Mailbox" />
   </Hosts>
