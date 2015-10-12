@@ -128,18 +128,8 @@ describe('office:mail', function(){
             addinRootPath + '/appread/home/home.html',
             addinRootPath + '/appread/services/data.service.js',
             addinRootPath + '/content/Office.css',
-            addinRootPath + '/content/fabric.components.css',
-            addinRootPath + '/content/fabric.components.min.css',
-            addinRootPath + '/content/fabric.components.rtl.css',
-            addinRootPath + '/content/fabric.components.rtl.min.css',
-            addinRootPath + '/content/fabric.css',
-            addinRootPath + '/content/fabric.min.css',
-            addinRootPath + '/content/fabric.rtl.css',
-            addinRootPath + '/content/fabric.rtl.min.css',
             addinRootPath + '/images/close.png',
-            addinRootPath + '/scripts/MicrosoftAjax.js',
-            addinRootPath + '/scripts/jquery.fabric.js',
-            addinRootPath + '/scripts/jquery.fabric.min.js'
+            addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
   
   
@@ -159,7 +149,8 @@ describe('office:mail', function(){
               jquery: '~1.9.1',
               angular: '~1.4.4',
               'angular-route': '~1.4.4',
-              'angular-sanitize': '~1.4.4'
+              'angular-sanitize': '~1.4.4',
+              'office-ui-fabric': '*'
             }
           };
   
@@ -422,18 +413,8 @@ describe('office:mail', function(){
             addinRootPath + '/appread/home/home.html',
             addinRootPath + '/appread/services/data.service.js',
             addinRootPath + '/content/Office.css',
-            addinRootPath + '/content/fabric.components.css',
-            addinRootPath + '/content/fabric.components.min.css',
-            addinRootPath + '/content/fabric.components.rtl.css',
-            addinRootPath + '/content/fabric.components.rtl.min.css',
-            addinRootPath + '/content/fabric.css',
-            addinRootPath + '/content/fabric.min.css',
-            addinRootPath + '/content/fabric.rtl.css',
-            addinRootPath + '/content/fabric.rtl.min.css',
             addinRootPath + '/images/close.png',
-            addinRootPath + '/scripts/MicrosoftAjax.js',
-            addinRootPath + '/scripts/jquery.fabric.js',
-            addinRootPath + '/scripts/jquery.fabric.min.js'
+            addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
   
   
@@ -601,18 +582,8 @@ describe('office:mail', function(){
             addinRootPath + '/appcompose/home/home.html',
             addinRootPath + '/appcompose/services/data.service.js',
             addinRootPath + '/content/Office.css',
-            addinRootPath + '/content/fabric.components.css',
-            addinRootPath + '/content/fabric.components.min.css',
-            addinRootPath + '/content/fabric.components.rtl.css',
-            addinRootPath + '/content/fabric.components.rtl.min.css',
-            addinRootPath + '/content/fabric.css',
-            addinRootPath + '/content/fabric.min.css',
-            addinRootPath + '/content/fabric.rtl.css',
-            addinRootPath + '/content/fabric.rtl.min.css',
             addinRootPath + '/images/close.png',
-            addinRootPath + '/scripts/MicrosoftAjax.js',
-            addinRootPath + '/scripts/jquery.fabric.js',
-            addinRootPath + '/scripts/jquery.fabric.min.js'
+            addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
   
   

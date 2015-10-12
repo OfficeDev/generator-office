@@ -6,6 +6,7 @@
     "jquery": "~1.9.1",
     "angular": "~1.4.4",
     "angular-route": "~1.4.4",
-    "angular-sanitize": "~1.4.4"
+    "angular-sanitize": "~1.4.4",
+    "office-ui-fabric": "*"
   }
 }

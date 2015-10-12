@@ -117,18 +117,8 @@ describe('office:content', function(){
           'app/home/home.html',
           'app/home/home.css',
           'content/Office.css',
-          'content/fabric.components.css',
-          'content/fabric.components.min.css',
-          'content/fabric.components.rtl.css',
-          'content/fabric.components.rtl.min.css',
-          'content/fabric.css',
-          'content/fabric.min.css',
-          'content/fabric.rtl.css',
-          'content/fabric.rtl.min.css',
           'images/close.png',
-          'scripts/MicrosoftAjax.js',
-          'scripts/jquery.fabric.js',
-          'scripts/jquery.fabric.min.js'
+          'scripts/MicrosoftAjax.js'
         ];
         assert.file(expected);
         done();
@@ -143,7 +133,8 @@ describe('office:content', function(){
           version: '0.1.0',
           dependencies: {
             'microsoft.office.js': '*',
-            jquery: '~1.9.1'
+            jquery: '~1.9.1',
+            'office-ui-fabric': '*'
           }
         };
 

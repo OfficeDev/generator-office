@@ -125,18 +125,8 @@ describe('office:mail', function(){
             'appread/home/home.html',
             'appread/services/data.service.js',
             'content/Office.css',
-            'content/fabric.components.css',
-            'content/fabric.components.min.css',
-            'content/fabric.components.rtl.css',
-            'content/fabric.components.rtl.min.css',
-            'content/fabric.css',
-            'content/fabric.min.css',
-            'content/fabric.rtl.css',
-            'content/fabric.rtl.min.css',
             'images/close.png',
-            'scripts/MicrosoftAjax.js',
-            'scripts/jquery.fabric.js',
-            'scripts/jquery.fabric.min.js'
+            'scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);
           done();
@@ -154,7 +144,8 @@ describe('office:mail', function(){
               jquery: '~1.9.1',
               angular: '~1.4.4',
               'angular-route': '~1.4.4',
-              'angular-sanitize': '~1.4.4'
+              'angular-sanitize': '~1.4.4',
+              'office-ui-fabric': '*'
             }
           };
   
@@ -414,18 +405,8 @@ describe('office:mail', function(){
             'appread/home/home.html',
             'appread/services/data.service.js',
             'content/Office.css',
-            'content/fabric.components.css',
-            'content/fabric.components.min.css',
-            'content/fabric.components.rtl.css',
-            'content/fabric.components.rtl.min.css',
-            'content/fabric.css',
-            'content/fabric.min.css',
-            'content/fabric.rtl.css',
-            'content/fabric.rtl.min.css',
             'images/close.png',
-            'scripts/MicrosoftAjax.js',
-            'scripts/jquery.fabric.js',
-            'scripts/jquery.fabric.min.js'
+            'scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);
           done();
@@ -590,18 +571,8 @@ describe('office:mail', function(){
             'appcompose/home/home.html',
             'appcompose/services/data.service.js',
             'content/Office.css',
-            'content/fabric.components.css',
-            'content/fabric.components.min.css',
-            'content/fabric.components.rtl.css',
-            'content/fabric.components.rtl.min.css',
-            'content/fabric.css',
-            'content/fabric.min.css',
-            'content/fabric.rtl.css',
-            'content/fabric.rtl.min.css',
             'images/close.png',
-            'scripts/MicrosoftAjax.js',
-            'scripts/jquery.fabric.js',
-            'scripts/jquery.fabric.min.js'
+            'scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);
           done();

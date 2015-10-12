@@ -374,30 +374,10 @@ module.exports = generators.Base.extend({
                      this.destinationPath('gulpfile.js'));
         this.fs.copy(this.templatePath('common/content/Office.css'),
                      this.destinationPath(this._parseTargetPath('content/Office.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.rtl.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.rtl.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.rtl.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.rtl.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.min.css')));
         this.fs.copy(this.templatePath('common/images/close.png'),
                      this.destinationPath(this._parseTargetPath('images/close.png')));
         this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'),
                      this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
-        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.js'),
-                     this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.js')));
-        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.min.js'),
-                     this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.min.js')));
 
         switch (this.genConfig.tech) {
           case 'html':
