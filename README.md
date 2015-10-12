@@ -39,7 +39,7 @@ If you are interested in contributing, read the the [Contributing Guidelines](do
 Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org). The project files created by the generator leverage client side packages in [bower](http://bower.io) so you will want to install that as well:
 
 ```bash
-$ npm install -g yo generator-office bower gulp
+$ npm install -g yo generator-office bower
 ```
 
 ## Usage

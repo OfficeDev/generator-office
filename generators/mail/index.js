@@ -395,8 +395,6 @@ module.exports = generators.Base.extend({
                      this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.min.css')));
         this.fs.copy(this.templatePath('common/images/close.png'),
                      this.destinationPath(this._parseTargetPath('images/close.png')));
-        this.fs.copy(this.templatePath('common/images/icon.png'),
-                     this.destinationPath(this._parseTargetPath('images/icon.png')));
         this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'),
                      this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
         this.fs.copy(this.templatePath('common/scripts/jquery.fabric.js'),
