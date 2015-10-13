@@ -46,6 +46,12 @@ module.exports = generators.Base.extend({
       desc: 'Supported Outlook forms',
       required: false
     });
+    
+    this.option('appId', {
+      type: String,
+      desc: 'Application ID as registered in Azure AD',
+      required: false
+    });
 
   }, // constructor()
 
@@ -132,6 +138,9 @@ module.exports = generators.Base.extend({
               name: 'Angular',
               value: 'ng'
             }, {
+              name: 'Angular ADAL',
+              value: 'ng-adal'
+            }, {
               name: 'Manifest.xml only (no application source files)',
               value: 'manifest-only'
             }]
@@ -145,6 +154,30 @@ module.exports = generators.Base.extend({
       }.bind(this));
 
     }, // askFor()
+    
+    askForAdalConfig: function(){
+      // if it's not an ADAL app, don't ask the questions
+      if (this.genConfig.tech !== 'ng-adal') {
+        return;
+      }
+
+      var done = this.async();
+
+      // office client application that can host the addin
+      var prompts = [{
+        name: 'appId',
+        message: 'Application ID as registered in Azure AD:',
+        default: '00000000-0000-0000-0000-000000000000',
+        when: this.options.appId === undefined
+      }];
+
+      // trigger prompts
+      this.prompt(prompts, function(responses){
+        this.genConfig = extend(this.genConfig, responses);
+        done();
+      }.bind(this));
+
+    }, // askForAdalConfig()
 
     askForOfficeClients: function(){
       // if it's a mail addin, don't ask for Office client
@@ -264,6 +297,7 @@ module.exports = generators.Base.extend({
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
             outlookForm: this.genConfig.outlookForm,
+            appId: this.genConfig.appId,
             'skip-install': this.options['skip-install']
           }
         }, {
@@ -279,6 +313,7 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
+            appId: this.genConfig.appId,            
             clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
           }
@@ -294,6 +329,7 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
+            appId: this.genConfig.appId,
             clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
           }
