@@ -45,6 +45,12 @@ module.exports = generators.Base.extend({
       desc: 'Office client product that can host the add-in',
       required: false
     });
+    
+    this.option('appId', {
+      type: String,
+      desc: 'Application ID as registered in Azure AD',
+      required: false
+    });
 
     // create global config object on this generator
     this.genConfig = {};
@@ -99,6 +105,9 @@ module.exports = generators.Base.extend({
               name: 'Angular',
               value: 'ng'
             }, {
+              name: 'Angular ADAL',
+              value: 'ng-adal'
+            }, {
               name: 'Manifest.xml only (no application source files)',
               value: 'manifest-only'
             }]
@@ -147,6 +156,30 @@ module.exports = generators.Base.extend({
       }.bind(this));
 
     }, // askFor()
+    
+    askForAdalConfig: function(){
+      // if it's not an ADAL app, don't ask the questions
+      if (this.genConfig.tech !== 'ng-adal') {
+        return;
+      }
+
+      var done = this.async();
+
+      // office client application that can host the addin
+      var prompts = [{
+        name: 'appId',
+        message: 'Application ID as registered in Azure AD:',
+        default: '00000000-0000-0000-0000-000000000000',
+        when: this.options.appId === undefined
+      }];
+
+      // trigger prompts
+      this.prompt(prompts, function(responses){
+        this.genConfig = extend(this.genConfig, responses);
+        done();
+      }.bind(this));
+
+    }, // askForAdalConfig()
 
     /**
      * If user specified tech:manifest-only, prompt for start page.
@@ -278,6 +311,11 @@ module.exports = generators.Base.extend({
                 this.destinationPath('bower.json'),
                 this.genConfig);
               break;
+            case 'ng-adal':
+              this.fs.copyTpl(this.templatePath('ng-adal/_bower.json'),
+                this.destinationPath('bower.json'),
+                this.genConfig);
+              break;
             case 'html':
               this.fs.copyTpl(this.templatePath('html/_bower.json'),
                 this.destinationPath('bower.json'),
@@ -321,6 +359,24 @@ module.exports = generators.Base.extend({
               /* istanbul ignore else */
               if (!bowerJson.dependencies['angular-sanitize']) {
                 bowerJson.dependencies['angular-sanitize'] = '~1.4.4';
+              }
+              break;
+            case 'ng-adal':
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['angular']) {
+                bowerJson.dependencies['angular'] = '~1.4.4';
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['angular-route']) {
+                bowerJson.dependencies['angular-route'] = '~1.4.4';
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['angular-sanitize']) {
+                bowerJson.dependencies['angular-sanitize'] = '~1.4.4';
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['adal-angular']) {
+                bowerJson.dependencies['adal-angular'] = '~1.0.5';
               }
               break;
           }
@@ -441,6 +497,43 @@ module.exports = generators.Base.extend({
             this.fs.copy(this.templatePath('ng/home/home.html'),
                          this.destinationPath(this._parseTargetPath('app/home/home.html')));
             this.fs.copy(this.templatePath('ng/services/data.service.js'),
+                         this.destinationPath(this._parseTargetPath('app/services/data.service.js')));
+            break;
+          case 'ng-adal':
+            // determine startpage for addin
+            this.genConfig.startPage = 'https://localhost:8443/index.html';
+
+            // copy tsd & jsconfig files
+            this.fs.copy(this.templatePath('ng-adal/_tsd.json'),
+                         this.destinationPath('tsd.json'));
+            this.fs.copy(this.templatePath('common/_jsconfig.json'),
+                         this.destinationPath('jsconfig.json'));
+
+            // create the manifest file
+            this.fs.copyTpl(this.templatePath('ng-adal/manifest.xml'),
+                            this.destinationPath('manifest.xml'),
+                            this.genConfig);
+            this.fs.copy(this.templatePath('common/manifest.xsd'),
+                         this.destinationPath('manifest.xsd'));
+
+            // copy addin files
+            this.genConfig.startPage = '{https-addin-host-site}/index.html';
+            this.fs.copy(this.templatePath('ng-adal/index.html'),
+                         this.destinationPath(this._parseTargetPath('index.html')));
+            this.fs.copy(this.templatePath('ng-adal/app.module.js'),
+                         this.destinationPath(this._parseTargetPath('app/app.module.js')));
+            this.fs.copy(this.templatePath('ng-adal/app.adalconfig.js'),
+                         this.destinationPath(this._parseTargetPath('app/app.adalconfig.js')));
+            this.fs.copyTpl(this.templatePath('ng-adal/app.config.js'),
+                         this.destinationPath(this._parseTargetPath('app/app.config.js')),
+                         this.genConfig);
+            this.fs.copy(this.templatePath('ng-adal/app.routes.js'),
+                         this.destinationPath(this._parseTargetPath('app/app.routes.js')));
+            this.fs.copy(this.templatePath('ng-adal/home/home.controller.js'),
+                         this.destinationPath(this._parseTargetPath('app/home/home.controller.js')));
+            this.fs.copy(this.templatePath('ng-adal/home/home.html'),
+                         this.destinationPath(this._parseTargetPath('app/home/home.html')));
+            this.fs.copy(this.templatePath('ng-adal/services/data.service.js'),
                          this.destinationPath(this._parseTargetPath('app/services/data.service.js')));
             break;
         }

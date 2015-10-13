@@ -45,6 +45,12 @@ module.exports = generators.Base.extend({
       desc: 'Supported Outlook forms',
       required: false
     });
+    
+    this.option('appId', {
+      type: String,
+      desc: 'Application ID as registered in Azure AD',
+      required: false
+    });
 
     // create global config object on this generator
     this.genConfig = {};
@@ -97,6 +103,9 @@ module.exports = generators.Base.extend({
               name: 'Angular',
               value: 'ng'
             }, {
+              name: 'Angular ADAL',
+              value: 'ng-adal'
+            }, {
               name: 'Manifest.xml only (no application source files)',
               value: 'manifest-only'
             }]
@@ -144,6 +153,30 @@ module.exports = generators.Base.extend({
       }.bind(this));
 
     }, // askFor()
+    
+    askForAdalConfig: function(){
+      // if it's not an ADAL app, don't ask the questions
+      if (this.genConfig.tech !== 'ng-adal') {
+        return;
+      }
+
+      var done = this.async();
+
+      // office client application that can host the addin
+      var prompts = [{
+        name: 'appId',
+        message: 'Application ID as registered in Azure AD:',
+        default: '00000000-0000-0000-0000-000000000000',
+        when: this.options.appId === undefined
+      }];
+
+      // trigger prompts
+      this.prompt(prompts, function(responses){
+        this.genConfig = extend(this.genConfig, responses);
+        done();
+      }.bind(this));
+
+    }, // askForAdalConfig()
 
     /**
      * If user specified tech:manifest-only, prompt for start page.
@@ -276,6 +309,11 @@ module.exports = generators.Base.extend({
                 yoGenerator.destinationPath('bower.json'),
                 yoGenerator.genConfig);
               break;
+            case 'ng-adal':
+              yoGenerator.fs.copyTpl(yoGenerator.templatePath('ng-adal/_bower.json'),
+                yoGenerator.destinationPath('bower.json'),
+                yoGenerator.genConfig);
+              break;
             case 'html':
               yoGenerator.fs.copyTpl(yoGenerator.templatePath('html/_bower.json'),
                 yoGenerator.destinationPath('bower.json'),
@@ -319,6 +357,24 @@ module.exports = generators.Base.extend({
               /* istanbul ignore else */
               if (!bowerJson.dependencies['angular-sanitize']) {
                 bowerJson.dependencies['angular-sanitize'] = '~1.4.4';
+              }
+              break;
+            case 'ng-adal':
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['angular']) {
+                bowerJson.dependencies['angular'] = '~1.4.4';
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['angular-route']) {
+                bowerJson.dependencies['angular-route'] = '~1.4.4';
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['angular-sanitize']) {
+                bowerJson.dependencies['angular-sanitize'] = '~1.4.4';
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['adal-angular']) {
+                bowerJson.dependencies['adal-angular'] = '~1.0.5';
               }
               break;
           }
@@ -483,6 +539,70 @@ module.exports = generators.Base.extend({
               this.fs.copy(this.templatePath('ng/appread/home/home.html'),
                           this.destinationPath(this._parseTargetPath('appread/home/home.html')));
               this.fs.copy(this.templatePath('ng/appread/services/data.service.js'),
+                          this.destinationPath(this._parseTargetPath('appread/services/data.service.js')));
+            }
+            break;
+          case 'ng-adal':
+            // determine startpage for addin
+            this.genConfig.startPageReadForm = 'https://localhost:8443/appread/index.html';
+            this.genConfig.startPageEditForm = 'https://localhost:8443/appcompose/index.html';
+
+            // copy tsd & jsconfig files
+            this.fs.copy(this.templatePath('ng-adal/_tsd.json'),
+                         this.destinationPath('tsd.json'));
+            this.fs.copy(this.templatePath('common/_jsconfig.json'),
+                         this.destinationPath('jsconfig.json'));
+
+            // create the manifest file
+            this.fs.copyTpl(this.templatePath('ng-adal/manifest.xml'),
+                            this.destinationPath('manifest.xml'),
+                            this.genConfig);
+            this.fs.copy(this.templatePath('common/manifest.xsd'),
+                         this.destinationPath('manifest.xsd'));
+
+            // copy addin files
+            this.genConfig.startPage = '{https-addin-host-site}/index.html';
+            if (this.genConfig.outlookForm &&
+                (this.genConfig.outlookForm.indexOf('mail-compose') > -1 ||
+                this.genConfig.outlookForm.indexOf('appointment-compose') > -1)) {
+              this.fs.copy(this.templatePath('ng-adal/appcompose/index.html'),
+                          this.destinationPath(this._parseTargetPath('appcompose/index.html')));
+              this.fs.copy(this.templatePath('ng-adal/appcompose/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.module.js')));
+              this.fs.copy(this.templatePath('ng-adal/appcompose/app.adalconfig.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.adalconfig.js')));
+              this.fs.copyTpl(this.templatePath('ng-adal/appcompose/app.config.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.config.js')),
+                          this.genConfig);
+              this.fs.copy(this.templatePath('ng-adal/appcompose/app.routes.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.routes.js')));
+              this.fs.copy(this.templatePath('ng-adal/appcompose/home/home.controller.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/home/home.controller.js')));
+              this.fs.copy(this.templatePath('ng-adal/appcompose/home/home.html'),
+                          this.destinationPath(this._parseTargetPath('appcompose/home/home.html')));
+              this.fs.copy(this.templatePath('ng-adal/appcompose/services/data.service.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/services/data.service.js')));
+            }
+
+            if (this.genConfig.outlookForm &&
+                (this.genConfig.outlookForm.indexOf('mail-read') > -1 ||
+                this.genConfig.outlookForm.indexOf('appointment-read') > -1)) {
+              this.fs.copy(this.templatePath('ng-adal/appread/index.html'),
+                          this.destinationPath(this._parseTargetPath('appread/index.html')));
+              this.fs.copy(this.templatePath('ng-adal/appread/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appread/app.module.js')));
+              this.fs.copy(this.templatePath('ng-adal/appread/app.adalconfig.js'),
+                          this.destinationPath(this._parseTargetPath('appread/app.adalconfig.js')));
+              this.fs.copyTpl(this.templatePath('ng-adal/appread/app.config.js'),
+                          this.destinationPath(this._parseTargetPath('appread/app.config.js')),
+                          this.genConfig);
+              this.fs.copy(this.templatePath('ng-adal/appread/app.routes.js'),
+                          this.destinationPath(this._parseTargetPath('appread/app.routes.js')));
+              this.fs.copy(this.templatePath('ng-adal/appread/home/home.controller.js'),
+                          this.destinationPath(this._parseTargetPath('appread/home/home.controller.js')));
+              this.fs.copy(this.templatePath('ng-adal/appread/home/home.html'),
+                          this.destinationPath(this._parseTargetPath('appread/home/home.html')));
+              this.fs.copy(this.templatePath('ng-adal/appread/services/data.service.js'),
                           this.destinationPath(this._parseTargetPath('appread/services/data.service.js')));
             }
             break;
