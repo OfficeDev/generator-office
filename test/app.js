@@ -70,7 +70,7 @@ describe('office:app', function(){
         name: 'My First Addin',
         rootPath: '',
         type: 'taskpane',
-        tech: 'html',
+        tech: 'ng-adal',
         clients: ['Document', 'Workbook'],
         'skip-install': true
       };
