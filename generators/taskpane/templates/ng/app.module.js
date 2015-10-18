@@ -18,7 +18,7 @@
   // when Office has initalized, manually bootstrap the app
   Office.initialize = function(){
     console.log('>>> Office.initialize()');
-    angular.bootstrap(jQuery('#container'), ['officeAddin']);
+    angular.bootstrap(document.getElementById('container'), ['officeAddin']);
   };
 
 })();
