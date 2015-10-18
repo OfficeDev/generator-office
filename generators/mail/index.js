@@ -338,12 +338,14 @@ module.exports = generators.Base.extend({
           if (!bowerJson.dependencies['microsoft.office.js']) {
             bowerJson.dependencies['microsoft.office.js'] = '*';
           }
-          /* istanbul ignore else */
-          if (!bowerJson.dependencies['jquery']) {
-            bowerJson.dependencies['jquery'] = '~1.9.1';
-          }
 
           switch (addinTech) {
+            case 'html':
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['jquery']) {
+                bowerJson.dependencies['jquery'] = '~1.9.1';
+              }
+              break;
             // if angular...
             case 'ng':
               /* istanbul ignore else */

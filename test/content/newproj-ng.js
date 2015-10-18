@@ -133,7 +133,6 @@ describe('office:content', function(){
           version: '0.1.0',
           dependencies: {
             'microsoft.office.js': '*',
-            jquery: '~1.9.1',
             angular: '~1.4.4',
             'angular-route': '~1.4.4',
             'angular-sanitize': '~1.4.4',
@@ -281,7 +280,6 @@ describe('office:content', function(){
 
         it ('has correct *.d.ts references', function(done){
           expect(tsd.installed).to.exist;
-          expect(tsd.installed['jquery/jquery.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.exist;
