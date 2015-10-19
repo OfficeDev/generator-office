@@ -37,6 +37,7 @@ $ yo office --skip-install
 ├── images
 │   └── close.png
 ├── manifest.xml
+├── manifest.xsd
 └── scripts
     └── MicrosoftAjax.js
 ```
@@ -90,6 +91,7 @@ $ yo office --skip-install
 ├── gulpfile.js
 ├── jsconfig.json
 ├── manifest.xml
+├── manifest.xsd
 ├── package.json
 ├── tsd.json
 └── src

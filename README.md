@@ -104,9 +104,9 @@ Relative path where the project should be created (blank = current directory). I
   - Default: undefined / null
   - Optional  
 
-### `--tech:[ 'html' | 'ng' | 'manifest-only' ]`
+### `--tech:[ 'html' | 'ng' | 'ng-adal' | 'manifest-only' ]`
 
-Technology to use for the project. The supported options include HTML (`html`) or Angular (`ng`). You can also use Manifest.xml only (`manifest-only`) which will create only the `manifest.xml` for an an Office addin.
+Technology to use for the project. The supported options include HTML (`html`), Angular (`ng`) or Angular ADAL (`ng-adal`). You can also use Manifest.xml only (`manifest-only`) which will create only the `manifest.xml` for an an Office addin.
 
   - Type: String
   - Default: undefined / null

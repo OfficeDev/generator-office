@@ -1,10 +1,10 @@
-# Example - Office Mail Add-in in HTML
+# Example - Office Mail Add-in in Angular ADAL
 
-This document demonstrates creating a Mail Add-in first in an empty project as well as in an existing project using HTML, CSS & JavaScript as the technology.
+This document demonstrates creating a Mail Add-in first in an empty project as well as in an existing project using [Angular](https://www.angularjs.org) ADAL as the technology.
 
 ## Empty Project
 
-This example creates an Office Mail Add-in as HTML within an empty project folder.
+This example creates an Office Mail Add-in as Angular ADAL within an empty project folder.
 
 ```bash
 $ yo office --skip-install
@@ -15,7 +15,8 @@ $ yo office --skip-install
 - **Project name (the display name):** My Office Add-in
 - **Root folder of the project:** {blank} 
 - **Office project type:** Mail Add-in (read & compose forms)
-- **Technology to use:** Html, CSS & JavaScript
+- **Technology to use:** Angular ADAL
+- **Application ID as registered in Azure AD:** 03ad2348-c459-4573-8f7d-0ca44d822e7c
 - **Supported Outlook forms:** E-Mail message - read form, Appointment - read form
 
 ```
@@ -28,12 +29,16 @@ $ yo office --skip-install
 ├── manifest.xsd
 ├── tsd.json
 ├── appread
-│   ├── app.css
-│   ├── app.js
-│   └── home
-│       ├── home.css
-│       ├── home.html
-│       └── home.js
+│   ├── app.adalconfig.js
+│   ├── app.config.js
+│   ├── app.module.js
+│   ├── app.routes.js
+│   ├── index.html
+│   ├── home
+│   │   ├── home.controller.js
+│   │   └── home.html
+│   └── services
+│       └── data.service.js
 ├── content
 │   └── Office.css
 ├── images
@@ -79,7 +84,8 @@ $ yo office --skip-install
 - **Project name (the display name):** My Office Add-in
 - **Root folder of the project:** src/public 
 - **Office project type:** Mail Add-in (read & compose forms)
-- **Technology to use:** Html, CSS & JavaScript
+- **Technology to use:** Angular ADAL
+- **Application ID as registered in Azure AD:** 03ad2348-c459-4573-8f7d-0ca44d822e7c
 - **Supported Outlook forms:** E-Mail message - read form, Appointment - read form
 
 ### Results:
@@ -91,24 +97,27 @@ $ yo office --skip-install
 ├── gulpfile.js
 ├── jsconfig.json
 ├── manifest.xml
-├── manifest.xsd
 ├── package.json
 ├── tsd.json
 └── src
     ├── public
+    │   ├── index.html
     │   ├── appread
-    │   │   ├── app.css
-    │   │   ├── app.js
-    │   │   └── home
-    │   │       ├── home.css
-    │   │       ├── home.html
-    │   │       └── home.js
+    │   │   ├── app.adalconfig.js
+    │   │   ├── app.config.js
+    │   │   ├── app.module.js
+    │   │   ├── app.routes.js
+    │   │   ├── index.html
+    │   │   ├── home
+    │   │   │   ├── home.controller.js
+    │   │   │   └── home.html
+    │   │   └── services
+    │   │       └── data.service.js
     │   ├── content
     │   │   ├── Office.css
     │   │   └── site.css
     │   ├── images
     │   │   └── close.png
-    │   ├── index.html
     │   └── scripts
     │       └── MicrosoftAjax.js
     └── server
