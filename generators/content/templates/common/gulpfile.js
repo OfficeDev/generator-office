@@ -53,8 +53,10 @@ gulp.task('validate-xml', function () {
 
 function validateHighResolutionIconUrl(xml, result) {
   if (xml && result) {
-    if (xml.indexOf('<HighResolutionIconUrl ') > -1 &&
-      xml.indexOf('<HighResolutionIconUrl DefaultValue="https://') < 0) {
+    var xmlString = xml.toString();    
+    
+    if (xmlString.indexOf('<HighResolutionIconUrl ') > -1 &&
+      xmlString.indexOf('<HighResolutionIconUrl DefaultValue="https://') < 0) {
         if (result.errors === null) {
           result.errors = [];
         }
