@@ -6,6 +6,14 @@ var fs = require('fs');
 var minimist = require('minimist');
 var xmllint = require('xmllint');
 var chalk = require('chalk');
+var $ = require('gulp-load-plugins')({lazy: true});
+
+gulp.task('help', $.taskListing.withFilters(function(task) {
+	var mainTasks = ['default', 'help', 'serve-static', 'validate-xml'];
+  var isSubTask = mainTasks.indexOf(task) < 0;
+	return isSubTask;
+}));
+gulp.task('default', ['help']);
 
 gulp.task('serve-static', function(){
   gulp.src('.')
