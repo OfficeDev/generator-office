@@ -25,16 +25,8 @@ $ yo office --skip-install
 ├── gulpfile.js
 ├── jsconfig.json
 ├── manifest.xml
+├── manifest.xsd
 ├── tsd.json
-├── appcompose
-│   ├── app.module.js
-│   ├── app.routes.js
-│   ├── index.html
-│   ├── home
-│   │   ├── home.controller.js
-│   │   └── home.html
-│   └── services
-│       └── data.service.js
 ├── appread
 │   ├── app.module.js
 │   ├── app.routes.js
@@ -101,20 +93,12 @@ $ yo office --skip-install
 ├── gulpfile.js
 ├── jsconfig.json
 ├── manifest.xml
+├── manifest.xsd
 ├── package.json
 ├── tsd.json
 └── src
     ├── public
     │   ├── index.html
-    │   ├── appcompose
-    │   │   ├── app.module.js
-    │   │   ├── app.routes.js
-    │   │   ├── index.html
-    │   │   ├── home
-    │   │   │   ├── home.controller.js
-    │   │   │   └── home.html
-    │   │   └── services
-    │   │       └── data.service.js
     │   ├── appread
     │   │   ├── app.module.js
     │   │   ├── app.routes.js

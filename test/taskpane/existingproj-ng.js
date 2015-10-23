@@ -256,7 +256,6 @@ describe('office:taskpane', function(){
 
         it('has correct *.d.ts references', function(done){
           expect(tsd.installed).to.exist;
-          expect(tsd.installed['jquery/jquery.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.exist;
