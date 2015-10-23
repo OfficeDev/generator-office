@@ -52,6 +52,8 @@ describe('office:mail', function(){
           devDependencies: {
             chalk: '^1.1.1',
             gulp: '^3.9.0',
+            'gulp-load-plugins': '^1.0.0',
+            'gulp-task-listing': '^1.0.1',
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
@@ -174,6 +176,8 @@ describe('office:mail', function(){
             devDependencies: {
               chalk: '^1.1.1',
               gulp: '^3.9.0',
+              'gulp-load-plugins': '^1.0.0',
+              'gulp-task-listing': '^1.0.1',
               'gulp-webserver': '^0.9.1',
               minimist: '^1.2.0',
               xmllint: 'git+https://github.com/kripken/xml.js.git'
@@ -341,7 +345,6 @@ describe('office:mail', function(){
   
           it('has correct *.d.ts references', function(done){
             expect(tsd.installed).to.exist;
-            expect(tsd.installed['jquery/jquery.d.ts']).to.exist;
             expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
             expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
             expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.exist;
@@ -354,6 +357,18 @@ describe('office:mail', function(){
         * gulpfile.js is good
         */
         describe('gulpfule.js contents', function(){
+          
+          it('contains task \'help\'', function(done){
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'help\',');
+            done();
+          });
+          
+          it('contains task \'default\'', function(done){
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'default\',');
+            done();
+          });
   
           it('contains task \'serve-static\'', function(done){
   

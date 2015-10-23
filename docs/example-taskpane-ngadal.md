@@ -1,10 +1,10 @@
-# Example - Office Content Add-in in HTML
+# Example - Office Task Pane Add-in in Angular ADAL
 
-This document demonstrates creating a Content Add-in first in an empty project as well as in an existing project using HTML, CSS & JavaScript as the technology.
+This document demonstrates creating a Task Pane Add-in first in an empty project as well as in an existing project using [Angular](https://www.angularjs.org) ADAL as the technology.
 
 ## Empty Project
 
-This example creates an Office Content Add-in as HTML within an empty project folder.
+This example creates an Office Task Pane Add-in as Angular ADAL within an empty project folder.
 
 ```bash
 $ yo office --skip-install
@@ -14,8 +14,9 @@ $ yo office --skip-install
 
 - **Project name (the display name):** My Office Add-in
 - **Root folder of the project:** {blank} 
-- **Office project type:** Content Add-in
-- **Technology to use:** Html, CSS & JavaScript
+- **Office project type:** Task Pane Add-in
+- **Technology to use:** Angular ADAL
+- **Application ID as registered in Azure AD:** 03ad2348-c459-4573-8f7d-0ca44d822e7c
 - **Supported Office Applications:** Word, Excel, PowerPoint, Project
 
 ```
@@ -23,21 +24,25 @@ $ yo office --skip-install
 ├── .bowerrc
 ├── bower.json
 ├── gulpfile.js
+├── index.html
 ├── jsconfig.json
+├── manifest.xml
+├── manifest.xsd
 ├── tsd.json
 ├── app
-│   ├── app.css
-│   ├── app.js
-│   └── home
-│       ├── home.css
-│       ├── home.html
-│       └── home.js
+│   ├── app.adalconfig.js
+│   ├── app.config.js
+│   ├── app.module.js
+│   ├── app.routes.js
+│   ├── home
+│   │   ├── home.controller.js
+│   │   └── home.html
+│   └── services
+│       └── data.service.js
 ├── content
 │   └── Office.css
 ├── images
 │   └── close.png
-├── manifest.xml
-├── manifest.xsd
 └── scripts
     └── MicrosoftAjax.js
 ```
@@ -78,8 +83,9 @@ $ yo office --skip-install
 
 - **Project name (the display name):** My Office Add-in
 - **Root folder of the project:** src/public 
-- **Office project type:** Content Add-in
-- **Technology to use:** Html, CSS & JavaScript
+- **Office project type:** Task Pane Add-in
+- **Technology to use:** Angular ADAL
+- **Application ID as registered in Azure AD:** 03ad2348-c459-4573-8f7d-0ca44d822e7c
 - **Supported Office Applications:** Word, Excel, PowerPoint, Project
 
 ### Results:
@@ -96,19 +102,22 @@ $ yo office --skip-install
 ├── tsd.json
 └── src
     ├── public
+    │   ├── index.html
     │   ├── app
-    │   │   ├── app.css
-    │   │   ├── app.js
-    │   │   └── home
-    │   │       ├── home.css
-    │   │       ├── home.html
-    │   │       └── home.js
+    │   │   ├── app.adalconfig.js
+    │   │   ├── app.config.js
+    │   │   ├── app.module.js
+    │   │   ├── app.routes.js
+    │   │   ├── home
+    │   │   │   ├── home.controller.js
+    │   │   │   └── home.html
+    │   │   └── services
+    │   │       └── data.service.js
     │   ├── content
     │   │   ├── Office.css
     │   │   └── site.css
     │   ├── images
     │   │   └── close.png
-    │   ├── index.html
     │   └── scripts
     │       └── MicrosoftAjax.js
     └── server
