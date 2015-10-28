@@ -50,9 +50,28 @@ exports.setupExistingProject = function(generator){
       'jquery': '~1.9.1'
     }
   };
-
   // write the bower.json file
   generator.fs.writeJSON(generator.destinationPath('bower.json'), existingBower);
+  
+  // create existing tsd.json file
+  // lodash is added to just test to ensure the existing tsd.json file isn't overwritten
+  var existingTsd = {
+    version: 'v4',
+    repo: 'borisyankov/DefinitelyTyped',
+    ref: 'master',
+    path: 'typings',
+    bundle: 'typings/tsd.d.ts',
+    installed: {
+      'jquery/jquery.d.ts': {
+        commit: '04a025ada3492a22df24ca2d8521c911697721b3'
+      },
+      'lodash/lodash.d.ts': {
+        commit: '62eedc3121a5e28c50473d2e4a9cefbcb9c3957f'
+      }
+    }
+  }
+  // write the bower.json file
+  generator.fs.writeJSON(generator.destinationPath('tsd.json'), existingTsd);
 
   // write out static content
   generator.fs.write(generator.destinationPath('public/index.html'), 'foo');
