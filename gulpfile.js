@@ -126,7 +126,7 @@ function log(msg){
  * Handle errors by writing to the log, then emit an end event.
  */
 function handleError(err){
-  $.log(err.toString());
+  $.util.log(err.toString());
   this.emit('end'); // jshint ignore:line
 }
 
