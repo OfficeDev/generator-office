@@ -388,6 +388,7 @@ describe('office:mail', function(){
             expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
             expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
             expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.exist;
+            expect(tsd.installed['office-js/office-js.d.ts']).to.exist;
             done();
           });
   
