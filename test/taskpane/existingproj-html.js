@@ -256,6 +256,7 @@ describe('office:taskpane', function(){
           expect(tsd.installed['angularjs/angular.d.ts']).to.not.exist;
           expect(tsd.installed['angularjs/angular-route.d.ts']).to.not.exist;
           expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.not.exist;
+          expect(tsd.installed['office-js/office-js.d.ts']).to.exist;
           done();
         });
 

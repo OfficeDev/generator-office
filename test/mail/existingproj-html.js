@@ -344,7 +344,8 @@ describe('office:mail', function(){
             expect(tsd.installed['angularjs/angular.d.ts']).to.not.exist;
             expect(tsd.installed['angularjs/angular-route.d.ts']).to.not.exist;
             expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.not.exist;
-            done();
+          expect(tsd.installed['office-js/office-js.d.ts']).to.exist;
+          done();
           });
   
         }); // describe('tsd.json contents')
