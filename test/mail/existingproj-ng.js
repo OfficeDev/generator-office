@@ -345,6 +345,9 @@ describe('office:mail', function(){
   
           it('has correct *.d.ts references', function(done){
             expect(tsd.installed).to.exist;
+            // make sure the existing ones are present (to verify we didn't overwrite, but rather update)
+            expect(tsd.installed['lodash/lodash.d.ts']).to.exist;
+            // make sure the new ones are present
             expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
             expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
             expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.exist;

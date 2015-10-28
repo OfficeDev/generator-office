@@ -405,6 +405,115 @@ module.exports = generators.Base.extend({
       }
     }, // upsertBower()
 
+    /**
+     * If tsd.json already exists in the root of this project, update it
+     * with the necessary addin packages.
+     */
+    upsertTsd: function(){
+      if (this.genConfig.tech !== 'manifest-only') {
+        /**
+         * Copies tsd.json from appropriate template => target.
+         *
+         * @param {Object} yoGenerator - Yeoman generator.
+         * @param {string} addinTech - Technology to use for the addin.
+         */
+        this._copyTsd = function(yoGenerator, addinTech){
+          switch (addinTech) {
+            case 'ng':
+              this.fs.copyTpl(this.templatePath('ng/_tsd.json'),
+                this.destinationPath('tsd.json'),
+                this.genConfig);
+              break;
+            case 'ng-adal':
+              this.fs.copyTpl(this.templatePath('ng-adal/_tsd.json'),
+                this.destinationPath('tsd.json'),
+                this.genConfig);
+              break;
+            case 'html':
+              this.fs.copyTpl(this.templatePath('html/_tsd.json'),
+                this.destinationPath('tsd.json'),
+                this.genConfig);
+              break;
+          }
+        };
+
+        /**
+         * Update existing tsd.json with the necessary references.
+         *
+         * @param {Object} yoGenerator - Yeoman generator.
+         * @param {string} addinTech - Technology to use for the addin.
+         */
+        this._updateTsd = function(yoGenerator, addinTech){
+          // verify the necessary package references are present in tsd.json...
+          //  if not, add them
+          var tsdJson = yoGenerator.fs.readJSON(pathToTsdJson, 'utf8');
+
+          // all addins need these
+          /* istanbul ignore else */
+          if (!tsdJson.installed['office-js/office-js.d.ts']) {
+            tsdJson.installed['office-js/office-js.d.ts'] = {
+              'commit': '62eedc3121a5e28c50473d2e4a9cefbcb9c3957f'
+            };
+          }
+
+          switch (addinTech) {
+            case 'html':
+              /* istanbul ignore else */
+              if (!tsdJson.installed['jquery/jquery.d.ts']) {
+                tsdJson.installed['jquery/jquery.d.ts'] = {
+                  'commit': '04a025ada3492a22df24ca2d8521c911697721b3'
+                };
+              }
+              break;
+            // if angular...
+            case 'ng':
+              // angular & ng-angular are the same as there is no typedef for adal-angular
+            case 'ng-adal':
+              /* istanbul ignore else */
+              if (!tsdJson.installed['angularjs/angular.d.ts']) {
+                tsdJson.installed['angularjs/angular.d.ts'] = {
+                  'commit': '04a025ada3492a22df24ca2d8521c911697721b3'
+                };
+              }
+              /* istanbul ignore else */
+              if (!tsdJson.installed['angularjs/angular-route.d.ts']) {
+                tsdJson.installed['angularjs/angular-route.d.ts'] = {
+                  'commit': '04a025ada3492a22df24ca2d8521c911697721b3'
+                };
+              }
+              /* istanbul ignore else */
+              if (!tsdJson.installed['angularjs/angular-sanitize.d.ts']) {
+                tsdJson.installed['angularjs/angular-sanitize.d.ts'] = {
+                  'commit': '04a025ada3492a22df24ca2d8521c911697721b3'
+                };
+              }
+              break;
+          }
+
+          // overwrite existing bower.json
+          yoGenerator.log(chalk.yellow('Adding additional packages to tsd.json'));
+          yoGenerator.fs.writeJSON(pathToTsdJson, tsdJson);
+        };
+
+        // workaround to 'this' context issue
+        var yoGenerator = this;
+
+        var done = yoGenerator.async();
+
+        var pathToTsdJson = yoGenerator.destinationPath('tsd.json');
+        // if doesn't exist...
+        if (!yoGenerator.fs.exists(pathToTsdJson)) {
+          // copy tsd.json => project
+          this._copyTsd(yoGenerator, yoGenerator.genConfig.tech);
+        } else {
+          // update tsd.json => project
+          this._updateTsd(yoGenerator, yoGenerator.genConfig.tech);
+        }
+
+        done();
+      }
+    }, // upsertTsd()
+
     app: function(){
       // helper function to build path to the file off root path
       this._parseTargetPath = function(file){
@@ -446,9 +555,7 @@ module.exports = generators.Base.extend({
             this.genConfig.startPageReadForm = 'https://localhost:8443/appread/home/home.html';
             this.genConfig.startPageEditForm = 'https://localhost:8443/appcompose/home/home.html';
 
-            // copy tsd & jsconfig files
-            this.fs.copy(this.templatePath('html/_tsd.json'),
-                         this.destinationPath('tsd.json'));
+            // copy jsconfig files
             this.fs.copy(this.templatePath('common/_jsconfig.json'),
                          this.destinationPath('jsconfig.json'));
 
@@ -495,9 +602,7 @@ module.exports = generators.Base.extend({
             this.genConfig.startPageReadForm = 'https://localhost:8443/appread/index.html';
             this.genConfig.startPageEditForm = 'https://localhost:8443/appcompose/index.html';
 
-            // copy tsd & jsconfig files
-            this.fs.copy(this.templatePath('ng/_tsd.json'),
-                         this.destinationPath('tsd.json'));
+            // copy jsconfig files
             this.fs.copy(this.templatePath('common/_jsconfig.json'),
                          this.destinationPath('jsconfig.json'));
 
@@ -549,9 +654,7 @@ module.exports = generators.Base.extend({
             this.genConfig.startPageReadForm = 'https://localhost:8443/appread/index.html';
             this.genConfig.startPageEditForm = 'https://localhost:8443/appcompose/index.html';
 
-            // copy tsd & jsconfig files
-            this.fs.copy(this.templatePath('ng-adal/_tsd.json'),
-                         this.destinationPath('tsd.json'));
+            // copy jsconfig files
             this.fs.copy(this.templatePath('common/_jsconfig.json'),
                          this.destinationPath('jsconfig.json'));
 
