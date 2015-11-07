@@ -114,6 +114,7 @@ describe('office:taskpane', function(){
           'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
+          'tsconfig.json',
           'app/app.js',
           'app/app.css',
           'app/home/home.js',

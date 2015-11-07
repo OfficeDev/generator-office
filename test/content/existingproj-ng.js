@@ -118,6 +118,7 @@ describe('office:content', function(){
           'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
+          'tsconfig.json',
           addinRootPath + '/index.html',
           addinRootPath + '/app/app.module.js',
           addinRootPath + '/app/app.routes.js',
