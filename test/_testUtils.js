@@ -6,8 +6,8 @@ var assert = require('yeoman-generator').assert;
  */
 exports.assertObjectContains = _assertObjectContains;
 
-function _assertObjectContains(obj, content){
-  Object.keys(content).forEach(function(key){
+function _assertObjectContains(obj, content) {
+  Object.keys(content).forEach(function (key) {
     if (typeof content[key] === 'object') {
       _assertObjectContains(content[key], obj[key]);
       return;
@@ -19,7 +19,7 @@ function _assertObjectContains(obj, content){
 /**
  * Helper function to check contents of JSON file.
  */
-exports.assertJSONFileContains = function(filename, content){
+exports.assertJSONFileContains = function (filename, content) {
   var obj = JSON.parse(fs.readFileSync(filename, 'utf8'));
   _assertObjectContains(obj, content);
 };
@@ -28,7 +28,7 @@ exports.assertJSONFileContains = function(filename, content){
  * Setup an existing project in the test folder.
  * @param {RunContext} generator - The generator being run.
  */
-exports.setupExistingProject = function(generator){
+exports.setupExistingProject = function (generator) {
   // create existing package.json file
   var existingPackage = {
     name: 'ProjectName',
@@ -69,7 +69,7 @@ exports.setupExistingProject = function(generator){
         commit: '62eedc3121a5e28c50473d2e4a9cefbcb9c3957f'
       }
     }
-  }
+  };
   // write the bower.json file
   generator.fs.writeJSON(generator.destinationPath('tsd.json'), existingTsd);
 
