@@ -522,6 +522,9 @@ module.exports = generators.Base.extend({
 
       var done = this.async();
 
+      // manifest filename
+      var manifestFilename = 'manifest-' + this.genConfig.projectInternalName + '.xml';
+
       // create a new ID for the project
       this.genConfig.projectId = guid.v4();
 
@@ -531,7 +534,7 @@ module.exports = generators.Base.extend({
         this.genConfig.startPageEditForm = this.genConfig.startPage;
         // create the manifest file
         this.fs.copyTpl(this.templatePath('common/manifest.xml'),
-                        this.destinationPath('manifest.xml'),
+                        this.destinationPath(manifestFilename),
                         this.genConfig);
       } else {
         // copy .bowerrc => project
@@ -561,7 +564,7 @@ module.exports = generators.Base.extend({
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
-                            this.destinationPath('manifest.xml'),
+                            this.destinationPath(manifestFilename),
                             this.genConfig);
             this.fs.copy(this.templatePath('common/manifest.xsd'),
                          this.destinationPath('manifest.xsd'));
@@ -608,7 +611,7 @@ module.exports = generators.Base.extend({
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
-                            this.destinationPath('manifest.xml'),
+                            this.destinationPath(manifestFilename),
                             this.genConfig);
             this.fs.copy(this.templatePath('common/manifest.xsd'),
                          this.destinationPath('manifest.xsd'));
@@ -660,7 +663,7 @@ module.exports = generators.Base.extend({
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('ng-adal/manifest.xml'),
-                            this.destinationPath('manifest.xml'),
+                            this.destinationPath(manifestFilename),
                             this.genConfig);
             this.fs.copy(this.templatePath('common/manifest.xsd'),
                          this.destinationPath('manifest.xsd'));
@@ -724,11 +727,14 @@ module.exports = generators.Base.extend({
     updateManifestForms: function(){
       var done = this.async();
 
+      // manifest filename
+      var manifestFilename = 'manifest-' + this.genConfig.projectInternalName + '.xml';
+
       // workaround to 'this' context issue
-      var yoGenerator = this;      
+      var yoGenerator = this;
 
       // load manifest.xml
-      var manifestXml = yoGenerator.fs.read(yoGenerator.destinationPath('manifest.xml'));
+      var manifestXml = yoGenerator.fs.read(yoGenerator.destinationPath(manifestFilename));
 
       // convert it to JSON
       var parser = new Xml2Js.Parser();
@@ -823,7 +829,7 @@ module.exports = generators.Base.extend({
         var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
 
         // write updated manifest
-        yoGenerator.fs.write(yoGenerator.destinationPath('manifest.xml'), updatedManifestXml);
+        yoGenerator.fs.write(yoGenerator.destinationPath(manifestFilename), updatedManifestXml);
 
         done();
       });

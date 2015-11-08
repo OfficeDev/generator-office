@@ -23,9 +23,13 @@ var options = {};
 
 describe('office:mail', function(){
 
+  var projectDisplayName = 'My Office Add-in';
+  var projectEscapedName = 'my-office-add-in';
+  var manifestFileName = 'manifest-' + projectEscapedName + '.xml';
+
   beforeEach(function(done){
     options = {
-      name: 'My Office Add-in'
+      name: projectDisplayName
     };
     done();
   });
@@ -69,19 +73,19 @@ describe('office:mail', function(){
         * All expected files are created.
         */
         it('creates expected files', function(done){
-          assert.file('manifest.xml');
+          assert.file(manifestFileName);
           done();
         });
   
         /**
-        * manfiest.xml is good
+        * manfiest-*.xml is good
         */
-        describe('manifest.xml contents', function(){
+        describe('manifest-*.xml contents', function(){
           var manifest = {};
   
           beforeEach(function(done){
             var parser = new Xml2Js.Parser();
-            fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
+            fs.readFile(manifestFileName, 'utf8', function(err, manifestContent){
               parser.parseString(manifestContent, function(err, manifestJson){
                 manifest = manifestJson;
   
@@ -96,7 +100,7 @@ describe('office:mail', function(){
           });
   
           it('has correct display name', function(done){
-            expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal('My Office Add-in');
+            expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
             done();
           });
   
@@ -204,7 +208,7 @@ describe('office:mail', function(){
             done();
           });
   
-        }); // describe('manifest.xml contents')
+        }); // describe('manifest-*.xml contents')
         
       }); // describe('Outlook form:mail-read, mail-compose, appointment-read, appointment-compose')
       
@@ -232,19 +236,19 @@ describe('office:mail', function(){
         * All expected files are created.
         */
         it('creates expected files', function(done){
-          assert.file('manifest.xml');
+          assert.file(manifestFileName);
           done();
         });
   
         /**
-        * manfiest.xml is good
+        * manfiest-*.xml is good
         */
-        describe('manifest.xml contents', function(){
+        describe('manifest-*.xml contents', function(){
           var manifest = {};
   
           beforeEach(function(done){
             var parser = new Xml2Js.Parser();
-            fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
+            fs.readFile(manifestFileName, 'utf8', function(err, manifestContent){
               parser.parseString(manifestContent, function(err, manifestJson){
                 manifest = manifestJson;
   
@@ -351,7 +355,7 @@ describe('office:mail', function(){
             done();
           });
   
-        }); // describe('manifest.xml contents')
+        }); // describe('manifest-*.xml contents')
         
       }); // describe('Outlook form:mail-read, appointment-read')
       
@@ -379,19 +383,19 @@ describe('office:mail', function(){
         * All expected files are created.
         */
         it('creates expected files', function(done){
-          assert.file('manifest.xml');
+          assert.file(manifestFileName);
           done();
         });
   
         /**
-        * manfiest.xml is good
+        * manfiest-*.xml is good
         */
-        describe('manifest.xml contents', function(){
+        describe('manifest-*.xml contents', function(){
           var manifest = {};
   
           beforeEach(function(done){
             var parser = new Xml2Js.Parser();
-            fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
+            fs.readFile(manifestFileName, 'utf8', function(err, manifestContent){
               parser.parseString(manifestContent, function(err, manifestJson){
                 manifest = manifestJson;
   
@@ -498,7 +502,7 @@ describe('office:mail', function(){
             done();
           });
   
-        }); // describe('manifest.xml contents')
+        }); // describe('manifest-*.xml contents')
         
       }); // describe('Outlook form:mail-compose, appointment-compose')
 
