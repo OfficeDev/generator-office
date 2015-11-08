@@ -23,9 +23,13 @@ var options = {};
 
 describe('office:content', function(){
 
+  var projectDisplayName = 'My Office Add-in';
+  var projectEscapedName = 'my-office-add-in';
+  var manifestFileName = 'manifest-' + projectEscapedName + '.xml';
+  
   beforeEach(function(done){
     options = {
-      name: 'My Office Add-in'
+      name: projectDisplayName
     };
     done();
   });
@@ -114,7 +118,7 @@ describe('office:content', function(){
           'bower.json',
           'gulpfile.js',
           'package.json',
-          'manifest.xml',
+          manifestFileName,
           'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
@@ -187,12 +191,12 @@ describe('office:content', function(){
       /**
        * manfiest.xml is good
        */
-      describe('manifest.xml contents', function(){
+      describe('manifest-*.xml contents', function(){
         var manifest = {};
 
         beforeEach(function(done){
           var parser = new Xml2Js.Parser();
-          fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
+          fs.readFile(manifestFileName, 'utf8', function(err, manifestContent){
             parser.parseString(manifestContent, function(err, manifestJson){
               manifest = manifestJson;
 
@@ -207,7 +211,7 @@ describe('office:content', function(){
         });
 
         it('has correct display name', function(done){
-          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal('My Office Add-in');
+          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
           done();
         });
 
@@ -277,7 +281,7 @@ describe('office:content', function(){
           done();
         });
 
-      }); // describe('manifest.xml contents')
+      }); // describe('manifest-*.xml contents')
 
       /**
        * tsd.json is good
