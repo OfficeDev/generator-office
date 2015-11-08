@@ -562,6 +562,10 @@ module.exports = generators.Base.extend({
             this.fs.copy(this.templatePath('common/_jsconfig.json'),
                          this.destinationPath('jsconfig.json'));
 
+            // copy tsconfig files
+            this.fs.copy(this.templatePath('common/_tsconfig.json'),
+                         this.destinationPath('tsconfig.json'));
+
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
                             this.destinationPath(manifestFilename),
@@ -608,6 +612,10 @@ module.exports = generators.Base.extend({
             // copy jsconfig files
             this.fs.copy(this.templatePath('common/_jsconfig.json'),
                          this.destinationPath('jsconfig.json'));
+
+            // copy tsconfig files
+            this.fs.copy(this.templatePath('common/_tsconfig.json'),
+                         this.destinationPath('tsconfig.json'));
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
@@ -660,6 +668,10 @@ module.exports = generators.Base.extend({
             // copy jsconfig files
             this.fs.copy(this.templatePath('common/_jsconfig.json'),
                          this.destinationPath('jsconfig.json'));
+
+            // copy tsconfig files
+            this.fs.copy(this.templatePath('common/_tsconfig.json'),
+                         this.destinationPath('tsconfig.json'));
 
             // create the manifest file
             this.fs.copyTpl(this.templatePath('ng-adal/manifest.xml'),

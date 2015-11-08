@@ -85,6 +85,7 @@ describe('office:taskpane', function(){
           'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
+          'tsconfig.json',
           addinRootPath + '/app/app.js',
           addinRootPath + '/app/app.css',
           addinRootPath + '/app/home/home.js',

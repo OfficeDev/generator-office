@@ -118,6 +118,7 @@ describe('office:content', function(){
           'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
+          'tsconfig.json',
           'index.html',
           'app/app.module.js',
           'app/app.adalconfig.js',
