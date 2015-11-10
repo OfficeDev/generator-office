@@ -36,10 +36,12 @@ If you are interested in contributing, read the the [Contributing Guidelines](do
 
 ## Install
 
-Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org). The project files created by the generator leverage client side packages in [bower](http://bower.io) so you will want to install that as well:
+Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org). The project files created by the generator leverage client side packages in [bower](http://bower.io) so you will want to install that as well.
+
+In the v0.5.1 release we added TypeScript type definitions for autocompletion / IntelliSense... for this you need to install the TSD utility before you install the generator.
 
 ```bash
-$ npm install -g yo generator-office bower
+$ npm install -g tsd yo generator-office bower
 ```
 
 ## Usage
