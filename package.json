@@ -24,7 +24,7 @@
   "main": "index.js",
   "preferGlobal": true,
   "scripts": {
-    "install": "tsd install -r -o --save-dev",
+    "dev-install": "tsd install -r -o --save-dev",
     "test": "./node_modules/mocha/bin/_mocha -R dot test/**",
     "test-coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R min -t 100000 test/**",
     "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec -t 100000 test/**"
