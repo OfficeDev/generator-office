@@ -38,10 +38,10 @@ If you are interested in contributing, read the the [Contributing Guidelines](do
 
 Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org). The project files created by the generator leverage client side packages in [bower](http://bower.io) so you will want to install that as well.
 
-In the v0.5.1 release we added TypeScript type definitions for autocompletion / IntelliSense... for this you need to install the TSD utility before you install the generator.
+In the v0.5.1 release we added TypeScript type definitions for autocompletion / IntelliSense... for this you need to install the [TSD](https://www.npmjs.com/package/tsd) utility that is used to download TypeScript type definitions.
 
 ```bash
-$ npm install -g tsd yo generator-office bower
+$ npm install -g tsd bower yo generator-office
 ```
 
 ## Usage
@@ -52,7 +52,15 @@ $ yo office [options]
 
 The generator is intented to be run from within a folder where you want the project scaffolding created. This can be in the root of the current folder or within a subfolder.
 
-> Note: Office Add-ins must be hosted, even in development, in a **HTTPS** site. You can create a simple HTTPS hosted site using Node.js using the [nodehttps](https://www.npmjs.com/package/generator-nodehttps) generator. 
+> Note: Office Add-ins must be hosted, even in development, in a **HTTPS** site. You can create a simple HTTPS hosted site using Node.js using the [nodehttps](https://www.npmjs.com/package/generator-nodehttps) generator.
+
+### Adding Autocompletion / IntelliSense to Generated Project
+
+After running the generator to scaffold your project, you can get additional autocompletion / IntelliSense help in your editor if it supports TypeScript by aquring the relevant TypeScript type definition files. For this you will need to have [TSD](https://www.npmjs.com/package/tsd) installed globally. To download the type definitions, from within the root of your generated project, run the following command:
+
+```bash
+$ tsd install -r -o --save-dev
+```
 
 ## Sub Generators
 
