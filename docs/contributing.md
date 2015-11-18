@@ -11,7 +11,7 @@ Please feel free to reach out to the team if you have any questions on contribut
 Typos are embarrasing! Most PR's that fix typos will be accepted. In order to make it easier to review the PR, please narrow the focus instead of sending a huge PR of fixes.
 
 ## Reporting Bugs & Issues
-If you have any bugs or issues with the generator. Please submit them in the [Issues](/OfficeDev/generator-office/issues) for this repo.
+If you have any bugs or issues with the generator, please submit them in the [Issues](/OfficeDev/generator-office/issues) for this repo.
 
 ## Commit Messages
 
@@ -43,9 +43,9 @@ changes during the course of your commits, please rebase them away before submit
 - **DO** include tests when adding new functionality and features. When fixing bugs, start with adding a test that highlights how the current behavior is broken.
 - **DO** keep discussions focused. When a new or related topic comes up it's often better to create new issue than to side track the conversation.
 - **DO NOT** submit PR's for coding style changes.
-- **DO NOT** surprise is with big PR's. Instead file an issue & start a discussion so we can agree on a direction before you invest a large amount of time.
+- **DO NOT** surprise us with big PR's. Instead file an issue & start a discussion so we can agree on a direction before you invest a large amount of time.
 - **DO NOT** commit code you didn't write.
-- **DO NOT** submit PR's that refactoring existing code without a discussion first. 
+- **DO NOT** submit PR's that refactor existing code without a discussion first. 
 
 ## Submitting Feature Requests & Design Change Requests
 Feature requests and Design Change Requests (DCRs) are an important part of the lifecycle of any software project. Please log these as [Issues](/OfficeDev/generator-office/issues) in the repo. 
