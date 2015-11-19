@@ -50,8 +50,11 @@ describe('office:taskpane', function(){
           name: 'somes-bad-character',
           version: '0.1.0',
           devDependencies: {
+            chalk: '^1.1.1',
             gulp: '^3.9.0',
-            'gulp-webserver': '^0.9.1'
+            'gulp-webserver': '^0.9.1',
+            minimist: '^1.2.0',
+            xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
 
@@ -105,6 +108,7 @@ describe('office:taskpane', function(){
           'package.json',
           'gulpfile.js',
           'manifest.xml',
+          'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
           'index.html',
@@ -114,18 +118,8 @@ describe('office:taskpane', function(){
           'app/home/home.html',
           'app/services/data.service.js',
           'content/Office.css',
-          'content/fabric.components.css',
-          'content/fabric.components.min.css',
-          'content/fabric.components.rtl.css',
-          'content/fabric.components.rtl.min.css',
-          'content/fabric.css',
-          'content/fabric.min.css',
-          'content/fabric.rtl.css',
-          'content/fabric.rtl.min.css',
           'images/close.png',
-          'scripts/MicrosoftAjax.js',
-          'scripts/jquery.fabric.js',
-          'scripts/jquery.fabric.min.js'
+          'scripts/MicrosoftAjax.js'
         ];
         assert.file(expected);
         done();
@@ -143,7 +137,8 @@ describe('office:taskpane', function(){
             jquery: '~1.9.1',
             angular: '~1.4.4',
             'angular-route': '~1.4.4',
-            'angular-sanitize': '~1.4.4'
+            'angular-sanitize': '~1.4.4',
+            'office-ui-fabric': '*'
           }
         };
 
@@ -163,8 +158,11 @@ describe('office:taskpane', function(){
             postinstall: 'bower install'
           },
           devDependencies: {
+            chalk: '^1.1.1',
             gulp: '^3.9.0',
-            'gulp-webserver': '^0.9.1'
+            'gulp-webserver': '^0.9.1',
+            minimist: '^1.2.0',
+            xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
 
@@ -302,6 +300,12 @@ describe('office:taskpane', function(){
 
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'serve-static\',');
+          done();
+        });
+        
+        it('contains task \'validate-xml\'', function(done){
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate-xml\',');
           done();
         });
 

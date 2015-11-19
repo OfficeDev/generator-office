@@ -228,12 +228,24 @@ module.exports = generators.Base.extend({
             packageJson.devDependencies = {};
           }
           /* istanbul ignore else */
+          if (!packageJson.devDependencies['chalk']) {
+            packageJson.devDependencies['chalk'] = '^1.1.1';
+          }
+          /* istanbul ignore else */
           if (!packageJson.devDependencies['gulp']) {
             packageJson.devDependencies['gulp'] = '^3.9.0';
           }
           /* istanbul ignore else */
           if (!packageJson.devDependencies['gulp-webserver']) {
             packageJson.devDependencies['gulp-webserver'] = '^0.9.1';
+          }
+          /* istanbul ignore else */
+          if (!packageJson.devDependencies['minimist']) {
+            packageJson.devDependencies['minimist'] = '^1.2.0';
+          }
+          /* istanbul ignore else */
+          if (!packageJson.devDependencies['xmllint']) {
+            packageJson.devDependencies['xmllint'] = 'git+https://github.com/kripken/xml.js.git';
           }
 
           // overwrite existing package.json
@@ -365,30 +377,10 @@ module.exports = generators.Base.extend({
                      this.destinationPath('gulpfile.js'));
         this.fs.copy(this.templatePath('common/content/Office.css'),
                      this.destinationPath(this._parseTargetPath('content/Office.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.rtl.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.rtl.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.rtl.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.rtl.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.min.css')));
         this.fs.copy(this.templatePath('common/images/close.png'),
                      this.destinationPath(this._parseTargetPath('images/close.png')));
         this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'),
                      this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
-        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.js'),
-                     this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.js')));
-        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.min.js'),
-                     this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.min.js')));
 
         switch (this.genConfig.tech) {
           case 'html':
@@ -406,29 +398,39 @@ module.exports = generators.Base.extend({
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
                             this.destinationPath('manifest.xml'),
                             this.genConfig);
+            this.fs.copy(this.templatePath('common/manifest.xsd'),
+                         this.destinationPath('manifest.xsd'));
 
             // copy addin files
-            this.fs.copy(this.templatePath('html/appcompose/app.css'),
-                         this.destinationPath(this._parseTargetPath('appcompose/app.css')));
-            this.fs.copy(this.templatePath('html/appcompose/app.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/app.js')));
-            this.fs.copy(this.templatePath('html/appcompose/home/home.html'),
-                         this.destinationPath(this._parseTargetPath('appcompose/home/home.html')));
-            this.fs.copy(this.templatePath('html/appcompose/home/home.css'),
-                         this.destinationPath(this._parseTargetPath('appcompose/home/home.css')));
-            this.fs.copy(this.templatePath('html/appcompose/home/home.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/home/home.js')));
+            if (this.genConfig.outlookForm &&
+                (this.genConfig.outlookForm.indexOf('mail-compose') > -1 ||
+                this.genConfig.outlookForm.indexOf('appointment-compose') > -1)) {
+              this.fs.copy(this.templatePath('html/appcompose/app.css'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.css')));
+              this.fs.copy(this.templatePath('html/appcompose/app.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.js')));
+              this.fs.copy(this.templatePath('html/appcompose/home/home.html'),
+                          this.destinationPath(this._parseTargetPath('appcompose/home/home.html')));
+              this.fs.copy(this.templatePath('html/appcompose/home/home.css'),
+                          this.destinationPath(this._parseTargetPath('appcompose/home/home.css')));
+              this.fs.copy(this.templatePath('html/appcompose/home/home.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/home/home.js')));
+            }
 
-            this.fs.copy(this.templatePath('html/appread/app.css'),
-                         this.destinationPath(this._parseTargetPath('appread/app.css')));
-            this.fs.copy(this.templatePath('html/appread/app.js'),
-                         this.destinationPath(this._parseTargetPath('appread/app.js')));
-            this.fs.copy(this.templatePath('html/appread/home/home.html'),
-                         this.destinationPath(this._parseTargetPath('appread/home/home.html')));
-            this.fs.copy(this.templatePath('html/appread/home/home.css'),
-                         this.destinationPath(this._parseTargetPath('appread/home/home.css')));
-            this.fs.copy(this.templatePath('html/appread/home/home.js'),
-                         this.destinationPath(this._parseTargetPath('appread/home/home.js')));
+            if (this.genConfig.outlookForm &&
+                (this.genConfig.outlookForm.indexOf('mail-read') > -1 ||
+                this.genConfig.outlookForm.indexOf('appointment-read') > -1)) {
+              this.fs.copy(this.templatePath('html/appread/app.css'),
+                          this.destinationPath(this._parseTargetPath('appread/app.css')));
+              this.fs.copy(this.templatePath('html/appread/app.js'),
+                          this.destinationPath(this._parseTargetPath('appread/app.js')));
+              this.fs.copy(this.templatePath('html/appread/home/home.html'),
+                          this.destinationPath(this._parseTargetPath('appread/home/home.html')));
+              this.fs.copy(this.templatePath('html/appread/home/home.css'),
+                          this.destinationPath(this._parseTargetPath('appread/home/home.css')));
+              this.fs.copy(this.templatePath('html/appread/home/home.js'),
+                          this.destinationPath(this._parseTargetPath('appread/home/home.js')));
+            }
             break;
           case 'ng':
             // determine startpage for addin
@@ -445,34 +447,44 @@ module.exports = generators.Base.extend({
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
                             this.destinationPath('manifest.xml'),
                             this.genConfig);
+            this.fs.copy(this.templatePath('common/manifest.xsd'),
+                         this.destinationPath('manifest.xsd'));
 
             // copy addin files
             this.genConfig.startPage = '{https-addin-host-site}/index.html';
-            this.fs.copy(this.templatePath('ng/appcompose/index.html'),
-                         this.destinationPath(this._parseTargetPath('appcompose/index.html')));
-            this.fs.copy(this.templatePath('ng/appcompose/app.module.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/app.module.js')));
-            this.fs.copy(this.templatePath('ng/appcompose/app.routes.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/app.routes.js')));
-            this.fs.copy(this.templatePath('ng/appcompose/home/home.controller.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/home/home.controller.js')));
-            this.fs.copy(this.templatePath('ng/appcompose/home/home.html'),
-                         this.destinationPath(this._parseTargetPath('appcompose/home/home.html')));
-            this.fs.copy(this.templatePath('ng/appcompose/services/data.service.js'),
-                         this.destinationPath(this._parseTargetPath('appcompose/services/data.service.js')));
+            if (this.genConfig.outlookForm &&
+                (this.genConfig.outlookForm.indexOf('mail-compose') > -1 ||
+                this.genConfig.outlookForm.indexOf('appointment-compose') > -1)) {
+              this.fs.copy(this.templatePath('ng/appcompose/index.html'),
+                          this.destinationPath(this._parseTargetPath('appcompose/index.html')));
+              this.fs.copy(this.templatePath('ng/appcompose/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.module.js')));
+              this.fs.copy(this.templatePath('ng/appcompose/app.routes.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.routes.js')));
+              this.fs.copy(this.templatePath('ng/appcompose/home/home.controller.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/home/home.controller.js')));
+              this.fs.copy(this.templatePath('ng/appcompose/home/home.html'),
+                          this.destinationPath(this._parseTargetPath('appcompose/home/home.html')));
+              this.fs.copy(this.templatePath('ng/appcompose/services/data.service.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/services/data.service.js')));
+            }
 
-            this.fs.copy(this.templatePath('ng/appread/index.html'),
-                         this.destinationPath(this._parseTargetPath('appread/index.html')));
-            this.fs.copy(this.templatePath('ng/appread/app.module.js'),
-                         this.destinationPath(this._parseTargetPath('appread/app.module.js')));
-            this.fs.copy(this.templatePath('ng/appread/app.routes.js'),
-                         this.destinationPath(this._parseTargetPath('appread/app.routes.js')));
-            this.fs.copy(this.templatePath('ng/appread/home/home.controller.js'),
-                         this.destinationPath(this._parseTargetPath('appread/home/home.controller.js')));
-            this.fs.copy(this.templatePath('ng/appread/home/home.html'),
-                         this.destinationPath(this._parseTargetPath('appread/home/home.html')));
-            this.fs.copy(this.templatePath('ng/appread/services/data.service.js'),
-                         this.destinationPath(this._parseTargetPath('appread/services/data.service.js')));
+            if (this.genConfig.outlookForm &&
+                (this.genConfig.outlookForm.indexOf('mail-read') > -1 ||
+                this.genConfig.outlookForm.indexOf('appointment-read') > -1)) {
+              this.fs.copy(this.templatePath('ng/appread/index.html'),
+                          this.destinationPath(this._parseTargetPath('appread/index.html')));
+              this.fs.copy(this.templatePath('ng/appread/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appread/app.module.js')));
+              this.fs.copy(this.templatePath('ng/appread/app.routes.js'),
+                          this.destinationPath(this._parseTargetPath('appread/app.routes.js')));
+              this.fs.copy(this.templatePath('ng/appread/home/home.controller.js'),
+                          this.destinationPath(this._parseTargetPath('appread/home/home.controller.js')));
+              this.fs.copy(this.templatePath('ng/appread/home/home.html'),
+                          this.destinationPath(this._parseTargetPath('appread/home/home.html')));
+              this.fs.copy(this.templatePath('ng/appread/services/data.service.js'),
+                          this.destinationPath(this._parseTargetPath('appread/services/data.service.js')));
+            }
             break;
         }
       }
@@ -488,7 +500,7 @@ module.exports = generators.Base.extend({
       var done = this.async();
 
       // workaround to 'this' context issue
-      var yoGenerator = this;
+      var yoGenerator = this;      
 
       // load manifest.xml
       var manifestXml = yoGenerator.fs.read(yoGenerator.destinationPath('manifest.xml'));
@@ -499,7 +511,10 @@ module.exports = generators.Base.extend({
 
         // if mail/appointment read not present, remove the form setting
         _.remove(manifestJson.OfficeApp.FormSettings[0].Form, function(formSetting){
-          if (formSetting.$['xsl:type'] === 'ItemRead') {
+          if (formSetting.$['xsi:type'] === 'ItemRead' &&
+            yoGenerator.genConfig.outlookForm &&
+            yoGenerator.genConfig.outlookForm.indexOf('mail-read') < 0 &&
+            yoGenerator.genConfig.outlookForm.indexOf('appointment-read') < 0) {
             return true;
           } else {
             return false;
@@ -508,7 +523,10 @@ module.exports = generators.Base.extend({
 
         // if mail/appointment edit not present, remove the form setting
         _.remove(manifestJson.OfficeApp.FormSettings[0].Form, function(formSetting){
-          if (formSetting.$['xsl:type'] === 'ItemEdit') {
+          if (formSetting.$['xsi:type'] === 'ItemEdit' &&
+            yoGenerator.genConfig.outlookForm &&
+            yoGenerator.genConfig.outlookForm.indexOf('mail-compose') < 0 &&
+            yoGenerator.genConfig.outlookForm.indexOf('appointment-compose') < 0) {
             return true;
           } else {
             return false;

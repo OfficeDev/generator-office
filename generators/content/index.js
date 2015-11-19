@@ -230,12 +230,24 @@ module.exports = generators.Base.extend({
             packageJson.devDependencies = {};
           }
           /* istanbul ignore else */
+          if (!packageJson.devDependencies['chalk']) {
+            packageJson.devDependencies['chalk'] = '^1.1.1';
+          }
+          /* istanbul ignore else */
           if (!packageJson.devDependencies['gulp']) {
             packageJson.devDependencies['gulp'] = '^3.9.0';
           }
           /* istanbul ignore else */
           if (!packageJson.devDependencies['gulp-webserver']) {
             packageJson.devDependencies['gulp-webserver'] = '^0.9.1';
+          }
+          /* istanbul ignore else */
+          if (!packageJson.devDependencies['minimist']) {
+            packageJson.devDependencies['minimist'] = '^1.2.0';
+          }
+          /* istanbul ignore else */
+          if (!packageJson.devDependencies['xmllint']) {
+            packageJson.devDependencies['xmllint'] = 'git+https://github.com/kripken/xml.js.git';
           }
 
           // overwrite existing package.json
@@ -364,30 +376,10 @@ module.exports = generators.Base.extend({
                      this.destinationPath('gulpfile.js'));
         this.fs.copy(this.templatePath('common/content/Office.css'),
                      this.destinationPath(this._parseTargetPath('content/Office.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.rtl.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.rtl.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.rtl.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.rtl.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.min.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.css')));
-        this.fs.copy(this.templatePath('common/content/fabric.components.rtl.min.css'),
-                     this.destinationPath(this._parseTargetPath('content/fabric.components.rtl.min.css')));
         this.fs.copy(this.templatePath('common/images/close.png'),
                      this.destinationPath(this._parseTargetPath('images/close.png')));
         this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'),
                      this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
-        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.js'),
-                     this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.js')));
-        this.fs.copy(this.templatePath('common/scripts/jquery.fabric.min.js'),
-                     this.destinationPath(this._parseTargetPath('scripts/jquery.fabric.min.js')));
 
         switch (this.genConfig.tech) {
           case 'html':
@@ -404,6 +396,8 @@ module.exports = generators.Base.extend({
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
                             this.destinationPath('manifest.xml'),
                             this.genConfig);
+            this.fs.copy(this.templatePath('common/manifest.xsd'),
+                         this.destinationPath('manifest.xsd'));
 
             // copy addin files
             this.fs.copy(this.templatePath('html/app.css'),
@@ -431,6 +425,8 @@ module.exports = generators.Base.extend({
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
                             this.destinationPath('manifest.xml'),
                             this.genConfig);
+            this.fs.copy(this.templatePath('common/manifest.xsd'),
+                         this.destinationPath('manifest.xsd'));
 
             // copy addin files
             this.genConfig.startPage = '{https-addin-host-site}/index.html';

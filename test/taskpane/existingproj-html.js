@@ -78,6 +78,7 @@ describe('office:taskpane', function(){
           'gulpfile.js',
           'package.json',
           'manifest.xml',
+          'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
           addinRootPath + '/app/app.js',
@@ -86,18 +87,8 @@ describe('office:taskpane', function(){
           addinRootPath + '/app/home/home.html',
           addinRootPath + '/app/home/home.css',
           addinRootPath + '/content/Office.css',
-          addinRootPath + '/content/fabric.components.css',
-          addinRootPath + '/content/fabric.components.min.css',
-          addinRootPath + '/content/fabric.components.rtl.css',
-          addinRootPath + '/content/fabric.components.rtl.min.css',
-          addinRootPath + '/content/fabric.css',
-          addinRootPath + '/content/fabric.min.css',
-          addinRootPath + '/content/fabric.rtl.css',
-          addinRootPath + '/content/fabric.rtl.min.css',
           addinRootPath + '/images/close.png',
-          addinRootPath + '/scripts/MicrosoftAjax.js',
-          addinRootPath + '/scripts/jquery.fabric.js',
-          addinRootPath + '/scripts/jquery.fabric.min.js'
+          addinRootPath + '/scripts/MicrosoftAjax.js'
         ];
         assert.file(expected);
         done();
@@ -112,7 +103,8 @@ describe('office:taskpane', function(){
           version: '0.1.0',
           dependencies: {
             'microsoft.office.js': '*',
-            jquery: '~1.9.1'
+            jquery: '~1.9.1',
+            'office-ui-fabric': '*'
           }
         };
 
@@ -134,8 +126,11 @@ describe('office:taskpane', function(){
             express: '^4.12.2'
           },
           devDependencies: {
+            chalk: '^1.1.1',
             gulp: '^3.9.0',
-            'gulp-webserver': '^0.9.1'
+            'gulp-webserver': '^0.9.1',
+            minimist: '^1.2.0',
+            xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
 
@@ -273,6 +268,12 @@ describe('office:taskpane', function(){
 
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'serve-static\',');
+          done();
+        });
+        
+        it('contains task \'validate-xml\'', function(done){
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate-xml\',');
           done();
         });
 

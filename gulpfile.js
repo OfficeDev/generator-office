@@ -66,10 +66,16 @@ gulp.task('run-yo', function(){
   log(chalk.yellow('BE AWARE!!! - Running this with default options will scaffold the project ' +
     'in the generator\'s source folder.'));
 
+  // determine correct path for platform
+  var yeomanCliPath = 'lib/node_modules/yo/lib/cli.js';
+  if (process.platform === 'win32'){
+    yeomanCliPath = 'npm/node_modules/yo/lib/cli.js';
+  }
+
   spawn('node',
     [
       '--debug',
-      path.join(which.sync('yo'), '../../', 'lib/node_modules/yo/lib/cli.js'),
+      path.join(which.sync('yo'), '../../', yeomanCliPath),
       'office',
       ' --skip-install'
     ], {
