@@ -21,11 +21,15 @@ var options = {};
 
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
-describe('office:content', function(){
+describe('office:content', function () {
 
-  beforeEach(function(done){
+  var projectDisplayName = 'My Office Add-in';
+  var projectEscapedName = 'my-office-add-in';
+  var manifestFileName = 'manifest-' + projectEscapedName + '.xml';
+
+  beforeEach(function (done) {
     options = {
-      name: 'My Office Add-in'
+      name: projectDisplayName
     };
     done();
   });
@@ -33,7 +37,7 @@ describe('office:content', function(){
   /**
    * Test scrubbing of name with illegal characters
    */
-  it('project name is alphanumeric only', function(done){
+  it('project name is alphanumeric only', function (done) {
     options = {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
@@ -44,13 +48,15 @@ describe('office:content', function(){
     // run generator
     helpers.run(path.join(__dirname, '../../generators/content'))
       .withOptions(options)
-      .on('end', function(){
+      .on('end', function () {
         var expected = {
           name: 'somes-bad-character',
           version: '0.1.0',
           devDependencies: {
             chalk: '^1.1.1',
             gulp: '^3.9.0',
+            'gulp-load-plugins': '^1.0.0',
+            'gulp-task-listing': '^1.0.1',
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
@@ -67,12 +73,12 @@ describe('office:content', function(){
   /**
    * Test addin when running on an exsting folder.
    */
-  describe('run on existing project (non-empty folder)', function(){
+  describe('run on existing project (non-empty folder)', function () {
     var addinRootPath = 'src/public';
 
     // generator ran at 'src/public' so for files
     //  in the root, need to back up to the root
-    beforeEach(function(done){
+    beforeEach(function (done) {
       // set to current folder
       options.rootPath = addinRootPath;
       done();
@@ -82,9 +88,9 @@ describe('office:content', function(){
     /**
      * Test addin when technology = html
      */
-    describe('addin technology:html', function(){
+    describe('addin technology:html', function () {
 
-      beforeEach(function(done){
+      beforeEach(function (done) {
         // set language to html
         options.tech = 'html';
 
@@ -94,30 +100,31 @@ describe('office:content', function(){
         // run the generator
         helpers.run(path.join(__dirname, '../../generators/content'))
           .withOptions(options)
-          .on('ready', function(gen){
+          .on('ready', function (gen) {
             util.setupExistingProject(gen);
           }.bind(this))
           .on('end', done);
 
       });
 
-      afterEach(function(){
+      afterEach(function () {
         mockery.disable();
       });
 
       /**
        * All expected files are created.
        */
-      it('creates expected files', function(done){
+      it('creates expected files', function (done) {
         var expected = [
           '.bowerrc',
           'bower.json',
           'gulpfile.js',
           'package.json',
-          'manifest.xml',
+          manifestFileName,
           'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
+          'tsconfig.json',
           addinRootPath + '/app/app.js',
           addinRootPath + '/app/app.css',
           addinRootPath + '/app/home/home.js',
@@ -134,7 +141,7 @@ describe('office:content', function(){
       /**
        * bower.json is good
        */
-      it('bower.json contains correct values', function(done){
+      it('bower.json contains correct values', function (done) {
         var expected = {
           name: 'ProjectName',
           version: '0.1.0',
@@ -153,7 +160,7 @@ describe('office:content', function(){
       /**
        * package.json is good
        */
-      it('package.json contains correct values', function(done){
+      it('package.json contains correct values', function (done) {
         var expected = {
           name: 'ProjectName',
           description: 'HTTPS site using Express and Node.js',
@@ -165,6 +172,8 @@ describe('office:content', function(){
           devDependencies: {
             chalk: '^1.1.1',
             gulp: '^3.9.0',
+            'gulp-load-plugins': '^1.0.0',
+            'gulp-task-listing': '^1.0.1',
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
@@ -179,13 +188,13 @@ describe('office:content', function(){
       /**
        * manfiest.xml is good
        */
-      describe('manifest.xml contents', function(){
+      describe('manifest-*.xml contents', function () {
         var manifest = {};
 
-        beforeEach(function(done){
+        beforeEach(function (done) {
           var parser = new Xml2Js.Parser();
-          fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
-            parser.parseString(manifestContent, function(err, manifestJson){
+          fs.readFile(manifestFileName, 'utf8', function (err, manifestContent) {
+            parser.parseString(manifestContent, function (err, manifestJson) {
               manifest = manifestJson;
 
               done();
@@ -193,17 +202,17 @@ describe('office:content', function(){
           });
         });
 
-        it('has valid ID', function(done){
+        it('has valid ID', function (done) {
           expect(validator.isUUID(manifest.OfficeApp.Id)).to.be.true;
           done();
         });
 
-        it('has correct display name', function(done){
-          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal('My Office Add-in');
+        it('has correct display name', function (done) {
+          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
           done();
         });
 
-        it('has correct start page', function(done){
+        it('has correct start page', function (done) {
           var subject = manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue;
           expect(subject).to.equal('https://localhost:8443/app/home/home.html');
           done();
@@ -212,9 +221,9 @@ describe('office:content', function(){
         /**
          * Word present in host entry.
          */
-        it('includes Word in Hosts', function(done){
+        it('includes Word in Hosts', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
             if (h.$.Name === 'Document') {
               found = true;
             }
@@ -227,9 +236,9 @@ describe('office:content', function(){
         /**
          * Excel present in host entry.
          */
-        it('includes Excel in Hosts', function(done){
+        it('includes Excel in Hosts', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
             if (h.$.Name === 'Workbook') {
               found = true;
             }
@@ -242,9 +251,9 @@ describe('office:content', function(){
         /**
          * PowerPoint present in host entry.
          */
-        it('includes PowerPoint in Hosts', function(done){
+        it('includes PowerPoint in Hosts', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
             if (h.$.Name === 'Presentation') {
               found = true;
             }
@@ -257,9 +266,9 @@ describe('office:content', function(){
         /**
          * Project present in host entry.
          */
-        it('includes Project in Hosts', function(done){
+        it('includes Project in Hosts', function (done) {
           var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function (h) {
             if (h.$.Name === 'Project') {
               found = true;
             }
@@ -269,28 +278,32 @@ describe('office:content', function(){
           done();
         });
 
-      }); // describe('manifest.xml contents')
+      }); // describe('manifest-*.xml contents')
 
       /**
        * tsd.json is good
        */
-      describe('tsd.json contents', function(){
+      describe('tsd.json contents', function () {
         var tsd = {};
 
-        beforeEach(function(done){
-          fs.readFile('tsd.json', 'utf8', function(err, tsdJson){
+        beforeEach(function (done) {
+          fs.readFile('tsd.json', 'utf8', function (err, tsdJson) {
             tsd = JSON.parse(tsdJson);
 
             done();
           });
         });
 
-        it('has correct *.d.ts references', function(done){
+        it('has correct *.d.ts references', function (done) {
           expect(tsd.installed).to.exist;
+          // make sure the existing ones are present (to verify we didn't overwrite, but rather update)
+          expect(tsd.installed['lodash/lodash.d.ts']).to.exist;
+          // make sure the new ones are present
           expect(tsd.installed['jquery/jquery.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular.d.ts']).to.not.exist;
           expect(tsd.installed['angularjs/angular-route.d.ts']).to.not.exist;
           expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.not.exist;
+          expect(tsd.installed['office-js/office-js.d.ts']).to.exist;
           done();
         });
 
@@ -299,16 +312,28 @@ describe('office:content', function(){
       /**
        * gulpfile.js is good
        */
-      describe('gulpfule.js contents', function(){
+      describe('gulpfule.js contents', function () {
 
-        it('contains task \'serve-static\'', function(done){
+        it('contains task \'help\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'help\',');
+          done();
+        });
+
+        it('contains task \'default\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'default\',');
+          done();
+        });
+
+        it('contains task \'serve-static\'', function (done) {
 
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'serve-static\',');
           done();
         });
-        
-        it('contains task \'validate-xml\'', function(done){
+
+        it('contains task \'validate-xml\'', function (done) {
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'validate-xml\',');
           done();

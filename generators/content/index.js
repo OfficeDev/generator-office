@@ -45,6 +45,12 @@ module.exports = generators.Base.extend({
       desc: 'Office client product that can host the add-in',
       required: false
     });
+    
+    this.option('appId', {
+      type: String,
+      desc: 'Application ID as registered in Azure AD',
+      required: false
+    });
 
     // create global config object on this generator
     this.genConfig = {};
@@ -99,6 +105,9 @@ module.exports = generators.Base.extend({
               name: 'Angular',
               value: 'ng'
             }, {
+              name: 'Angular ADAL',
+              value: 'ng-adal'
+            }, {
               name: 'Manifest.xml only (no application source files)',
               value: 'manifest-only'
             }]
@@ -147,6 +156,30 @@ module.exports = generators.Base.extend({
       }.bind(this));
 
     }, // askFor()
+    
+    askForAdalConfig: function(){
+      // if it's not an ADAL app, don't ask the questions
+      if (this.genConfig.tech !== 'ng-adal') {
+        return;
+      }
+
+      var done = this.async();
+
+      // office client application that can host the addin
+      var prompts = [{
+        name: 'appId',
+        message: 'Application ID as registered in Azure AD:',
+        default: '00000000-0000-0000-0000-000000000000',
+        when: this.options.appId === undefined
+      }];
+
+      // trigger prompts
+      this.prompt(prompts, function(responses){
+        this.genConfig = extend(this.genConfig, responses);
+        done();
+      }.bind(this));
+
+    }, // askForAdalConfig()
 
     /**
      * If user specified tech:manifest-only, prompt for start page.
@@ -278,6 +311,11 @@ module.exports = generators.Base.extend({
                 this.destinationPath('bower.json'),
                 this.genConfig);
               break;
+            case 'ng-adal':
+              this.fs.copyTpl(this.templatePath('ng-adal/_bower.json'),
+                this.destinationPath('bower.json'),
+                this.genConfig);
+              break;
             case 'html':
               this.fs.copyTpl(this.templatePath('html/_bower.json'),
                 this.destinationPath('bower.json'),
@@ -302,12 +340,14 @@ module.exports = generators.Base.extend({
           if (!bowerJson.dependencies['microsoft.office.js']) {
             bowerJson.dependencies['microsoft.office.js'] = '*';
           }
-          /* istanbul ignore else */
-          if (!bowerJson.dependencies['jquery']) {
-            bowerJson.dependencies['jquery'] = '~1.9.1';
-          }
 
           switch (addinTech) {
+            case 'html':
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['jquery']) {
+                bowerJson.dependencies['jquery'] = '~1.9.1';
+              }
+              break;
             // if angular...
             case 'ng':
               /* istanbul ignore else */
@@ -321,6 +361,24 @@ module.exports = generators.Base.extend({
               /* istanbul ignore else */
               if (!bowerJson.dependencies['angular-sanitize']) {
                 bowerJson.dependencies['angular-sanitize'] = '~1.4.4';
+              }
+              break;
+            case 'ng-adal':
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['angular']) {
+                bowerJson.dependencies['angular'] = '~1.4.4';
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['angular-route']) {
+                bowerJson.dependencies['angular-route'] = '~1.4.4';
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['angular-sanitize']) {
+                bowerJson.dependencies['angular-sanitize'] = '~1.4.4';
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['adal-angular']) {
+                bowerJson.dependencies['adal-angular'] = '~1.0.5';
               }
               break;
           }
@@ -349,6 +407,115 @@ module.exports = generators.Base.extend({
       }
     }, // upsertBower()
 
+    /**
+     * If tsd.json already exists in the root of this project, update it
+     * with the necessary addin packages.
+     */
+    upsertTsd: function(){
+      if (this.genConfig.tech !== 'manifest-only') {
+        /**
+         * Copies tsd.json from appropriate template => target.
+         *
+         * @param {Object} yoGenerator - Yeoman generator.
+         * @param {string} addinTech - Technology to use for the addin.
+         */
+        this._copyTsd = function(yoGenerator, addinTech){
+          switch (addinTech) {
+            case 'ng':
+              this.fs.copyTpl(this.templatePath('ng/_tsd.json'),
+                this.destinationPath('tsd.json'),
+                this.genConfig);
+              break;
+            case 'ng-adal':
+              this.fs.copyTpl(this.templatePath('ng-adal/_tsd.json'),
+                this.destinationPath('tsd.json'),
+                this.genConfig);
+              break;
+            case 'html':
+              this.fs.copyTpl(this.templatePath('html/_tsd.json'),
+                this.destinationPath('tsd.json'),
+                this.genConfig);
+              break;
+          }
+        };
+
+        /**
+         * Update existing tsd.json with the necessary references.
+         *
+         * @param {Object} yoGenerator - Yeoman generator.
+         * @param {string} addinTech - Technology to use for the addin.
+         */
+        this._updateTsd = function(yoGenerator, addinTech){
+          // verify the necessary package references are present in tsd.json...
+          //  if not, add them
+          var tsdJson = yoGenerator.fs.readJSON(pathToTsdJson, 'utf8');
+
+          // all addins need these
+          /* istanbul ignore else */
+          if (!tsdJson.installed['office-js/office-js.d.ts']) {
+            tsdJson.installed['office-js/office-js.d.ts'] = {
+              'commit': '62eedc3121a5e28c50473d2e4a9cefbcb9c3957f'
+            };
+          }
+
+          switch (addinTech) {
+            case 'html':
+              /* istanbul ignore else */
+              if (!tsdJson.installed['jquery/jquery.d.ts']) {
+                tsdJson.installed['jquery/jquery.d.ts'] = {
+                  'commit': '04a025ada3492a22df24ca2d8521c911697721b3'
+                };
+              }
+              break;
+            // if angular...
+            case 'ng':
+              // angular & ng-angular are the same as there is no typedef for adal-angular
+            case 'ng-adal':
+              /* istanbul ignore else */
+              if (!tsdJson.installed['angularjs/angular.d.ts']) {
+                tsdJson.installed['angularjs/angular.d.ts'] = {
+                  'commit': '04a025ada3492a22df24ca2d8521c911697721b3'
+                };
+              }
+              /* istanbul ignore else */
+              if (!tsdJson.installed['angularjs/angular-route.d.ts']) {
+                tsdJson.installed['angularjs/angular-route.d.ts'] = {
+                  'commit': '04a025ada3492a22df24ca2d8521c911697721b3'
+                };
+              }
+              /* istanbul ignore else */
+              if (!tsdJson.installed['angularjs/angular-sanitize.d.ts']) {
+                tsdJson.installed['angularjs/angular-sanitize.d.ts'] = {
+                  'commit': '04a025ada3492a22df24ca2d8521c911697721b3'
+                };
+              }
+              break;
+          }
+
+          // overwrite existing bower.json
+          yoGenerator.log(chalk.yellow('Adding additional packages to tsd.json'));
+          yoGenerator.fs.writeJSON(pathToTsdJson, tsdJson);
+        };
+
+        // workaround to 'this' context issue
+        var yoGenerator = this;
+
+        var done = yoGenerator.async();
+
+        var pathToTsdJson = yoGenerator.destinationPath('tsd.json');
+        // if doesn't exist...
+        if (!yoGenerator.fs.exists(pathToTsdJson)) {
+          // copy tsd.json => project
+          this._copyTsd(yoGenerator, yoGenerator.genConfig.tech);
+        } else {
+          // update tsd.json => project
+          this._updateTsd(yoGenerator, yoGenerator.genConfig.tech);
+        }
+
+        done();
+      }
+    }, // upsertTsd()
+    
     app: function(){
       // helper function to build path to the file off root path
       this._parseTargetPath = function(file){
@@ -357,13 +524,16 @@ module.exports = generators.Base.extend({
 
       var done = this.async();
 
+      // manifest filename
+      var manifestFilename = 'manifest-' + this.genConfig.projectInternalName + '.xml';
+
       // create a new ID for the project
       this.genConfig.projectId = guid.v4();
 
       if (this.genConfig.tech === 'manifest-only') {
         // create the manifest file
         this.fs.copyTpl(this.templatePath('common/manifest.xml'),
-                        this.destinationPath('manifest.xml'),
+                        this.destinationPath(manifestFilename),
                         this.genConfig);
       } else {
         // copy .bowerrc => project
@@ -386,15 +556,17 @@ module.exports = generators.Base.extend({
             // determine startpage for addin
             this.genConfig.startPage = 'https://localhost:8443/app/home/home.html';
 
-            // copy tsd & jsconfig files
-            this.fs.copy(this.templatePath('html/_tsd.json'),
-                         this.destinationPath('tsd.json'));
+            // copy jsconfig files
             this.fs.copy(this.templatePath('common/_jsconfig.json'),
                          this.destinationPath('jsconfig.json'));
 
+            // copy tsconfig files
+            this.fs.copy(this.templatePath('common/_tsconfig.json'),
+                         this.destinationPath('tsconfig.json'));
+
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
-                            this.destinationPath('manifest.xml'),
+                            this.destinationPath(manifestFilename),
                             this.genConfig);
             this.fs.copy(this.templatePath('common/manifest.xsd'),
                          this.destinationPath('manifest.xsd'));
@@ -415,15 +587,17 @@ module.exports = generators.Base.extend({
             // determine startpage for addin
             this.genConfig.startPage = 'https://localhost:8443/index.html';
 
-            // copy tsd & jsconfig files
-            this.fs.copy(this.templatePath('ng/_tsd.json'),
-                         this.destinationPath('tsd.json'));
+            // copy jsconfig files
             this.fs.copy(this.templatePath('common/_jsconfig.json'),
                          this.destinationPath('jsconfig.json'));
 
+            // copy tsconfig files
+            this.fs.copy(this.templatePath('common/_tsconfig.json'),
+                         this.destinationPath('tsconfig.json'));
+
             // create the manifest file
             this.fs.copyTpl(this.templatePath('common/manifest.xml'),
-                            this.destinationPath('manifest.xml'),
+                            this.destinationPath(manifestFilename),
                             this.genConfig);
             this.fs.copy(this.templatePath('common/manifest.xsd'),
                          this.destinationPath('manifest.xsd'));
@@ -443,6 +617,45 @@ module.exports = generators.Base.extend({
             this.fs.copy(this.templatePath('ng/services/data.service.js'),
                          this.destinationPath(this._parseTargetPath('app/services/data.service.js')));
             break;
+          case 'ng-adal':
+            // determine startpage for addin
+            this.genConfig.startPage = 'https://localhost:8443/index.html';
+
+            // copy jsconfig files
+            this.fs.copy(this.templatePath('common/_jsconfig.json'),
+                         this.destinationPath('jsconfig.json'));
+
+            // copy tsconfig files
+            this.fs.copy(this.templatePath('common/_tsconfig.json'),
+                         this.destinationPath('tsconfig.json'));
+
+            // create the manifest file
+            this.fs.copyTpl(this.templatePath('ng-adal/manifest.xml'),
+                            this.destinationPath(manifestFilename),
+                            this.genConfig);
+            this.fs.copy(this.templatePath('common/manifest.xsd'),
+                         this.destinationPath('manifest.xsd'));
+
+            // copy addin files
+            this.genConfig.startPage = '{https-addin-host-site}/index.html';
+            this.fs.copy(this.templatePath('ng-adal/index.html'),
+                         this.destinationPath(this._parseTargetPath('index.html')));
+            this.fs.copy(this.templatePath('ng-adal/app.module.js'),
+                         this.destinationPath(this._parseTargetPath('app/app.module.js')));
+            this.fs.copy(this.templatePath('ng-adal/app.adalconfig.js'),
+                         this.destinationPath(this._parseTargetPath('app/app.adalconfig.js')));
+            this.fs.copyTpl(this.templatePath('ng-adal/app.config.js'),
+                         this.destinationPath(this._parseTargetPath('app/app.config.js')),
+                         this.genConfig);
+            this.fs.copy(this.templatePath('ng-adal/app.routes.js'),
+                         this.destinationPath(this._parseTargetPath('app/app.routes.js')));
+            this.fs.copy(this.templatePath('ng-adal/home/home.controller.js'),
+                         this.destinationPath(this._parseTargetPath('app/home/home.controller.js')));
+            this.fs.copy(this.templatePath('ng-adal/home/home.html'),
+                         this.destinationPath(this._parseTargetPath('app/home/home.html')));
+            this.fs.copy(this.templatePath('ng-adal/services/data.service.js'),
+                         this.destinationPath(this._parseTargetPath('app/services/data.service.js')));
+            break;
         }
       }
 
@@ -456,11 +669,14 @@ module.exports = generators.Base.extend({
     updateManifestHosts: function(){
       var done = this.async();
 
+      // manifest filename
+      var manifestFilename = 'manifest-' + this.genConfig.projectInternalName + '.xml';
+
       // workaround to 'this' context issue
       var yoGenerator = this;
 
       // load manifest.xml
-      var manifestXml = yoGenerator.fs.read(yoGenerator.destinationPath('manifest.xml'));
+      var manifestXml = yoGenerator.fs.read(yoGenerator.destinationPath(manifestFilename));
 
       // convert it to JSON
       var parser = new Xml2Js.Parser();
@@ -484,7 +700,7 @@ module.exports = generators.Base.extend({
         var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
 
         // write updated manifest
-        yoGenerator.fs.write(yoGenerator.destinationPath('manifest.xml'), updatedManifestXml);
+        yoGenerator.fs.write(yoGenerator.destinationPath(manifestFilename), updatedManifestXml);
 
         done();
       });

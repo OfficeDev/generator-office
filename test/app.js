@@ -22,6 +22,9 @@ describe('office:app', function(){
   // set timeouts to 5s
   this.timeout(10000);
 
+  var projectEscapedName = 'my-first-addin';
+  var manifestFileName = 'manifest-' + projectEscapedName + '.xml';
+
   describe('runs mail subgenerator', function(){
 
     beforeEach(function(done){
@@ -41,14 +44,14 @@ describe('office:app', function(){
         .on('end', done);
     });
 
-    it('manifest.xml is for mail addin', function(done){
+    it('manifest-*.xml is for mail addin', function(done){
 
-      // verify manifest.xml exists
-      assert.file('manifest.xml');
+      // verify manifest-*.xml exists
+      assert.file(manifestFileName);
 
-      // load manifest.xml as JSON
+      // load manifest-*.xml as JSON
       var parser = new Xml2Js.Parser();
-      fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
+      fs.readFile(manifestFileName, 'utf8', function(err, manifestContent){
         parser.parseString(manifestContent, function(err, manifestJson){
 
           // check addin type
@@ -70,7 +73,7 @@ describe('office:app', function(){
         name: 'My First Addin',
         rootPath: '',
         type: 'taskpane',
-        tech: 'html',
+        tech: 'ng-adal',
         clients: ['Document', 'Workbook'],
         'skip-install': true
       };
@@ -81,14 +84,14 @@ describe('office:app', function(){
         .on('end', done);
     });
 
-    it('manifest.xml is for taskpane addin', function(done){
+    it('manifest-*.xml is for taskpane addin', function(done){
 
-      // verify manifest.xml exists
-      assert.file('manifest.xml');
+      // verify manifest-*.xml exists
+      assert.file(manifestFileName);
 
-      // load manifest.xml as JSON
+      // load manifest-*.xml as JSON
       var parser = new Xml2Js.Parser();
-      fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
+      fs.readFile(manifestFileName, 'utf8', function(err, manifestContent){
         parser.parseString(manifestContent, function(err, manifestJson){
 
           // check addin type
@@ -121,14 +124,14 @@ describe('office:app', function(){
         .on('end', done);
     });
 
-    it('manifest.xml is for content addin', function(done){
+    it('manifest-*.xml is for content addin', function(done){
 
-      // verify manifest.xml exists
-      assert.file('manifest.xml');
+      // verify manifest-*.xml exists
+      assert.file(manifestFileName);
 
-      // load manifest.xml as JSON
+      // load manifest-*.xml as JSON
       var parser = new Xml2Js.Parser();
-      fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
+      fs.readFile(manifestFileName, 'utf8', function(err, manifestContent){
         parser.parseString(manifestContent, function(err, manifestJson){
 
           // check addin type

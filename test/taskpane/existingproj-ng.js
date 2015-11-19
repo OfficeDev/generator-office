@@ -24,9 +24,13 @@ var options = {};
 
 describe('office:taskpane', function(){
 
+  var projectDisplayName = 'My Office Add-in';
+  var projectEscapedName = 'my-office-add-in';
+  var manifestFileName = 'manifest-' + projectEscapedName + '.xml';
+
   beforeEach(function(done){
     options = {
-      name: 'My Office Add-in'
+      name: projectDisplayName
     };
     done();
   });
@@ -75,10 +79,11 @@ describe('office:taskpane', function(){
           'bower.json',
           'gulpfile.js',
           'package.json',
-          'manifest.xml',
+          manifestFileName,
           'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
+          'tsconfig.json',
           addinRootPath + '/index.html',
           addinRootPath + '/app/app.module.js',
           addinRootPath + '/app/app.routes.js',
@@ -132,6 +137,8 @@ describe('office:taskpane', function(){
           devDependencies: {
             chalk: '^1.1.1',
             gulp: '^3.9.0',
+            'gulp-load-plugins': '^1.0.0',
+            'gulp-task-listing': '^1.0.1',
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
@@ -144,14 +151,14 @@ describe('office:taskpane', function(){
       });
 
       /**
-       * manfiest.xml is good
+       * manfiest-*.xml is good
        */
-      describe('manifest.xml contents', function(){
+      describe('manifest-*.xml contents', function(){
         var manifest = {};
 
         beforeEach(function(done){
           var parser = new Xml2Js.Parser();
-          fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
+          fs.readFile(manifestFileName, 'utf8', function(err, manifestContent){
             parser.parseString(manifestContent, function(err, manifestJson){
               manifest = manifestJson;
 
@@ -166,7 +173,7 @@ describe('office:taskpane', function(){
         });
 
         it('has correct display name', function(done){
-          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal('My Office Add-in');
+          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
           done();
         });
 
@@ -236,7 +243,7 @@ describe('office:taskpane', function(){
           done();
         });
 
-      }); // describe('manifest.xml contents')
+      }); // describe('manifest-*.xml contents')
 
       /**
        * tsd.json is good
@@ -254,10 +261,13 @@ describe('office:taskpane', function(){
 
         it('has correct *.d.ts references', function(done){
           expect(tsd.installed).to.exist;
-          expect(tsd.installed['jquery/jquery.d.ts']).to.exist;
+          // make sure the existing ones are present (to verify we didn't overwrite, but rather update)
+          expect(tsd.installed['lodash/lodash.d.ts']).to.exist;
+          // make sure the new ones are present
           expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.exist;
+          expect(tsd.installed['office-js/office-js.d.ts']).to.exist;
           done();
         });
 
@@ -267,6 +277,18 @@ describe('office:taskpane', function(){
        * gulpfile.js is good
        */
       describe('gulpfule.js contents', function(){
+        
+        it('contains task \'help\'', function(done){
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'help\',');
+          done();
+        });
+        
+        it('contains task \'default\'', function(done){
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'default\',');
+          done();
+        });
 
         it('contains task \'serve-static\'', function(done){
 

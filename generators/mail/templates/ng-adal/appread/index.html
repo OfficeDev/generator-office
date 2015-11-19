@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-sanitize.min.js"></script>
+  <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/adal.min.js"></script>
+  <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/adal-angular.min.js"></script>
+  <link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.min.css" rel="stylesheet">
+  <!--<link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.components.min.css" rel="stylesheet">-->
+  <script src="//appsforoffice.microsoft.com/lib/1/hosted/Office.js"></script>
+
+  <!-- To enable offline debugging using a local reference to Angular-*.js & Office.js, use: -->
+  <!--<script src="../bower_components/angular/angular.min.js"></script>  -->
+  <!--<script src="../bower_components/angular-route/angular-route.min.js"></script>  -->
+  <!--<script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script> -->
+  <!--<script src="../bower_components/adal-angular/dist/adal.min.js"></script>  -->
+  <!--<script src="../bower_components/adal-angular/dist/adal-angular.min.js"></script>  -->
+  <!--<script src="../bower_components/microsoft.office.js/scripts/Office/1/office.js"></script>  -->
+  <!--<script src="../content/fabric.min.css"></script>  -->
+  <!--<script src="../content/fabric.components.min.css"></script>  -->
+  <!--<script src="../scripts/jquery.fabric.min.js"></script>  -->
+
+  <link href="../content/Office.css" rel="stylesheet" type="text/css" />
+  <link href="../bower_components/microsoft.office.js/styles/OfficeThemes.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+  <div id="container">
+    <div data-ng-view></div>
+  </div>
+
+  <script src="app.module.js"></script>
+  <script src="app.config.js"></script>
+  <script src="app.adalconfig.js"></script>
+  <script src="app.routes.js"></script>
+  <script src="services/data.service.js"></script>
+  <script src="home/home.controller.js"></script>
+
+</body>
+
+</html>

@@ -6,7 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/OfficeDev/generator-office/badge.svg?branch=master&service=github)](https://coveralls.io/github/OfficeDev/generator-office?branch=master)
 [![Dependency Status](https://david-dm.org/officedev/generator-office.svg)](https://david-dm.org/officedev/generator-office)
 [![devDependency Status](https://david-dm.org/officedev/generator-office/dev-status.svg)](https://david-dm.org/officedev/generator-office#info=devDependencies)
-[![Slack Network](http://officedev.herokuapp.com/badge.svg)](http://officedev.herokuapp.com/)
+[![Slack Network](http://officedevslack.azurewebsites.com/badge.svg)](http://officedevslack.azurewebsites.com/)
 
 [Yeoman](http://yeoman.io) generator for creating Microsoft Office projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
 
@@ -36,10 +36,22 @@ If you are interested in contributing, read the the [Contributing Guidelines](do
 
 ## Install
 
-Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org). The project files created by the generator leverage client side packages in [bower](http://bower.io) so you will want to install that as well:
+> **Wait!** 
+
+> Is this the first time you're using Yeoman or installing a Yeoman generator? When working with Yeoman there are a few common prerequisites. Ensure you have already have a copy of the popular source control solution [Git](https://git-scm.com/download) installed.
+
+> If you don't have git installed, once you install it we recommend you restart your console (or if on Windows, restart your machine) as system environment variables are set/updated during this installation.
+
+Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org). 
+
+The project files created by the generator leverage client side packages in [bower](http://bower.io) so you will want to install that as well.
+
+In addition, the task runner [gulp](https://www.npmjs.com/package/gulp) is used in the build process to assist developers in validating the Office Add-in manifest file as well as other tasks, so that is listed as part of the install below.
+
+In the v0.5.1 release we added TypeScript type definitions for autocompletion / IntelliSense... for this you need to install the TSD utility before you install the generator.
 
 ```bash
-$ npm install -g yo generator-office bower
+$ npm install -g tsd bower gulp yo generator-office
 ```
 
 ## Usage
@@ -50,7 +62,7 @@ $ yo office [options]
 
 The generator is intented to be run from within a folder where you want the project scaffolding created. This can be in the root of the current folder or within a subfolder.
 
-> Note: Office Add-ins must be hosted, even in development, in a **HTTPS** site. You can create a simple HTTPS hosted site using Node.js using the [nodehttps](https://www.npmjs.com/package/generator-nodehttps) generator. 
+> Note: Office Add-ins must be hosted, even in development, in a **HTTPS** site. Refer to the section [Running the Generated Site](/OfficeDev/generator-office#running-the-generated-site) below for details.
 
 ## Sub Generators
 
@@ -64,7 +76,13 @@ Running the main generator will prompt you for the type of Office project to cre
 
 ## Running the Generated Site
 
-All generators create a `gulpfile.js`. This uses the [gulp-webserver](https://www.npmjs.com/package/gulp-webserver) task to start a HTTPS server. This server includes a self-signed SSL cert that your development enviroment must trust (this involves adding it to your trusted root certificates). Start the local HTTPS site on `https://localhost:8443/` and launch a browser to this site using:
+All generators create a `gulpfile.js`. This uses the [gulp-webserver](https://www.npmjs.com/package/gulp-webserver) task to start a HTTPS server. This server includes a self-signed SSL cert that your development enviroment must trust. 
+
+> Using a self-signed certificate involves adding it to your trusted root certificates... see our doc [Adding Self-Signed Certificates as Trusted Root Certificate](docs/trust-self-signed-cert.md) for instructions on how to do this.
+
+> Because the gulp plugin is added to all Office Add-ins created using this generator, you only need to setup the trust relationship with the self-signed cert it includes one time per developer workstation.
+
+Start the local HTTPS site on `https://localhost:8443/` and launch a browser to this site using:
 
 ```bash
 $ gulp serve-static
@@ -104,9 +122,9 @@ Relative path where the project should be created (blank = current directory). I
   - Default: undefined / null
   - Optional  
 
-### `--tech:[ 'html' | 'ng' | 'manifest-only' ]`
+### `--tech:[ 'html' | 'ng' | 'ng-adal' | 'manifest-only' ]`
 
-Technology to use for the project. The supported options include HTML (`html`) or Angular (`ng`). You can also use Manifest.xml only (`manifest-only`) which will create only the `manifest.xml` for an an Office addin.
+Technology to use for the project. The supported options include HTML (`html`), Angular (`ng`) or Angular ADAL (`ng-adal`). You can also use Manifest.xml only (`manifest-only`) which will create only the `manifest.xml` for an an Office addin.
 
   - Type: String
   - Default: undefined / null

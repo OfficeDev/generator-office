@@ -25,14 +25,8 @@ $ yo office --skip-install
 ├── gulpfile.js
 ├── jsconfig.json
 ├── manifest.xml
+├── manifest.xsd
 ├── tsd.json
-├── appcompose
-│   ├── app.css
-│   ├── app.js
-│   └── home
-│       ├── home.css
-│       ├── home.html
-│       └── home.js
 ├── appread
 │   ├── app.css
 │   ├── app.js
@@ -97,17 +91,11 @@ $ yo office --skip-install
 ├── gulpfile.js
 ├── jsconfig.json
 ├── manifest.xml
+├── manifest.xsd
 ├── package.json
 ├── tsd.json
 └── src
     ├── public
-    │   ├── appcompose
-    │   │   ├── app.css
-    │   │   ├── app.js
-    │   │   └── home
-    │   │       ├── home.css
-    │   │       ├── home.html
-    │   │       └── home.js
     │   ├── appread
     │   │   ├── app.css
     │   │   ├── app.js

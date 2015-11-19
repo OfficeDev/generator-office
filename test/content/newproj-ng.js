@@ -23,9 +23,13 @@ var options = {};
 
 describe('office:content', function(){
 
+  var projectDisplayName = 'My Office Add-in';
+  var projectEscapedName = 'my-office-add-in';
+  var manifestFileName = 'manifest-' + projectEscapedName + '.xml';
+
   beforeEach(function(done){
     options = {
-      name: 'My Office Add-in'
+      name: projectDisplayName
     };
     done();
   });
@@ -51,6 +55,8 @@ describe('office:content', function(){
           devDependencies: {
             chalk: '^1.1.1',
             gulp: '^3.9.0',
+            'gulp-load-plugins': '^1.0.0',
+            'gulp-task-listing': '^1.0.1',
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
@@ -106,10 +112,11 @@ describe('office:content', function(){
           'bower.json',
           'package.json',
           'gulpfile.js',
-          'manifest.xml',
+          manifestFileName,
           'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
+          'tsconfig.json',
           'index.html',
           'app/app.module.js',
           'app/app.routes.js',
@@ -129,11 +136,10 @@ describe('office:content', function(){
        */
       it('bower.json contains correct values', function(done){
         var expected = {
-          name: 'my-office-add-in',
+          name: projectEscapedName,
           version: '0.1.0',
           dependencies: {
             'microsoft.office.js': '*',
-            jquery: '~1.9.1',
             angular: '~1.4.4',
             'angular-route': '~1.4.4',
             'angular-sanitize': '~1.4.4',
@@ -151,7 +157,7 @@ describe('office:content', function(){
        */
       it('package.json contains correct values', function(done){
         var expected = {
-          name: 'my-office-add-in',
+          name: projectEscapedName,
           version: '0.1.0',
           scripts: {
             postinstall: 'bower install'
@@ -159,6 +165,8 @@ describe('office:content', function(){
           devDependencies: {
             chalk: '^1.1.1',
             gulp: '^3.9.0',
+            'gulp-load-plugins': '^1.0.0',
+            'gulp-task-listing': '^1.0.1',
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
@@ -171,14 +179,14 @@ describe('office:content', function(){
       });
 
       /**
-       * manfiest.xml is good
+       * manfiest-*.xml is good
        */
-      describe('manifest.xml contents', function(){
+      describe('manifest-*.xml contents', function(){
         var manifest = {};
 
         beforeEach(function(done){
           var parser = new Xml2Js.Parser();
-          fs.readFile('manifest.xml', 'utf8', function(err, manifestContent){
+          fs.readFile(manifestFileName, 'utf8', function(err, manifestContent){
             parser.parseString(manifestContent, function(err, manifestJson){
               manifest = manifestJson;
 
@@ -193,7 +201,7 @@ describe('office:content', function(){
         });
 
         it('has correct display name', function(done){
-          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal('My Office Add-in');
+          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
           done();
         });
 
@@ -263,7 +271,7 @@ describe('office:content', function(){
           done();
         });
 
-      }); // describe('manifest.xml contents')
+      }); // describe('manifest-*.xml contents')
 
       /**
        * tsd.json is good
@@ -281,10 +289,10 @@ describe('office:content', function(){
 
         it ('has correct *.d.ts references', function(done){
           expect(tsd.installed).to.exist;
-          expect(tsd.installed['jquery/jquery.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.exist;
+          expect(tsd.installed['office-js/office-js.d.ts']).to.exist;
           done();
         });
 
@@ -294,6 +302,18 @@ describe('office:content', function(){
        * gulpfile.js is good
        */
       describe('gulpfule.js contents', function(){
+        
+        it('contains task \'help\'', function(done){
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'help\',');
+          done();
+        });
+        
+        it('contains task \'default\'', function(done){
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'default\',');
+          done();
+        });
 
         it('contains task \'serve-static\'', function(done){
 
