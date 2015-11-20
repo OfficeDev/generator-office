@@ -8,7 +8,6 @@
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
   <Description DefaultValue="[Task pane Add-in description]"/>
   <HighResolutionIconUrl DefaultValue="[Icon URL]"/>
-  <SupportUrl DefaultValue="[Support URL]"/>
   <AppDomains>
     <AppDomain>https://login.windows.net</AppDomain>
     <AppDomain>https://login.microsoftonline.net</AppDomain>
