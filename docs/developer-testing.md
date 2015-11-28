@@ -37,6 +37,6 @@ When PR's are submitted, all tests must pass before they will be reviewed. This 
 
 ## Code Coverage
 
-Any new or changed code should be adequately covered by unit tests. Like tests this is run automatically when a PR is submitted using [Coveralls](https://coveralls.io/github/OfficeDev/generator-office?branch=master). Any PR's that lower the code coverage % with new code submission will be scrutinized before being merged. Depending on the reason for the drop in code coverage %, the PR may be rejected or the submitter may be requested to address it with more tests.
+Any new or changed code should be adequately covered by unit tests. Like tests, code coverage is run automatically when a PR is submitted using [Coveralls](https://coveralls.io/github/OfficeDev/generator-office?branch=master). Any PR's that lower the code coverage % with new code submission will be scrutinized before being merged. Depending on the reason for the drop in code coverage %, the PR may be rejected or the submitter may be requested to address it with more tests.
 
 Coverage reports are also generated every time tests are run locally. To view a code coverage report, after running tests, open the code coverage report found in `/coverage/lcov-report/index.html` in a browser.
