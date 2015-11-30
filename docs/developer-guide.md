@@ -10,7 +10,7 @@ Gulp is used to automate some test and style checks within this repo. To view a 
 $ gulp
 ```
 
-Refer to the `gulpfile.js` for a description of each task as each is commented with [jsdoc](http://usejsdoc.org/) descriptions.
+For details on each task, refer to the `gulpfile.js`.  Each task is commented with [jsdoc](http://usejsdoc.org/) a description of the tasks purpose.
 
 ## Coding Style
 
@@ -31,7 +31,7 @@ While coding, you can automatically run this using the **autovet** task:
 $ gulp autovet
 ```
 
-To simplify the task of formatting your code, you can use the **JSCS** NPM CLI provided in the developer dependencies. This does not do all code fixes, just the things that can be automatically fixed by the JSCS CLI:
+To simplify the task of formatting your code, you can use the **JSCS** NPM CLI provided in the developer dependencies. This does not apply all code fixes, just the things that can be automatically fixed by the JSCS CLI:
 
 ```
 $ node_modules/jscs/bin/jscs [path-to-js-files] --fix
