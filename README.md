@@ -138,13 +138,27 @@ The Microsoft Office client application that can host the add-in.
 
   - Type: String[]
   - Default: undefined / null
-  - Optional  
+  - Optional   
 
-### `--outlookForm: [ 'mail-read' | 'mail-compose' | 'appointment-read' | 'appointment-compose' ]`
+### `--extensionPoint: [ 'MessageReadCommandSurface' | 'MessageComposeCommandSurface' | 'AppointmentAttendeeCommandSurface' | 'AppointmentOrganizerCommandSurface' | 'CustomPane' ]`
 
-The type of form within Outlook that can host the add-in. 
+The extension points to support. Valid choices depend on the type of add-in created.
 
-> This applies only to mail add-ins.
+#### Mail add-in extension points
+
+- `MessageReadCommandSurface`
+- `MessageComposeCommandSurface`
+- `AppointmentAttendeeCommandSurface`
+- `AppointmentOrganizerCommandSurface`
+- `CustomPane`
+
+#### Task pane add-in extension points
+
+TBD
+
+#### Content add-in extension points
+
+TBD
 
   - Type: String[]
   - Default: undefined / null

@@ -22,10 +22,17 @@ module.exports = generators.Base.extend({
       desc: 'Add-in type (mail, taskpane, content)'
     });
     
-    this.option('tech', {
-      type: String,
-      desc: 'Technology to use for the Add-in (html = HTML; ng = Angular)',
-      required: false
+    //this.option('tech', {
+    //  type: String,
+    //  desc: 'Technology to use for the Add-in (html = HTML; ng = Angular)',
+    //  required: false
+    //});
+    
+    this.option('manifest-only', {
+      type: Boolean,
+      desc: 'Set to true to disable creation of sample files.',
+      required: false,
+      defaults: false
     });
     
     this.option('root-path', {
@@ -40,7 +47,7 @@ module.exports = generators.Base.extend({
       required: false
     });
     
-    this.option('extensionPoints', {
+    this.option('extensionPoint', {
       type: String,
       desc: 'Supported extension points',
       required: false
@@ -48,7 +55,7 @@ module.exports = generators.Base.extend({
     
     // If commands are passed as an option, it will be a
     // JSON object with all the details we need
-    // extensionPoints and clients will be ignored
+    // extensionPoint and clients will be ignored
     this.option('commands', {
       type: String,
       desc: 'A JSON-formatted string defining the commands to add',
@@ -114,6 +121,7 @@ module.exports = generators.Base.extend({
           }
         },
         // technology used to create the addin (html / angular / etc)
+        /*
         {
           name: 'tech',
           message: 'Technology to use:',
@@ -131,6 +139,8 @@ module.exports = generators.Base.extend({
               value: 'manifest-only'
             }]
         },
+        */
+        // Path to the manifest being updated
         {
           name: 'manifest-file',
           message: 'Relative path to manifest file:',
@@ -239,10 +249,10 @@ module.exports = generators.Base.extend({
       if (availableExtensionPoints !== undefined) {
         var prompts = [
           {
-            name: 'extensionPoints',
+            name: 'extensionPoint',
             message: 'Supported extension points:',
             type: 'checkbox',
-            when: this.genConfig.extensionPoints === undefined,
+            when: this.genConfig.extensionPoint === undefined,
             choices: availableExtensionPoints,
             validate: function(answers) {
               if (answers.length < 1) {
@@ -318,7 +328,7 @@ module.exports = generators.Base.extend({
      */
     askForCommandSurface: function() {
       if (this.genConfig.commands !== undefined ||
-          !commandSurfaceIncluded(this.genConfig.extensionPoints)) {
+          !commandSurfaceIncluded(this.genConfig.extensionPoint)) {
         return;
       }
       
@@ -370,7 +380,7 @@ module.exports = generators.Base.extend({
               }
             ]
           }
-        ]
+        ];
         
         var done = this.async();
         this.prompt(prompts, function(response) {
@@ -378,7 +388,50 @@ module.exports = generators.Base.extend({
           done();
         }.bind(this));
       }
-    }
+    }, // askForCommandSurface()
+    
+    // When manifest-only = true, ask for URL values
+    askForUrls: function() {
+      if (this.genConfig['manifest-only'] !== true) {
+        return;
+      }
+      
+      var prompts = [];
+      
+      if (this.genConfig.extensionPoint.indexOf('CustomPane') >= 0) {
+        prompts.push({
+          name: 'customPaneUrl',
+          message: 'Custom pane URL:'
+        });  
+      }
+      
+      if (commandSurfaceIncluded(this.genConfig.extensionPoint)) {
+        if (this.genConfig.buttonTypes.indexOf('uiless') >= 0) {
+          prompts.push({
+            name: 'functionFileUrl',
+            message: 'Function file URL:'
+          }); 
+        }
+        
+        if (this.genConfig.buttonTypes.indexOf('taskpane') >= 0) {
+          prompts.push({
+            name: 'taskPaneUrl',
+            message: 'Task pane URL:'
+          });
+        }
+        
+        prompts.push({
+          name: 'iconUrl',
+          message: 'Icon URL:'
+        });
+      }
+      
+      var done = this.async();
+      this.prompt(prompts, function(response) {
+        this.genConfig = extend(this.genConfig, response);
+        done();
+      }.bind(this));
+    } // askForUrls()
   }, // prompting()
   
   /**
@@ -408,9 +461,13 @@ module.exports = generators.Base.extend({
       // Determine if a function file is needed
       var needFuncFile = this.genConfig.buttonTypes.indexOf('uiless') >= 0;
       if (needFuncFile) {
+        var funcFile = this.genConfig.functionFileUrl !== undefined ? 
+          this.genConfig.functionFileUrl : 
+          'https://localhost:8443/FunctionFile/Functions.html';
+        
         // Use the default function file
         this.genConfig.functionFileId = createUrlResource('funcFile', '',
-          'https://localhost:8443/FunctionFile/Functions.html', this.genConfig);
+          funcFile, this.genConfig);
       }
       
       // Set up control counters
@@ -419,17 +476,6 @@ module.exports = generators.Base.extend({
       this.genConfig.uilessCount = 0;
       this.genConfig.menuCount = 0;
       this.genConfig.taskPaneCount = 0;
-      
-      _.forEach(this.genConfig.hosts, function(hostType){
-        // foreach formfactor
-          // foreach applicable extensionpoint
-            // if custompane
-              // do custompane resources
-            // else
-              // foreach command tab
-                // foreach button type
-                  // add resources
-      });
     }
   }, // configuring()
   
@@ -445,7 +491,6 @@ module.exports = generators.Base.extend({
       var done = this.async();
       
       var manifestFile = this.genConfig['manifest-file'];
-      var modifiedManifestFile = manifestFile.replace('.xml', '-cmd.xml');
       
       // workaround to 'this' context issue
       var yoGenerator = this;
@@ -461,10 +506,6 @@ module.exports = generators.Base.extend({
       
       // convert to JSON
       var parser = new Xml2Js.Parser();
-      
-      var test = '<?xml version="1.0" encoding="UTF-8"?>';
-      test += '<!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->';
-      test += '<OfficeApp/>';
       
       parser.parseString(manifestXml, function(err, manifestJson) {
         
@@ -532,7 +573,7 @@ module.exports = generators.Base.extend({
         var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
         
         // write updated manifest
-        yoGenerator.fs.write(yoGenerator.destinationPath(modifiedManifestFile), updatedManifestXml);
+        yoGenerator.fs.write(yoGenerator.destinationPath(manifestFile), updatedManifestXml);
         
         done();
       });
@@ -542,7 +583,11 @@ module.exports = generators.Base.extend({
      * Add supporting files
      */
     addFiles: function() {
-      if (this.genConfig.uiLessCount > 0) {
+      if (this.genConfig['manifest-only'] === true) {
+        return;
+      }
+      
+      if (this.genConfig.uilessCount > 0) {
         this.fs.copyTpl(this.templatePath('common/FunctionFile/Functions.js'),
                         this.destinationPath('FunctionFile/Functions.js'),
                         this.genConfig);
@@ -557,7 +602,7 @@ module.exports = generators.Base.extend({
                      this.destinationPath(this._parseTargetPath('TaskPane/TaskPane.js')));  
       }
       
-      if (this.genConfig.extensionPoints.indexOf('CustomPane') >= 0){
+      if (this.genConfig.extensionPoint.indexOf('CustomPane') >= 0){
         this.fs.copy(this.templatePath('common/CustomPane/CustomPane.html'),
                      this.destinationPath(this._parseTargetPath('CustomPane/CustomPane.html')));
         this.fs.copy(this.templatePath('common/CustomPane/CustomPane.js'),
@@ -600,7 +645,7 @@ function buildFormFactor(config) {
   }
   
   var extensionPoints = [];
-  _.forEach(config.extensionPoints, function(extensionType){
+  _.forEach(config.extensionPoint, function(extensionType){
     extensionPoints.push(buildExtensionPoint(extensionType, config));
   });
   
@@ -619,11 +664,12 @@ function buildExtensionPoint(type, config) {
   
   if (type === 'CustomPane') {
     // Build custom pane
+    var customPaneUrl = config.customPaneUrl !== undefined ? config.customPaneUrl : 
+      'https://localhost:8443/CustomPane/CustomPane.html';
     extPoint.RequestedHeight = 200;
     extPoint.SourceLocation = {
       '$': {
-        resid: createUrlResource('customPaneUrl', '',
-          'https://localhost:8443/CustomPane/CustomPane.html', config)
+        resid: createUrlResource('customPaneUrl', '', customPaneUrl, config)
       }
     };
     // Setting standard rule to activate on all messages and appointments
@@ -736,6 +782,13 @@ function buildGroup(config) {
 function buildUiLessButton(config) {
   config.uilessCount++;
   
+  var icon16 = config.iconUrl !== undefined ? config.iconUrl : 
+      'https://localhost:8443/images/icon-16.png';
+  var icon32 = config.iconUrl !== undefined ? config.iconUrl : 
+      'https://localhost:8443/images/icon-32.png';
+  var icon80 = config.iconUrl !== undefined ? config.iconUrl : 
+      'https://localhost:8443/images/icon-80.png';
+  
   var button = {
     '$': {
       'xsi:type': 'Button',
@@ -773,21 +826,21 @@ function buildUiLessButton(config) {
           '$': {
             size: 16,
             resid: createImageResource('uilessButtonIcon', config.uilessCount + '-16',
-              'https://localhost:8443/images/icon-16.png', config)
+              icon16, config)
           }
         },
         {
           '$': {
             size: 32,
             resid: createImageResource('uilessButtonIcon', config.uilessCount + '-32',
-              'https://localhost:8443/images/icon-32.png', config)
+              icon32, config)
           }
         },
         {
           '$': {
             size: 80,
             resid: createImageResource('uilessButtonIcon', config.uilessCount + '-80',
-              'https://localhost:8443/images/icon-80.png', config)
+              icon80, config)
           }
         }
       ] 
@@ -806,6 +859,13 @@ function buildUiLessButton(config) {
  */
 function buildMenu(config) {
   config.menuCount++;
+  
+  var icon16 = config.iconUrl !== undefined ? config.iconUrl : 
+      'https://localhost:8443/images/icon-16.png';
+  var icon32 = config.iconUrl !== undefined ? config.iconUrl : 
+      'https://localhost:8443/images/icon-32.png';
+  var icon80 = config.iconUrl !== undefined ? config.iconUrl : 
+      'https://localhost:8443/images/icon-80.png';
   
   // Create a UI-less button to put inside the menu
   var uilessButton = buildUiLessButton(config);
@@ -850,21 +910,21 @@ function buildMenu(config) {
           '$': {
             size: 16,
             resid: createImageResource('menuIcon', config.menuCount + '-16',
-              'https://localhost:8443/images/icon-16.png', config)
+              icon16, config)
           }
         },
         {
           '$': {
             size: 32,
             resid: createImageResource('menuIcon', config.menuCount + '-32',
-              'https://localhost:8443/images/icon-32.png', config)
+              icon32, config)
           }
         },
         {
           '$': {
             size: 80,
             resid: createImageResource('menuIcon', config.menuCount + '-80',
-              'https://localhost:8443/images/icon-80.png', config)
+              icon80, config)
           }
         }
       ] 
@@ -882,6 +942,15 @@ function buildMenu(config) {
  */
 function buildTaskPaneButton(config) {
   config.taskPaneCount++;
+  
+  var icon16 = config.iconUrl !== undefined ? config.iconUrl : 
+      'https://localhost:8443/images/icon-16.png';
+  var icon32 = config.iconUrl !== undefined ? config.iconUrl : 
+      'https://localhost:8443/images/icon-32.png';
+  var icon80 = config.iconUrl !== undefined ? config.iconUrl : 
+      'https://localhost:8443/images/icon-80.png';
+  var taskPaneUrl = config.taskPaneUrl !== undefined ? config.taskPaneUrl : 
+      'https://localhost:8443/TaskPane/TaskPane.html';
   
   var button = {
     '$': {
@@ -920,21 +989,21 @@ function buildTaskPaneButton(config) {
           '$': {
             size: 16,
             resid: createImageResource('taskpaneButtonIcon', config.taskPaneCount + '-16',
-              'https://localhost:8443/images/icon-16.png', config)
+              icon16, config)
           }
         },
         {
           '$': {
             size: 32,
             resid: createImageResource('taskpaneButtonIcon', config.taskPaneCount + '-32',
-              'https://localhost:8443/images/icon-32.png', config)
+              icon32, config)
           }
         },
         {
           '$': {
             size: 80,
             resid: createImageResource('taskpaneButtonIcon', config.taskPaneCount + '-80',
-              'https://localhost:8443/images/icon-80.png', config)
+              icon80, config)
           }
         }
       ] 
@@ -944,7 +1013,7 @@ function buildTaskPaneButton(config) {
       SourceLocation: {
         '$': {
           resid: createUrlResource('taskPaneUrl', config.taskPaneCount,
-            'https://localhost:8443/TaskPane/TaskPane.html', config)
+            taskPaneUrl, config)
         }
       }
     }
