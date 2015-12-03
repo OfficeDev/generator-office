@@ -634,7 +634,7 @@ function buildControlContainer(type, config) {
       config.customContainerCount++;
       container.nodeName = 'CustomTab'
       container.node = {
-        '$': { id: type },
+        '$': { id: type + config.customContainerCount },
         Label: { 
           '$': { 
             resid: createShortStringResource('customTabLabel', config.customContainerCount,
