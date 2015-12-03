@@ -512,16 +512,16 @@ module.exports = generators.Base.extend({
         // Add namespaces to the OfficeApp element
         var newNS = {
           '$': {
-            'xmlns:bt': 'http://schemas.microsoft.com/office/officeappbasictypes/1.0',
-            'xmlns:mailappor': 'http://schemas.microsoft.com/office/mailappversionoverrides/1.0'
+            'xmlns:bt': 'http://schemas.microsoft.com/office/officeappbasictypes/1.0'
           }
         };
         manifestJson.OfficeApp = extend(manifestJson.OfficeApp, newNS);
         
         // Create VersionOverrides
+        var overrideNamespace = 'http://schemas.microsoft.com/office/mailappversionoverrides';
         manifestJson.OfficeApp.VersionOverrides = {
           '$': {
-            xmlns: 'http://schemas.microsoft.com/office/mailappversionoverrides',
+            xmlns: overrideNamespace,
             'xsi:type': 'VersionOverridesV1_0'
           },
         };
