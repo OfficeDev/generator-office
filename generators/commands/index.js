@@ -264,6 +264,7 @@ module.exports = generators.Base.extend({
     /**
      * ask for CustomPane details
      */
+    /*
     askForCustomPane: function() {
       if (this.genConfig.commands !== undefined ||
           this.genConfig.type !== 'mail' || 
@@ -310,7 +311,7 @@ module.exports = generators.Base.extend({
         this.genConfig = extend(this.genConfig, { customPaneOptions: responses });
         done();
       }.bind(this));
-    },  // askForCustomPane()
+    },  // askForCustomPane() */
     
     /**
      * ask for *CommandSurface details
@@ -541,15 +542,28 @@ module.exports = generators.Base.extend({
      * Add supporting files
      */
     addFiles: function() {
-      this.fs.copyTpl(this.templatePath('common/FunctionFile/Functions.js'),
-                      this.destinationPath('FunctionFile/Functions.js'),
-                      this.genConfig);
-      this.fs.copy(this.templatePath('common/FunctionFile/Functions.html'),
-                   this.destinationPath(this._parseTargetPath('FunctionFile/Functions.html')));
-      this.fs.copy(this.templatePath('common/TaskPane/TaskPane.html'),
-                   this.destinationPath(this._parseTargetPath('TaskPane/TaskPane.html')));
-      this.fs.copy(this.templatePath('common/TaskPane/TaskPane.js'),
-                   this.destinationPath(this._parseTargetPath('TaskPane/TaskPane.js')));  
+      if (this.genConfig.uiLessCount > 0) {
+        this.fs.copyTpl(this.templatePath('common/FunctionFile/Functions.js'),
+                        this.destinationPath('FunctionFile/Functions.js'),
+                        this.genConfig);
+        this.fs.copy(this.templatePath('common/FunctionFile/Functions.html'),
+                     this.destinationPath(this._parseTargetPath('FunctionFile/Functions.html')));
+      }
+      
+      if (this.genConfig.taskPaneCount > 0) {
+        this.fs.copy(this.templatePath('common/TaskPane/TaskPane.html'),
+                     this.destinationPath(this._parseTargetPath('TaskPane/TaskPane.html')));
+        this.fs.copy(this.templatePath('common/TaskPane/TaskPane.js'),
+                     this.destinationPath(this._parseTargetPath('TaskPane/TaskPane.js')));  
+      }
+      
+      if (this.genConfig.extensionPoints.indexOf('CustomPane') >= 0){
+        this.fs.copy(this.templatePath('common/CustomPane/CustomPane.html'),
+                     this.destinationPath(this._parseTargetPath('CustomPane/CustomPane.html')));
+        this.fs.copy(this.templatePath('common/CustomPane/CustomPane.js'),
+                     this.destinationPath(this._parseTargetPath('CustomPane/CustomPane.js')));
+      }
+      
       this.fs.copy(this.templatePath('common/Images/icon-16.png'),
                    this.destinationPath(this._parseTargetPath('Images/icon-16.png')));
       this.fs.copy(this.templatePath('common/Images/icon-32.png'),
@@ -605,6 +619,35 @@ function buildExtensionPoint(type, config) {
   
   if (type === 'CustomPane') {
     // Build custom pane
+    extPoint.RequestedHeight = 200;
+    extPoint.SourceLocation = {
+      '$': {
+        resid: createUrlResource('customPaneUrl', '',
+          'https://localhost:8443/CustomPane/CustomPane.html', config)
+      }
+    };
+    // Setting standard rule to activate on all messages and appointments
+    extPoint.Rule = {
+      '$': {
+        'xsi:type': 'RuleCollection',
+        Mode: 'Or'
+      },
+      Rule: [
+        {
+          '$': {
+            'xsi:type': 'ItemIs',
+            ItemType: 'Message'
+          }
+        },
+        {
+          '$': {
+            'xsi:type': 'ItemIs',
+            ItemType: 'AppointmentAttendee'
+          }
+        }
+      ]
+    }
+    
   }
   else {
     // Build a command surface
