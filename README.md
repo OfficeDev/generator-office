@@ -92,7 +92,9 @@ You can add the `open` property set to a URL to have your default browser open &
 
 ## Examples
 
-Refer to the [docs](docs) for example executions & output of the generator.## Command Line Options:
+Refer to the [docs](docs) for example executions & output of the generator.
+
+## Command Line Options:
 
 List of supported options. If these are not provided, the generator will prompt you for the values before scaffolding the project.
 
