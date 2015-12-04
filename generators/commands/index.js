@@ -53,9 +53,9 @@ module.exports = generators.Base.extend({
       required: false
     });
     
-    // If commands are passed as an option, it will be a
-    // JSON object with all the details we need
-    // extensionPoint and clients will be ignored
+    // If commands are passed as an option, the caller has specified
+    // custom commands and javascript, so most of the other options
+    // will be ignored.
     this.option('commands', {
       type: String,
       desc: 'A JSON-formatted string defining the commands to add',
@@ -146,6 +146,12 @@ module.exports = generators.Base.extend({
           message: 'Relative path to manifest file:',
           default: 'manifest.xml',
           when: this.options['manifest-file'] === undefined
+        },
+        {
+          name: 'ready-bruh',
+          message: 'Ready bruh?',
+          type: 'confirm',
+          default: true
         }
       ];
       
@@ -207,7 +213,7 @@ module.exports = generators.Base.extend({
         return;
       }
       
-      var availableExtensionPoints = undefined;
+      var availableExtensionPoints;
       
       switch(this.genConfig.type) {
         case 'mail':
@@ -270,58 +276,6 @@ module.exports = generators.Base.extend({
         }.bind(this));
       }
     }, // askForExtensionPoints()
-    
-    /**
-     * ask for CustomPane details
-     */
-    /*
-    askForCustomPane: function() {
-      if (this.genConfig.commands !== undefined ||
-          this.genConfig.type !== 'mail' || 
-          this.genConfig.extensionPoints.indexOf('CustomPane') < 0) {
-        return;
-      }
-      
-      var prompts = [
-        {
-          name: 'requestedHeight',
-          message: 'Requested height in pixels for custom pane',
-          default: 200,
-          filter: function(input) {
-            if (typeof input === 'number') {
-              return input;
-            }
-            return parseInt(input, 10);
-          },
-          validate: function(response) {
-            var numVal = response;
-            if (typeof response !== 'number')
-            {
-              numVal = parseInt(response, 10);
-            }
-            
-            if (isNaN(numVal) || numVal < 32 || numVal > 450) {
-              return 'Please enter a valid integer between 32 and 450'      
-            }
-            return true;
-          } 
-        },
-        {
-          name: 'sourceLocation',
-          message: 'Relative path to source page for custom pane',
-          default: '/CustomPane/CustomPane.html'
-        }
-        // Possible enhancements:
-        // - Add rich rule building prompts here
-        // - Ask for disable entity highlighting
-      ];
-      
-      var done = this.async();
-      this.prompt(prompts, function(responses){
-        this.genConfig = extend(this.genConfig, { customPaneOptions: responses });
-        done();
-      }.bind(this));
-    },  // askForCustomPane() */
     
     /**
      * ask for *CommandSurface details
@@ -470,6 +424,8 @@ module.exports = generators.Base.extend({
           funcFile, this.genConfig);
       }
       
+      this.genConfig.customFuncs = '';
+      
       // Set up control counters
       this.genConfig.customContainerCount = 0;
       this.genConfig.groupCount = 0;
@@ -518,64 +474,89 @@ module.exports = generators.Base.extend({
         manifestJson.OfficeApp = extend(manifestJson.OfficeApp, newNS);
         
         // Create VersionOverrides
-        var overrideNamespace = 'http://schemas.microsoft.com/office/mailappversionoverrides';
         manifestJson.OfficeApp.VersionOverrides = {
           '$': {
-            xmlns: overrideNamespace,
+            xmlns: getOverrideNamespace(yoGenerator.genConfig),
             'xsi:type': 'VersionOverridesV1_0'
           },
         };
         
-        // Build array of Host elements
-        var hosts = [];
-        _.forEach(yoGenerator.genConfig.hosts, function(hostType){
-          // Initialize host
-          var host = {
-            '$': {
-              'xsi:type': hostType
-            }
-          };
+        if (yoGenerator.genConfig.commands !== undefined) {
           
-          // Add form factors
-          _.forEach(yoGenerator.genConfig.formFactors, function(factorType){
-            host[factorType] = buildFormFactor(yoGenerator.genConfig);
+          var commandData = yoGenerator.fs.read(yoGenerator.genConfig.commands.commandFile);
+          
+          // Hack to force function file
+          if (commandData.indexOf('xsi:type="ExecuteFunction"') > -1) {
+            yoGenerator.genConfig.uilessCount = 1;
+          }
+          
+          yoGenerator.genConfig.customFuncs = yoGenerator.fs.read(yoGenerator.genConfig.commands.functionFile);
+          parser.parseString(commandData, function(err, commandJson) {
+            manifestJson.OfficeApp.VersionOverrides.Hosts = commandJson.root.Hosts;
+            manifestJson.OfficeApp.VersionOverrides.Resources = commandJson.root.Resources;
+
+            // convert JSON => XML
+            var xmlBuilder = new Xml2Js.Builder();
+            var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
+            
+            // write updated manifest
+            yoGenerator.fs.write(yoGenerator.destinationPath(manifestFile), updatedManifestXml);
+            
+            done();
+          });
+        }
+        else {
+          // Build array of Host elements
+          var hosts = [];
+          _.forEach(yoGenerator.genConfig.hosts, function(hostType){
+            // Initialize host
+            var host = {
+              '$': {
+                'xsi:type': hostType
+              }
+            };
+            
+            // Add form factors
+            _.forEach(yoGenerator.genConfig.formFactors, function(factorType){
+              host[factorType] = buildFormFactor(yoGenerator.genConfig);
+            });
+            
+            hosts.push(host);
           });
           
-          hosts.push(host);
-        });
-        
-        manifestJson.OfficeApp.VersionOverrides.Hosts = { Host: hosts };
-        
-        // Sort resources by id to make it easier
-        // to find specific resources in the manifest
-        yoGenerator.genConfig.resources.images.sort(function(a,b){
-          return (a['$'].id.localeCompare(b['$'].id));
-        });
-        yoGenerator.genConfig.resources.urls.sort(function(a,b){
-          return (a['$'].id.localeCompare(b['$'].id));
-        });
-        yoGenerator.genConfig.resources.shortStrings.sort(function(a,b){
-          return (a['$'].id.localeCompare(b['$'].id));
-        });
-        yoGenerator.genConfig.resources.longStrings.sort(function(a,b){
-          return (a['$'].id.localeCompare(b['$'].id));
-        });
-        
-        manifestJson.OfficeApp.VersionOverrides.Resources = {
-          'bt:Images': { 'bt:Image': yoGenerator.genConfig.resources.images },
-          'bt:Urls': { 'bt:Url': yoGenerator.genConfig.resources.urls },
-          'bt:ShortStrings': { 'bt:String': yoGenerator.genConfig.resources.shortStrings },
-          'bt:LongStrings': { 'bt:String': yoGenerator.genConfig.resources.longStrings }
-        };
-        
-        // convert JSON => XML
-        var xmlBuilder = new Xml2Js.Builder();
-        var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
-        
-        // write updated manifest
-        yoGenerator.fs.write(yoGenerator.destinationPath(manifestFile), updatedManifestXml);
-        
-        done();
+          manifestJson.OfficeApp.VersionOverrides.Hosts = { Host: hosts };
+          
+          // Sort resources by id to make it easier
+          // to find specific resources in the manifest
+          yoGenerator.genConfig.resources.images.sort(function(a,b){
+            return (a['$'].id.localeCompare(b['$'].id));
+          });
+          yoGenerator.genConfig.resources.urls.sort(function(a,b){
+            return (a['$'].id.localeCompare(b['$'].id));
+          });
+          yoGenerator.genConfig.resources.shortStrings.sort(function(a,b){
+            return (a['$'].id.localeCompare(b['$'].id));
+          });
+          yoGenerator.genConfig.resources.longStrings.sort(function(a,b){
+            return (a['$'].id.localeCompare(b['$'].id));
+          });
+          
+          manifestJson.OfficeApp.VersionOverrides.Resources = {
+            'bt:Images': { 'bt:Image': yoGenerator.genConfig.resources.images },
+            'bt:Urls': { 'bt:Url': yoGenerator.genConfig.resources.urls },
+            'bt:ShortStrings': { 'bt:String': yoGenerator.genConfig.resources.shortStrings },
+            'bt:LongStrings': { 'bt:String': yoGenerator.genConfig.resources.longStrings }
+          };
+          
+          // convert JSON => XML
+          var xmlBuilder = new Xml2Js.Builder();
+          var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
+          
+          // write updated manifest
+          yoGenerator.fs.write(yoGenerator.destinationPath(manifestFile), updatedManifestXml);
+          
+          done();
+        }
       });
     }, // updateManifest();
     
@@ -588,7 +569,7 @@ module.exports = generators.Base.extend({
       }
       
       if (this.genConfig.uilessCount > 0) {
-        this.fs.copyTpl(this.templatePath('common/FunctionFile/Functions.js'),
+        this.fs.copyTpl(this.templatePath('common/FunctionFile/Functions.ejs'),
                         this.destinationPath('FunctionFile/Functions.js'),
                         this.genConfig);
         this.fs.copy(this.templatePath('common/FunctionFile/Functions.html'),
@@ -629,6 +610,18 @@ function commandSurfaceIncluded(extensionPoints) {
           extensionPoints.indexOf('MessageComposeCommandSurface') >= 0 ||
           extensionPoints.indexOf('AppointmentAttendeeCommandSurface') >= 0 ||
           extensionPoints.indexOf('AppointmentOrganizerCommandSurface') >= 0);
+}
+
+function getOverrideNamespace(config) {
+  switch (config.type) {
+    case 'mail':
+      return 'http://schemas.microsoft.com/office/mailappversionoverrides';
+      
+    case 'taskpane':
+    case 'content':
+      return 'NYI';
+  }
+  
 }
 
 /**
@@ -692,8 +685,7 @@ function buildExtensionPoint(type, config) {
           }
         }
       ]
-    }
-    
+    };
   }
   else {
     // Build a command surface
@@ -721,7 +713,7 @@ function buildControlContainer(type, config) {
       break;
     case 'TabCustom': // Custom tab 
       config.customContainerCount++;
-      container.nodeName = 'CustomTab'
+      container.nodeName = 'CustomTab';
       container.node = {
         '$': { id: type + config.customContainerCount },
         Label: { 
@@ -1028,7 +1020,7 @@ function buildTaskPaneButton(config) {
 function createUrlResource(prefix, suffix, value, config) {
   var resid = prefix + suffix;
   if (resid.length > 32) {
-    throw "Invalid resource ID: must be 32 characters or less";
+    throw 'Invalid resource ID: must be 32 characters or less';
   }
   
   config.resources.urls.push({
@@ -1047,7 +1039,7 @@ function createUrlResource(prefix, suffix, value, config) {
 function createImageResource(prefix, suffix, value, config) {
   var resid = prefix + suffix;
   if (resid.length > 32) {
-    throw "Invalid resource ID: must be 32 characters or less";
+    throw 'Invalid resource ID: must be 32 characters or less';
   }
   
   config.resources.images.push({
@@ -1066,7 +1058,7 @@ function createImageResource(prefix, suffix, value, config) {
 function createShortStringResource(prefix, suffix, value, config) {
   var resid = prefix + suffix;
   if (resid.length > 32) {
-    throw "Invalid resource ID: must be 32 characters or less";
+    throw 'Invalid resource ID: must be 32 characters or less';
   }
   
   config.resources.shortStrings.push({
@@ -1085,7 +1077,7 @@ function createShortStringResource(prefix, suffix, value, config) {
 function createLongStringResource(prefix, suffix, value, config) {
   var resid = prefix + suffix;
   if (resid.length > 32) {
-    throw "Invalid resource ID: must be 32 characters or less";
+    throw 'Invalid resource ID: must be 32 characters or less';
   }
   
   config.resources.longStrings.push({

@@ -226,6 +226,20 @@ module.exports = generators.Base.extend({
     this.genConfig.projectInternalName = projectName.toLowerCase().replace(/ /g, '-');
     this.genConfig.projectDisplayName = projectName;
     this.genConfig.rootPath = this.genConfig['root-path'];
+    
+    // Setup custom app commands based on tech
+    // The idea here is to create commands that compliment the existing
+    // sample code so you see how to do 'a thing' in both the old and new way
+    switch (this.genConfig.tech) {
+      case 'html':
+        
+        this.genConfig.commands = {
+          commandFile: this.templatePath('html/commands/overrides.xml'),
+          functionFile: this.templatePath('html/commands/functions.js')
+        };
+        
+        break;
+    }
   }, // configuring()
   
   default: function() {
@@ -236,7 +250,8 @@ module.exports = generators.Base.extend({
         'root-path': this.genConfig['root-path'],
         'manifest-file': 'manifest-' + this.genConfig.projectInternalName + '.xml',
         'manifest-only': this.genConfig.tech === 'manifest-only',
-        extensionPoint: this.genConfig.extensionPoint
+        extensionPoint: this.genConfig.extensionPoint,
+        commands: this.genConfig.commands
       }
     }, {
         local: require.resolve('../commands')
@@ -798,8 +813,8 @@ module.exports = generators.Base.extend({
 
         // create array of selected form types
         var supportedFormTypesJson = [];
-        _.forEach(yoGenerator.genConfig.extensionPoint, function(formType){
-          switch (formType) {
+        _.forEach(yoGenerator.genConfig.extensionPoint, function(extensionType){
+          switch (extensionType) {
             case 'MessageReadCommandSurface':
               supportedFormTypesJson.push({
                 '$': {
