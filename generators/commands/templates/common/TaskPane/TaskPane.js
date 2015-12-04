@@ -1,7 +1,8 @@
-// Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
+// Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
+// See full license at the bottom of this file.
 
 (function () {
-  "use strict";
+  'use strict';
 
   // The Office initialize function must be run each time a new page is loaded
   Office.initialize = function (reason) {

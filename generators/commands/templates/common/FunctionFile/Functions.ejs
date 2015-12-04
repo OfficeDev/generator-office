@@ -1,11 +1,12 @@
-// Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file.
+// Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. 
+// See full license at the bottom of this file.
 
 Office.initialize = function () {
-}
+};
 
 function showMessage(message, icon, event) {
-  Office.context.mailbox.item.notificationMessages.replaceAsync("msg", {
-    type: "informationalMessage",
+  Office.context.mailbox.item.notificationMessages.replaceAsync('msg', {
+    type: 'informationalMessage',
     icon: icon,
     message: message,
     persistent: false
@@ -13,6 +14,10 @@ function showMessage(message, icon, event) {
     event.completed();
   });
 }
+
+<% if (customFuncs !== undefined) { %>
+<%- customFuncs %>
+<% } %>
 
 <% for (var i = 1; i <= uilessCount; i++) { %>
 // This is the function executed by uilessButton<%= i %>
