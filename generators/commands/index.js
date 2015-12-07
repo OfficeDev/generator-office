@@ -413,7 +413,7 @@ module.exports = generators.Base.extend({
       };
       
       // Determine if a function file is needed
-      var needFuncFile = this.genConfig.buttonTypes.indexOf('uiless') >= 0;
+      var needFuncFile = this.genConfig.buttontypes !== undefined &&this.genConfig.buttonTypes.indexOf('uiless') >= 0;
       if (needFuncFile) {
         var funcFile = this.genConfig.functionFileUrl !== undefined ? 
           this.genConfig.functionFileUrl : 
@@ -606,10 +606,13 @@ module.exports = generators.Base.extend({
  */
 function commandSurfaceIncluded(extensionPoints) {
   // Be sure to add applicable command surfaces here
-  return (extensionPoints.indexOf('MessageReadCommandSurface') >= 0 ||
-          extensionPoints.indexOf('MessageComposeCommandSurface') >= 0 ||
-          extensionPoints.indexOf('AppointmentAttendeeCommandSurface') >= 0 ||
-          extensionPoints.indexOf('AppointmentOrganizerCommandSurface') >= 0);
+  if (extensionPoints !== undefined) {
+    return (extensionPoints.indexOf('MessageReadCommandSurface') >= 0 ||
+            extensionPoints.indexOf('MessageComposeCommandSurface') >= 0 ||
+            extensionPoints.indexOf('AppointmentAttendeeCommandSurface') >= 0 ||
+            extensionPoints.indexOf('AppointmentOrganizerCommandSurface') >= 0);
+  }
+  return false;
 }
 
 function getOverrideNamespace(config) {
