@@ -22,12 +22,6 @@ module.exports = generators.Base.extend({
       desc: 'Add-in type (mail, taskpane, content)'
     });
     
-    //this.option('tech', {
-    //  type: String,
-    //  desc: 'Technology to use for the Add-in (html = HTML; ng = Angular)',
-    //  required: false
-    //});
-    
     this.option('manifest-only', {
       type: Boolean,
       desc: 'Set to true to disable creation of sample files.',
@@ -120,26 +114,6 @@ module.exports = generators.Base.extend({
             }
           }
         },
-        // technology used to create the addin (html / angular / etc)
-        /*
-        {
-          name: 'tech',
-          message: 'Technology to use:',
-          type: 'list',
-          when: this.options.tech === undefined,
-          choices: [
-            {
-              name: 'HTML, CSS & JavaScript',
-              value: 'html'
-            }, {
-              name: 'Angular',
-              value: 'ng'
-            }, {
-              name: 'Manifest.xml only (no application source files)',
-              value: 'manifest-only'
-            }]
-        },
-        */
         // Path to the manifest being updated
         {
           name: 'manifest-file',
@@ -492,8 +466,9 @@ module.exports = generators.Base.extend({
           
           yoGenerator.genConfig.customFuncs = yoGenerator.fs.read(yoGenerator.genConfig.commands.functionFile);
           parser.parseString(commandData, function(err, commandJson) {
-            manifestJson.OfficeApp.VersionOverrides.Hosts = commandJson.root.Hosts;
-            manifestJson.OfficeApp.VersionOverrides.Resources = commandJson.root.Resources;
+            var scrubbedCommands = scrubCommandData(commandJson, yoGenerator.genConfig.extensionPoint);
+            manifestJson.OfficeApp.VersionOverrides.Hosts = scrubbedCommands.root.Hosts;
+            manifestJson.OfficeApp.VersionOverrides.Resources = scrubbedCommands.root.Resources;
 
             // convert JSON => XML
             var xmlBuilder = new Xml2Js.Builder();
@@ -570,7 +545,7 @@ module.exports = generators.Base.extend({
       
       if (this.genConfig.uilessCount > 0) {
         this.fs.copyTpl(this.templatePath('common/FunctionFile/Functions.ejs'),
-                        this.destinationPath('FunctionFile/Functions.js'),
+                        this.destinationPath(this._parseTargetPath('FunctionFile/Functions.js')),
                         this.genConfig);
         this.fs.copy(this.templatePath('common/FunctionFile/Functions.html'),
                      this.destinationPath(this._parseTargetPath('FunctionFile/Functions.html')));
@@ -625,6 +600,68 @@ function getOverrideNamespace(config) {
       return 'NYI';
   }
   
+}
+
+/**
+ * Takes custom command data passed by mail generator
+ * and removes unneeded ExtensionPoint elements
+ */
+function scrubCommandData(commandData, extensionPoints) {
+  
+  // First remove any unused extension points
+  _.forEach(commandData.root.Hosts[0].Host[0], function(child, childname) {
+    if (childname.indexOf('FormFactor') > -1) {
+      var newExtensionPoints = [];
+      _.forEach(commandData.root.Hosts[0].Host[0][childname][0].ExtensionPoint, function (extPoint, index){
+        var type = extPoint.$['xsi:type'];
+        if (extensionPoints.indexOf(type) > -1) {
+          newExtensionPoints.push(commandData.root.Hosts[0].Host[0][childname][0].ExtensionPoint[index]);
+        }
+      });
+      commandData.root.Hosts[0].Host[0][childname][0].ExtensionPoint = newExtensionPoints;
+    }
+  });
+  
+  // Next remove any unreferenced resources
+  var newResources = {
+    'bt:Images': { 'bt:Image': [] },
+    'bt:Urls': { 'bt:Url': [] },
+    'bt:ShortStrings': { 'bt:String': [] },
+    'bt:LongStrings': { 'bt:String': [] }
+  };
+  
+  var jsonHost = JSON.stringify(commandData.root.Hosts[0].Host[0]);
+  // Images
+  _.forEach(commandData.root.Resources[0]['bt:Images'][0]['bt:Image'], function(image){
+    if (jsonHost.indexOf(image.$.id) > -1) {
+      newResources['bt:Images']['bt:Image'].push(image);
+    }
+  });
+  
+  // Urls
+  _.forEach(commandData.root.Resources[0]['bt:Urls'][0]['bt:Url'], function(url){
+    if (jsonHost.indexOf(url.$.id) > -1) {
+      newResources['bt:Urls']['bt:Url'].push(url);
+    }
+  });
+  
+  // ShortStrings
+  _.forEach(commandData.root.Resources[0]['bt:ShortStrings'][0]['bt:String'], function(shortString){
+    if (jsonHost.indexOf(shortString.$.id) > -1) {
+      newResources['bt:ShortStrings']['bt:String'].push(shortString);
+    }
+  });
+  
+  // LongStrings
+  _.forEach(commandData.root.Resources[0]['bt:LongStrings'][0]['bt:String'], function(longString){
+    if (jsonHost.indexOf(longString.$.id) > -1) {
+      newResources['bt:LongStrings']['bt:String'].push(longString);
+    }
+  });
+  
+  commandData.root.Resources = newResources;
+  
+  return commandData;
 }
 
 /**

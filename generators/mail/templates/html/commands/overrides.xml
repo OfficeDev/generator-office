@@ -160,6 +160,14 @@
             </Group>
           </OfficeTab>
         </ExtensionPoint>
+        <ExtensionPoint xsi:type="CustomPane">
+          <RequestedHeight>200</RequestedHeight>
+          <SourceLocation resid="customPaneUrl"/>
+          <Rule xsi:type="RuleCollection" Mode="Or">
+            <Rule xsi:type="ItemIs" ItemType="Message"/>
+            <Rule xsi:type="ItemIs" ItemType="AppointmentAttendee"/>
+          </Rule>
+        </ExtensionPoint>
       </DesktopFormFactor>
     </Host>
   </Hosts>
@@ -170,6 +178,7 @@
       <bt:Image id="icon-80" DefaultValue="https://localhost:8443/images/icon-80.png"/>
     </bt:Images>
     <bt:Urls>
+      <bt:Url id="customPaneUrl" DefaultValue="https://localhost:8443/CustomPane/CustomPane.html"/>
       <bt:Url id="funcFile" DefaultValue="https://localhost:8443/FunctionFile/Functions.html"/>
       <bt:Url id="readPaneUrl" DefaultValue="https://localhost:8443/appread/home/home.html"/>
     </bt:Urls>
