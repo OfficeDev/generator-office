@@ -1122,6 +1122,6 @@ describe('office:mail -> office:commands', function () {
       
     }); // describe('technology:ng')
 
-  }); // describe('called with custom command data')
+  }); // describe('called without custom command data')
 
 }); // describe('office:mail -> office:commands')
