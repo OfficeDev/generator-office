@@ -366,7 +366,6 @@ module.exports = generators.Base.extend({
    * save configurations & config project
    */
   configuring: function(){
-    
     // helper function to build path to the file off root path
       this._parseTargetPath = function(file){
         return path.join(this.genConfig['root-path'], file);
@@ -428,6 +427,8 @@ module.exports = generators.Base.extend({
       // make sure manifest exists
       if (!yoGenerator.fs.exists(manifestFile)){
         this.log('Specified manifest "', manifestFile, '" not found. Exiting...');
+        this.genConfig.abort = true;
+        done();
         return;
       }
       
@@ -539,9 +540,11 @@ module.exports = generators.Base.extend({
      * Add supporting files
      */
     addFiles: function() {
-      if (this.genConfig['manifest-only'] === true) {
+      if (this.genConfig['manifest-only'] === true ||
+          this.genConfig.abort === true) {
         return;
       }
+      var done = this.async();
       
       if (this.genConfig.uilessCount > 0) {
         this.fs.copyTpl(this.templatePath('common/FunctionFile/Functions.ejs'),
@@ -571,6 +574,8 @@ module.exports = generators.Base.extend({
                    this.destinationPath(this._parseTargetPath('Images/icon-32.png')));
       this.fs.copy(this.templatePath('common/Images/icon-80.png'),
                    this.destinationPath(this._parseTargetPath('Images/icon-80.png')));
+                   
+      done();
     }
   } // writing()
 });
