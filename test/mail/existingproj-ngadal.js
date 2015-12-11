@@ -52,7 +52,12 @@ describe('office:mail', function () {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
       tech: 'ng-adal',
-      extensionPoint: ['MessageReadCommandSurface', 'MessageComposeCommandSurface', 'AppointmentAttendeeCommandSurface', 'AppointmentOrganizerCommandSurface'],
+      extensionPoint: [
+        'MessageReadCommandSurface', 
+        'MessageComposeCommandSurface', 
+        'AppointmentAttendeeCommandSurface', 
+        'AppointmentOrganizerCommandSurface'
+      ],
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
 
@@ -98,7 +103,9 @@ describe('office:mail', function () {
      */
     describe('technology:ng-adal', function () {
 
-      describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface', function () {
+      describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface, '
+             + 'AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
@@ -107,7 +114,12 @@ describe('office:mail', function () {
           options.appId = '03ad2348-c459-4573-8f7d-0ca44d822e7c';
   
           // set outlook form type
-          options.extensionPoint = ['MessageReadCommandSurface', 'MessageComposeCommandSurface', 'AppointmentAttendeeCommandSurface', 'AppointmentOrganizerCommandSurface'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'MessageComposeCommandSurface', 
+            'AppointmentAttendeeCommandSurface', 
+            'AppointmentOrganizerCommandSurface'
+          ];
 
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
@@ -454,9 +466,13 @@ describe('office:mail', function () {
 
         }); // describe('gulpfile.js contents')
 
-      }); // describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface')
+      }); // describe('Outlook extension points:MessageReadCommandSurface, 
+          // MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, 
+          // AppointmentOrganizerCommandSurface')
       
-      describe('Outlook extension points:MessageReadCommandSurface, AppointmentAttendeeCommandSurface', function () {
+      describe('Outlook extension points:MessageReadCommandSurface, '
+             + 'AppointmentAttendeeCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
@@ -465,7 +481,10 @@ describe('office:mail', function () {
           options.appId = '03ad2348-c459-4573-8f7d-0ca44d822e7c';
   
           // set outlook form type
-          options.extensionPoint = ['MessageReadCommandSurface', 'AppointmentAttendeeCommandSurface'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'AppointmentAttendeeCommandSurface'
+          ];
 
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
@@ -629,9 +648,12 @@ describe('office:mail', function () {
 
         }); // describe('manifest.xml contents')
   
-      }); // describe('Outlook extension points:MessageReadCommandSurface, AppointmentAttendeeCommandSurface')
+      }); // describe('Outlook extension points:MessageReadCommandSurface, 
+          // AppointmentAttendeeCommandSurface')
       
-      describe('Outlook extension points:MessageComposeCommandSurface, AppointmentOrganizerCommandSurface', function () {
+      describe('Outlook extension points:MessageComposeCommandSurface, '
+             + 'AppointmentOrganizerCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
@@ -640,7 +662,10 @@ describe('office:mail', function () {
           options.appId = '03ad2348-c459-4573-8f7d-0ca44d822e7c';
   
           // set outlook form type
-          options.extensionPoint = ['MessageComposeCommandSurface', 'AppointmentOrganizerCommandSurface'];
+          options.extensionPoint = [
+            'MessageComposeCommandSurface', 
+            'AppointmentOrganizerCommandSurface'
+          ];
 
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
@@ -804,7 +829,8 @@ describe('office:mail', function () {
 
         }); // describe('manifest-*.xml contents')
   
-      }); // describe('Outlook extension points:MessageComposeCommandSurface, AppointmentOrganizerCommandSurface')
+      }); // describe('Outlook extension points:MessageComposeCommandSurface, 
+          // AppointmentOrganizerCommandSurface')
 
     }); // describe('technology:ng')
 

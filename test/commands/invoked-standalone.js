@@ -23,7 +23,6 @@ var prompts = {};
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
 describe('office:commands', function () {
-  this.timeout(15000);
   var projectDisplayName = 'My Office Commands';
   var projectEscapedName = 'my-office-commands';
   var manifestFileName = 'manifest-' + projectEscapedName + '.xml';
@@ -80,19 +79,27 @@ describe('office:commands', function () {
           addinRootPath + '/images/icon-80.png',
           addinRootPath + '/taskpane/taskpane.html',
           addinRootPath + '/taskpane/taskpane.js'
-        ]
+        ];
         
         assert.noFile(unexpected);
         done();
       });
     }); // describe('Called with non-existent manifest')
         
-    describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface, CustomPane', function () {
+    describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface, '
+           + 'AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface, CustomPane', 
+    function () {
     
       beforeEach(function (done) {
 
         // set extension points
-        options.extensionPoint = ['MessageReadCommandSurface', 'MessageComposeCommandSurface', 'AppointmentAttendeeCommandSurface', 'AppointmentOrganizerCommandSurface', 'CustomPane'];
+        options.extensionPoint = [
+          'MessageReadCommandSurface', 
+          'MessageComposeCommandSurface', 
+          'AppointmentAttendeeCommandSurface', 
+          'AppointmentOrganizerCommandSurface', 
+          'CustomPane'
+        ];
         
         prompts.buttonTypes = ['uiless', 'menu', 'taskpane'];
         prompts.commandContainers = ['TabDefault', 'TabCustom'];
@@ -153,7 +160,8 @@ describe('office:commands', function () {
         */
         it('has valid VersionOverrides', function(done) {
           expect(manifest.OfficeApp).to.have.property('VersionOverrides').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with.property('xmlns').equal('http://schemas.microsoft.com/office/mailappversionoverrides');
+          expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with
+            .property('xmlns').equal('http://schemas.microsoft.com/office/mailappversionoverrides');
           done();
         });
         
@@ -163,8 +171,10 @@ describe('office:commands', function () {
         */
         it('has MailHost Host entry', function(done) {
           expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Hosts').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have.property('Host').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have.property('$').with.property('xsi:type').equal('MailHost');
+          expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have.property('Host')
+            .with.length(1);
+          expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have.property('$')
+            .with.property('xsi:type').equal('MailHost');
           done();
         });
         
@@ -174,11 +184,13 @@ describe('office:commands', function () {
         it('has MessageReadCommandSurface', function(done) {
           var found = false;
           
-          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+            .ExtensionPoint, function(extPoint) {
             if(extPoint.$['xsi:type'] === 'MessageReadCommandSurface') {
               found = true;
               // Validate tabs are present
-              expect(extPoint, 'MessageReadCommandSurface has default tab').to.have.deep.property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
+              expect(extPoint, 'MessageReadCommandSurface has default tab').to.have.deep
+                .property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
               expect(extPoint, 'MessageReadCommandSurface has custom tab').to.have.deep.property('CustomTab[0]');
               
               var hasUiless = false;
@@ -200,13 +212,13 @@ describe('office:commands', function () {
               });
               
               // Validate tabs have a uiless button
-              expect(hasUiless, "Default tab has uiless button").to.be.true;
+              expect(hasUiless, 'Default tab has uiless button').to.be.true;
               
               // Validate tabs have a menu button
-              expect(hasMenu, "Default tab has menu button").to.be.true;
+              expect(hasMenu, 'Default tab has menu button').to.be.true;
               
               // Validate tabs have a taskpane button
-              expect(hasTaskpane, "Default tab has taskpane button").to.be.true;
+              expect(hasTaskpane, 'Default tab has taskpane button').to.be.true;
               
               hasUiless = false;
               hasMenu = false;
@@ -227,13 +239,13 @@ describe('office:commands', function () {
               });
               
               // Validate tabs have a uiless button
-              expect(hasUiless, "Custom tab has uiless button").to.be.true;
+              expect(hasUiless, 'Custom tab has uiless button').to.be.true;
               
               // Validate tabs have a menu button
-              expect(hasMenu, "Custom tab has menu button").to.be.true;
+              expect(hasMenu, 'Custom tab has menu button').to.be.true;
               
               // Validate tabs have a taskpane button
-              expect(hasTaskpane, "Custom tab has taskpane button").to.be.true;
+              expect(hasTaskpane, 'Custom tab has taskpane button').to.be.true;
             }
           });
           expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists').to.be.true;
@@ -246,12 +258,14 @@ describe('office:commands', function () {
         it('has MessageComposeCommandSurface', function(done) {
           var found = false;
           
-          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+            .ExtensionPoint, function(extPoint) {
             if(extPoint.$['xsi:type'] === 'MessageComposeCommandSurface') {
               found = true;
               
               // Validate tabs are present
-              expect(extPoint, 'MessageComposeCommandSurface has default tab').to.have.deep.property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
+              expect(extPoint, 'MessageComposeCommandSurface has default tab').to.have.deep.
+                property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
               expect(extPoint, 'MessageComposeCommandSurface has custom tab').to.have.deep.property('CustomTab[0]');
               
               var hasUiless = false;
@@ -273,13 +287,13 @@ describe('office:commands', function () {
               });
               
               // Validate tabs have a uiless button
-              expect(hasUiless, "Default tab has uiless button").to.be.true;
+              expect(hasUiless, 'Default tab has uiless button').to.be.true;
               
               // Validate tabs have a menu button
-              expect(hasMenu, "Default tab has menu button").to.be.true;
+              expect(hasMenu, 'Default tab has menu button').to.be.true;
               
               // Validate tabs have a taskpane button
-              expect(hasTaskpane, "Default tab has taskpane button").to.be.true;
+              expect(hasTaskpane, 'Default tab has taskpane button').to.be.true;
               
               hasUiless = false;
               hasMenu = false;
@@ -300,13 +314,13 @@ describe('office:commands', function () {
               });
               
               // Validate tabs have a uiless button
-              expect(hasUiless, "Custom tab has uiless button").to.be.true;
+              expect(hasUiless, 'Custom tab has uiless button').to.be.true;
               
               // Validate tabs have a menu button
-              expect(hasMenu, "Custom tab has menu button").to.be.true;
+              expect(hasMenu, 'Custom tab has menu button').to.be.true;
               
               // Validate tabs have a taskpane button
-              expect(hasTaskpane, "Custom tab has taskpane button").to.be.true;
+              expect(hasTaskpane, 'Custom tab has taskpane button').to.be.true;
             }
           });
           expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists').to.be.true;
@@ -319,13 +333,16 @@ describe('office:commands', function () {
         it('has AppointmentAttendeeCommandSurface', function(done) {
           var found = false;
           
-          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+            .ExtensionPoint, function(extPoint) {
             if(extPoint.$['xsi:type'] === 'AppointmentAttendeeCommandSurface') {
               found = true;
               
               // Validate tabs are present
-              expect(extPoint, 'AppointmentAttendeeCommandSurface has default tab').to.have.deep.property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
-              expect(extPoint, 'AppointmentAttendeeCommandSurface has custom tab').to.have.deep.property('CustomTab[0]');
+              expect(extPoint, 'AppointmentAttendeeCommandSurface has default tab')
+                .to.have.deep.property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
+              expect(extPoint, 'AppointmentAttendeeCommandSurface has custom tab')
+                .to.have.deep.property('CustomTab[0]');
               
               var hasUiless = false;
               var hasMenu = false;
@@ -346,13 +363,13 @@ describe('office:commands', function () {
               });
               
               // Validate tabs have a uiless button
-              expect(hasUiless, "Default tab has uiless button").to.be.true;
+              expect(hasUiless, 'Default tab has uiless button').to.be.true;
               
               // Validate tabs have a menu button
-              expect(hasMenu, "Default tab has menu button").to.be.true;
+              expect(hasMenu, 'Default tab has menu button').to.be.true;
               
               // Validate tabs have a taskpane button
-              expect(hasTaskpane, "Default tab has taskpane button").to.be.true;
+              expect(hasTaskpane, 'Default tab has taskpane button').to.be.true;
               
               hasUiless = false;
               hasMenu = false;
@@ -373,13 +390,13 @@ describe('office:commands', function () {
               });
               
               // Validate tabs have a uiless button
-              expect(hasUiless, "Custom tab has uiless button").to.be.true;
+              expect(hasUiless, 'Custom tab has uiless button').to.be.true;
               
               // Validate tabs have a menu button
-              expect(hasMenu, "Custom tab has menu button").to.be.true;
+              expect(hasMenu, 'Custom tab has menu button').to.be.true;
               
               // Validate tabs have a taskpane button
-              expect(hasTaskpane, "Custom tab has taskpane button").to.be.true;
+              expect(hasTaskpane, 'Custom tab has taskpane button').to.be.true;
             }
           });
           expect(found, '<ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface"> exists').to.be.true;
@@ -392,13 +409,16 @@ describe('office:commands', function () {
         it('has AppointmentOrganizerCommandSurface', function(done) {
           var found = false;
           
-          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+            .ExtensionPoint, function(extPoint) {
             if(extPoint.$['xsi:type'] === 'AppointmentOrganizerCommandSurface') {
               found = true;
               
               // Validate tabs are present
-              expect(extPoint, 'AppointmentOrganizerCommandSurface has default tab').to.have.deep.property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
-              expect(extPoint, 'AppointmentOrganizerCommandSurface has custom tab').to.have.deep.property('CustomTab[0]');
+              expect(extPoint, 'AppointmentOrganizerCommandSurface has default tab')
+                .to.have.deep.property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
+              expect(extPoint, 'AppointmentOrganizerCommandSurface has custom tab')
+                .to.have.deep.property('CustomTab[0]');
               
               var hasUiless = false;
               var hasMenu = false;
@@ -419,13 +439,13 @@ describe('office:commands', function () {
               });
               
               // Validate tabs have a uiless button
-              expect(hasUiless, "Default tab has uiless button").to.be.true;
+              expect(hasUiless, 'Default tab has uiless button').to.be.true;
               
               // Validate tabs have a menu button
-              expect(hasMenu, "Default tab has menu button").to.be.true;
+              expect(hasMenu, 'Default tab has menu button').to.be.true;
               
               // Validate tabs have a taskpane button
-              expect(hasTaskpane, "Default tab has taskpane button").to.be.true;
+              expect(hasTaskpane, 'Default tab has taskpane button').to.be.true;
               
               hasUiless = false;
               hasMenu = false;
@@ -446,13 +466,13 @@ describe('office:commands', function () {
               });
               
               // Validate tabs have a uiless button
-              expect(hasUiless, "Custom tab has uiless button").to.be.true;
+              expect(hasUiless, 'Custom tab has uiless button').to.be.true;
               
               // Validate tabs have a menu button
-              expect(hasMenu, "Custom tab has menu button").to.be.true;
+              expect(hasMenu, 'Custom tab has menu button').to.be.true;
               
               // Validate tabs have a taskpane button
-              expect(hasTaskpane, "Custom tab has taskpane button").to.be.true;
+              expect(hasTaskpane, 'Custom tab has taskpane button').to.be.true;
             }
           });
           expect(found, '<ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface"> exists').to.be.true;
@@ -465,7 +485,8 @@ describe('office:commands', function () {
         it('has CustomPane', function(done) {
           var found = false;
           
-          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+            .ExtensionPoint, function(extPoint) {
             if(extPoint.$['xsi:type'] === 'CustomPane') {
               found = true;
             }
@@ -480,23 +501,33 @@ describe('office:commands', function () {
         */
         it('has valid Resources', function(done) {
           expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Images').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Urls').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:ShortStrings').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:LongStrings').with.length(1);
+          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+            .property('bt:Images').with.length(1);
+          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+            .property('bt:Urls').with.length(1);
+          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+            .property('bt:ShortStrings').with.length(1);
+          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+            .property('bt:LongStrings').with.length(1);
           done();
         });
         
       }); // describe('manifest-*.xml contents')
     
-    }); // describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface, CustomPane')
+    }); // describe('Outlook extension points: MessageReadCommandSurface, 
+        // MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, 
+        // AppointmentOrganizerCommandSurface, CustomPane')
     
-    describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface', function () {
+    describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface', 
+    function () {
     
       beforeEach(function (done) {
 
         // set extension points
-        options.extensionPoint = ['MessageReadCommandSurface', 'MessageComposeCommandSurface'];
+        options.extensionPoint = [
+          'MessageReadCommandSurface', 
+          'MessageComposeCommandSurface'
+        ];
         
         prompts.buttonTypes = ['uiless', 'menu'];
         prompts.commandContainers = ['TabDefault'];
@@ -533,7 +564,7 @@ describe('office:commands', function () {
           addinRootPath + '/taskpane/taskpane.js',
           addinRootPath + '/custompane/custompane.html',
           addinRootPath + '/custompane/custompane.js'
-        ]
+        ];
         
         assert.noFile(unexpected);
         done();
@@ -562,7 +593,8 @@ describe('office:commands', function () {
         */
         it('has valid VersionOverrides', function(done) {
           expect(manifest.OfficeApp).to.have.property('VersionOverrides').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with.property('xmlns').equal('http://schemas.microsoft.com/office/mailappversionoverrides');
+          expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with
+            .property('xmlns').equal('http://schemas.microsoft.com/office/mailappversionoverrides');
           done();
         });
         
@@ -573,7 +605,8 @@ describe('office:commands', function () {
         it('has MailHost Host entry', function(done) {
           expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Hosts').with.length(1);
           expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have.property('Host').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have.property('$').with.property('xsi:type').equal('MailHost');
+          expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have.property('$')
+            .with.property('xsi:type').equal('MailHost');
           done();
         });
         
@@ -583,12 +616,14 @@ describe('office:commands', function () {
         it('has MessageReadCommandSurface', function(done) {
           var found = false;
           
-          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+            .ExtensionPoint, function(extPoint) {
             if(extPoint.$['xsi:type'] === 'MessageReadCommandSurface') {
               found = true;
               
               // Validate tabs are present
-              expect(extPoint, 'MessageReadCommandSurface has default tab').to.have.deep.property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
+              expect(extPoint, 'MessageReadCommandSurface has default tab').to.have.deep
+                .property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
               expect(extPoint, 'MessageReadCommandSurface has custom tab').to.not.have.deep.property('CustomTab[0]');
               
               var hasUiless = false;
@@ -610,13 +645,13 @@ describe('office:commands', function () {
               });
               
               // Validate tabs have a uiless button
-              expect(hasUiless, "Default tab has uiless button").to.be.true;
+              expect(hasUiless, 'Default tab has uiless button').to.be.true;
               
               // Validate tabs have a menu button
-              expect(hasMenu, "Default tab has menu button").to.be.true;
+              expect(hasMenu, 'Default tab has menu button').to.be.true;
               
               // Validate tabs have a taskpane button
-              expect(hasTaskpane, "Default tab has taskpane button").to.be.false;
+              expect(hasTaskpane, 'Default tab has taskpane button').to.be.false;
             }
           });
           expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists').to.be.true;
@@ -629,12 +664,14 @@ describe('office:commands', function () {
         it('has MessageComposeCommandSurface', function(done) {
           var found = false;
           
-          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+            .ExtensionPoint, function(extPoint) {
             if(extPoint.$['xsi:type'] === 'MessageComposeCommandSurface') {
               found = true;
               
               // Validate tabs are present
-              expect(extPoint, 'MessageComposeCommandSurface has default tab').to.have.deep.property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
+              expect(extPoint, 'MessageComposeCommandSurface has default tab').to.have.deep
+                .property('OfficeTab[0]').with.property('$').with.property('id').equal('TabDefault');
               expect(extPoint, 'MessageComposeCommandSurface has custom tab').to.not.have.deep.property('CustomTab[0]');
               
               var hasUiless = false;
@@ -656,13 +693,13 @@ describe('office:commands', function () {
               });
               
               // Validate tabs have a uiless button
-              expect(hasUiless, "Default tab has uiless button").to.be.true;
+              expect(hasUiless, 'Default tab has uiless button').to.be.true;
               
               // Validate tabs have a menu button
-              expect(hasMenu, "Default tab has menu button").to.be.true;
+              expect(hasMenu, 'Default tab has menu button').to.be.true;
               
               // Validate tabs have a taskpane button
-              expect(hasTaskpane, "Default tab has taskpane button").to.be.false;
+              expect(hasTaskpane, 'Default tab has taskpane button').to.be.false;
             }
           });
           expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists').to.be.true;
@@ -675,7 +712,8 @@ describe('office:commands', function () {
         it('has AppointmentAttendeeCommandSurface', function(done) {
           var found = false;
           
-          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+            .ExtensionPoint, function(extPoint) {
             if(extPoint.$['xsi:type'] === 'AppointmentAttendeeCommandSurface') {
               found = true;
             }
@@ -690,7 +728,8 @@ describe('office:commands', function () {
         it('has AppointmentOrganizerCommandSurface', function(done) {
           var found = false;
           
-          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+            .ExtensionPoint, function(extPoint) {
             if(extPoint.$['xsi:type'] === 'AppointmentOrganizerCommandSurface') {
               found = true;
             }
@@ -705,7 +744,8 @@ describe('office:commands', function () {
         it('has CustomPane', function(done) {
           var found = false;
           
-          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+          _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+            .ExtensionPoint, function(extPoint) {
             if(extPoint.$['xsi:type'] === 'CustomPane') {
               found = true;
             }
@@ -720,16 +760,21 @@ describe('office:commands', function () {
         */
         it('has valid Resources', function(done) {
           expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Images').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Urls').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:ShortStrings').with.length(1);
-          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:LongStrings').with.length(1);
+          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+            .property('bt:Images').with.length(1);
+          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+            .property('bt:Urls').with.length(1);
+          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+            .property('bt:ShortStrings').with.length(1);
+          expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+            .property('bt:LongStrings').with.length(1);
           done();
         });
         
       }); // describe('manifest-*.xml contents')
     
-    }); // describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface')
+    }); // describe('Outlook extension points: MessageReadCommandSurface, 
+        // MessageComposeCommandSurface')
       
   }); // describe('Outlook add-in')
 

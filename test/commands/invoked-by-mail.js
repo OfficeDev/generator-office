@@ -52,14 +52,22 @@ describe('office:mail -> office:commands', function () {
      */
     describe('addin technology:html', function () {
       
-      describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface, CustomPane', function () {
+      describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface,' 
+             + 'AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface, CustomPane', 
+      function () {
       
         beforeEach(function (done) {
           // set language to html
           options.tech = 'html';
   
           // set extension points
-          options.extensionPoint = ['MessageReadCommandSurface', 'MessageComposeCommandSurface', 'AppointmentAttendeeCommandSurface', 'AppointmentOrganizerCommandSurface', 'CustomPane'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'MessageComposeCommandSurface', 
+            'AppointmentAttendeeCommandSurface', 
+            'AppointmentOrganizerCommandSurface', 
+            'CustomPane'
+          ];
   
           // run the generator
           helpers.run(path.join(__dirname, '../../generators/mail'))
@@ -111,7 +119,9 @@ describe('office:mail -> office:commands', function () {
           */
           it('has valid VersionOverrides', function(done) {
             expect(manifest.OfficeApp).to.have.property('VersionOverrides').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with.property('xmlns').equal('http://schemas.microsoft.com/office/mailappversionoverrides');
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with
+              .property('xmlns').equal(
+                'http://schemas.microsoft.com/office/mailappversionoverrides');
             done();
           });
           
@@ -121,8 +131,10 @@ describe('office:mail -> office:commands', function () {
           */
           it('has MailHost Host entry', function(done) {
             expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Hosts').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have.property('Host').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have.property('$').with.property('xsi:type').equal('MailHost');
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have.property('Host')
+              .with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have.property('$')
+              .with.property('xsi:type').equal('MailHost'); 
             done();
           });
           
@@ -132,7 +144,8 @@ describe('office:mail -> office:commands', function () {
           it('has MessageReadCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageReadCommandSurface') {
                 found = true;
               }
@@ -147,7 +160,8 @@ describe('office:mail -> office:commands', function () {
           it('has MessageComposeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageComposeCommandSurface') {
                 found = true;
               }
@@ -162,7 +176,8 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentAttendeeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentAttendeeCommandSurface') {
                 found = true;
               }
@@ -177,7 +192,8 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentOrganizerCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentOrganizerCommandSurface') {
                 found = true;
               }
@@ -192,7 +208,8 @@ describe('office:mail -> office:commands', function () {
           it('has CustomPane', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'CustomPane') {
                 found = true;
               }
@@ -206,26 +223,37 @@ describe('office:mail -> office:commands', function () {
           * child nodes
           */
           it('has valid Resources', function(done) {
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Images').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Urls').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:ShortStrings').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:LongStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources')
+              .with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property
+              ('bt:Images').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property
+              ('bt:Urls').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property
+              ('bt:ShortStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property
+              ('bt:LongStrings').with.length(1);
             done();
           });
           
         }); // describe('manifest-*.xml contents')
       
-      }); // describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface, CustomPane')
+      }); // describe('Outlook extension points: MessageReadCommandSurface, 
+          // MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, 
+          // AppointmentOrganizerCommandSurface, CustomPane')
       
-      describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface', function () {
+      describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface', 
+      function () {
       
         beforeEach(function (done) {
           // set language to html
           options.tech = 'html';
   
           // set extension points
-          options.extensionPoint = ['MessageReadCommandSurface', 'MessageComposeCommandSurface'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'MessageComposeCommandSurface'
+          ];
   
           // run the generator
           helpers.run(path.join(__dirname, '../../generators/mail'))
@@ -253,7 +281,7 @@ describe('office:mail -> office:commands', function () {
           var unexpected = [
             addinRootPath + '/custompane/custompane.html',
             addinRootPath + '/custompane/custompane.js'
-          ]
+          ];
           
           assert.noFile(unexpected);
           done();
@@ -282,7 +310,9 @@ describe('office:mail -> office:commands', function () {
           */
           it('has valid VersionOverrides', function(done) {
             expect(manifest.OfficeApp).to.have.property('VersionOverrides').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with.property('xmlns').equal('http://schemas.microsoft.com/office/mailappversionoverrides');
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with
+              .property('xmlns').equal(
+                'http://schemas.microsoft.com/office/mailappversionoverrides');
             done();
           });
           
@@ -292,8 +322,10 @@ describe('office:mail -> office:commands', function () {
           */
           it('has MailHost Host entry', function(done) {
             expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Hosts').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have.property('Host').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have.property('$').with.property('xsi:type').equal('MailHost');
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have
+              .property('Host').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have
+              .property('$').with.property('xsi:type').equal('MailHost');
             done();
           });
           
@@ -303,12 +335,14 @@ describe('office:mail -> office:commands', function () {
           it('has MessageReadCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageReadCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists').to.be.true;
+            expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists')
+              .to.be.true;
             done();
           });
           
@@ -318,12 +352,14 @@ describe('office:mail -> office:commands', function () {
           it('has MessageComposeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageComposeCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists').to.be.true;
+            expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists')
+              .to.be.true;
             done();
           });
           
@@ -333,12 +369,14 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentAttendeeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentAttendeeCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface"> exists').to.be.false;
+            expect(found, '<ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface"> exists')
+              .to.be.false;
             done();
           });
           
@@ -348,12 +386,14 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentOrganizerCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentOrganizerCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface"> exists').to.be.false;
+            expect(found, '<ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface"> exists')
+              .to.be.false;
             done();
           });
           
@@ -363,7 +403,8 @@ describe('office:mail -> office:commands', function () {
           it('has CustomPane', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'CustomPane') {
                 found = true;
               }
@@ -377,17 +418,23 @@ describe('office:mail -> office:commands', function () {
           * child nodes
           */
           it('has valid Resources', function(done) {
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Images').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Urls').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:ShortStrings').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:LongStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources')
+              .with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:Images').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:Urls').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:ShortStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:LongStrings').with.length(1);
             done();
           });
           
         }); // describe('manifest-*.xml contents')
       
-      }); // describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface')
+      }); // describe('Outlook extension points: MessageReadCommandSurface, 
+          // MessageComposeCommandSurface')
       
     }); // describe('technology:html')
 
@@ -405,19 +452,27 @@ describe('office:mail -> office:commands', function () {
     });
 
     /**
-     * Set technology = ng, the mail ng template doesn't 
+     * Set technology = ng, the mail ng template doesn't
      * pass custom command data
      */
     describe('addin technology:ng', function () {
       
-      describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface, CustomPane', function () {
+      describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface,' 
+            +  'AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface, CustomPane', 
+      function () {
         
         beforeEach(function (done) {
           // set language to ng
           options.tech = 'ng';
   
           // set extension points
-          options.extensionPoint = ['MessageReadCommandSurface', 'MessageComposeCommandSurface', 'AppointmentAttendeeCommandSurface', 'AppointmentOrganizerCommandSurface', 'CustomPane'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'MessageComposeCommandSurface', 
+            'AppointmentAttendeeCommandSurface', 
+            'AppointmentOrganizerCommandSurface', 
+            'CustomPane'
+          ];
           
           // set tabs
           prompts.commandContainers = ['TabDefault'];
@@ -476,7 +531,9 @@ describe('office:mail -> office:commands', function () {
            */
           it('has valid VersionOverrides', function(done) {
             expect(manifest.OfficeApp).to.have.property('VersionOverrides').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with.property('xmlns').equal('http://schemas.microsoft.com/office/mailappversionoverrides');
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with
+              .property('xmlns').equal(
+                'http://schemas.microsoft.com/office/mailappversionoverrides');
             done();
           });
           
@@ -486,8 +543,10 @@ describe('office:mail -> office:commands', function () {
            */
           it('has MailHost Host entry', function(done) {
             expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Hosts').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have.property('Host').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have.property('$').with.property('xsi:type').equal('MailHost');
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have
+              .property('Host').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have
+              .property('$').with.property('xsi:type').equal('MailHost');
             done();
           });
           
@@ -497,12 +556,14 @@ describe('office:mail -> office:commands', function () {
           it('has MessageReadCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageReadCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists').to.be.true;
+            expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists')
+              .to.be.true;
             done();
           });
           
@@ -512,12 +573,14 @@ describe('office:mail -> office:commands', function () {
           it('has MessageComposeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageComposeCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists').to.be.true;
+            expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists')
+              .to.be.true;
             done();
           });
           
@@ -527,12 +590,14 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentAttendeeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentAttendeeCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface"> exists').to.be.true;
+            expect(found, '<ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface"> exists')
+              .to.be.true;
             done();
           });
           
@@ -542,12 +607,14 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentOrganizerCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentOrganizerCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface"> exists').to.be.true;
+            expect(found, '<ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface"> exists')
+              .to.be.true;
             done();
           });
           
@@ -557,7 +624,8 @@ describe('office:mail -> office:commands', function () {
           it('has CustomPane', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'CustomPane') {
                 found = true;
               }
@@ -571,26 +639,38 @@ describe('office:mail -> office:commands', function () {
            * child nodes
            */
           it('has valid Resources', function(done) {
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Images').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Urls').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:ShortStrings').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:LongStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources')
+              .with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:Images').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:Urls').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:ShortStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:LongStrings').with.length(1);
             done();
           });
           
         }); // describe('manifest-*.xml contents')
         
-      }); // describe('Outlook extension points: MessageReadCommandSurface, MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface, CustomPane')
+      }); // describe('Outlook extension points: MessageReadCommandSurface, 
+          // MessageComposeCommandSurface, AppointmentAttendeeCommandSurface,
+          // AppointmentOrganizerCommandSurface, CustomPane')
       
-      describe('Outlook extension points: MessageReadCommandSurface, AppointmentAttendeeCommandSurface', function () {
+      describe('Outlook extension points: MessageReadCommandSurface, '
+             + 'AppointmentAttendeeCommandSurface', 
+      function () {
         
         beforeEach(function (done) {
           // set language to ng
           options.tech = 'ng';
   
           // set extension points
-          options.extensionPoint = ['MessageReadCommandSurface', 'AppointmentAttendeeCommandSurface'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'AppointmentAttendeeCommandSurface'
+          ];
           
           // set tabs
           prompts.commandContainers = ['TabDefault'];
@@ -626,7 +706,7 @@ describe('office:mail -> office:commands', function () {
             addinRootPath + '/custompane/custompane.js',
             addinRootPath + '/taskpane/taskpane.html',
             addinRootPath + '/taskpane/taskpane.js'
-          ]
+          ];
           
           assert.noFile(unexpected);
           done();
@@ -655,7 +735,9 @@ describe('office:mail -> office:commands', function () {
            */
           it('has valid VersionOverrides', function(done) {
             expect(manifest.OfficeApp).to.have.property('VersionOverrides').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with.property('xmlns').equal('http://schemas.microsoft.com/office/mailappversionoverrides');
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with
+              .property('xmlns').equal(
+                'http://schemas.microsoft.com/office/mailappversionoverrides');
             done();
           });
           
@@ -665,8 +747,10 @@ describe('office:mail -> office:commands', function () {
            */
           it('has MailHost Host entry', function(done) {
             expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Hosts').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have.property('Host').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have.property('$').with.property('xsi:type').equal('MailHost');
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have
+              .property('Host').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have
+              .property('$').with.property('xsi:type').equal('MailHost');
             done();
           });
           
@@ -676,12 +760,14 @@ describe('office:mail -> office:commands', function () {
           it('has MessageReadCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageReadCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists').to.be.true;
+            expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists')
+              .to.be.true;
             done();
           });
           
@@ -691,12 +777,14 @@ describe('office:mail -> office:commands', function () {
           it('has MessageComposeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageComposeCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists').to.be.false;
+            expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists')
+              .to.be.false;
             done();
           });
           
@@ -706,12 +794,14 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentAttendeeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentAttendeeCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface"> exists').to.be.true;
+            expect(found, '<ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface"> exists')
+              .to.be.true;
             done();
           });
           
@@ -721,12 +811,14 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentOrganizerCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentOrganizerCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface"> exists').to.be.false;
+            expect(found, '<ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface"> exists')
+              .to.be.false;
             done();
           });
           
@@ -736,7 +828,8 @@ describe('office:mail -> office:commands', function () {
           it('has CustomPane', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'CustomPane') {
                 found = true;
               }
@@ -750,26 +843,37 @@ describe('office:mail -> office:commands', function () {
            * child nodes
            */
           it('has valid Resources', function(done) {
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Images').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Urls').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:ShortStrings').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:LongStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources')
+              .with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:Images').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:Urls').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:ShortStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:LongStrings').with.length(1);
             done();
           });
           
         }); // describe('manifest-*.xml contents')
         
-      }); // describe('Outlook extension points: MessageReadCommandSurface, AppointmentAttendeeCommandSurface')
+      }); // describe('Outlook extension points: MessageReadCommandSurface, 
+          // AppointmentAttendeeCommandSurface')
       
-      describe('Outlook extension points: MessageComposeCommandSurface, AppointmentOrganizerCommandSurface', function () {
+      describe('Outlook extension points: MessageComposeCommandSurface, '
+             + 'AppointmentOrganizerCommandSurface', 
+      function () {
         
         beforeEach(function (done) {
           // set language to ng
           options.tech = 'ng';
   
           // set extension points
-          options.extensionPoint = ['MessageComposeCommandSurface', 'AppointmentOrganizerCommandSurface'];
+          options.extensionPoint = [
+            'MessageComposeCommandSurface', 
+            'AppointmentOrganizerCommandSurface'
+          ];
           
           // set tabs
           prompts.commandContainers = ['TabDefault'];
@@ -805,7 +909,7 @@ describe('office:mail -> office:commands', function () {
           var unexpected = [
             addinRootPath + '/custompane/custompane.html',
             addinRootPath + '/custompane/custompane.js'
-          ]
+          ];
           
           assert.noFile(unexpected);
           done();
@@ -834,7 +938,9 @@ describe('office:mail -> office:commands', function () {
            */
           it('has valid VersionOverrides', function(done) {
             expect(manifest.OfficeApp).to.have.property('VersionOverrides').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with.property('xmlns').equal('http://schemas.microsoft.com/office/mailappversionoverrides');
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with
+              .property('xmlns').equal(
+                'http://schemas.microsoft.com/office/mailappversionoverrides');
             done();
           });
           
@@ -844,8 +950,10 @@ describe('office:mail -> office:commands', function () {
            */
           it('has MailHost Host entry', function(done) {
             expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Hosts').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have.property('Host').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have.property('$').with.property('xsi:type').equal('MailHost');
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have
+              .property('Host').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have
+              .property('$').with.property('xsi:type').equal('MailHost');
             done();
           });
           
@@ -855,12 +963,14 @@ describe('office:mail -> office:commands', function () {
           it('has MessageReadCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageReadCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists').to.be.false;
+            expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists')
+              .to.be.false;
             done();
           });
           
@@ -870,12 +980,14 @@ describe('office:mail -> office:commands', function () {
           it('has MessageComposeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageComposeCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists').to.be.true;
+            expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists')
+              .to.be.true;
             done();
           });
           
@@ -885,12 +997,14 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentAttendeeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentAttendeeCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface"> exists').to.be.false;
+            expect(found, '<ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface"> exists')
+              .to.be.false;
             done();
           });
           
@@ -900,12 +1014,14 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentOrganizerCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentOrganizerCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface"> exists').to.be.true;
+            expect(found, '<ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface"> exists')
+              .to.be.true;
             done();
           });
           
@@ -915,7 +1031,8 @@ describe('office:mail -> office:commands', function () {
           it('has CustomPane', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'CustomPane') {
                 found = true;
               }
@@ -929,17 +1046,23 @@ describe('office:mail -> office:commands', function () {
            * child nodes
            */
           it('has valid Resources', function(done) {
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Images').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Urls').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:ShortStrings').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:LongStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources')
+              .with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:Images').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:Urls').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:ShortStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:LongStrings').with.length(1);
             done();
           });
           
         }); // describe('manifest-*.xml contents')
         
-      }); // describe('Outlook extension points: MessageComposeCommandSurface, AppointmentOrganizerCommandSurface')
+      }); // describe('Outlook extension points: MessageComposeCommandSurface, 
+          // AppointmentOrganizerCommandSurface')
       
       describe('Outlook extension points: CustomPane', function () {
         
@@ -984,7 +1107,7 @@ describe('office:mail -> office:commands', function () {
             addinRootPath + '/functionfile/functions.js',
             addinRootPath + '/taskpane/taskpane.html',
             addinRootPath + '/taskpane/taskpane.js'
-          ]
+          ];
           
           assert.noFile(unexpected);
           done();
@@ -1013,7 +1136,9 @@ describe('office:mail -> office:commands', function () {
            */
           it('has valid VersionOverrides', function(done) {
             expect(manifest.OfficeApp).to.have.property('VersionOverrides').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with.property('xmlns').equal('http://schemas.microsoft.com/office/mailappversionoverrides');
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('$').with
+              .property('xmlns').equal(
+                'http://schemas.microsoft.com/office/mailappversionoverrides');
             done();
           });
           
@@ -1023,8 +1148,10 @@ describe('office:mail -> office:commands', function () {
            */
           it('has MailHost Host entry', function(done) {
             expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Hosts').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have.property('Host').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have.property('$').with.property('xsi:type').equal('MailHost');
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0]).to.have
+              .property('Host').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0]).to.have
+              .property('$').with.property('xsi:type').equal('MailHost');
             done();
           });
           
@@ -1034,12 +1161,14 @@ describe('office:mail -> office:commands', function () {
           it('has MessageReadCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageReadCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists').to.be.false;
+            expect(found, '<ExtensionPoint xsi:type="MessageReadCommandSurface"> exists')
+              .to.be.false;
             done();
           });
           
@@ -1049,12 +1178,14 @@ describe('office:mail -> office:commands', function () {
           it('has MessageComposeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'MessageComposeCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists').to.be.false;
+            expect(found, '<ExtensionPoint xsi:type="MessageComposeCommandSurface"> exists')
+              .to.be.false;
             done();
           });
           
@@ -1064,12 +1195,14 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentAttendeeCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentAttendeeCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface"> exists').to.be.false;
+            expect(found, '<ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface"> exists')
+              .to.be.false;
             done();
           });
           
@@ -1079,12 +1212,14 @@ describe('office:mail -> office:commands', function () {
           it('has AppointmentOrganizerCommandSurface', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'AppointmentOrganizerCommandSurface') {
                 found = true;
               }
             });
-            expect(found, '<ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface"> exists').to.be.false;
+            expect(found, '<ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface"> exists')
+              .to.be.false;
             done();
           });
           
@@ -1094,7 +1229,8 @@ describe('office:mail -> office:commands', function () {
           it('has CustomPane', function(done) {
             var found = false;
             
-            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0].ExtensionPoint, function(extPoint) {
+            _.forEach(manifest.OfficeApp.VersionOverrides[0].Hosts[0].Host[0].DesktopFormFactor[0]
+              .ExtensionPoint, function(extPoint) {
               if(extPoint.$['xsi:type'] === 'CustomPane') {
                 found = true;
               }
@@ -1108,11 +1244,16 @@ describe('office:mail -> office:commands', function () {
            * child nodes
            */
           it('has valid Resources', function(done) {
-            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Images').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:Urls').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:ShortStrings').with.length(1);
-            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have.property('bt:LongStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0]).to.have.property('Resources')
+              .with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:Images').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:Urls').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:ShortStrings').with.length(1);
+            expect(manifest.OfficeApp.VersionOverrides[0].Resources[0]).to.have
+              .property('bt:LongStrings').with.length(1);
             done();
           });
           

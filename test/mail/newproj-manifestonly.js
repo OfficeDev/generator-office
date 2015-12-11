@@ -59,13 +59,20 @@ describe('office:mail', function () {
      * Test addin when technology = manifest-only
      */
     describe('technology:manifest-only', function () {
-      describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface', function () {
+      describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface, '
+             + 'AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface', 
+      function () {
         beforeEach(function (done) {
           // set language to html
           options.tech = 'manifest-only';
   
           // set outlook form type
-          options.extensionPoint = ['MessageReadCommandSurface', 'MessageComposeCommandSurface', 'AppointmentAttendeeCommandSurface', 'AppointmentOrganizerCommandSurface'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'MessageComposeCommandSurface', 
+            'AppointmentAttendeeCommandSurface', 
+            'AppointmentOrganizerCommandSurface'
+          ];
 
           options.startPage = 'https://localhost:8443/manifest-only/index.html';
   
@@ -222,15 +229,22 @@ describe('office:mail', function () {
 
         }); // describe('manifest-*.xml contents')
         
-      }); // describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface')
+      }); // describe('Outlook extension points:MessageReadCommandSurface, 
+          // MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, 
+          // AppointmentOrganizerCommandSurface')
       
-      describe('Outlook extension points:MessageReadCommandSurface, AppointmentAttendeeCommandSurface', function () {
+      describe('Outlook extension points:MessageReadCommandSurface, '
+             + 'AppointmentAttendeeCommandSurface', 
+      function () {
         beforeEach(function (done) {
           // set language to html
           options.tech = 'manifest-only';
   
           // set outlook form type
-          options.extensionPoint = ['MessageReadCommandSurface', 'AppointmentAttendeeCommandSurface'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'AppointmentAttendeeCommandSurface'
+          ];
 
           options.startPage = 'https://localhost:8443/manifest-only/index.html';
   
@@ -370,15 +384,21 @@ describe('office:mail', function () {
 
         }); // describe('manifest-*.xml contents')
         
-      }); // describe('Outlook extension points:MessageReadCommandSurface, AppointmentAttendeeCommandSurface')
+      }); // describe('Outlook extension points:MessageReadCommandSurface, 
+          // AppointmentAttendeeCommandSurface')
       
-      describe('Outlook extension points:MessageComposeCommandSurface, AppointmentOrganizerCommandSurface', function () {
+      describe('Outlook extension points:MessageComposeCommandSurface, '
+             + 'AppointmentOrganizerCommandSurface', 
+      function () {
         beforeEach(function (done) {
           // set language to html
           options.tech = 'manifest-only';
   
           // set outlook form type
-          options.extensionPoint = ['MessageComposeCommandSurface', 'AppointmentOrganizerCommandSurface'];
+          options.extensionPoint = [
+            'MessageComposeCommandSurface', 
+            'AppointmentOrganizerCommandSurface'
+          ];
 
           options.startPage = 'https://localhost:8443/manifest-only/index.html';
   
@@ -518,7 +538,8 @@ describe('office:mail', function () {
 
         }); // describe('manifest-*.xml contents')
         
-      }); // describe('Outlook extension points:MessageComposeCommandSurface, AppointmentOrganizerCommandSurface')
+      }); // describe('Outlook extension points:MessageComposeCommandSurface, 
+          // AppointmentOrganizerCommandSurface')
 
     }); // describe('technology:manifest-only')
 
