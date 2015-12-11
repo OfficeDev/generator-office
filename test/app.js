@@ -34,7 +34,12 @@ describe('office:app', function(){
         rootPath: '',
         type: 'mail',
         tech: 'html',
-        outlookForm: ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'],
+        extensionPoint: [
+          'MessageReadCommandSurface', 
+          'MessageComposeCommandSurface', 
+          'AppointmentAttendeeCommandSurface', 
+          'AppointmentOrganizerCommandSurface'
+        ],
         'skip-install': true
       };
 
