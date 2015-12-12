@@ -82,14 +82,24 @@ function _validateHighResolutionIconUrl(xml, result) {
   if (xml && result) {
     var xmlString = xml.toString();
 
-    if (xmlString.indexOf('<HighResolutionIconUrl ') > -1 &&
-      xmlString.indexOf('<HighResolutionIconUrl DefaultValue="https://') < 0) {
-      if (result.errors === null) {
-        result.errors = [];
+    if (xmlString.indexOf('<HighResolutionIconUrl ') > -1) {
+      if (xmlString.indexOf('<HighResolutionIconUrl DefaultValue="https://') < 0) {
+        if (result.errors === null) {
+          result.errors = [];
+        }
+  
+        result.errors.push('The value of the HighResolutionIconUrl attribute contains an unsupported URL.'
+                        + ' You can only use https:// URLs.');
       }
-
-      result.errors.push('The value of the HighResolutionIconUrl attribute contains an unsupported URL.'
-                       + ' You can only use https:// URLs.');
+      
+      if (!/HighResolutionIconUrl[^>]+DefaultValue="[^"]+\.(png|jpg|jpeg)"/.test(xmlString)) {
+        if (result.errors === null) {
+          result.errors = [];
+        }
+  
+        result.errors.push('The value of the HighResolutionIconUrl attribute contains an unsupported URL.'
+                        + ' The icon URL must end with png, jpg or jpeg.');
+      }
     }
   }
 }
