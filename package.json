@@ -54,7 +54,7 @@
     "deep-extend": "^0.4.0",
     "lodash": "^3.10.1",
     "uuid": "^2.0.1",
-    "yeoman-generator": "^0.22.0",
+    "yeoman-generator": "^0.22.1",
     "yosay": "^1.0.2",
     "xml2js": "^0.4.10"
   },
