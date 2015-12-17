@@ -5,8 +5,8 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var mockery = require('mockery');
-var assert = require('yeoman-generator').assert;
-var helpers = require('yeoman-generator').test;
+var assert = require('yeoman-assert');
+var helpers = require('yeoman-test');
 
 var Xml2Js = require('xml2js');
 var validator = require('validator');
@@ -55,11 +55,15 @@ describe('office:content', function(){
           version: '0.1.0',
           devDependencies: {
             chalk: '^1.1.1',
+            del: '^2.1.0',
             gulp: '^3.9.0',
             'gulp-load-plugins': '^1.0.0',
+            'gulp-minify-css': '^1.2.2',
             'gulp-task-listing': '^1.0.1',
+            'gulp-uglify': '^1.5.1',
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
+            'run-sequence': '^1.1.5',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
@@ -162,11 +166,15 @@ describe('office:content', function(){
           },
           devDependencies: {
             chalk: '^1.1.1',
+            del: '^2.1.0',
             gulp: '^3.9.0',
             'gulp-load-plugins': '^1.0.0',
+            'gulp-minify-css': '^1.2.2',
             'gulp-task-listing': '^1.0.1',
+            'gulp-uglify': '^1.5.1',
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
+            'run-sequence': '^1.1.5',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
@@ -324,6 +332,42 @@ describe('office:content', function(){
         it('contains task \'validate-xml\'', function(done){
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'validate-xml\',');
+          done();
+        });
+        
+        it('contains task \'dist-remove\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'dist-remove\',');
+          done();
+        });
+        
+        it('contains task \'dist-copy-files\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'dist-copy-files\',');
+          done();
+        });
+        
+        it('contains task \'dist-minify\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'dist-minify\',');
+          done();
+        });
+        
+        it('contains task \'dist-minify-js\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'dist-minify-js\',');
+          done();
+        });
+        
+        it('contains task \'dist-minify-css\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'dist-minify-css\',');
+          done();
+        });
+        
+        it('contains task \'dist\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'dist\',');
           done();
         });
 
