@@ -5,8 +5,8 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var mockery = require('mockery');
-var assert = require('yeoman-generator').assert;
-var helpers = require('yeoman-generator').test;
+var assert = require('yeoman-assert');
+var helpers = require('yeoman-test');
 
 var Xml2Js = require('xml2js');
 var validator = require('validator');

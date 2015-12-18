@@ -1,5 +1,5 @@
 var fs = require('fs');
-var assert = require('yeoman-generator').assert;
+var assert = require('yeoman-assert');
 
 /**
  * Helper function to check contents of object.
