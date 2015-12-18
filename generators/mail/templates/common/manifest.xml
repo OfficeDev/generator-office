@@ -8,7 +8,6 @@
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
   <Description DefaultValue="[Task pane Add-in description]"/>
   <HighResolutionIconUrl DefaultValue="[Icon URL]"/>
-  <SupportUrl DefaultValue="[Support URL]"/>
   <Hosts>
     <Host Name="Mailbox" />
   </Hosts>

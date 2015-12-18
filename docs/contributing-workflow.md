@@ -1,6 +1,6 @@
 # Contribution Workflow
 
-You can contrubute to this repo with issues & PRs. Simply filing issues for problem you encounter is a great way to contribute. Contributing bug fixes & features is greatly appreciated!
+You can contrubute to this repo with issues & PRs. Simply filing issues for problems you encounter is a great way to contribute. Contributing bug fixes & features is greatly appreciated!
 
 ## Getting Started
 
@@ -22,9 +22,9 @@ The following is recommended for contributing to the repo:
   - This can be skipped for trival changes.
   - Reuse an existing issue on the topic, if there is one.
   - Get an agreement from core team members before starting work.
-  - Clearly state you are going to take on implementing it, if that's the case.
+  - Clearly state you are going to be implementing a fix, if that's the case.
 * Create a personal fork of the repository on GitHub (if you don't already have one).
-  - If you already have a fork, ensure it is up to date with the upstream repo (this repo). Refer to this help doc for more information on syncing your repo: [GitHub Help: Syncing a Fork](https://help.github.com/articles/syncing-a-fork/)
+  - If you already have a fork, ensure you have an upstream remote for the **DEV** branch and it is up to date with the repo (this repo). Refer to this help doc for more information on syncing your repo: [GitHub Help: Syncing a Fork](https://help.github.com/articles/syncing-a-fork/)
 * Create a branch off master: `git checkout -b mybranch`
   - Name the branch so that it clearly communicates your intentions such as **issue-123** or **githubhandle-issue123**
   - Branches are useful since they isolate your changes from incoming changes from upstream. They also enable you to create multiple PRs from the same fork.
@@ -36,6 +36,6 @@ The following is recommended for contributing to the repo:
   - Make sure the code coverage % is no lower than the upstream repo.
 * Push changes to your fork on GitHub.
 * Create a pull request (PR) against the upstream repository's **DEV** branch.
-  - Include details in the PR comment what the PR is for. Include a reference to the issue (by number & link).
+  - Include details in the PR comment indicating what the PR is for. Include a reference to the issue (by number & link).
 
-**Note: it is OK to create your PR as a "WIP" (work in progress) on the upstream repo before the implementation is done. This can be useful if you'd like to start the feedback process concurrent with your implementation. State this this is the case in the initial PR comment.
+**Note: It is OK to create your PR as a "WIP" (work in progress) on the upstream repo before the implementation is done. This can be useful if you'd like to start the feedback process concurrent with your implementation. State this this is the case in the initial PR comment.
