@@ -120,12 +120,6 @@ module.exports = generators.Base.extend({
           message: 'Relative path to manifest file:',
           default: 'manifest.xml',
           when: this.options['manifest-file'] === undefined
-        },
-        {
-          name: 'ready-bruh',
-          message: 'Ready bruh?',
-          type: 'confirm',
-          default: true
         }
       ];
       
@@ -153,9 +147,9 @@ module.exports = generators.Base.extend({
           return;
         case 'taskpane':
           // TODO: Setup prompt for available hosts
-          break;
         case 'content':
           // TODO: Setup prompt for available hosts
+          this.genConfig.hosts = [];
           break;
       }
     }, // askForHosts()
@@ -220,9 +214,9 @@ module.exports = generators.Base.extend({
           break;
         case 'taskpane':
           // TODO: set available extension points
-          break;
         case 'content':
           // TODO: set available extension points
+          this.genConfig.extensionPoint = [];
           break;
       }
       
@@ -234,7 +228,7 @@ module.exports = generators.Base.extend({
             type: 'checkbox',
             when: this.genConfig.extensionPoint === undefined,
             choices: availableExtensionPoints,
-            validate: function(answers) {
+            validate: /* istanbul ignore next */ function(answers) {
               if (answers.length < 1) {
                 return 'Must select at least one extension point';
               }
@@ -272,50 +266,55 @@ module.exports = generators.Base.extend({
         }
       }
       
-      if (availableContainers.length > 0) {
-        var prompts = [
-          {
-            name: 'commandContainers',
-            message: 'Add buttons to:',
-            type: 'checkbox',
-            choices: availableContainers,
-            validate: function(answers) {
-              if (answers.length < 1) {
-                return 'Must select at least one container to add buttons to';
-              }
-              return true;
+      var prompts = [
+        {
+          name: 'continue',
+          message: 'Press Enter to continue...',
+          type: 'confirm',
+          when: false,
+          default: true
+        },
+        {
+          name: 'commandContainers',
+          message: 'Add buttons to:',
+          type: 'checkbox',
+          choices: availableContainers,
+          validate: /* istanbul ignore next */ function(answers) {
+            if (answers.length < 1) {
+              return 'Must select at least one container to add buttons to';
             }
-          },
-          {
-            name: 'buttonTypes',
-            message: 'Supported button types:',
-            type: 'checkbox',
-            choices: [
-              {
-                name: 'UI-less button',
-                value: 'uiless',
-                checked: true
-              },
-              {
-                name: 'Drop-down menu button',
-                value: 'menu',
-                checked: true
-              },
-              {
-                name: 'Task-pane launcher button',
-                value: 'taskpane',
-                checked: true
-              }
-            ]
+            return true;
           }
-        ];
-        
-        var done = this.async();
-        this.prompt(prompts, function(response) {
-          this.genConfig = extend(this.genConfig, response);
-          done();
-        }.bind(this));
-      }
+        },
+        {
+          name: 'buttonTypes',
+          message: 'Supported button types:',
+          type: 'checkbox',
+          choices: [
+            {
+              name: 'UI-less button',
+              value: 'uiless',
+              checked: true
+            },
+            {
+              name: 'Drop-down menu button',
+              value: 'menu',
+              checked: true
+            },
+            {
+              name: 'Task-pane launcher button',
+              value: 'taskpane',
+              checked: true
+            }
+          ]
+        }
+      ];
+      
+      var done = this.async();
+      this.prompt(prompts, function(response) {
+        this.genConfig = extend(this.genConfig, response);
+        done();
+      }.bind(this));
     }, // askForCommandSurface()
     
     // When manifest-only = true, ask for URL values
@@ -366,6 +365,14 @@ module.exports = generators.Base.extend({
    * save configurations & config project
    */
   configuring: function(){
+    // Check for types not yet implemented
+    // and inform the user
+    if (this.genConfig.type === 'content' ||
+        this.genConfig.type === 'taskpane') {
+      this.log('Command support for this type of add-is is not yet implemented. Exiting...');
+      this.genConfig.abort = true;
+      return;      
+    }
     // helper function to build path to the file off root path
       this._parseTargetPath = function(file){
         return path.join(this.genConfig['root-path'], file);
@@ -386,7 +393,8 @@ module.exports = generators.Base.extend({
       };
       
       // Determine if a function file is needed
-      var needFuncFile = this.genConfig.buttontypes !== undefined &&this.genConfig.buttonTypes.indexOf('uiless') >= 0;
+      var needFuncFile = (this.genConfig.buttonTypes !== undefined) &&
+                          this.genConfig.buttonTypes.indexOf('uiless') >= 0;
       if (needFuncFile) {
         var funcFile = this.genConfig.functionFileUrl !== undefined ? 
           this.genConfig.functionFileUrl : 
@@ -417,6 +425,9 @@ module.exports = generators.Base.extend({
      */
     
     updateManifest: function() {
+      if (this.genConfig.abort === true) {
+        return;
+      }
       var done = this.async();
       
       var manifestFile = this.genConfig['manifest-file'];
@@ -447,7 +458,7 @@ module.exports = generators.Base.extend({
           }
         };
         manifestJson.OfficeApp = extend(manifestJson.OfficeApp, newNS);
-        
+       
         // Create VersionOverrides
         manifestJson.OfficeApp.VersionOverrides = {
           '$': {
@@ -460,14 +471,16 @@ module.exports = generators.Base.extend({
           
           var commandData = yoGenerator.fs.read(yoGenerator.genConfig.commands.commandFile);
           
-          // Hack to force function file
-          if (commandData.indexOf('xsi:type="ExecuteFunction"') > -1) {
-            yoGenerator.genConfig.uilessCount = 1;
-          }
-          
           yoGenerator.genConfig.customFuncs = yoGenerator.fs.read(yoGenerator.genConfig.commands.functionFile);
           parser.parseString(commandData, function(err, commandJson) {
             var scrubbedCommands = scrubCommandData(commandJson, yoGenerator.genConfig.extensionPoint);
+            
+            // Hack to force function file
+            var flatScrubbedData = JSON.stringify(scrubbedCommands);
+            if (flatScrubbedData.indexOf('"xsi:type":"ExecuteFunction"') > -1) {
+              yoGenerator.genConfig.uilessCount = 1;
+            }
+          
             manifestJson.OfficeApp.VersionOverrides.Hosts = scrubbedCommands.root.Hosts;
             manifestJson.OfficeApp.VersionOverrides.Resources = scrubbedCommands.root.Resources;
 
@@ -586,23 +599,21 @@ module.exports = generators.Base.extend({
  */
 function commandSurfaceIncluded(extensionPoints) {
   // Be sure to add applicable command surfaces here
-  if (extensionPoints !== undefined) {
-    return (extensionPoints.indexOf('MessageReadCommandSurface') >= 0 ||
-            extensionPoints.indexOf('MessageComposeCommandSurface') >= 0 ||
-            extensionPoints.indexOf('AppointmentAttendeeCommandSurface') >= 0 ||
-            extensionPoints.indexOf('AppointmentOrganizerCommandSurface') >= 0);
-  }
-  return false;
+  return (extensionPoints.indexOf('MessageReadCommandSurface') >= 0 ||
+          extensionPoints.indexOf('MessageComposeCommandSurface') >= 0 ||
+          extensionPoints.indexOf('AppointmentAttendeeCommandSurface') >= 0 ||
+          extensionPoints.indexOf('AppointmentOrganizerCommandSurface') >= 0);
 }
 
 function getOverrideNamespace(config) {
   switch (config.type) {
     case 'mail':
       return 'http://schemas.microsoft.com/office/mailappversionoverrides';
-      
-    case 'taskpane':
-    case 'content':
-      return 'NYI';
+    
+    // TODO: Add other types here  
+    //case 'taskpane':
+    //case 'content':
+    //  return 'NYI';
   }
   
 }
@@ -1064,6 +1075,7 @@ function buildTaskPaneButton(config) {
  */
 function createUrlResource(prefix, suffix, value, config) {
   var resid = prefix + suffix;
+  /* istanbul ignore if */
   if (resid.length > 32) {
     throw 'Invalid resource ID: must be 32 characters or less';
   }
@@ -1083,6 +1095,7 @@ function createUrlResource(prefix, suffix, value, config) {
  */
 function createImageResource(prefix, suffix, value, config) {
   var resid = prefix + suffix;
+  /* istanbul ignore if */
   if (resid.length > 32) {
     throw 'Invalid resource ID: must be 32 characters or less';
   }
@@ -1102,6 +1115,7 @@ function createImageResource(prefix, suffix, value, config) {
  */
 function createShortStringResource(prefix, suffix, value, config) {
   var resid = prefix + suffix;
+  /* istanbul ignore if */
   if (resid.length > 32) {
     throw 'Invalid resource ID: must be 32 characters or less';
   }
@@ -1121,6 +1135,7 @@ function createShortStringResource(prefix, suffix, value, config) {
  */
 function createLongStringResource(prefix, suffix, value, config) {
   var resid = prefix + suffix;
+  /* istanbul ignore if */
   if (resid.length > 32) {
     throw 'Invalid resource ID: must be 32 characters or less';
   }

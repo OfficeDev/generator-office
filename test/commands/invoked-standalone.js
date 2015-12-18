@@ -52,12 +52,10 @@ describe('office:commands', function () {
 
         // set extension points
         options.extensionPoint = ['CustomPane'];
-        console.log('About to run generator');
         // run the generator
         helpers.run(path.join(__dirname, '../../generators/commands'))
           .withOptions(options)
           .on('end', function() {
-            console.log('Generator done');
             done();
           });
       });
@@ -67,7 +65,6 @@ describe('office:commands', function () {
       });
       
       it('creates no files', function (done) {
-        console.log('Checking files');
         var unexpected = [
           manifestFileName,
           addinRootPath + '/custompane/custompane.html',
@@ -777,5 +774,103 @@ describe('office:commands', function () {
         // MessageComposeCommandSurface')
       
   }); // describe('Outlook add-in')
+  
+  describe('Taskpane add-in', function () {
+    var addinRootPath = 'src/public';
 
+    // generator ran at 'src/public' so for files
+    //  in the root, need to back up to the root
+    beforeEach(function (done) {
+      // set to current folder
+      options.rootPath = addinRootPath;
+      options.type = 'taskpane';
+      options['manifest-file'] = manifestFileName;
+      done();
+    });
+    
+    describe('Called with non-existent manifest', function () {
+      beforeEach(function (done) {
+
+        // set extension points
+        // run the generator
+        helpers.run(path.join(__dirname, '../../generators/commands'))
+          .withOptions(options)
+          .on('end', function() {
+            done();
+          });
+      });
+      
+      afterEach(function () {
+        mockery.disable();
+      });
+      
+      it('creates no files', function (done) {
+        var unexpected = [
+          manifestFileName,
+          addinRootPath + '/custompane/custompane.html',
+          addinRootPath + '/custompane/custompane.js',
+          addinRootPath + '/functionfile/functions.html',
+          addinRootPath + '/functionfile/functions.js',
+          addinRootPath + '/images/icon-16.png',
+          addinRootPath + '/images/icon-32.png',
+          addinRootPath + '/images/icon-80.png',
+          addinRootPath + '/taskpane/taskpane.html',
+          addinRootPath + '/taskpane/taskpane.js'
+        ];
+        
+        assert.noFile(unexpected);
+        done();
+      });
+    }); // describe('Called with non-existent manifest')
+  }); // describe('Taskpane add-in')
+  
+  describe('Content add-in', function () {
+    var addinRootPath = 'src/public';
+
+    // generator ran at 'src/public' so for files
+    //  in the root, need to back up to the root
+    beforeEach(function (done) {
+      // set to current folder
+      options.rootPath = addinRootPath;
+      options.type = 'content';
+      options['manifest-file'] = manifestFileName;
+      done();
+    });
+    
+    describe('Called with non-existent manifest', function () {
+      beforeEach(function (done) {
+
+        // set extension points
+        // run the generator
+        helpers.run(path.join(__dirname, '../../generators/commands'))
+          .withOptions(options)
+          .on('end', function() {
+            done();
+          });
+      });
+      
+      afterEach(function () {
+        mockery.disable();
+      });
+      
+      it('creates no files', function (done) {
+        var unexpected = [
+          manifestFileName,
+          addinRootPath + '/custompane/custompane.html',
+          addinRootPath + '/custompane/custompane.js',
+          addinRootPath + '/functionfile/functions.html',
+          addinRootPath + '/functionfile/functions.js',
+          addinRootPath + '/images/icon-16.png',
+          addinRootPath + '/images/icon-32.png',
+          addinRootPath + '/images/icon-80.png',
+          addinRootPath + '/taskpane/taskpane.html',
+          addinRootPath + '/taskpane/taskpane.js'
+        ];
+        
+        assert.noFile(unexpected);
+        done();
+      });
+    }); // describe('Called with non-existent manifest')
+  }); // describe('Content add-in')
+  
 }); // describe('office:commands')
