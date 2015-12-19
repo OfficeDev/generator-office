@@ -5,8 +5,12 @@ environment:
   # test with latest LTS versin of node
   - nodejs_version: "4.2.3"
 
+platform:
+  - x86
+  - x64
+
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node $env:nodejs_version $env:platform
   - npm install
 
 # don't build, nothing to build
