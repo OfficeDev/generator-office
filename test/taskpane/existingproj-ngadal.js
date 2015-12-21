@@ -341,6 +341,30 @@ describe('office:taskpane', function(){
           done();
         });
         
+        it('contains task \'validate\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate\',');
+          done();
+        });
+        
+        it('contains task \'validate-forcatalog\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate-forcatalog\',');
+          done();
+        });
+        
+        it('contains task \'validate-forstore\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate-forstore\',');
+          done();
+        });
+        
+        it('contains task \'validate-highResolutionIconUrl\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate-highResolutionIconUrl\',');
+          done();
+        });
+        
         it('contains task \'validate-xml\'', function(done){
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'validate-xml\',');

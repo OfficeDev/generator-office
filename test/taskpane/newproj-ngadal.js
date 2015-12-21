@@ -64,6 +64,7 @@ describe('office:taskpane', function(){
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
             'run-sequence': '^1.1.5',
+            'xml2js': '^0.4.15',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
@@ -183,6 +184,7 @@ describe('office:taskpane', function(){
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
             'run-sequence': '^1.1.5',
+            'xml2js': '^0.4.15',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
@@ -350,7 +352,7 @@ describe('office:taskpane', function(){
       /**
        * gulpfile.js is good
        */
-      describe('gulpfule.js contents', function(){
+      describe('gulpfile.js contents', function(){
         
         it('contains task \'help\'', function(done){
           assert.file('gulpfile.js');
@@ -368,6 +370,30 @@ describe('office:taskpane', function(){
 
           assert.file('gulpfile.js');
           assert.fileContent('gulpfile.js', 'gulp.task(\'serve-static\',');
+          done();
+        });
+        
+        it('contains task \'validate\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate\',');
+          done();
+        });
+        
+        it('contains task \'validate-forcatalog\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate-forcatalog\',');
+          done();
+        });
+        
+        it('contains task \'validate-forstore\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate-forstore\',');
+          done();
+        });
+        
+        it('contains task \'validate-highResolutionIconUrl\'', function (done) {
+          assert.file('gulpfile.js');
+          assert.fileContent('gulpfile.js', 'gulp.task(\'validate-highResolutionIconUrl\',');
           done();
         });
         
