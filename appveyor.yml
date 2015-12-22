@@ -1,0 +1,24 @@
+environment:
+  matrix:
+  # test with latest stable version of node
+  - nodejs_version: "5"
+  # test with latest LTS versin of node
+  - nodejs_version: "4.2.3"
+
+platform:
+  - x86
+  - x64
+
+install:
+  - ps: Install-Product node $env:nodejs_version $env:platform
+  - npm install
+
+# don't build, nothing to build
+build: off
+
+test_script:
+  # debugging output for environment
+  - node --version
+  - npm --version
+  # run tests
+  - node_modules\.bin\_mocha -R dot "test\**\*.js"
