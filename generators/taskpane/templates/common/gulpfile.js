@@ -1,7 +1,6 @@
 'use script';
 
 var gulp = require('gulp');
-var webserver = require('gulp-webserver');
 var fs = require('fs');
 var minimist = require('minimist');
 var xmllint = require('xmllint');
@@ -10,6 +9,10 @@ var $ = require('gulp-load-plugins')({ lazy: true });
 var del = require('del');
 var runSequence = require('run-sequence');
 var Xml2Js = require('xml2js');
+var browserSync = require('browser-sync');
+
+// Issue reload on changes
+var reload = browserSync.reload;
 
 var config = {
   release: './dist'
@@ -28,14 +31,29 @@ gulp.task('default', ['help']);
  * Startup static webserver.
  */
 gulp.task('serve-static', function () {
-  gulp.src('.')
-    .pipe(webserver({
-      https: true,
-      port: '8443',
-      host: 'localhost',
-      directoryListing: true,
-      fallback: 'index.html'
-    }));
+
+    // init browser sync
+    browserSync({
+        notify: false,
+        port: 8443,
+        server: {
+            baseDir: ['.'],
+            directory: true,
+            routes: {
+                '/bower_components': 'bower_components'
+            }
+        },
+        https: true
+    });
+
+    // reload if any of those file changes
+    gulp.watch([
+            './**/*.js',
+            './**/*.html',
+            './**/*.css'
+        ])
+        .on('change', reload);
+
 });
 
 /**
