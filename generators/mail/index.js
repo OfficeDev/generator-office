@@ -269,8 +269,8 @@ module.exports = generators.Base.extend({
             packageJson.devDependencies['gulp'] = '^3.9.0';
           }
           /* istanbul ignore else */
-          if (!packageJson.devDependencies['gulp-webserver']) {
-            packageJson.devDependencies['gulp-webserver'] = '^0.9.1';
+          if (!packageJson.devDependencies['browser-sync']) {
+            packageJson.devDependencies['browser-sync'] = '^2.11.0';
           }
           /* istanbul ignore else */
           if (!packageJson.devDependencies['minimist']) {
