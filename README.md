@@ -77,7 +77,7 @@ Running the main generator will prompt you for the type of Office project to cre
 
 ## Running the Generated Site
 
-All generators create a `gulpfile.js`. This uses the [gulp-webserver](https://www.npmjs.com/package/gulp-webserver) task to start a HTTPS server. This server includes a self-signed SSL cert that your development enviroment must trust. 
+All generators create a `gulpfile.js`. This uses [BrowserSync.io](https://www.browsersync.io) to start a web server running on HTTPS. This server includes a self-signed SSL cert that your development enviroment must trust. 
 
 > Using a self-signed certificate involves adding it to your trusted root certificates... see our doc [Adding Self-Signed Certificates as Trusted Root Certificate](docs/trust-self-signed-cert.md) for instructions on how to do this.
 
