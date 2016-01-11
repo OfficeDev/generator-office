@@ -14,7 +14,7 @@ function _assertObjectContains(obj, content) {
     }
     assert.equal(content[key], obj[key]);
   });
-}
+};
 
 /**
  * Helper function to check contents of JSON file.

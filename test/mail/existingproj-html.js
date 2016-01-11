@@ -61,7 +61,7 @@ describe('office:mail', function () {
             'gulp-minify-css': '^1.2.2',
             'gulp-task-listing': '^1.0.1',
             'gulp-uglify': '^1.5.1',
-            'gulp-webserver': '^0.9.1',
+            "browser-sync": "^2.11.0",
             minimist: '^1.2.0',
             'run-sequence': '^1.1.5',
             'xml2js': '^0.4.15',
@@ -186,7 +186,7 @@ describe('office:mail', function () {
               'gulp-minify-css': '^1.2.2',
               'gulp-task-listing': '^1.0.1',
               'gulp-uglify': '^1.5.1',
-              'gulp-webserver': '^0.9.1',
+              "browser-sync": "^2.11.0",
               minimist: '^1.2.0',
               'run-sequence': '^1.1.5',
               xmllint: 'git+https://github.com/kripken/xml.js.git'
