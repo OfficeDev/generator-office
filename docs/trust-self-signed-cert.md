@@ -1,6 +1,6 @@
 # Adding Self-Signed Certificates as Trusted Root Certificate
 
-This generator leveages the gulp plugin [gulp-webserver](https://www.npmjs.com/package/gulp-webserver) that includes a self-signed certificate. Your workstation will not trust this certificate and thus, the Office client where you are running your Office Add-in from within will not load your addin from an untrusted and unsecure location.
+This generator leveages the [BrowserSync.io](https://www.browsersync.io) that includes a self-signed certificate. Your workstation will not trust this certificate and thus, the Office client where you are running your Office Add-in from within will not load your addin from an untrusted and unsecure location.
 
 To fix this you need to configure your developer workstation to trust the self-signed certifiacte from the gulp plugin. The steps for this differ depending on your developer environment (OSX / Windows / Linux). Use these instructions to trust the certificate:
 
