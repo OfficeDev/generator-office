@@ -581,12 +581,12 @@ module.exports = generators.Base.extend({
                      this.destinationPath(this._parseTargetPath('CustomPane/CustomPane.js')));
       }
       
-      this.fs.copy(this.templatePath('common/Images/icon-16.png'),
-                   this.destinationPath(this._parseTargetPath('Images/icon-16.png')));
-      this.fs.copy(this.templatePath('common/Images/icon-32.png'),
-                   this.destinationPath(this._parseTargetPath('Images/icon-32.png')));
-      this.fs.copy(this.templatePath('common/Images/icon-80.png'),
-                   this.destinationPath(this._parseTargetPath('Images/icon-80.png')));
+      this.fs.copy(this.templatePath('common/images/icon-16.png'),
+                   this.destinationPath(this._parseTargetPath('images/icon-16.png')));
+      this.fs.copy(this.templatePath('common/images/icon-32.png'),
+                   this.destinationPath(this._parseTargetPath('images/icon-32.png')));
+      this.fs.copy(this.templatePath('common/images/icon-80.png'),
+                   this.destinationPath(this._parseTargetPath('images/icon-80.png')));
                    
       done();
     }
