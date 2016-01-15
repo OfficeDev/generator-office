@@ -71,6 +71,7 @@ Running the main generator will prompt you for the type of Office project to cre
   - `office:mail` - creates a Mail Add-in
   - `office:taskpane` - creates a Task Pane Add-in
   - `office:content` - creates a Content Add-in
+  - `office:commands` - adds [add-in commands](https://msdn.microsoft.com/EN-US/library/office/mt267546.aspx) to an existing manifest (Currently only supports Outlook add-ins)
 
 > Remember you can see the options of each sub generators by running `$ yo office:[sub] --help`
 
@@ -148,20 +149,13 @@ The extension points to support. Valid choices depend on the type of add-in crea
 
 #### Mail add-in extension points
 
-- `MessageReadCommandSurface`
-- `MessageComposeCommandSurface`
-- `AppointmentAttendeeCommandSurface`
-- `AppointmentOrganizerCommandSurface`
-- `CustomPane`
+- `MessageReadCommandSurface` - The mail read form
+- `MessageComposeCommandSurface` - The mail compose form
+- `AppointmentAttendeeCommandSurface` - The appointment attendee form
+- `AppointmentOrganizerCommandSurface` - The appointment organizer form
+- `CustomPane` - A custom horizontal pane for mail read and appointment attendee forms
 
-#### Task pane add-in extension points
 
-TBD
-
-#### Content add-in extension points
-
-TBD
-
-  - Type: String[]
-  - Default: undefined / null
-  - Optional  
+- Type: String[]
+- Default: undefined / null
+- Optional  

@@ -59,7 +59,7 @@ module.exports = generators.Base.extend({
     // Task-pane/Content pane-specific options
     this.option('clients', {
       type: String,
-      desc: 'Office client product that can host the add-in',
+      desc: 'Office client product that can host the add-in (NYI)',
       required: false
     });
     
