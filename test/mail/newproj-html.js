@@ -42,7 +42,12 @@ describe('office:mail', function () {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
       tech: 'html',
-      outlookForm: ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'],
+      extensionPoint: [
+        'MessageReadCommandSurface', 
+        'MessageComposeCommandSurface', 
+        'AppointmentAttendeeCommandSurface', 
+        'AppointmentOrganizerCommandSurface'
+      ],
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
 
@@ -92,14 +97,21 @@ describe('office:mail', function () {
      */
     describe('addin technology:html', function () {
 
-      describe('Outlook form:mail-read, mail-compose, appointment-read, appointment-compose', function () {
+      describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface, '
+             + 'AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
           options.tech = 'html';
   
           // set outlook form type
-          options.outlookForm = ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'MessageComposeCommandSurface', 
+            'AppointmentAttendeeCommandSurface', 
+            'AppointmentOrganizerCommandSurface'
+          ];
   
           // run the generator
           helpers.run(path.join(__dirname, '../../generators/mail'))
@@ -452,16 +464,23 @@ describe('office:mail', function () {
 
         }); // describe('gulpfile.js contents')
       
-      }); // describe('Outlook form:mail-read, mail-compose, appointment-read, appointment-compose')
+      }); //describe('Outlook extension points:MessageReadCommandSurface, 
+          // MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, 
+          // AppointmentOrganizerCommandSurface')
       
-      describe('Outlook form:mail-read, appointment-read', function () {
+      describe('Outlook extension points:MessageReadCommandSurface, '
+             + 'AppointmentAttendeeCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
           options.tech = 'html';
   
           // set outlook form type
-          options.outlookForm = ['mail-read', 'appointment-read'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'AppointmentAttendeeCommandSurface'
+          ];
   
           // run the generator
           helpers.run(path.join(__dirname, '../../generators/mail'))
@@ -617,16 +636,22 @@ describe('office:mail', function () {
 
         }); // describe('manifest-*.xml contents')   
       
-      }); // describe('Outlook form:mail-read, appointment-read')
+      }); // describe('Outlook extension points:MessageReadCommandSurface,
+          // AppointmentAttendeeCommandSurface')
       
-      describe('Outlook form:mail-compose, appointment-compose', function () {
+      describe('Outlook extension points:MessageComposeCommandSurface, '
+             + 'AppointmentOrganizerCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
           options.tech = 'html';
   
           // set outlook form type
-          options.outlookForm = ['mail-compose', 'appointment-compose'];
+          options.extensionPoint = [
+            'MessageComposeCommandSurface', 
+            'AppointmentOrganizerCommandSurface'
+          ];
   
           // run the generator
           helpers.run(path.join(__dirname, '../../generators/mail'))
@@ -782,7 +807,8 @@ describe('office:mail', function () {
 
         }); // describe('manifest-*.xml contents')
   
-      }); // describe('Outlook form:mail-compose, appointment-compose')
+      }); // describe(''Outlook extension points:MessageComposeCommandSurface, 
+          // AppointmentOrganizerCommandSurface')
       
     }); // describe('technology:html')
 

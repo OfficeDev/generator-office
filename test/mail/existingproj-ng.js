@@ -18,6 +18,7 @@ var util = require('./../_testUtils');
 
 // sub:generator options
 var options = {};
+var prompts = {};
 
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
@@ -31,6 +32,15 @@ describe('office:mail', function () {
     options = {
       name: projectDisplayName
     };
+    
+    // Since mail invokes commands, we
+    // need to mock responding to the prompts for
+    // info
+    prompts = {
+      buttonTypes: ['uiless'],
+      functionFileUrl: 'https://localhost:8443/manifest-only/functions.html',
+      iconUrl: 'https://localhost:8443/manifest-only/icon.png'
+    };
     done();
   });
 
@@ -42,13 +52,19 @@ describe('office:mail', function () {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
       tech: 'ng',
-      outlookForm: ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'],
+      extensionPoint: [
+        'MessageReadCommandSurface', 
+        'MessageComposeCommandSurface', 
+        'AppointmentAttendeeCommandSurface', 
+        'AppointmentOrganizerCommandSurface'
+      ],
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
 
     // run generator
     helpers.run(path.join(__dirname, '../../generators/mail'))
       .withOptions(options)
+      .withPrompts(prompts)
       .on('end', function () {
         var expected = {
           name: 'somes-bad-character',
@@ -92,17 +108,25 @@ describe('office:mail', function () {
      */
     describe('technology:ng', function () {
 
-      describe('Outlook form:mail-read, mail-compose, appointment-read, appointment-compose', function () {
+      describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface, '
+             + 'AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
           options.tech = 'ng';
   
           // set outlook form type
-          options.outlookForm = ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'MessageComposeCommandSurface', 
+            'AppointmentAttendeeCommandSurface', 
+            'AppointmentOrganizerCommandSurface'
+          ];
 
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
+            .withPrompts(prompts)
             .on('ready', function (gen) {
               util.setupExistingProject(gen);
             }.bind(this))
@@ -464,19 +488,27 @@ describe('office:mail', function () {
 
         }); // describe('gulpfile.js contents')
 
-      }); // describe('Outlook form:mail-read, mail-compose, appointment-read, appointment-compose')
+      }); // describe('Outlook extension points:MessageReadCommandSurface,
+          // MessageComposeCommandSurface, AppointmentAttendeeCommandSurface,
+          // AppointmentOrganizerCommandSurface')
       
-      describe('Outlook form:mail-read, appointment-read', function () {
+      describe('Outlook extension points:MessageReadCommandSurface, '
+             + 'AppointmentAttendeeCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
           options.tech = 'ng';
   
           // set outlook form type
-          options.outlookForm = ['mail-read', 'appointment-read'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'AppointmentAttendeeCommandSurface'
+          ];
 
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
+            .withPrompts(prompts)
             .on('ready', function (gen) {
               util.setupExistingProject(gen);
             }.bind(this))
@@ -634,19 +666,26 @@ describe('office:mail', function () {
 
         }); // describe('manifest-*.xml contents')
   
-      }); // describe('Outlook form:mail-read, appointment-read')
+      }); // describe('Outlook extension points:MessageReadCommandSurface, 
+          // AppointmentAttendeeCommandSurface')
       
-      describe('Outlook form:mail-compose, appointment-compose', function () {
+      describe('Outlook extension points:MessageComposeCommandSurface, '
+             + 'AppointmentOrganizerCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
           options.tech = 'ng';
   
           // set outlook form type
-          options.outlookForm = ['mail-compose', 'appointment-compose'];
+          options.extensionPoint = [
+            'MessageComposeCommandSurface', 
+            'AppointmentOrganizerCommandSurface'
+          ];
 
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
+            .withPrompts(prompts)
             .on('ready', function (gen) {
               util.setupExistingProject(gen);
             }.bind(this))
@@ -804,7 +843,8 @@ describe('office:mail', function () {
 
         }); // describe('manifest-*.xml contents')
   
-      }); // describe('Outlook form:mail-compose, appointment-compose')
+      }); // describe('Outlook extension points:MessageComposeCommandSurface, 
+          // AppointmentOrganizerCommandSurface')
 
     }); // describe('technology:ng')
 
