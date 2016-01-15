@@ -84,10 +84,10 @@ describe('office:mail -> office:commands', function () {
           */
         it('creates expected files', function (done) {
           var expected = [
-            addinRootPath + '/custompane/custompane.html',
-            addinRootPath + '/custompane/custompane.js',
-            addinRootPath + '/functionfile/functions.html',
-            addinRootPath + '/functionfile/functions.js',
+            addinRootPath + '/CustomPane/CustomPane.html',
+            addinRootPath + '/CustomPane/CustomPane.js',
+            addinRootPath + '/FunctionFile/Functions.html',
+            addinRootPath + '/FunctionFile/Functions.js',
             addinRootPath + '/images/icon-16.png',
             addinRootPath + '/images/icon-32.png',
             addinRootPath + '/images/icon-80.png'
@@ -270,8 +270,8 @@ describe('office:mail -> office:commands', function () {
           */
         it('creates expected files', function (done) {
           var expected = [
-            addinRootPath + '/functionfile/functions.html',
-            addinRootPath + '/functionfile/functions.js',
+            addinRootPath + '/FunctionFile/Functions.html',
+            addinRootPath + '/FunctionFile/Functions.js',
             addinRootPath + '/images/icon-16.png',
             addinRootPath + '/images/icon-32.png',
             addinRootPath + '/images/icon-80.png'
@@ -279,8 +279,8 @@ describe('office:mail -> office:commands', function () {
           assert.file(expected);
           
           var unexpected = [
-            addinRootPath + '/custompane/custompane.html',
-            addinRootPath + '/custompane/custompane.js'
+            addinRootPath + '/CustomPane/CustomPane.html',
+            addinRootPath + '/CustomPane/CustomPane.js'
           ];
           
           assert.noFile(unexpected);
@@ -463,8 +463,8 @@ describe('office:mail -> office:commands', function () {
           */
         it('creates expected files', function (done) {
           var expected = [
-            addinRootPath + '/custompane/custompane.html',
-            addinRootPath + '/custompane/custompane.js',
+            addinRootPath + '/CustomPane/CustomPane.html',
+            addinRootPath + '/CustomPane/CustomPane.js',
             addinRootPath + '/images/icon-16.png',
             addinRootPath + '/images/icon-32.png',
             addinRootPath + '/images/icon-80.png'
@@ -472,10 +472,10 @@ describe('office:mail -> office:commands', function () {
           assert.file(expected);
           
           var unexpected = [
-            addinRootPath + '/functionfile/functions.html',
-            addinRootPath + '/functionfile/functions.js',
-            addinRootPath + '/taskpane/taskpane.html',
-            addinRootPath + '/taskpane/taskpane.js'
+            addinRootPath + '/FunctionFile/Functions.html',
+            addinRootPath + '/FunctionFile/Functions.js',
+            addinRootPath + '/TaskPane/TaskPane.html',
+            addinRootPath + '/TaskPane/TaskPane.js'
           ];
           
           assert.noFile(unexpected);
@@ -688,15 +688,15 @@ describe('office:mail -> office:commands', function () {
          */
         it('creates expected files', function (done) {
           var expected = [
-            addinRootPath + '/custompane/custompane.html',
-            addinRootPath + '/custompane/custompane.js',
-            addinRootPath + '/functionfile/functions.html',
-            addinRootPath + '/functionfile/functions.js',
+            addinRootPath + '/CustomPane/CustomPane.html',
+            addinRootPath + '/CustomPane/CustomPane.js',
+            addinRootPath + '/FunctionFile/Functions.html',
+            addinRootPath + '/FunctionFile/Functions.js',
             addinRootPath + '/images/icon-16.png',
             addinRootPath + '/images/icon-32.png',
             addinRootPath + '/images/icon-80.png',
-            addinRootPath + '/taskpane/taskpane.html',
-            addinRootPath + '/taskpane/taskpane.js'
+            addinRootPath + '/TaskPane/TaskPane.html',
+            addinRootPath + '/TaskPane/TaskPane.js'
           ];
           assert.file(expected);
           done();
@@ -887,8 +887,8 @@ describe('office:mail -> office:commands', function () {
          */
         it('creates expected files', function (done) {
           var expected = [
-            addinRootPath + '/functionfile/functions.html',
-            addinRootPath + '/functionfile/functions.js',
+            addinRootPath + '/FunctionFile/Functions.html',
+            addinRootPath + '/FunctionFile/Functions.js',
             addinRootPath + '/images/icon-16.png',
             addinRootPath + '/images/icon-32.png',
             addinRootPath + '/images/icon-80.png'
@@ -896,10 +896,10 @@ describe('office:mail -> office:commands', function () {
           assert.file(expected);
           
           var unexpected = [
-            addinRootPath + '/custompane/custompane.html',
-            addinRootPath + '/custompane/custompane.js',
-            addinRootPath + '/taskpane/taskpane.html',
-            addinRootPath + '/taskpane/taskpane.js'
+            addinRootPath + '/CustomPane/CustomPane.html',
+            addinRootPath + '/CustomPane/CustomPane.js',
+            addinRootPath + '/TaskPane/TaskPane.html',
+            addinRootPath + '/TaskPane/TaskPane.js'
           ];
           
           assert.noFile(unexpected);
@@ -1090,19 +1090,19 @@ describe('office:mail -> office:commands', function () {
          */
         it('creates expected files', function (done) {
           var expected = [
-            addinRootPath + '/functionfile/functions.html',
-            addinRootPath + '/functionfile/functions.js',
+            addinRootPath + '/FunctionFile/Functions.html',
+            addinRootPath + '/FunctionFile/Functions.js',
             addinRootPath + '/images/icon-16.png',
             addinRootPath + '/images/icon-32.png',
             addinRootPath + '/images/icon-80.png',
-            addinRootPath + '/taskpane/taskpane.html',
-            addinRootPath + '/taskpane/taskpane.js'
+            addinRootPath + '/TaskPane/TaskPane.html',
+            addinRootPath + '/TaskPane/TaskPane.js'
           ];
           assert.file(expected);
           
           var unexpected = [
-            addinRootPath + '/custompane/custompane.html',
-            addinRootPath + '/custompane/custompane.js'
+            addinRootPath + '/CustomPane/CustomPane.html',
+            addinRootPath + '/CustomPane/CustomPane.js'
           ];
           
           assert.noFile(unexpected);
@@ -1288,8 +1288,8 @@ describe('office:mail -> office:commands', function () {
          */
         it('creates expected files', function (done) {
           var expected = [
-            addinRootPath + '/custompane/custompane.html',
-            addinRootPath + '/custompane/custompane.js',
+            addinRootPath + '/CustomPane/CustomPane.html',
+            addinRootPath + '/CustomPane/CustomPane.js',
             addinRootPath + '/images/icon-16.png',
             addinRootPath + '/images/icon-32.png',
             addinRootPath + '/images/icon-80.png'
@@ -1297,10 +1297,10 @@ describe('office:mail -> office:commands', function () {
           assert.file(expected);
           
           var unexpected = [
-            addinRootPath + '/functionfile/functions.html',
-            addinRootPath + '/functionfile/functions.js',
-            addinRootPath + '/taskpane/taskpane.html',
-            addinRootPath + '/taskpane/taskpane.js'
+            addinRootPath + '/FunctionFile/Functions.html',
+            addinRootPath + '/FunctionFile/Functions.js',
+            addinRootPath + '/TaskPane/TaskPane.html',
+            addinRootPath + '/TaskPane/TaskPane.js'
           ];
           
           assert.noFile(unexpected);
@@ -1519,15 +1519,15 @@ describe('office:mail -> office:commands', function () {
           assert.file(expected);
           
           var unexpected = [
-            addinRootPath + '/custompane/custompane.html',
-            addinRootPath + '/custompane/custompane.js',
-            addinRootPath + '/functionfile/functions.html',
-            addinRootPath + '/functionfile/functions.js',
+            addinRootPath + '/CustomPane/CustomPane.html',
+            addinRootPath + '/CustomPane/CustomPane.js',
+            addinRootPath + '/FunctionFile/Functions.html',
+            addinRootPath + '/FunctionFile/Functions.js',
             addinRootPath + '/images/icon-16.png',
             addinRootPath + '/images/icon-32.png',
             addinRootPath + '/images/icon-80.png',
-            addinRootPath + '/taskpane/taskpane.html',
-            addinRootPath + '/taskpane/taskpane.js'
+            addinRootPath + '/TaskPane/TaskPane.html',
+            addinRootPath + '/TaskPane/TaskPane.js'
           ];
           assert.noFile(unexpected);
           done();
@@ -1721,15 +1721,15 @@ describe('office:mail -> office:commands', function () {
           assert.file(expected);
           
           var unexpected = [
-            addinRootPath + '/custompane/custompane.html',
-            addinRootPath + '/custompane/custompane.js',
-            addinRootPath + '/functionfile/functions.html',
-            addinRootPath + '/functionfile/functions.js',
+            addinRootPath + '/CustomPane/CustomPane.html',
+            addinRootPath + '/CustomPane/CustomPane.js',
+            addinRootPath + '/FunctionFile/Functions.html',
+            addinRootPath + '/FunctionFile/Functions.js',
             addinRootPath + '/images/icon-16.png',
             addinRootPath + '/images/icon-32.png',
             addinRootPath + '/images/icon-80.png',
-            addinRootPath + '/taskpane/taskpane.html',
-            addinRootPath + '/taskpane/taskpane.js'
+            addinRootPath + '/TaskPane/TaskPane.html',
+            addinRootPath + '/TaskPane/TaskPane.js'
           ];
           assert.noFile(unexpected);
           done();
@@ -1922,15 +1922,15 @@ describe('office:mail -> office:commands', function () {
           assert.file(expected);
           
           var unexpected = [
-            addinRootPath + '/custompane/custompane.html',
-            addinRootPath + '/custompane/custompane.js',
-            addinRootPath + '/functionfile/functions.html',
-            addinRootPath + '/functionfile/functions.js',
+            addinRootPath + '/CustomPane/CustomPane.html',
+            addinRootPath + '/CustomPane/CustomPane.js',
+            addinRootPath + '/FunctionFile/Functions.html',
+            addinRootPath + '/FunctionFile/Functions.js',
             addinRootPath + '/images/icon-16.png',
             addinRootPath + '/images/icon-32.png',
             addinRootPath + '/images/icon-80.png',
-            addinRootPath + '/taskpane/taskpane.html',
-            addinRootPath + '/taskpane/taskpane.js'
+            addinRootPath + '/TaskPane/TaskPane.html',
+            addinRootPath + '/TaskPane/TaskPane.js'
           ];
           assert.noFile(unexpected);
           done();
@@ -2118,15 +2118,15 @@ describe('office:mail -> office:commands', function () {
           assert.file(expected);
           
           var unexpected = [
-            addinRootPath + '/custompane/custompane.html',
-            addinRootPath + '/custompane/custompane.js',
-            addinRootPath + '/functionfile/functions.html',
-            addinRootPath + '/functionfile/functions.js',
+            addinRootPath + '/CustomPane/CustomPane.html',
+            addinRootPath + '/CustomPane/CustomPane.js',
+            addinRootPath + '/FunctionFile/Functions.html',
+            addinRootPath + '/FunctionFile/Functions.js',
             addinRootPath + '/images/icon-16.png',
             addinRootPath + '/images/icon-32.png',
             addinRootPath + '/images/icon-80.png',
-            addinRootPath + '/taskpane/taskpane.html',
-            addinRootPath + '/taskpane/taskpane.js'
+            addinRootPath + '/TaskPane/TaskPane.html',
+            addinRootPath + '/TaskPane/TaskPane.js'
           ];
           assert.noFile(unexpected);
           done();
