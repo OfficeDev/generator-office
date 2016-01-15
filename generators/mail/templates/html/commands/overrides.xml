@@ -10,7 +10,6 @@
               <Label resid="groupLabel"/>
               <Control xsi:type="Button" id="msgReadPaneButton">
                 <Label resid="msgReadPaneButtonLabel"/>
-                <Tooltip resid="msgReadPaneButtonTooltip"/>
                 <Supertip>
                   <Title resid="msgReadPaneButtonTitle"/>
                   <Description resid="msgReadPaneButtonDesc"/>
@@ -33,7 +32,6 @@
               <Label resid="groupLabel"/>
               <Control xsi:type="Button" id="attendeePaneButton">
                 <Label resid="attendeePaneButtonLabel"/>
-                <Tooltip resid="attendeePaneButtonTooltip"/>
                 <Supertip>
                   <Title resid="attendeePaneButtonTitle"/>
                   <Description resid="attendeePaneButtonDesc"/>
@@ -56,7 +54,6 @@
               <Label resid="groupLabel"/>
               <Control xsi:type="Button" id="msgComposeGetSubject">
                 <Label resid="getSubjectLabel"/>
-                <Tooltip resid="getSubjectTooltip"/>
                 <Supertip>
                   <Title resid="getSubjectTitle"/>
                   <Description resid="getSubjectDesc"/>
@@ -72,7 +69,6 @@
               </Control>
               <Control xsi:type="Menu" id="msgComposeMenu">
                 <Label resid="menuLabel" />
-                <Tooltip resid="menuTooltip" />
                 <Supertip>
                   <Title resid="menuTitle" />
                   <Description resid="menuDescription" />
@@ -85,7 +81,6 @@
                 <Items>
                   <Item id="msgComposeSetSubject">
                     <Label resid="setSubjectLabel"/>
-                    <Tooltip resid="setSubjectTooltip"/>
                     <Supertip>
                       <Title resid="setSubjectTitle"/>
                       <Description resid="setSubjectDesc"/>
@@ -101,7 +96,6 @@
                   </Item>
                   <Item id="msgComposeAddRecip">
                     <Label resid="addRecipLabel"/>
-                    <Tooltip resid="addRecipTooltip"/>
                     <Supertip>
                       <Title resid="addRecipTitle"/>
                       <Description resid="addRecipDesc"/>
@@ -126,7 +120,6 @@
               <Label resid="groupLabel"/>
               <Control xsi:type="Button" id="organizerGetSubject">
                 <Label resid="getSubjectLabel"/>
-                <Tooltip resid="getSubjectTooltip"/>
                 <Supertip>
                   <Title resid="getSubjectTitle"/>
                   <Description resid="getSubjectDesc"/>
@@ -142,7 +135,6 @@
               </Control>
               <Control xsi:type="Menu" id="organizerMenu">
                 <Label resid="menuLabel" />
-                <Tooltip resid="menuTooltip" />
                 <Supertip>
                   <Title resid="menuTitle" />
                   <Description resid="menuDescription" />
@@ -155,7 +147,6 @@
                 <Items>
                   <Item id="organizerSetSubject">
                     <Label resid="setSubjectLabel"/>
-                    <Tooltip resid="setSubjectTooltip"/>
                     <Supertip>
                       <Title resid="setSubjectTitle"/>
                       <Description resid="setSubjectDesc"/>
@@ -171,7 +162,6 @@
                   </Item>
                   <Item id="organizerAddRecip">
                     <Label resid="addRecipLabel"/>
-                    <Tooltip resid="addRecipTooltip"/>
                     <Supertip>
                       <Title resid="addRecipTitle"/>
                       <Description resid="addRecipDesc"/>
@@ -228,17 +218,11 @@
       <bt:String id="menuTitle" DefaultValue="Modify message"/>
     </bt:ShortStrings>
     <bt:LongStrings>
-      <bt:String id="msgReadPaneButtonTooltip" DefaultValue="Opens a task pane showing some details about the currently selected message"/>
       <bt:String id="msgReadPaneButtonDesc" DefaultValue="Opens a task pane showing the subject and sender of the currently selected message"/>
-      <bt:String id="attendeePaneButtonTooltip" DefaultValue="Opens a task pane showing some details about the currently selected appointment"/>
       <bt:String id="attendeePaneButtonDesc" DefaultValue="Opens a task pane showing the subject and sender of the currently selected appointment"/>
-      <bt:String id="setSubjectTooltip" DefaultValue="Sets the subject to 'Hello World!'"/>
       <bt:String id="setSubjectDesc" DefaultValue="Sets the subject to 'Hello World!'"/>
-      <bt:String id="getSubjectTooltip" DefaultValue="Gets the current subject"/>
       <bt:String id="getSubjectDesc" DefaultValue="Gets the current subject and displays it in the info bar"/>
-      <bt:String id="addRecipTooltip" DefaultValue="Add yourself to the recipient list"/>
       <bt:String id="addRecipDesc" DefaultValue="Add yourself to the recipient list (the To line for messages, the Required attendees line for appointments)"/>
-      <bt:String id="menuTooltip" DefaultValue="Expand this menu for options to modify the message"/>
       <bt:String id="menuDescription" DefaultValue="Expand this menu to set this subject or add yourself to the To line."/>
     </bt:LongStrings>
   </Resources>

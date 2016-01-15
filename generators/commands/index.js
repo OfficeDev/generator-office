@@ -848,12 +848,6 @@ function buildUiLessButton(config) {
           'UI-less Button ' + config.uilessCount, config)
       } 
     },
-    Tooltip: { 
-      '$': { 
-        resid: createLongStringResource('uilessButtonToolTip', config.uilessCount,
-          'This is the tooltip for UI-less Button ' + config.uilessCount, config) 
-      } 
-    },
     Supertip: {
       Title: { 
         '$': { 
@@ -932,12 +926,6 @@ function buildMenu(config) {
         'Menu ' + config.menuCount, config)
       }
     },
-    Tooltip: {
-      '$': {
-        resid: createLongStringResource('menuToolTip', config.menuCount,
-        'This is the tooltip for Menu ' + config.menuCount, config)
-      }
-    },
     Supertip: {
       Title: { 
         '$': { 
@@ -1009,12 +997,6 @@ function buildTaskPaneButton(config) {
       '$': { 
         resid: createShortStringResource('taskpaneButtonLabel', config.taskPaneCount,
           'Taskpane Button ' + config.taskPaneCount, config)
-      } 
-    },
-    Tooltip: { 
-      '$': { 
-        resid: createLongStringResource('taskpaneButtonToolTip', config.taskPaneCount,
-          'This is the tooltip for Taskpane Button ' + config.taskPaneCount, config) 
       } 
     },
     Supertip: {
