@@ -328,7 +328,8 @@ module.exports = generators.Base.extend({
       if (this.genConfig.extensionPoint.indexOf('CustomPane') >= 0) {
         prompts.push({
           name: 'customPaneUrl',
-          message: 'Custom pane URL:'
+          message: 'Custom pane URL:',
+          default: 'https://localhost:8443/CustomPane/CustomPane.html'
         });  
       }
       
@@ -336,20 +337,23 @@ module.exports = generators.Base.extend({
         if (this.genConfig.buttonTypes.indexOf('uiless') >= 0) {
           prompts.push({
             name: 'functionFileUrl',
-            message: 'Function file URL:'
+            message: 'Function file URL:',
+            default: 'https://localhost:8443/FunctionFile/Functions.html'
           }); 
         }
         
         if (this.genConfig.buttonTypes.indexOf('taskpane') >= 0) {
           prompts.push({
             name: 'taskPaneUrl',
-            message: 'Task pane URL:'
+            message: 'Task pane URL:',
+            default: 'https://localhost:8443/TaskPane/TaskPane.html'
           });
         }
         
         prompts.push({
           name: 'iconUrl',
-          message: 'Icon URL:'
+          message: 'Icon URL:',
+          default: 'https://localhost:8443/images/icon.png'
         });
       }
       
