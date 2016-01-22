@@ -768,7 +768,8 @@ function buildControlContainer(type, config) {
     case 'TabDefault': // Default tab (used by Outlook)
       container.nodeName = 'OfficeTab';
       container.node = {
-        '$': { id: type }
+        '$': { id: type },
+        Group: buildGroup(config)
       };
       break;
     case 'TabCustom': // Custom tab 
@@ -776,6 +777,7 @@ function buildControlContainer(type, config) {
       container.nodeName = 'CustomTab';
       container.node = {
         '$': { id: type + config.customContainerCount },
+        Group: buildGroup(config),
         Label: { 
           '$': { 
             resid: createShortStringResource('customTabLabel', config.customContainerCount,
@@ -786,8 +788,7 @@ function buildControlContainer(type, config) {
 
       break;
   }
-  
-  container.node.Group = buildGroup(config);
+ 
   return container;
 }
 
