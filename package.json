@@ -1,6 +1,6 @@
 {
   "name": "generator-office",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Yeoman generator for creating Microsoft Office projects using any text editor.",
   "license": "MIT",
   "author": "OfficeDev",
@@ -8,12 +8,17 @@
     "Connell, Andrew <me@andrewconnell.com>",
     "Thake, Jeremy <jthake@microsoft.com>",
     "Martella, Joe <martellaj@live.com>",
-    "Mastykarz, Waldek <waldek@mastykarz.nl>"
+    "Mastykarz, Waldek <waldek@mastykarz.nl>",
+    "Johnston, Jason <jasonjoh@microsoft.com>"
   ],
   "maintainers": [
     {
       "name": "andrewconnell",
       "email": "me@andrewconnell.com"
+    },
+    {
+      "name": "jthake",
+      "email": "me@jeremythake.com"
     },
     {
       "name": "ms-office",
