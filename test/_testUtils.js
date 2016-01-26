@@ -78,3 +78,12 @@ exports.setupExistingProject = function (generator) {
   generator.fs.write(generator.destinationPath('public/content/site.css'), 'foo');
   generator.fs.write(generator.destinationPath('server/server.js'), 'foo');
 };
+
+exports.setupExistingManifest = function (generator, manifest) {
+  var minimalManifest = '<?xml version="1.0" encoding="UTF-8"?>';
+  minimalManifest +=    '<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" ';
+  minimalManifest +=    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MailApp">';
+  minimalManifest +=    '</OfficeApp>';
+  
+  generator.fs.write(generator.destinationPath(manifest), minimalManifest);
+};

@@ -72,6 +72,7 @@ Running the main generator will prompt you for the type of Office project to cre
   - `office:mail` - creates a Mail Add-in
   - `office:taskpane` - creates a Task Pane Add-in
   - `office:content` - creates a Content Add-in
+  - `office:commands` - adds [add-in commands](https://msdn.microsoft.com/EN-US/library/office/mt267546.aspx) to an existing manifest (Currently only supports Outlook add-ins)
 
 > Remember you can see the options of each sub generators by running `$ yo office:[sub] --help`
 
@@ -93,7 +94,9 @@ You can add the `open` property set to a URL to have your default browser open &
 
 ## Examples
 
-Refer to the [docs](docs) for example executions & output of the generator.## Command Line Options:
+Refer to the [docs](docs) for example executions & output of the generator.
+
+## Command Line Options:
 
 List of supported options. If these are not provided, the generator will prompt you for the values before scaffolding the project.
 
@@ -139,14 +142,21 @@ The Microsoft Office client application that can host the add-in.
 
   - Type: String[]
   - Default: undefined / null
-  - Optional  
+  - Optional   
 
-### `--outlookForm: [ 'mail-read' | 'mail-compose' | 'appointment-read' | 'appointment-compose' ]`
+### `--extensionPoint: [ 'MessageReadCommandSurface' | 'MessageComposeCommandSurface' | 'AppointmentAttendeeCommandSurface' | 'AppointmentOrganizerCommandSurface' | 'CustomPane' ]`
 
-The type of form within Outlook that can host the add-in. 
+The extension points to support. Valid choices depend on the type of add-in created.
 
-> This applies only to mail add-ins.
+#### Mail add-in extension points
 
-  - Type: String[]
-  - Default: undefined / null
-  - Optional  
+- `MessageReadCommandSurface` - The mail read form
+- `MessageComposeCommandSurface` - The mail compose form
+- `AppointmentAttendeeCommandSurface` - The appointment attendee form
+- `AppointmentOrganizerCommandSurface` - The appointment organizer form
+- `CustomPane` - A custom horizontal pane for mail read and appointment attendee forms
+
+
+- Type: String[]
+- Default: undefined / null
+- Optional  

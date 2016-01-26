@@ -39,10 +39,10 @@ module.exports = generators.Base.extend({
       desc: 'Technology to use for the Add-in (html = HTML; ng = Angular)',
       required: false
     });
-
-    this.option('outlookForm', {
+    
+    this.option('extensionPoint', {
       type: String,
-      desc: 'Supported Outlook forms',
+      desc: 'Supported extension points',
       required: false
     });
     
@@ -111,35 +111,40 @@ module.exports = generators.Base.extend({
             }]
         },
         {
-          name: 'outlookForm',
-          message: 'Supported Outlook forms:',
+          name: 'extensionPoint',
+          message: 'Supported Outlook extension points:',
           type: 'checkbox',
           choices: [
             {
-              name: 'E-Mail message - read form',
-              value: 'mail-read',
+              name: 'Message read',
+              value: 'MessageReadCommandSurface',
               checked: true
             },
             {
-              name: 'E-Mail message - compose form',
-              value: 'mail-compose',
+              name: 'Message compose',
+              value: 'MessageComposeCommandSurface',
               checked: true
             },
             {
-              name: 'Appointment - read form',
-              value: 'appointment-read',
+              name: 'Appointment attendee',
+              value: 'AppointmentOrganizerCommandSurface',
               checked: true
             },
             {
-              name: 'Appointment - compose form',
-              value: 'appointment-compose',
+              name: 'Appointment organizer',
+              value: 'AppointmentAttendeeCommandSurface',
               checked: true
+            },
+            {
+              name: 'Custom pane (for message read and appointment attendee forms)',
+              value: 'CustomPane',
+              checked: false
             }
           ],
-          when: this.options.outlookForm === undefined,
+          when: this.options.extensionPoint === undefined,
           validate: /* istanbul ignore next */ function(answers){
             if (answers.length < 1) {
-              return 'Must select at least one Outlook form type';
+              return 'Must select at least one extension point';
             }
             return true;
           }
@@ -221,7 +226,37 @@ module.exports = generators.Base.extend({
     this.genConfig.projectInternalName = projectName.toLowerCase().replace(/ /g, '-');
     this.genConfig.projectDisplayName = projectName;
     this.genConfig.rootPath = this.genConfig['root-path'];
+    
+    // Setup custom app commands based on tech
+    // The idea here is to create commands that compliment the existing
+    // sample code so you see how to do 'a thing' in both the old and new way
+    switch (this.genConfig.tech) {
+      case 'html':
+        
+        this.genConfig.commands = {
+          commandFile: this.templatePath('html/commands/overrides.xml'),
+          functionFile: this.templatePath('html/commands/functions.js')
+        };
+        
+        break;
+    }
   }, // configuring()
+  
+  default: function() {
+    // Invoke the commands subgenerator
+    this.composeWith('office:commands', {
+      options: {
+        type: 'mail',
+        'root-path': this.genConfig['root-path'],
+        'manifest-file': 'manifest-' + this.genConfig.projectInternalName + '.xml',
+        'manifest-only': this.genConfig.tech === 'manifest-only',
+        extensionPoint: this.genConfig.extensionPoint,
+        commands: this.genConfig.commands
+      }
+    }, {
+        local: require.resolve('../commands')
+    });
+  },
 
   /**
    * write generator specific files
@@ -574,9 +609,9 @@ module.exports = generators.Base.extend({
                          this.destinationPath('manifest.xsd'));
 
             // copy addin files
-            if (this.genConfig.outlookForm &&
-                (this.genConfig.outlookForm.indexOf('mail-compose') > -1 ||
-                this.genConfig.outlookForm.indexOf('appointment-compose') > -1)) {
+            if (this.genConfig.extensionPoint &&
+                (this.genConfig.extensionPoint.indexOf('MessageComposeCommandSurface') > -1 ||
+                this.genConfig.extensionPoint.indexOf('AppointmentOrganizerCommandSurface') > -1)) {
               this.fs.copy(this.templatePath('html/appcompose/app.css'),
                           this.destinationPath(this._parseTargetPath('appcompose/app.css')));
               this.fs.copy(this.templatePath('html/appcompose/app.js'),
@@ -589,9 +624,9 @@ module.exports = generators.Base.extend({
                           this.destinationPath(this._parseTargetPath('appcompose/home/home.js')));
             }
 
-            if (this.genConfig.outlookForm &&
-                (this.genConfig.outlookForm.indexOf('mail-read') > -1 ||
-                this.genConfig.outlookForm.indexOf('appointment-read') > -1)) {
+            if (this.genConfig.extensionPoint &&
+                (this.genConfig.extensionPoint.indexOf('MessageReadCommandSurface') > -1 ||
+                this.genConfig.extensionPoint.indexOf('AppointmentAttendeeCommandSurface') > -1)) {
               this.fs.copy(this.templatePath('html/appread/app.css'),
                           this.destinationPath(this._parseTargetPath('appread/app.css')));
               this.fs.copy(this.templatePath('html/appread/app.js'),
@@ -626,9 +661,9 @@ module.exports = generators.Base.extend({
 
             // copy addin files
             this.genConfig.startPage = '{https-addin-host-site}/index.html';
-            if (this.genConfig.outlookForm &&
-                (this.genConfig.outlookForm.indexOf('mail-compose') > -1 ||
-                this.genConfig.outlookForm.indexOf('appointment-compose') > -1)) {
+            if (this.genConfig.extensionPoint &&
+                (this.genConfig.extensionPoint.indexOf('MessageComposeCommandSurface') > -1 ||
+                this.genConfig.extensionPoint.indexOf('AppointmentOrganizerCommandSurface') > -1)) {
               this.fs.copy(this.templatePath('ng/appcompose/index.html'),
                           this.destinationPath(this._parseTargetPath('appcompose/index.html')));
               this.fs.copy(this.templatePath('ng/appcompose/app.module.js'),
@@ -643,9 +678,9 @@ module.exports = generators.Base.extend({
                           this.destinationPath(this._parseTargetPath('appcompose/services/data.service.js')));
             }
 
-            if (this.genConfig.outlookForm &&
-                (this.genConfig.outlookForm.indexOf('mail-read') > -1 ||
-                this.genConfig.outlookForm.indexOf('appointment-read') > -1)) {
+            if (this.genConfig.extensionPoint &&
+                (this.genConfig.extensionPoint.indexOf('MessageReadCommandSurface') > -1 ||
+                this.genConfig.extensionPoint.indexOf('AppointmentAttendeeCommandSurface') > -1)) {
               this.fs.copy(this.templatePath('ng/appread/index.html'),
                           this.destinationPath(this._parseTargetPath('appread/index.html')));
               this.fs.copy(this.templatePath('ng/appread/app.module.js'),
@@ -682,9 +717,9 @@ module.exports = generators.Base.extend({
 
             // copy addin files
             this.genConfig.startPage = '{https-addin-host-site}/index.html';
-            if (this.genConfig.outlookForm &&
-                (this.genConfig.outlookForm.indexOf('mail-compose') > -1 ||
-                this.genConfig.outlookForm.indexOf('appointment-compose') > -1)) {
+            if (this.genConfig.extensionPoint &&
+                (this.genConfig.extensionPoint.indexOf('MessageComposeCommandSurface') > -1 ||
+                this.genConfig.extensionPoint.indexOf('AppointmentOrganizerCommandSurface') > -1)) {
               this.fs.copy(this.templatePath('ng-adal/appcompose/index.html'),
                           this.destinationPath(this._parseTargetPath('appcompose/index.html')));
               this.fs.copy(this.templatePath('ng-adal/appcompose/app.module.js'),
@@ -704,9 +739,9 @@ module.exports = generators.Base.extend({
                           this.destinationPath(this._parseTargetPath('appcompose/services/data.service.js')));
             }
 
-            if (this.genConfig.outlookForm &&
-                (this.genConfig.outlookForm.indexOf('mail-read') > -1 ||
-                this.genConfig.outlookForm.indexOf('appointment-read') > -1)) {
+            if (this.genConfig.extensionPoint &&
+                (this.genConfig.extensionPoint.indexOf('MessageReadCommandSurface') > -1 ||
+                this.genConfig.extensionPoint.indexOf('AppointmentAttendeeCommandSurface') > -1)) {
               this.fs.copy(this.templatePath('ng-adal/appread/index.html'),
                           this.destinationPath(this._parseTargetPath('appread/index.html')));
               this.fs.copy(this.templatePath('ng-adal/appread/app.module.js'),
@@ -755,9 +790,9 @@ module.exports = generators.Base.extend({
         // if mail/appointment read not present, remove the form setting
         _.remove(manifestJson.OfficeApp.FormSettings[0].Form, function(formSetting){
           if (formSetting.$['xsi:type'] === 'ItemRead' &&
-            yoGenerator.genConfig.outlookForm &&
-            yoGenerator.genConfig.outlookForm.indexOf('mail-read') < 0 &&
-            yoGenerator.genConfig.outlookForm.indexOf('appointment-read') < 0) {
+            yoGenerator.genConfig.extensionPoint &&
+            yoGenerator.genConfig.extensionPoint.indexOf('MessageReadCommandSurface') < 0 &&
+            yoGenerator.genConfig.extensionPoint.indexOf('AppointmentAttendeeCommandSurface') < 0) {
             return true;
           } else {
             return false;
@@ -767,9 +802,9 @@ module.exports = generators.Base.extend({
         // if mail/appointment edit not present, remove the form setting
         _.remove(manifestJson.OfficeApp.FormSettings[0].Form, function(formSetting){
           if (formSetting.$['xsi:type'] === 'ItemEdit' &&
-            yoGenerator.genConfig.outlookForm &&
-            yoGenerator.genConfig.outlookForm.indexOf('mail-compose') < 0 &&
-            yoGenerator.genConfig.outlookForm.indexOf('appointment-compose') < 0) {
+            yoGenerator.genConfig.extensionPoint &&
+            yoGenerator.genConfig.extensionPoint.indexOf('MessageComposeCommandSurface') < 0 &&
+            yoGenerator.genConfig.extensionPoint.indexOf('AppointmentOrganizerCommandSurface') < 0) {
             return true;
           } else {
             return false;
@@ -778,9 +813,9 @@ module.exports = generators.Base.extend({
 
         // create array of selected form types
         var supportedFormTypesJson = [];
-        _.forEach(yoGenerator.genConfig.outlookForm, function(formType){
-          switch (formType) {
-            case 'mail-read':
+        _.forEach(yoGenerator.genConfig.extensionPoint, function(extensionType){
+          switch (extensionType) {
+            case 'MessageReadCommandSurface':
               supportedFormTypesJson.push({
                 '$': {
                   'xsi:type': 'ItemIs',
@@ -789,7 +824,7 @@ module.exports = generators.Base.extend({
                 }
               });
               break;
-            case 'mail-compose':
+            case 'MessageComposeCommandSurface':
               supportedFormTypesJson.push({
                 '$': {
                   'xsi:type': 'ItemIs',
@@ -798,7 +833,7 @@ module.exports = generators.Base.extend({
                 }
               });
               break;
-            case 'appointment-read':
+            case 'AppointmentAttendeeCommandSurface':
               supportedFormTypesJson.push({
                 '$': {
                   'xsi:type': 'ItemIs',
@@ -807,7 +842,7 @@ module.exports = generators.Base.extend({
                 }
               });
               break;
-            case 'appointment-compose':
+            case 'AppointmentOrganizerCommandSurface':
               supportedFormTypesJson.push({
                 '$': {
                   'xsi:type': 'ItemIs',
