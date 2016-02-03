@@ -195,7 +195,7 @@ describe('office:content', function () {
       });
 
       /**
-       * manifest.xml is good
+       * manfiest.xml is good
        */
       describe('manifest-*.xml contents', function () {
         var manifest = {};

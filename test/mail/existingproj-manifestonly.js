@@ -96,7 +96,7 @@ describe('office:mail', function () {
         });
   
         /**
-        * manifest-*.xml is good
+        * manfiest-*.xml is good
         */
         describe('manifest-*.xml contents', function () {
           var manifest = {};
@@ -119,11 +119,6 @@ describe('office:mail', function () {
 
           it('has correct display name', function (done) {
             expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
-            done();
-          });
-          
-          it('has valid hi-res icon URL', function (done) {
-            expect(manifest.OfficeApp.HighResolutionIconUrl[0].$.DefaultValue).to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
             done();
           });
 
@@ -273,7 +268,7 @@ describe('office:mail', function () {
         });
   
         /**
-        * manifest-*.xml is good
+        * manfiest-*.xml is good
         */
         describe('manifest-*.xml contents', function () {
           var manifest = {};
@@ -427,7 +422,7 @@ describe('office:mail', function () {
         });
   
         /**
-        * manifest-*.xml is good
+        * manfiest-*.xml is good
         */
         describe('manifest-*.xml contents', function () {
           var manifest = {};
