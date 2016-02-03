@@ -153,6 +153,7 @@ describe('office:mail', function () {
             addinRootPath + '/appread/home/home.css',
             addinRootPath + '/content/Office.css',
             addinRootPath + '/images/close.png',
+            addinRootPath + '/images/hi-res-icon.png',
             addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);
@@ -529,6 +530,7 @@ describe('office:mail', function () {
             addinRootPath + '/appread/home/home.css',
             addinRootPath + '/content/Office.css',
             addinRootPath + '/images/close.png',
+            addinRootPath + '/images/hi-res-icon.png',
             addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);
@@ -704,6 +706,7 @@ describe('office:mail', function () {
             addinRootPath + '/appcompose/home/home.css',
             addinRootPath + '/content/Office.css',
             addinRootPath + '/images/close.png',
+            addinRootPath + '/images/hi-res-icon.png',
             addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);
