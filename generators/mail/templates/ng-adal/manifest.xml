@@ -6,8 +6,8 @@
   <ProviderName>[Provider name]</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
-  <Description DefaultValue="[Task pane Add-in description]"/>
-  <HighResolutionIconUrl DefaultValue="[Icon URL]"/>
+  <Description DefaultValue="[Outlook Add-in description]"/>
+  <HighResolutionIconUrl DefaultValue="https://localhost:8443/images/hi-res-icon.png"/>
   <AppDomains>
     <AppDomain>https://login.windows.net</AppDomain>
     <AppDomain>https://login.microsoftonline.net</AppDomain>

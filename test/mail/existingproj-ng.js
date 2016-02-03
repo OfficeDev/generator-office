@@ -165,6 +165,7 @@ describe('office:mail', function () {
             addinRootPath + '/appread/services/data.service.js',
             addinRootPath + '/content/Office.css',
             addinRootPath + '/images/close.png',
+            addinRootPath + '/images/hi-res-icon.png',
             addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
 
@@ -228,7 +229,7 @@ describe('office:mail', function () {
         });
   
         /**
-        * manfiest-*.xml is good
+        * manifest-*.xml is good
         */
         describe('manifest-*.xml contents', function () {
           var manifest = {};
@@ -251,6 +252,12 @@ describe('office:mail', function () {
 
           it('has correct display name', function (done) {
             expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
+            done();
+          });
+          
+          it('has valid hi-res icon URL', function (done) {
+            expect(manifest.OfficeApp.HighResolutionIconUrl[0].$.DefaultValue)
+              .to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
             done();
           });
 
@@ -541,6 +548,7 @@ describe('office:mail', function () {
             addinRootPath + '/appread/services/data.service.js',
             addinRootPath + '/content/Office.css',
             addinRootPath + '/images/close.png',
+            addinRootPath + '/images/hi-res-icon.png',
             addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
 
@@ -550,7 +558,7 @@ describe('office:mail', function () {
         });
   
         /**
-        * manfiest-*.xml is good
+        * manifest-*.xml is good
         */
         describe('manifest-*.xml contents', function () {
           var manifest = {};
@@ -718,6 +726,7 @@ describe('office:mail', function () {
             addinRootPath + '/appcompose/services/data.service.js',
             addinRootPath + '/content/Office.css',
             addinRootPath + '/images/close.png',
+            addinRootPath + '/images/hi-res-icon.png',
             addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
 
@@ -727,7 +736,7 @@ describe('office:mail', function () {
         });
   
         /**
-        * manfiest-*.xml is good
+        * manifest-*.xml is good
         */
         describe('manifest-*.xml contents', function () {
           var manifest = {};
