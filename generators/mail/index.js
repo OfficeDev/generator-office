@@ -584,6 +584,8 @@ module.exports = generators.Base.extend({
                      this.destinationPath(this._parseTargetPath('content/Office.css')));
         this.fs.copy(this.templatePath('common/images/close.png'),
                      this.destinationPath(this._parseTargetPath('images/close.png')));
+        this.fs.copy(this.templatePath('common/images/hi-res-icon.png'),
+                     this.destinationPath(this._parseTargetPath('images/hi-res-icon.png')));             
         this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'),
                      this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
 
