@@ -1,7 +1,7 @@
 # Developers / Contributors
 
 - [Contributing](contributing.md) describes the guidelines for contributing to this repo. 
-- [Contributing Workflow](contributing-workflow.md) describes the process by which you should follow for contributing to this repo. 
+- [Contributing Workflow](contributing-workflow.md) describes the process which you should follow for contributing to this repo. 
 - [Contrubutor License Agreement (CLA)](contributor-license-agreement.md) describes the requirement and process of signing a Contributor License Agreement (CLA).
 - [Developer Guide](developer-guide.md) describes the development styles and rules developers should follow.
 - [Developer Testing](developer-testing.md) describes process and guideline developers should follow for writing and running tests.

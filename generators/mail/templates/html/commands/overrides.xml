@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<root>
+  <Hosts>
+    <Host xsi:type="MailHost">
+      <DesktopFormFactor>
+        <FunctionFile resid="funcFile"/>
+        <ExtensionPoint xsi:type="MessageReadCommandSurface">
+          <OfficeTab id="TabDefault">
+            <Group id="msgReadCmdGroup">
+              <Label resid="groupLabel"/>
+              <Control xsi:type="Button" id="msgReadPaneButton">
+                <Label resid="msgReadPaneButtonLabel"/>
+                <Supertip>
+                  <Title resid="msgReadPaneButtonTitle"/>
+                  <Description resid="msgReadPaneButtonDesc"/>
+                </Supertip>
+                <Icon>
+                  <bt:Image size="16" resid="icon-16"/>
+                  <bt:Image size="32" resid="icon-32"/>
+                  <bt:Image size="80" resid="icon-80"/>
+                </Icon>
+                <Action xsi:type="ShowTaskpane">
+                  <SourceLocation resid="readPaneUrl"/>
+                </Action>
+              </Control>
+            </Group>
+          </OfficeTab>
+        </ExtensionPoint>
+        <ExtensionPoint xsi:type="AppointmentAttendeeCommandSurface">
+          <OfficeTab id="TabDefault">
+            <Group id="attendeeCmdGroup">
+              <Label resid="groupLabel"/>
+              <Control xsi:type="Button" id="attendeePaneButton">
+                <Label resid="attendeePaneButtonLabel"/>
+                <Supertip>
+                  <Title resid="attendeePaneButtonTitle"/>
+                  <Description resid="attendeePaneButtonDesc"/>
+                </Supertip>
+                <Icon>
+                  <bt:Image size="16" resid="icon-16"/>
+                  <bt:Image size="32" resid="icon-32"/>
+                  <bt:Image size="80" resid="icon-80"/>
+                </Icon>
+                <Action xsi:type="ShowTaskpane">
+                  <SourceLocation resid="readPaneUrl"/>
+                </Action>
+              </Control>
+            </Group>
+          </OfficeTab>
+        </ExtensionPoint>
+        <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+          <OfficeTab id="TabDefault">
+            <Group id="msgComposeCmdGroup">
+              <Label resid="groupLabel"/>
+              <Control xsi:type="Button" id="msgComposeGetSubject">
+                <Label resid="getSubjectLabel"/>
+                <Supertip>
+                  <Title resid="getSubjectTitle"/>
+                  <Description resid="getSubjectDesc"/>
+                </Supertip>
+                <Icon>
+                  <bt:Image size="16" resid="icon-16"/>
+                  <bt:Image size="32" resid="icon-32"/>
+                  <bt:Image size="80" resid="icon-80"/>
+                </Icon>
+                <Action xsi:type="ExecuteFunction">
+                  <FunctionName>getSubject</FunctionName>
+                </Action>
+              </Control>
+              <Control xsi:type="Menu" id="msgComposeMenu">
+                <Label resid="menuLabel" />
+                <Supertip>
+                  <Title resid="menuTitle" />
+                  <Description resid="menuDescription" />
+                </Supertip>
+                <Icon>
+                  <bt:Image size="16" resid="icon-16"/>
+                  <bt:Image size="32" resid="icon-32"/>
+                  <bt:Image size="80" resid="icon-80"/>
+                </Icon>
+                <Items>
+                  <Item id="msgComposeSetSubject">
+                    <Label resid="setSubjectLabel"/>
+                    <Supertip>
+                      <Title resid="setSubjectTitle"/>
+                      <Description resid="setSubjectDesc"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="icon-16"/>
+                      <bt:Image size="32" resid="icon-32"/>
+                      <bt:Image size="80" resid="icon-80"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>setSubject</FunctionName>
+                    </Action>
+                  </Item>
+                  <Item id="msgComposeAddRecip">
+                    <Label resid="addRecipLabel"/>
+                    <Supertip>
+                      <Title resid="addRecipTitle"/>
+                      <Description resid="addRecipDesc"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="icon-16"/>
+                      <bt:Image size="32" resid="icon-32"/>
+                      <bt:Image size="80" resid="icon-80"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>addToRecipients</FunctionName>
+                    </Action>
+                  </Item>
+                </Items>
+              </Control>
+            </Group>
+          </OfficeTab>
+        </ExtensionPoint>
+        <ExtensionPoint xsi:type="AppointmentOrganizerCommandSurface">
+          <OfficeTab id="TabDefault">
+            <Group id="organizerCmdGroup">
+              <Label resid="groupLabel"/>
+              <Control xsi:type="Button" id="organizerGetSubject">
+                <Label resid="getSubjectLabel"/>
+                <Supertip>
+                  <Title resid="getSubjectTitle"/>
+                  <Description resid="getSubjectDesc"/>
+                </Supertip>
+                <Icon>
+                  <bt:Image size="16" resid="icon-16"/>
+                  <bt:Image size="32" resid="icon-32"/>
+                  <bt:Image size="80" resid="icon-80"/>
+                </Icon>
+                <Action xsi:type="ExecuteFunction">
+                  <FunctionName>getSubject</FunctionName>
+                </Action>
+              </Control>
+              <Control xsi:type="Menu" id="organizerMenu">
+                <Label resid="menuLabel" />
+                <Supertip>
+                  <Title resid="menuTitle" />
+                  <Description resid="menuDescription" />
+                </Supertip>
+                <Icon>
+                  <bt:Image size="16" resid="icon-16"/>
+                  <bt:Image size="32" resid="icon-32"/>
+                  <bt:Image size="80" resid="icon-80"/>
+                </Icon>
+                <Items>
+                  <Item id="organizerSetSubject">
+                    <Label resid="setSubjectLabel"/>
+                    <Supertip>
+                      <Title resid="setSubjectTitle"/>
+                      <Description resid="setSubjectDesc"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="icon-16"/>
+                      <bt:Image size="32" resid="icon-32"/>
+                      <bt:Image size="80" resid="icon-80"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>setSubject</FunctionName>
+                    </Action>
+                  </Item>
+                  <Item id="organizerAddRecip">
+                    <Label resid="addRecipLabel"/>
+                    <Supertip>
+                      <Title resid="addRecipTitle"/>
+                      <Description resid="addRecipDesc"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="icon-16"/>
+                      <bt:Image size="32" resid="icon-32"/>
+                      <bt:Image size="80" resid="icon-80"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>addToRecipients</FunctionName>
+                    </Action>
+                  </Item>
+                </Items>
+              </Control>
+            </Group>
+          </OfficeTab>
+        </ExtensionPoint>
+        <ExtensionPoint xsi:type="CustomPane">
+          <RequestedHeight>200</RequestedHeight>
+          <SourceLocation resid="customPaneUrl"/>
+          <Rule xsi:type="RuleCollection" Mode="Or">
+            <Rule xsi:type="ItemIs" ItemType="Message"/>
+            <Rule xsi:type="ItemIs" ItemType="AppointmentAttendee"/>
+          </Rule>
+        </ExtensionPoint>
+      </DesktopFormFactor>
+    </Host>
+  </Hosts>
+  <Resources>
+    <bt:Images>
+      <bt:Image id="icon-16" DefaultValue="https://localhost:8443/images/icon-16.png"/>
+      <bt:Image id="icon-32" DefaultValue="https://localhost:8443/images/icon-32.png"/>
+      <bt:Image id="icon-80" DefaultValue="https://localhost:8443/images/icon-80.png"/>
+    </bt:Images>
+    <bt:Urls>
+      <bt:Url id="customPaneUrl" DefaultValue="https://localhost:8443/CustomPane/CustomPane.html"/>
+      <bt:Url id="funcFile" DefaultValue="https://localhost:8443/FunctionFile/Functions.html"/>
+      <bt:Url id="readPaneUrl" DefaultValue="https://localhost:8443/appread/home/home.html"/>
+    </bt:Urls>
+    <bt:ShortStrings>
+      <bt:String id="groupLabel" DefaultValue="Sample Add-in"/>
+      <bt:String id="msgReadPaneButtonLabel" DefaultValue="See message details"/>
+      <bt:String id="msgReadPaneButtonTitle" DefaultValue="See message details"/>
+      <bt:String id="attendeePaneButtonLabel" DefaultValue="See appointment details"/>
+      <bt:String id="attendeePaneButtonTitle" DefaultValue="See appointment details"/>
+      <bt:String id="setSubjectLabel" DefaultValue="Set subject"/>
+      <bt:String id="setSubjectTitle" DefaultValue="Set subject"/>
+      <bt:String id="getSubjectLabel" DefaultValue="Get subject"/>
+      <bt:String id="getSubjectTitle" DefaultValue="Get subject"/>
+      <bt:String id="addRecipLabel" DefaultValue="Add recipient"/>
+      <bt:String id="addRecipTitle" DefaultValue="Add recipient"/>
+      <bt:String id="menuLabel" DefaultValue="Modify message"/>
+      <bt:String id="menuTitle" DefaultValue="Modify message"/>
+    </bt:ShortStrings>
+    <bt:LongStrings>
+      <bt:String id="msgReadPaneButtonDesc" DefaultValue="Opens a task pane showing the subject and sender of the currently selected message"/>
+      <bt:String id="attendeePaneButtonDesc" DefaultValue="Opens a task pane showing the subject and sender of the currently selected appointment"/>
+      <bt:String id="setSubjectDesc" DefaultValue="Sets the subject to 'Hello World!'"/>
+      <bt:String id="getSubjectDesc" DefaultValue="Gets the current subject and displays it in the info bar"/>
+      <bt:String id="addRecipDesc" DefaultValue="Add yourself to the recipient list (the To line for messages, the Required attendees line for appointments)"/>
+      <bt:String id="menuDescription" DefaultValue="Expand this menu to set this subject or add yourself to the To line."/>
+    </bt:LongStrings>
+  </Resources>
+</root>

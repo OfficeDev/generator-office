@@ -2,8 +2,8 @@
 
 var fs = require('fs');
 var path = require('path');
-var assert = require('yeoman-generator').assert;
-var helpers = require('yeoman-generator').test;
+var assert = require('yeoman-assert');
+var helpers = require('yeoman-test');
 
 var Xml2Js = require('xml2js');
 var validator = require('validator');
@@ -34,7 +34,12 @@ describe('office:app', function(){
         rootPath: '',
         type: 'mail',
         tech: 'html',
-        outlookForm: ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'],
+        extensionPoint: [
+          'MessageReadCommandSurface', 
+          'MessageComposeCommandSurface', 
+          'AppointmentAttendeeCommandSurface', 
+          'AppointmentOrganizerCommandSurface'
+        ],
         'skip-install': true
       };
 

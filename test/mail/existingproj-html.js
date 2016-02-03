@@ -5,8 +5,8 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
 var mockery = require('mockery');
-var assert = require('yeoman-generator').assert;
-var helpers = require('yeoman-generator').test;
+var assert = require('yeoman-assert');
+var helpers = require('yeoman-test');
 
 var Xml2Js = require('xml2js');
 var validator = require('validator');
@@ -42,7 +42,12 @@ describe('office:mail', function () {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
       tech: 'html',
-      outlookForm: ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'],
+      extensionPoint: [
+        'MessageReadCommandSurface', 
+        'MessageComposeCommandSurface', 
+        'AppointmentAttendeeCommandSurface', 
+        'AppointmentOrganizerCommandSurface'
+      ],
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
 
@@ -55,11 +60,16 @@ describe('office:mail', function () {
           version: '0.1.0',
           devDependencies: {
             chalk: '^1.1.1',
+            del: '^2.1.0',
             gulp: '^3.9.0',
             'gulp-load-plugins': '^1.0.0',
+            'gulp-minify-css': '^1.2.2',
             'gulp-task-listing': '^1.0.1',
+            'gulp-uglify': '^1.5.1',
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
+            'run-sequence': '^1.1.5',
+            'xml2js': '^0.4.15',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
@@ -87,14 +97,21 @@ describe('office:mail', function () {
      */
     describe('addin technology:html', function () {
 
-      describe('Outlook form:mail-read, mail-compose, appointment-read, appointment-compose', function () {
+      describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface,'
+             + 'AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
           options.tech = 'html';
   
           // set outlook form type
-          options.outlookForm = ['mail-read', 'mail-compose', 'appointment-read', 'appointment-compose'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'MessageComposeCommandSurface', 
+            'AppointmentAttendeeCommandSurface', 
+            'AppointmentOrganizerCommandSurface'
+          ];
   
           // run the generator
           helpers.run(path.join(__dirname, '../../generators/mail'))
@@ -175,11 +192,15 @@ describe('office:mail', function () {
             },
             devDependencies: {
               chalk: '^1.1.1',
+              del: '^2.1.0',
               gulp: '^3.9.0',
               'gulp-load-plugins': '^1.0.0',
+              'gulp-minify-css': '^1.2.2',
               'gulp-task-listing': '^1.0.1',
+              'gulp-uglify': '^1.5.1',
               'gulp-webserver': '^0.9.1',
               minimist: '^1.2.0',
+              'run-sequence': '^1.1.5',
               xmllint: 'git+https://github.com/kripken/xml.js.git'
             }
           };
@@ -381,25 +402,92 @@ describe('office:mail', function () {
             assert.fileContent('gulpfile.js', 'gulp.task(\'serve-static\',');
             done();
           });
+          
+          it('contains task \'validate\'', function (done) {
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'validate\',');
+            done();
+          });
+            
+          it('contains task \'validate-forcatalog\'', function (done) {
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'validate-forcatalog\',');
+            done();
+          });
+            
+          it('contains task \'validate-forstore\'', function (done) {
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'validate-forstore\',');
+            done();
+          });
+            
+          it('contains task \'validate-highResolutionIconUrl\'', function (done) {
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'validate-highResolutionIconUrl\',');
+            done();
+          });
 
           it('contains task \'validate-xml\'', function (done) {
             assert.file('gulpfile.js');
             assert.fileContent('gulpfile.js', 'gulp.task(\'validate-xml\',');
             done();
           });
+          
+          it('contains task \'dist-remove\'', function (done) {
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'dist-remove\',');
+            done();
+          });
+          
+          it('contains task \'dist-copy-files\'', function (done) {
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'dist-copy-files\',');
+            done();
+          });
+          
+          it('contains task \'dist-minify\'', function (done) {
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'dist-minify\',');
+            done();
+          });
+          
+          it('contains task \'dist-minify-js\'', function (done) {
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'dist-minify-js\',');
+            done();
+          });
+          
+          it('contains task \'dist-minify-css\'', function (done) {
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'dist-minify-css\',');
+            done();
+          });
+          
+          it('contains task \'dist\'', function (done) {
+            assert.file('gulpfile.js');
+            assert.fileContent('gulpfile.js', 'gulp.task(\'dist\',');
+            done();
+          });
 
         }); // describe('gulpfile.js contents')
         
-      }); //describe('Outlook form:mail-read, mail-compose, appointment-read, appointment-compose')
+      }); // describe('Outlook extension points:MessageReadCommandSurface, 
+          // MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, 
+          // AppointmentOrganizerCommandSurface')
       
-      describe('Outlook form:mail-read, appointment-read', function () {
+      describe('Outlook extension points:MessageReadCommandSurface, '
+             + 'AppointmentAttendeeCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
           options.tech = 'html';
   
           // set outlook form type
-          options.outlookForm = ['mail-read', 'appointment-read'];
+          options.extensionPoint = [
+            'MessageReadCommandSurface', 
+            'AppointmentAttendeeCommandSurface'
+          ];
   
           // run the generator
           helpers.run(path.join(__dirname, '../../generators/mail'))
@@ -559,16 +647,22 @@ describe('office:mail', function () {
 
         }); // describe('manifest-*.xml contents')  
         
-      }); //describe('Outlook form:mail-read, appointment-read')
+      }); // describe('Outlook extension points:MessageReadCommandSurface, 
+          // AppointmentAttendeeCommandSurface')
       
-      describe('Outlook form:mail-compose, appointment-compose', function () {
+      describe('Outlook extension points:MessageComposeCommandSurface, '
+             + 'AppointmentOrganizerCommandSurface', 
+      function () {
 
         beforeEach(function (done) {
           // set language to html
           options.tech = 'html';
   
           // set outlook form type
-          options.outlookForm = ['mail-compose', 'appointment-compose'];
+          options.extensionPoint = [
+            'MessageComposeCommandSurface', 
+            'AppointmentOrganizerCommandSurface'
+          ];
   
           // run the generator
           helpers.run(path.join(__dirname, '../../generators/mail'))
@@ -728,7 +822,8 @@ describe('office:mail', function () {
 
         }); // describe('manifest-*.xml contents')
   
-      }); //describe('Outlook form:mail-compose, appointment-compose')
+      }); // describe(''Outlook extension points:MessageComposeCommandSurface, 
+          // AppointmentOrganizerCommandSurface')
       
     }); // describe('technology:html')
 
