@@ -6,8 +6,8 @@
   <ProviderName>[Provider name]</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
-  <Description DefaultValue="[Outlook Add-in description]"/>
-  <HighResolutionIconUrl DefaultValue="https://localhost:8443/images/hi-res-icon.png"/>
+  <Description DefaultValue="[Task pane Add-in description]"/>
+  <HighResolutionIconUrl DefaultValue="[Icon URL]"/>
   <Hosts>
     <Host Name="Mailbox" />
   </Hosts>
