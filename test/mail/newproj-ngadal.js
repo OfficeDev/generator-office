@@ -169,7 +169,6 @@ describe('office:mail', function () {
             'appread/services/data.service.js',
             'content/Office.css',
             'images/close.png',
-            'images/hi-res-icon.png',
             'scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);
@@ -588,7 +587,6 @@ describe('office:mail', function () {
             'appread/services/data.service.js',
             'content/Office.css',
             'images/close.png',
-            'images/hi-res-icon.png',
             'scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);
@@ -767,7 +765,6 @@ describe('office:mail', function () {
             'appcompose/services/data.service.js',
             'content/Office.css',
             'images/close.png',
-            'images/hi-res-icon.png',
             'scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);

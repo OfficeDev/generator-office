@@ -171,7 +171,6 @@ describe('office:mail', function () {
             addinRootPath + '/appread/services/data.service.js',
             addinRootPath + '/content/Office.css',
             addinRootPath + '/images/close.png',
-            addinRootPath + '/images/hi-res-icon.png',
             addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
 
@@ -598,7 +597,6 @@ describe('office:mail', function () {
             addinRootPath + '/appread/services/data.service.js',
             addinRootPath + '/content/Office.css',
             addinRootPath + '/images/close.png',
-            addinRootPath + '/images/hi-res-icon.png',
             addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
 
@@ -780,7 +778,6 @@ describe('office:mail', function () {
             addinRootPath + '/appcompose/services/data.service.js',
             addinRootPath + '/content/Office.css',
             addinRootPath + '/images/close.png',
-            addinRootPath + '/images/hi-res-icon.png',
             addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
 
