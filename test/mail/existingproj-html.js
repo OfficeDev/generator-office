@@ -239,7 +239,8 @@ describe('office:mail', function () {
           });
           
           it('has valid hi-res icon URL', function (done) {
-            expect(manifest.OfficeApp.HighResolutionIconUrl[0].$.DefaultValue).to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
+            expect(manifest.OfficeApp.HighResolutionIconUrl[0].$.DefaultValue)
+              .to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
             done();
           });
 
