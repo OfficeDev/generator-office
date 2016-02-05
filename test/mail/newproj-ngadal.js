@@ -169,6 +169,7 @@ describe('office:mail', function () {
             'appread/services/data.service.js',
             'content/Office.css',
             'images/close.png',
+            'images/hi-res-icon.png',
             'scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);
@@ -229,7 +230,7 @@ describe('office:mail', function () {
         });
   
         /**
-        * manfiest-*.xml is good
+        * manifest-*.xml is good
         */
         describe('manifest-*.xml contents', function () {
           var manifest = {};
@@ -252,6 +253,12 @@ describe('office:mail', function () {
 
           it('has correct display name', function (done) {
             expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
+            done();
+          });
+          
+          it('has valid hi-res icon URL', function (done) {
+            expect(manifest.OfficeApp.HighResolutionIconUrl[0].$.DefaultValue)
+              .to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
             done();
           });
 
@@ -582,6 +589,7 @@ describe('office:mail', function () {
             'appread/services/data.service.js',
             'content/Office.css',
             'images/close.png',
+            'images/hi-res-icon.png',
             'scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);
@@ -589,7 +597,7 @@ describe('office:mail', function () {
         });
   
         /**
-        * manfiest-*.xml is good
+        * manifest-*.xml is good
         */
         describe('manifest-*.xml contents', function () {
           var manifest = {};
@@ -760,6 +768,7 @@ describe('office:mail', function () {
             'appcompose/services/data.service.js',
             'content/Office.css',
             'images/close.png',
+            'images/hi-res-icon.png',
             'scripts/MicrosoftAjax.js'
           ];
           assert.file(expected);
@@ -767,7 +776,7 @@ describe('office:mail', function () {
         });
   
         /**
-        * manfiest-*.xml is good
+        * manifest-*.xml is good
         */
         describe('manifest-*.xml contents', function () {
           var manifest = {};
