@@ -26,6 +26,7 @@ module.exports = generators.Base.extend({
     this.option('root-path', {
       type: String,
       desc: 'Relative path where the project should be created (blank = current directory)',
+      default: '.',
       required: false
     });
 
