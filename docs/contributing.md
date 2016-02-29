@@ -1,4 +1,4 @@
-# Contributing Guidlines
+# Contributing Guidelines
  
 If you would like to become an active contributor to this project please read the following guidelines.
 
@@ -8,7 +8,7 @@ Please feel free to reach out to the team if you have any questions about contri
 
 ## Fixing Typos
 
-Typos are embarrasing! Most PR's that fix typos will be accepted. In order to make it easier to review the PR, please narrow the focus instead of sending a huge PR of fixes.
+Typos are embarrassing! Most PR's that fix typos will be accepted. In order to make it easier to review the PR, please narrow the focus instead of sending a huge PR of fixes.
 
 ## Reporting Bugs & Issues
 If you have any bugs or issues with the generator. Please submit them in the [Issues](/OfficeDev/generator-office/issues) for this repo.
