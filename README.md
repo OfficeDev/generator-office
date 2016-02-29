@@ -61,7 +61,7 @@ $ npm install -g tsd bower gulp yo generator-office
 $ yo office [options]
 ```
 
-The generator is intented to be run from within a folder where you want the project scaffolding created. This can be in the root of the current folder or within a subfolder.
+The generator is intended to be run from within a folder where you want the project scaffolding created. This can be in the root of the current folder or within a subfolder.
 
 > Note: Office Add-ins must be hosted, even in development, in a **HTTPS** site. Refer to the section [Running the Generated Site](/OfficeDev/generator-office#running-the-generated-site) below for details.
 
@@ -78,7 +78,7 @@ Running the main generator will prompt you for the type of Office project to cre
 
 ## Running the Generated Site
 
-All generators create a `gulpfile.js`. This uses the [gulp-webserver](https://www.npmjs.com/package/gulp-webserver) task to start a HTTPS server. This server includes a self-signed SSL cert that your development enviroment must trust. 
+All generators create a `gulpfile.js`. This uses the [gulp-webserver](https://www.npmjs.com/package/gulp-webserver) task to start a HTTPS server. This server includes a self-signed SSL cert that your development environment must trust. 
 
 > Using a self-signed certificate involves adding it to your trusted root certificates... see our doc [Adding Self-Signed Certificates as Trusted Root Certificate](docs/trust-self-signed-cert.md) for instructions on how to do this.
 
@@ -91,6 +91,14 @@ $ gulp serve-static
 ```
 
 You can add the `open` property set to a URL to have your default browser open & navigate to when running this task.
+
+## Validating your manifest files
+
+There is a gulp task to validate your manifest file, since the generated manifest file has changed to have the name <project-name>-manifest.xml it is necessary to pass the name of the file as an arguement to the validate task like so:
+
+```bash
+$ gulp validate --xmlfile your-project-manifest.xml
+```
 
 ## Examples
 
