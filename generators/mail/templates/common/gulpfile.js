@@ -61,11 +61,11 @@ gulp.task('validate-forstore', ['validate-xml', 'validate-highResolutionIconUrl'
   var parser = new Xml2Js.Parser();
   parser.parseString(xml, function(err, manifestJson) {
     // 5.7. Apps and add-ins must use SSL
-    if (manifestJson.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue.indexOf('https://') !== 0) {
+    if (manifestJson.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue.indexOf('https://') !== 0) {
       console.log(chalk.red('ERROR: 5.7. Apps and add-ins must be secured with a valid ' + 
         'and trusted SSL certificate (HTTPS).'));
-      console.log(chalk.blue('FIX: Change the URL of OfficeApp/DefaultSettings/SourceLocation/DefaultValue (' + 
-        manifestJson.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue) + ') to https://');
+      console.log(chalk.blue('FIX: Change the URL of OfficeApp/FormSettings/Form/DesktopSettings/SourceLocation/DefaultValue (' + 
+       manifestJson.OfficeApp.FormSettings[0].Form[0].DesktopSettings[0].SourceLocation[0].$.DefaultValue) + ') to https://');
     }
     
     // 5.10. icon must be present
