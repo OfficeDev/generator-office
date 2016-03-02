@@ -41,13 +41,13 @@ module.exports = generators.Base.extend({
       desc: 'Office client product that can host the add-in',
       required: false
     });
-    
+
     this.option('extensionPoint', {
       type: String,
       desc: 'Supported extension points',
       required: false
     });
-    
+
     this.option('appId', {
       type: String,
       desc: 'Application ID as registered in Azure AD',
@@ -124,27 +124,6 @@ module.exports = generators.Base.extend({
               name: 'Content Add-in',
               value: 'content'
             }]
-        },
-        // technology used to create the addin (html / angular / etc)
-        {
-          name: 'tech',
-          message: 'Technology to use:',
-          type: 'list',
-          when: this.options.tech === undefined,
-          choices: [
-            {
-              name: 'HTML, CSS & JavaScript',
-              value: 'html'
-            }, {
-              name: 'Angular',
-              value: 'ng'
-            }, {
-              name: 'Angular ADAL',
-              value: 'ng-adal'
-            }, {
-              name: 'Manifest.xml only (no application source files)',
-              value: 'manifest-only'
-            }]
         }];
 
       // trigger prompts
@@ -153,84 +132,7 @@ module.exports = generators.Base.extend({
         this.genConfig = extend(this.genConfig, responses);
         done();
       }.bind(this));
-
-    }, // askFor()
-    
-    askForAdalConfig: function(){
-      // if it's not an ADAL app, don't ask the questions
-      if (this.genConfig.tech !== 'ng-adal') {
-        return;
-      }
-
-      var done = this.async();
-
-      // office client application that can host the addin
-      var prompts = [{
-        name: 'appId',
-        message: 'Application ID as registered in Azure AD:',
-        default: '00000000-0000-0000-0000-000000000000',
-        when: this.options.appId === undefined
-      }];
-
-      // trigger prompts
-      this.prompt(prompts, function(responses){
-        this.genConfig = extend(this.genConfig, responses);
-        done();
-      }.bind(this));
-
-    }, // askForAdalConfig()
-
-    askForOfficeClients: function(){
-      // if it's a mail addin, don't ask for Office client
-      if (this.genConfig.type === 'mail') {
-        return;
-      }
-
-      var done = this.async();
-
-      // office client application that can host the addin
-      var prompts = [{
-        name: 'clients',
-        message: 'Supported Office applications:',
-        type: 'checkbox',
-        choices: [
-          {
-            name: 'Word',
-            value: 'Document',
-            checked: true
-          },
-          {
-            name: 'Excel',
-            value: 'Workbook',
-            checked: true
-          },
-          {
-            name: 'PowerPoint',
-            value: 'Presentation',
-            checked: true
-          },
-          {
-            name: 'Project',
-            value: 'Project',
-            checked: true
-          }
-        ],
-        when: this.options.clients === undefined,
-        validate: /* istanbul ignore next */ function(clientsAnswer){
-          if (clientsAnswer.length < 1) {
-            return 'Must select at least one Office application';
-          }
-          return true;
-        }
-      }];
-
-      // trigger prompts
-      this.prompt(prompts, function(responses){
-        this.genConfig = extend(this.genConfig, responses);
-        done();
-      }.bind(this));
-
-    } // askForOfficeClients()
+    }
 
   }, // prompting()
 
@@ -264,7 +166,7 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
-            appId: this.genConfig.appId,            
+            appId: this.genConfig.appId,
             clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
           }
