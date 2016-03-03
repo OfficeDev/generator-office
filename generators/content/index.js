@@ -51,6 +51,13 @@ module.exports = generators.Base.extend({
       desc: 'Application ID as registered in Azure AD',
       required: false
     });
+    
+    this.option('includeNgOfficeUIFabric', {
+      type: Boolean,
+      desc: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
+      required: false,
+      defaults: false
+    });
 
     // create global config object on this generator
     this.genConfig = {};
@@ -181,6 +188,31 @@ module.exports = generators.Base.extend({
 
     }, // askForAdalConfig()
 
+    askForNgConfig: function(){
+      // if it's not an NG app, don't ask the questions
+      if (this.genConfig.tech !== 'ng' && this.genConfig.tech !== 'ng-adal') {
+        this.genConfig.includeNgOfficeUIFabric = false;
+        return;
+      }
+      
+      var done = this.async();
+
+      // office client application that can host the addin
+      var prompts = [{
+        name: 'includeNgOfficeUIFabric',
+        message: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
+        type: 'confirm',
+        default: true,
+        when: this.options.includeNgOfficeUIFabric === undefined
+      }];
+
+      // trigger prompts
+      this.prompt(prompts, function(responses){
+        this.genConfig = extend(this.genConfig, responses);
+        done();
+      }.bind(this));
+
+    }, // askForNgConfig()
     /**
      * If user specified tech:manifest-only, prompt for start page.
      */
@@ -368,7 +400,11 @@ module.exports = generators.Base.extend({
               /* istanbul ignore else */
               if (!bowerJson.dependencies['angular-sanitize']) {
                 bowerJson.dependencies['angular-sanitize'] = '~1.4.4';
-              }
+              }              
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['ng-office-ui-fabric'] && yoGenerator.genConfig.includeNgOfficeUIFabric) {                
+                bowerJson.dependencies['ng-office-ui-fabric'] = '*';
+              }               
               break;
             case 'ng-adal':
               /* istanbul ignore else */
@@ -387,6 +423,10 @@ module.exports = generators.Base.extend({
               if (!bowerJson.dependencies['adal-angular']) {
                 bowerJson.dependencies['adal-angular'] = '~1.0.5';
               }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['ng-office-ui-fabric'] && yoGenerator.genConfig.includeNgOfficeUIFabric) {                
+                bowerJson.dependencies['ng-office-ui-fabric'] = '*';
+              }
               break;
           }
 
@@ -403,7 +443,7 @@ module.exports = generators.Base.extend({
         var pathToBowerJson = yoGenerator.destinationPath('bower.json');
         // if doesn't exist...
         if (!yoGenerator.fs.exists(pathToBowerJson)) {
-          // copy bower.json => project
+          // copy bower.json => project          
           this._copyBower(yoGenerator, yoGenerator.genConfig.tech);
         } else {
           // update bower.json => project
@@ -611,8 +651,9 @@ module.exports = generators.Base.extend({
 
             // copy addin files
             this.genConfig.startPage = '{https-addin-host-site}/index.html';
-            this.fs.copy(this.templatePath('ng/index.html'),
-                         this.destinationPath(this._parseTargetPath('index.html')));
+            this.fs.copyTpl(this.templatePath('ng/index.html'),
+                         this.destinationPath(this._parseTargetPath('index.html')),
+                         this.genConfig);
             this.fs.copy(this.templatePath('ng/app.module.js'),
                          this.destinationPath(this._parseTargetPath('app/app.module.js')));
             this.fs.copy(this.templatePath('ng/app.routes.js'),
