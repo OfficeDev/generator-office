@@ -51,6 +51,13 @@ module.exports = generators.Base.extend({
       desc: 'Application ID as registered in Azure AD',
       required: false
     });
+    
+    this.option('includeNgOfficeUIFabric', {
+      type: Boolean,
+      desc: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
+      required: false,
+      defaults: false
+    });
 
     // create global config object on this generator
     this.genConfig = {};
@@ -183,6 +190,31 @@ module.exports = generators.Base.extend({
 
     }, // askForAdalConfig()
 
+    askForNgConfig: function(){
+      // if it's not an NG app, don't ask the questions
+      if (this.genConfig.tech !== 'ng' && this.genConfig.tech !== 'ng-adal') {
+        this.genConfig.includeNgOfficeUIFabric = false;
+        return;
+      }
+
+      var done = this.async();
+
+      // office client application that can host the addin
+      var prompts = [{
+        name: 'includeNgOfficeUIFabric',
+        message: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
+        type: 'confirm',
+        default: true,
+        when: this.options.includeNgOfficeUIFabric === undefined
+      }];
+
+      // trigger prompts
+      this.prompt(prompts, function(responses){
+        this.genConfig = extend(this.genConfig, responses);
+        done();
+      }.bind(this));
+
+    }, // askForNgConfig()
     /**
      * If user specified tech:manifest-only, prompt for start page.
      */
@@ -395,6 +427,10 @@ module.exports = generators.Base.extend({
               if (!bowerJson.dependencies['angular-sanitize']) {
                 bowerJson.dependencies['angular-sanitize'] = '~1.4.4';
               }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['ng-office-ui-fabric'] && yoGenerator.genConfig.includeNgOfficeUIFabric) {
+                bowerJson.dependencies['ng-office-ui-fabric'] = '*';
+              }
               break;
             case 'ng-adal':
               /* istanbul ignore else */
@@ -412,6 +448,10 @@ module.exports = generators.Base.extend({
               /* istanbul ignore else */
               if (!bowerJson.dependencies['adal-angular']) {
                 bowerJson.dependencies['adal-angular'] = '~1.0.5';
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['ng-office-ui-fabric'] && yoGenerator.genConfig.includeNgOfficeUIFabric) {
+                bowerJson.dependencies['ng-office-ui-fabric'] = '*';
               }
               break;
           }

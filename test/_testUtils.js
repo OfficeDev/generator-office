@@ -12,6 +12,9 @@ function _assertObjectContains(obj, content) {
       _assertObjectContains(content[key], obj[key]);
       return;
     }
+    if (content[key] !== obj[key]) {
+      console.log("Not equal" + key);
+    }
     assert.equal(content[key], obj[key]);
   });
 }
