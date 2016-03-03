@@ -179,7 +179,11 @@ module.exports = generators.Base.extend({
         message: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
         type: 'confirm',
         default: true,
+<<<<<<< 4cdf95991081ad03bf42c036c2524d84862f06a2
         when: !this.options.includeNgOfficeUIFabric
+=======
+        when: this.options.includeNgOfficeUIFabric === undefined
+>>>>>>> Option to include Office UI Fabric for ng & ng-adal
       }];
 
       // trigger prompts
@@ -275,8 +279,7 @@ module.exports = generators.Base.extend({
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
             includeNgOfficeUIFabric: this.genConfig.includeNgOfficeUIFabric,
-            appId: this.genConfig.appId,          
-
+            appId: this.genConfig.appId,      
             clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
           }
