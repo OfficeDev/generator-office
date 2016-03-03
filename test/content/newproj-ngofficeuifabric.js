@@ -90,12 +90,12 @@ describe('office:content', function(){
     /**
      * Test addin when technology = angular
      */
-    describe('addin technology:ng', function(){
+    describe('addin technology:ng, includeNgOfficeUIFabric', function(){
 
       beforeEach(function(done){
         // set language to html
         options.tech = 'ng';
-
+        options.includeNgOfficeUIFabric = true;
         // set products
         options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
 
@@ -149,7 +149,8 @@ describe('office:content', function(){
             angular: '~1.4.4',
             'angular-route': '~1.4.4',
             'angular-sanitize': '~1.4.4',
-            'office-ui-fabric': '*'
+            'office-ui-fabric': '*',
+            'ng-office-ui-fabric': '*'
           }
         };
 
