@@ -188,13 +188,12 @@ module.exports = generators.Base.extend({
 
     }, // askForAdalConfig()
 
-    askForNgConfig: function(){
+    askForNgConfig: function(){      
       // if it's not an NG app, don't ask the questions
       if (this.genConfig.tech !== 'ng' && this.genConfig.tech !== 'ng-adal') {
         this.genConfig.includeNgOfficeUIFabric = false;
         return;
-      }    
-
+      }     
       var done = this.async();
 
       // office client application that can host the addin
@@ -401,7 +400,6 @@ module.exports = generators.Base.extend({
                 bowerJson.dependencies['angular-sanitize'] = '~1.4.4';
               }              
               /* istanbul ignore else */              
-
               if (!bowerJson.dependencies['ng-office-ui-fabric'] && yoGenerator.genConfig.includeNgOfficeUIFabric) {                
                 bowerJson.dependencies['ng-office-ui-fabric'] = '*';
               }               
@@ -657,8 +655,7 @@ module.exports = generators.Base.extend({
 
             this.fs.copyTpl(this.templatePath('ng/app.module.js'),
                          this.destinationPath(this._parseTargetPath('app/app.module.js')),
-                         this.genConfig);                         
-
+                         this.genConfig);
             this.fs.copy(this.templatePath('ng/app.routes.js'),
                          this.destinationPath(this._parseTargetPath('app/app.routes.js')));
             this.fs.copy(this.templatePath('ng/home/home.controller.js'),
