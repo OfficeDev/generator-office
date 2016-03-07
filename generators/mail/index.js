@@ -706,10 +706,12 @@ module.exports = generators.Base.extend({
             if (this.genConfig.extensionPoint &&
                 (this.genConfig.extensionPoint.indexOf('MessageComposeCommandSurface') > -1 ||
                 this.genConfig.extensionPoint.indexOf('AppointmentOrganizerCommandSurface') > -1)) {
-              this.fs.copy(this.templatePath('ng/appcompose/index.html'),
-                          this.destinationPath(this._parseTargetPath('appcompose/index.html')));
-              this.fs.copy(this.templatePath('ng/appcompose/app.module.js'),
-                          this.destinationPath(this._parseTargetPath('appcompose/app.module.js')));
+              this.fs.copyTpl(this.templatePath('ng/appcompose/index.html'),
+                          this.destinationPath(this._parseTargetPath('appcompose/index.html')),
+                          this.genConfig);                          
+              this.fs.copyTpl(this.templatePath('ng/appcompose/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.module.js')),
+                         this.genConfig);
               this.fs.copy(this.templatePath('ng/appcompose/app.routes.js'),
                           this.destinationPath(this._parseTargetPath('appcompose/app.routes.js')));
               this.fs.copy(this.templatePath('ng/appcompose/home/home.controller.js'),
@@ -723,10 +725,12 @@ module.exports = generators.Base.extend({
             if (this.genConfig.extensionPoint &&
                 (this.genConfig.extensionPoint.indexOf('MessageReadCommandSurface') > -1 ||
                 this.genConfig.extensionPoint.indexOf('AppointmentAttendeeCommandSurface') > -1)) {
-              this.fs.copy(this.templatePath('ng/appread/index.html'),
-                          this.destinationPath(this._parseTargetPath('appread/index.html')));
-              this.fs.copy(this.templatePath('ng/appread/app.module.js'),
-                          this.destinationPath(this._parseTargetPath('appread/app.module.js')));
+              this.fs.copyTpl(this.templatePath('ng/appread/index.html'),
+                          this.destinationPath(this._parseTargetPath('appread/index.html')),
+                          this.genConfig);
+              this.fs.copyTpl(this.templatePath('ng/appread/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appread/app.module.js')),
+                         this.genConfig);
               this.fs.copy(this.templatePath('ng/appread/app.routes.js'),
                           this.destinationPath(this._parseTargetPath('appread/app.routes.js')));
               this.fs.copy(this.templatePath('ng/appread/home/home.controller.js'),
@@ -762,10 +766,12 @@ module.exports = generators.Base.extend({
             if (this.genConfig.extensionPoint &&
                 (this.genConfig.extensionPoint.indexOf('MessageComposeCommandSurface') > -1 ||
                 this.genConfig.extensionPoint.indexOf('AppointmentOrganizerCommandSurface') > -1)) {
-              this.fs.copy(this.templatePath('ng-adal/appcompose/index.html'),
-                          this.destinationPath(this._parseTargetPath('appcompose/index.html')));
-              this.fs.copy(this.templatePath('ng-adal/appcompose/app.module.js'),
-                          this.destinationPath(this._parseTargetPath('appcompose/app.module.js')));
+              this.fs.copyTpl(this.templatePath('ng-adal/appcompose/index.html'),
+                          this.destinationPath(this._parseTargetPath('appcompose/index.html')),
+                          this.genConfig);
+              this.fs.copyTpl(this.templatePath('ng/appcompose/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.module.js')),
+                          this.genConfig);
               this.fs.copy(this.templatePath('ng-adal/appcompose/app.adalconfig.js'),
                           this.destinationPath(this._parseTargetPath('appcompose/app.adalconfig.js')));
               this.fs.copyTpl(this.templatePath('ng-adal/appcompose/app.config.js'),
@@ -784,10 +790,12 @@ module.exports = generators.Base.extend({
             if (this.genConfig.extensionPoint &&
                 (this.genConfig.extensionPoint.indexOf('MessageReadCommandSurface') > -1 ||
                 this.genConfig.extensionPoint.indexOf('AppointmentAttendeeCommandSurface') > -1)) {
-              this.fs.copy(this.templatePath('ng-adal/appread/index.html'),
-                          this.destinationPath(this._parseTargetPath('appread/index.html')));
-              this.fs.copy(this.templatePath('ng-adal/appread/app.module.js'),
-                          this.destinationPath(this._parseTargetPath('appread/app.module.js')));
+              this.fs.copyTpl(this.templatePath('ng-adal/appread/index.html'),
+                          this.destinationPath(this._parseTargetPath('appread/index.html')),
+                          this.genConfig);
+              this.fs.copyTpl(this.templatePath('ng/appread/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appread/app.module.js')),
+                         this.genConfig);
               this.fs.copy(this.templatePath('ng-adal/appread/app.adalconfig.js'),
                           this.destinationPath(this._parseTargetPath('appread/app.adalconfig.js')));
               this.fs.copyTpl(this.templatePath('ng-adal/appread/app.config.js'),
