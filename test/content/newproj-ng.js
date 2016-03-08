@@ -42,7 +42,7 @@ describe('office:content', function(){
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
       tech: 'ng',
-      includeNgOfficeUIFabric: false,
+      skipIncludeNgOfficeUIFabric: true,
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
 

@@ -58,6 +58,12 @@ module.exports = generators.Base.extend({
       required: false,
       defaults: false
     });
+    
+    this.option('skipIncludeNgOfficeUIFabric', {
+      type: Boolean,
+      desc: 'Do not include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
+      required: false
+    });
 
     // create global config object on this generator
     this.genConfig = {};
@@ -193,8 +199,13 @@ module.exports = generators.Base.extend({
       if (this.genConfig.tech !== 'ng' && this.genConfig.tech !== 'ng-adal') {
         this.genConfig.includeNgOfficeUIFabric = false;
         return;
-      }     
-           
+      }
+      
+      if (this.options.skipIncludeNgOfficeUIFabric) {
+        this.genConfig.includeNgOfficeUIFabric = false;
+        return;
+      }
+      
       var done = this.async();
 
       // office client application that can host the addin
