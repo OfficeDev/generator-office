@@ -55,8 +55,13 @@ module.exports = generators.Base.extend({
     this.option('includeNgOfficeUIFabric', {
       type: Boolean,
       desc: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
-      required: false,
-      defaults: false
+      required: false
+    });
+    
+    this.option('skipIncludeNgOfficeUIFabric', {
+      type: Boolean,
+      desc: 'Do not include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
+      required: false
     });
 
     // create global config object on this generator
@@ -190,13 +195,18 @@ module.exports = generators.Base.extend({
 
     }, // askForAdalConfig()
 
-    askForNgConfig: function(){
+    askForNgConfig: function(){      
       // if it's not an NG app, don't ask the questions
       if (this.genConfig.tech !== 'ng' && this.genConfig.tech !== 'ng-adal') {
         this.genConfig.includeNgOfficeUIFabric = false;
         return;
+      }     
+      
+      if (this.options.skipIncludeNgOfficeUIFabric) {
+        this.genConfig.includeNgOfficeUIFabric = false;
+        return;
       }
-
+           
       var done = this.async();
 
       // office client application that can host the addin
@@ -210,11 +220,13 @@ module.exports = generators.Base.extend({
 
       // trigger prompts
       this.prompt(prompts, function(responses){
-        this.genConfig = extend(this.genConfig, responses);
+        this.genConfig = extend(this.genConfig, responses);        
         done();
-      }.bind(this));
+      }.bind(this));     
+      
 
     }, // askForNgConfig()
+
     /**
      * If user specified tech:manifest-only, prompt for start page.
      */
