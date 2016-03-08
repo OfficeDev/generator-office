@@ -123,27 +123,6 @@ module.exports = generators.Base.extend({
               name: 'Content Add-in',
               value: 'content'
             }]
-        },
-        // technology used to create the addin (html / angular / etc)
-        {
-          name: 'tech',
-          message: 'Technology to use:',
-          type: 'list',
-          when: this.options.tech === undefined,
-          choices: [
-            {
-              name: 'HTML, CSS & JavaScript',
-              value: 'html'
-            }, {
-              name: 'Angular',
-              value: 'ng'
-            }, {
-              name: 'Angular ADAL',
-              value: 'ng-adal'
-            }, {
-              name: 'Manifest.xml only (no application source files)',
-              value: 'manifest-only'
-            }]
         }];
 
       // trigger prompts
@@ -152,7 +131,6 @@ module.exports = generators.Base.extend({
         this.genConfig = extend(this.genConfig, responses);
         done();
       }.bind(this));
-
     }, // askFor()
 
     askForAdalConfig: function(){
@@ -230,7 +208,6 @@ module.exports = generators.Base.extend({
       }.bind(this));
 
     } // askForOfficeClients()
-
   }, // prompting()
 
   default: function(){
