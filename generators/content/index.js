@@ -45,7 +45,7 @@ module.exports = generators.Base.extend({
       desc: 'Office client product that can host the add-in',
       required: false
     });
-    
+
     this.option('appId', {
       type: String,
       desc: 'Application ID as registered in Azure AD',
@@ -85,7 +85,7 @@ module.exports = generators.Base.extend({
           when: this.options['root-path'] === undefined,
           filter: /* istanbul ignore next */ function(response){
             if (response === 'current folder') {
-              return '';
+              return '.';
             } else {
               return response;
             }
@@ -156,7 +156,7 @@ module.exports = generators.Base.extend({
       }.bind(this));
 
     }, // askFor()
-    
+
     askForAdalConfig: function(){
       // if it's not an ADAL app, don't ask the questions
       if (this.genConfig.tech !== 'ng-adal') {
@@ -515,7 +515,7 @@ module.exports = generators.Base.extend({
         done();
       }
     }, // upsertTsd()
-    
+
     app: function(){
       // helper function to build path to the file off root path
       this._parseTargetPath = function(file){
