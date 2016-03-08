@@ -194,7 +194,14 @@ module.exports = generators.Base.extend({
         {
           name: 'startPage',
           message: 'Add-in start URL:',
-          when: this.options.startPage === undefined,
+          when: (this.options.startPage === undefined ||
+                 !this.options.startPage.match(/^https:\/\//i)),
+          validate: /* istanbul ignore next */ function(answer){
+            if (answer.length < 1 || !answer.match(/^https:\/\//i)) {
+              return 'Must provide an HTTPS url for the add-in start page';
+            }
+            return true;
+          }
         }];
 
       // trigger prompts
