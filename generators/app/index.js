@@ -63,6 +63,7 @@ module.exports = generators.Base.extend({
       type: Boolean,
       desc: 'Do not include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
       required: false
+      
     });
 
   }, // constructor()
