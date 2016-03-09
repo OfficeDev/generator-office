@@ -204,7 +204,7 @@ module.exports = generators.Base.extend({
       if (this.options.skipIncludeNgOfficeUIFabric) {
         this.genConfig.includeNgOfficeUIFabric = false;
         return;
-      }     
+      }
 
       var done = this.async();
 
@@ -221,7 +221,8 @@ module.exports = generators.Base.extend({
       this.prompt(prompts, function(responses){
         this.genConfig = extend(this.genConfig, responses);        
         done();
-      }.bind(this));     
+      }.bind(this));    
+
     }, // askForNgConfig()
     /**
      * If user specified tech:manifest-only, prompt for start page.
@@ -664,7 +665,6 @@ module.exports = generators.Base.extend({
             this.fs.copyTpl(this.templatePath('ng/index.html'),
                          this.destinationPath(this._parseTargetPath('index.html')),
                          this.genConfig);
-
             this.fs.copyTpl(this.templatePath('ng/app.module.js'),
                          this.destinationPath(this._parseTargetPath('app/app.module.js')),
                          this.genConfig);

@@ -257,8 +257,7 @@ module.exports = generators.Base.extend({
             tech: this.genConfig.tech,
             includeNgOfficeUIFabric: this.options.includeNgOfficeUIFabric,
             skipIncludeNgOfficeUIFabric: this.options.skipIncludeNgOfficeUIFabric,
-            appId: this.genConfig.appId,           
-
+            appId: this.genConfig.appId,
             clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
           }
