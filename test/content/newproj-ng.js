@@ -95,7 +95,8 @@ describe('office:content', function(){
       beforeEach(function(done){
         // set language to html
         options.tech = 'ng';
-
+        options.skipIncludeNgOfficeUIFabric = true;
+        
         // set products
         options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
 

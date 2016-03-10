@@ -55,8 +55,7 @@ module.exports = generators.Base.extend({
     this.option('includeNgOfficeUIFabric', {
       type: Boolean,
       desc: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
-      required: false,
-      defaults: false
+      required: false
     });
     
     this.option('skipIncludeNgOfficeUIFabric', {
@@ -197,7 +196,7 @@ module.exports = generators.Base.extend({
       if (this.genConfig.tech !== 'ng' && this.genConfig.tech !== 'ng-adal') {
         this.genConfig.includeNgOfficeUIFabric = false;
         return;
-      }     
+      }
       
       if (this.options.skipIncludeNgOfficeUIFabric) {
         this.genConfig.includeNgOfficeUIFabric = false;
@@ -212,7 +211,7 @@ module.exports = generators.Base.extend({
         message: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
         type: 'confirm',
         default: true,
-        when: this.options.includeNgOfficeUIFabric === undefined
+        when: !this.options.includeNgOfficeUIFabric
       }];
 
       // trigger prompts

@@ -57,7 +57,7 @@ describe('office:taskpane', function(){
         options.skipIncludeNgOfficeUIFabric = true;
         // set products
         options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
-
+        options.appId = '03ad2348-c459-4573-8f7d-0ca44d822e7c';
         helpers.run(path.join(__dirname, '../../generators/taskpane'))
           .withOptions(options)
           .on('ready', function(gen){

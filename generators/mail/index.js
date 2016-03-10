@@ -215,7 +215,7 @@ module.exports = generators.Base.extend({
         message: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
         type: 'confirm',
         default: true,
-        when: this.options.includeNgOfficeUIFabric === undefined
+        when: !this.options.includeNgOfficeUIFabric
       }];
 
       // trigger prompts
