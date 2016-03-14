@@ -39,13 +39,13 @@ module.exports = generators.Base.extend({
       desc: 'Technology to use for the Add-in (html = HTML; ng = Angular)',
       required: false
     });
-    
+
     this.option('extensionPoint', {
       type: String,
       desc: 'Supported extension points',
       required: false
     });
-    
+
     this.option('appId', {
       type: String,
       desc: 'Application ID as registered in Azure AD',
@@ -83,7 +83,7 @@ module.exports = generators.Base.extend({
           when: this.options['root-path'] === undefined,
           filter: /* istanbul ignore next */ function(response){
             if (response === 'current folder'){
-              return '';
+              return '.';
             } else {
               return response;
             }
@@ -158,7 +158,7 @@ module.exports = generators.Base.extend({
       }.bind(this));
 
     }, // askFor()
-    
+
     askForAdalConfig: function(){
       // if it's not an ADAL app, don't ask the questions
       if (this.genConfig.tech !== 'ng-adal') {
@@ -198,7 +198,14 @@ module.exports = generators.Base.extend({
         {
           name: 'startPage',
           message: 'Add-in start URL:',
-          when: this.options.startPage === undefined,
+          when: (this.options.startPage === undefined ||
+                 !this.options.startPage.match(/^https:\/\//i)),
+          validate: /* istanbul ignore next */ function(answer){
+            if (answer.length < 1 || !answer.match(/^https:\/\//i)) {
+              return 'Must provide an HTTPS url for the add-in start page';
+            }
+            return true;
+          }
         }];
 
       // trigger prompts
@@ -226,22 +233,22 @@ module.exports = generators.Base.extend({
     this.genConfig.projectInternalName = projectName.toLowerCase().replace(/ /g, '-');
     this.genConfig.projectDisplayName = projectName;
     this.genConfig.rootPath = this.genConfig['root-path'];
-    
+
     // Setup custom app commands based on tech
     // The idea here is to create commands that compliment the existing
     // sample code so you see how to do 'a thing' in both the old and new way
     switch (this.genConfig.tech) {
       case 'html':
-        
+
         this.genConfig.commands = {
           commandFile: this.templatePath('html/commands/overrides.xml'),
           functionFile: this.templatePath('html/commands/functions.js')
         };
-        
+
         break;
     }
   }, // configuring()
-  
+
   default: function() {
     // Invoke the commands subgenerator
     this.composeWith('office:commands', {
@@ -585,7 +592,7 @@ module.exports = generators.Base.extend({
         this.fs.copy(this.templatePath('common/images/close.png'),
                      this.destinationPath(this._parseTargetPath('images/close.png')));
         this.fs.copy(this.templatePath('common/images/hi-res-icon.png'),
-                     this.destinationPath(this._parseTargetPath('images/hi-res-icon.png')));             
+                     this.destinationPath(this._parseTargetPath('images/hi-res-icon.png')));
         this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'),
                      this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
 

@@ -14,39 +14,39 @@ module.exports = generators.Base.extend({
    */
   constructor: function(){
     generators.Base.apply(this, arguments);
-    
+
     // Shared options
     this.option('type', {
       type: String,
       required: false,
       desc: 'Add-in type (mail, taskpane, content)'
     });
-    
+
     this.option('manifest-only', {
       type: Boolean,
       desc: 'Set to true to disable creation of sample files.',
       required: false,
       defaults: false
     });
-    
+
     this.option('root-path', {
       type: String,
       desc: 'Relative path where the project should be created (blank = current directory)',
       required: false
     });
-    
+
     this.option('manifest-file', {
       type: String,
       desc: 'Relative path to manifest file',
       required: false
     });
-    
+
     this.option('extensionPoint', {
       type: String,
       desc: 'Supported extension points',
       required: false
     });
-    
+
     // If commands are passed as an option, the caller has specified
     // custom commands and javascript, so most of the other options
     // will be ignored.
@@ -55,26 +55,26 @@ module.exports = generators.Base.extend({
       desc: 'A JSON-formatted string defining the commands to add',
       required: false
     });
-    
+
     // Task-pane/Content pane-specific options
     this.option('clients', {
       type: String,
       desc: 'Office client product that can host the add-in (NYI)',
       required: false
     });
-    
+
     // create global config object on this generator
     this.genConfig = {};
   }, // constructor()
-  
+
   /**
    * Prompt users for options
    */
   prompting: {
-    
+
     askFor: function(){
       var done = this.async();
-      
+
       var prompts = [
         {
           name: 'type',
@@ -108,7 +108,7 @@ module.exports = generators.Base.extend({
           when: this.options['root-path'] === undefined,
           filter: /* istanbul ignore next */ function(response){
             if (response === 'current folder') {
-              return '';
+              return '.';
             } else {
               return response;
             }
@@ -122,7 +122,7 @@ module.exports = generators.Base.extend({
           when: this.options['manifest-file'] === undefined
         }
       ];
-      
+
       // trigger prompts
       this.prompt(prompts, function(responses){
         this.genConfig = extend(this.genConfig, this.options);
@@ -130,7 +130,7 @@ module.exports = generators.Base.extend({
         done();
       }.bind(this));
     }, // askFor()
-    
+
     /**
      * ask for hosts
      */
@@ -139,7 +139,7 @@ module.exports = generators.Base.extend({
       if (this.genConfig.commands !== undefined) {
         return;
       }
-      
+
       switch(this.genConfig.type){
         case 'mail':
           // Only one host for mail, so no need to prompt
@@ -153,25 +153,25 @@ module.exports = generators.Base.extend({
           break;
       }
     }, // askForHosts()
-    
+
     /**
      * ask for form factors
      */
     askForFormFactors: function() {
       // Currently only Desktop is supported, so no need to prompt.
       // Just set form factors to only desktop and move on.
-      
+
       // When support for other form factors is added will need to make this
       // into a prompt.
-      
+
       // If commands were passed as an option, then don't prompt
       if (this.genConfig.commands !== undefined) {
         return;
       }
-      
+
       this.genConfig = extend(this.genConfig, {formFactors: [ 'DesktopFormFactor' ]});
     }, // askForFormFactors()
-    
+
     /**
      * ask for extension points based on add-in type
      */
@@ -180,9 +180,9 @@ module.exports = generators.Base.extend({
       if (this.genConfig.commands !== undefined) {
         return;
       }
-      
+
       var availableExtensionPoints;
-      
+
       switch(this.genConfig.type) {
         case 'mail':
           availableExtensionPoints = [
@@ -219,7 +219,7 @@ module.exports = generators.Base.extend({
           this.genConfig.extensionPoint = [];
           break;
       }
-      
+
       if (availableExtensionPoints !== undefined) {
         var prompts = [
           {
@@ -236,7 +236,7 @@ module.exports = generators.Base.extend({
             }
           }
         ];
-        
+
         var done = this.async();
         this.prompt(prompts, function(responses){
           this.genConfig = extend(this.genConfig, responses);
@@ -244,7 +244,7 @@ module.exports = generators.Base.extend({
         }.bind(this));
       }
     }, // askForExtensionPoints()
-    
+
     /**
      * ask for *CommandSurface details
      */
@@ -253,9 +253,9 @@ module.exports = generators.Base.extend({
           !commandSurfaceIncluded(this.genConfig.extensionPoint)) {
         return;
       }
-      
+
       var availableContainers = [];
-      
+
       for (var i = 0; i < this.genConfig.hosts.length; i++) {
         switch (this.genConfig.hosts[i]) {
           case 'MailHost':
@@ -265,7 +265,7 @@ module.exports = generators.Base.extend({
           // TODO: Add other hosts here
         }
       }
-      
+
       var prompts = [
         {
           name: 'continue',
@@ -309,39 +309,39 @@ module.exports = generators.Base.extend({
           ]
         }
       ];
-      
+
       var done = this.async();
       this.prompt(prompts, function(response) {
         this.genConfig = extend(this.genConfig, response);
         done();
       }.bind(this));
     }, // askForCommandSurface()
-    
+
     // When manifest-only = true, ask for URL values
     askForUrls: function() {
       if (this.genConfig['manifest-only'] !== true) {
         return;
       }
-      
+
       var prompts = [];
-      
+
       if (this.genConfig.extensionPoint.indexOf('CustomPane') >= 0) {
         prompts.push({
           name: 'customPaneUrl',
           message: 'Custom pane URL:',
           default: 'https://localhost:8443/CustomPane/CustomPane.html'
-        });  
+        });
       }
-      
+
       if (commandSurfaceIncluded(this.genConfig.extensionPoint)) {
         if (this.genConfig.buttonTypes.indexOf('uiless') >= 0) {
           prompts.push({
             name: 'functionFileUrl',
             message: 'Function file URL:',
             default: 'https://localhost:8443/FunctionFile/Functions.html'
-          }); 
+          });
         }
-        
+
         if (this.genConfig.buttonTypes.indexOf('taskpane') >= 0) {
           prompts.push({
             name: 'taskPaneUrl',
@@ -349,14 +349,14 @@ module.exports = generators.Base.extend({
             default: 'https://localhost:8443/TaskPane/TaskPane.html'
           });
         }
-        
+
         prompts.push({
           name: 'iconUrl',
           message: 'Icon URL:',
           default: 'https://localhost:8443/images/icon.png'
         });
       }
-      
+
       var done = this.async();
       this.prompt(prompts, function(response) {
         this.genConfig = extend(this.genConfig, response);
@@ -364,7 +364,7 @@ module.exports = generators.Base.extend({
       }.bind(this));
     } // askForUrls()
   }, // prompting()
-  
+
   /**
    * save configurations & config project
    */
@@ -375,16 +375,16 @@ module.exports = generators.Base.extend({
         this.genConfig.type === 'taskpane') {
       this.log('Command support for this type of add-is is not yet implemented. Exiting...');
       this.genConfig.abort = true;
-      return;      
+      return;
     }
     // helper function to build path to the file off root path
       this._parseTargetPath = function(file){
         return path.join(this.genConfig['root-path'], file);
       };
-    
+
     // Build up a JSON-representation of the VersionOverrides
     // element here.
-    
+
     // If the caller passed this in, we can build directly from it
     if (this.genConfig.commands === undefined)
     {
@@ -395,22 +395,22 @@ module.exports = generators.Base.extend({
         shortStrings: [],
         longStrings: []
       };
-      
+
       // Determine if a function file is needed
       var needFuncFile = (this.genConfig.buttonTypes !== undefined) &&
                           this.genConfig.buttonTypes.indexOf('uiless') >= 0;
       if (needFuncFile) {
-        var funcFile = this.genConfig.functionFileUrl !== undefined ? 
-          this.genConfig.functionFileUrl : 
+        var funcFile = this.genConfig.functionFileUrl !== undefined ?
+          this.genConfig.functionFileUrl :
           'https://localhost:8443/FunctionFile/Functions.html';
-        
+
         // Use the default function file
         this.genConfig.functionFileId = createUrlResource('funcFile', '',
           funcFile, this.genConfig);
       }
-      
+
       this.genConfig.customFuncs = '';
-      
+
       // Set up control counters
       this.genConfig.customContainerCount = 0;
       this.genConfig.groupCount = 0;
@@ -419,7 +419,7 @@ module.exports = generators.Base.extend({
       this.genConfig.taskPaneCount = 0;
     }
   }, // configuring()
-  
+
   /**
    * write generator specific files
    */
@@ -427,18 +427,18 @@ module.exports = generators.Base.extend({
     /**
      * Update the manifest
      */
-    
+
     updateManifest: function() {
       if (this.genConfig.abort === true) {
         return;
       }
       var done = this.async();
-      
+
       var manifestFile = this.genConfig['manifest-file'];
-      
+
       // workaround to 'this' context issue
       var yoGenerator = this;
-      
+
       // make sure manifest exists
       if (!yoGenerator.fs.exists(manifestFile)){
         this.log('Specified manifest "', manifestFile, '" not found. Exiting...');
@@ -446,15 +446,15 @@ module.exports = generators.Base.extend({
         done();
         return;
       }
-      
+
       // load manifest XML
       var manifestXml = yoGenerator.fs.read(yoGenerator.destinationPath(manifestFile));
-      
+
       // convert to JSON
       var parser = new Xml2Js.Parser();
-      
+
       parser.parseString(manifestXml, function(err, manifestJson) {
-        
+
         // Add namespaces to the OfficeApp element
         var newNS = {
           '$': {
@@ -462,7 +462,7 @@ module.exports = generators.Base.extend({
           }
         };
         manifestJson.OfficeApp = extend(manifestJson.OfficeApp, newNS);
-       
+
         // Create VersionOverrides
         manifestJson.OfficeApp.VersionOverrides = {
           '$': {
@@ -470,31 +470,31 @@ module.exports = generators.Base.extend({
             'xsi:type': 'VersionOverridesV1_0'
           },
         };
-        
+
         if (yoGenerator.genConfig.commands !== undefined) {
-          
+
           var commandData = yoGenerator.fs.read(yoGenerator.genConfig.commands.commandFile);
-          
+
           yoGenerator.genConfig.customFuncs = yoGenerator.fs.read(yoGenerator.genConfig.commands.functionFile);
           parser.parseString(commandData, function(err, commandJson) {
             var scrubbedCommands = scrubCommandData(commandJson, yoGenerator.genConfig.extensionPoint);
-            
+
             // Hack to force function file
             var flatScrubbedData = JSON.stringify(scrubbedCommands);
             if (flatScrubbedData.indexOf('"xsi:type":"ExecuteFunction"') > -1) {
               yoGenerator.genConfig.uilessCount = 1;
             }
-          
+
             manifestJson.OfficeApp.VersionOverrides.Hosts = scrubbedCommands.root.Hosts;
             manifestJson.OfficeApp.VersionOverrides.Resources = scrubbedCommands.root.Resources;
 
             // convert JSON => XML
             var xmlBuilder = new Xml2Js.Builder();
             var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
-            
+
             // write updated manifest
             yoGenerator.fs.write(yoGenerator.destinationPath(manifestFile), updatedManifestXml);
-            
+
             done();
           });
         }
@@ -508,17 +508,17 @@ module.exports = generators.Base.extend({
                 'xsi:type': hostType
               }
             };
-            
+
             // Add form factors
             _.forEach(yoGenerator.genConfig.formFactors, function(factorType){
               host[factorType] = buildFormFactor(yoGenerator.genConfig);
             });
-            
+
             hosts.push(host);
           });
-          
+
           manifestJson.OfficeApp.VersionOverrides.Hosts = { Host: hosts };
-          
+
           // Sort resources by id to make it easier
           // to find specific resources in the manifest
           yoGenerator.genConfig.resources.images.sort(function(a,b){
@@ -533,26 +533,26 @@ module.exports = generators.Base.extend({
           yoGenerator.genConfig.resources.longStrings.sort(function(a,b){
             return (a['$'].id.localeCompare(b['$'].id));
           });
-          
+
           manifestJson.OfficeApp.VersionOverrides.Resources = {
             'bt:Images': { 'bt:Image': yoGenerator.genConfig.resources.images },
             'bt:Urls': { 'bt:Url': yoGenerator.genConfig.resources.urls },
             'bt:ShortStrings': { 'bt:String': yoGenerator.genConfig.resources.shortStrings },
             'bt:LongStrings': { 'bt:String': yoGenerator.genConfig.resources.longStrings }
           };
-          
+
           // convert JSON => XML
           var xmlBuilder = new Xml2Js.Builder();
           var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
-          
+
           // write updated manifest
           yoGenerator.fs.write(yoGenerator.destinationPath(manifestFile), updatedManifestXml);
-          
+
           done();
         }
       });
     }, // updateManifest();
-    
+
     /**
      * Add supporting files
      */
@@ -562,7 +562,7 @@ module.exports = generators.Base.extend({
         return;
       }
       var done = this.async();
-      
+
       if (this.genConfig.uilessCount > 0) {
         this.fs.copyTpl(this.templatePath('common/FunctionFile/Functions.ejs'),
                         this.destinationPath(this._parseTargetPath('FunctionFile/Functions.js')),
@@ -570,28 +570,28 @@ module.exports = generators.Base.extend({
         this.fs.copy(this.templatePath('common/FunctionFile/Functions.html'),
                      this.destinationPath(this._parseTargetPath('FunctionFile/Functions.html')));
       }
-      
+
       if (this.genConfig.taskPaneCount > 0) {
         this.fs.copy(this.templatePath('common/TaskPane/TaskPane.html'),
                      this.destinationPath(this._parseTargetPath('TaskPane/TaskPane.html')));
         this.fs.copy(this.templatePath('common/TaskPane/TaskPane.js'),
-                     this.destinationPath(this._parseTargetPath('TaskPane/TaskPane.js')));  
+                     this.destinationPath(this._parseTargetPath('TaskPane/TaskPane.js')));
       }
-      
+
       if (this.genConfig.extensionPoint.indexOf('CustomPane') >= 0){
         this.fs.copy(this.templatePath('common/CustomPane/CustomPane.html'),
                      this.destinationPath(this._parseTargetPath('CustomPane/CustomPane.html')));
         this.fs.copy(this.templatePath('common/CustomPane/CustomPane.js'),
                      this.destinationPath(this._parseTargetPath('CustomPane/CustomPane.js')));
       }
-      
+
       this.fs.copy(this.templatePath('common/Images/icon-16.png'),
                    this.destinationPath(this._parseTargetPath('images/icon-16.png')));
       this.fs.copy(this.templatePath('common/Images/icon-32.png'),
                    this.destinationPath(this._parseTargetPath('images/icon-32.png')));
       this.fs.copy(this.templatePath('common/Images/icon-80.png'),
                    this.destinationPath(this._parseTargetPath('images/icon-80.png')));
-                   
+
       done();
     }
   } // writing()
@@ -613,13 +613,13 @@ function getOverrideNamespace(config) {
   switch (config.type) {
     case 'mail':
       return 'http://schemas.microsoft.com/office/mailappversionoverrides';
-    
-    // TODO: Add other types here  
+
+    // TODO: Add other types here
     //case 'taskpane':
     //case 'content':
     //  return 'NYI';
   }
-  
+
 }
 
 /**
@@ -627,7 +627,7 @@ function getOverrideNamespace(config) {
  * and removes unneeded ExtensionPoint elements
  */
 function scrubCommandData(commandData, extensionPoints) {
-  
+
   // First remove any unused extension points
   _.forEach(commandData.root.Hosts[0].Host[0], function(child, childname) {
     if (childname.indexOf('FormFactor') > -1) {
@@ -641,7 +641,7 @@ function scrubCommandData(commandData, extensionPoints) {
       commandData.root.Hosts[0].Host[0][childname][0].ExtensionPoint = newExtensionPoints;
     }
   });
-  
+
   // Next remove any unreferenced resources
   var newResources = {
     'bt:Images': { 'bt:Image': [] },
@@ -649,7 +649,7 @@ function scrubCommandData(commandData, extensionPoints) {
     'bt:ShortStrings': { 'bt:String': [] },
     'bt:LongStrings': { 'bt:String': [] }
   };
-  
+
   var jsonHost = JSON.stringify(commandData.root.Hosts[0].Host[0]);
   // Images
   _.forEach(commandData.root.Resources[0]['bt:Images'][0]['bt:Image'], function(image){
@@ -657,30 +657,30 @@ function scrubCommandData(commandData, extensionPoints) {
       newResources['bt:Images']['bt:Image'].push(image);
     }
   });
-  
+
   // Urls
   _.forEach(commandData.root.Resources[0]['bt:Urls'][0]['bt:Url'], function(url){
     if (jsonHost.indexOf(url.$.id) > -1) {
       newResources['bt:Urls']['bt:Url'].push(url);
     }
   });
-  
+
   // ShortStrings
   _.forEach(commandData.root.Resources[0]['bt:ShortStrings'][0]['bt:String'], function(shortString){
     if (jsonHost.indexOf(shortString.$.id) > -1) {
       newResources['bt:ShortStrings']['bt:String'].push(shortString);
     }
   });
-  
+
   // LongStrings
   _.forEach(commandData.root.Resources[0]['bt:LongStrings'][0]['bt:String'], function(longString){
     if (jsonHost.indexOf(longString.$.id) > -1) {
       newResources['bt:LongStrings']['bt:String'].push(longString);
     }
   });
-  
+
   commandData.root.Resources = newResources;
-  
+
   return commandData;
 }
 
@@ -690,20 +690,20 @@ function scrubCommandData(commandData, extensionPoints) {
 
 function buildFormFactor(config) {
   var factor = {};
-  
+
   if (config.functionFileId !== undefined) {
-    factor.FunctionFile = { 
+    factor.FunctionFile = {
       '$': { resid: config.functionFileId }
     };
   }
-  
+
   var extensionPoints = [];
   _.forEach(config.extensionPoint, function(extensionType){
     extensionPoints.push(buildExtensionPoint(extensionType, config));
   });
-  
+
   factor.ExtensionPoint = extensionPoints;
-  
+
   return factor;
 }
 
@@ -714,10 +714,10 @@ function buildExtensionPoint(type, config) {
   var extPoint = {
     '$': { 'xsi:type': type }
   };
-  
+
   if (type === 'CustomPane') {
     // Build custom pane
-    var customPaneUrl = config.customPaneUrl !== undefined ? config.customPaneUrl : 
+    var customPaneUrl = config.customPaneUrl !== undefined ? config.customPaneUrl :
       'https://localhost:8443/CustomPane/CustomPane.html';
     extPoint.RequestedHeight = 200;
     extPoint.SourceLocation = {
@@ -754,7 +754,7 @@ function buildExtensionPoint(type, config) {
       extPoint[container.nodeName] = container.node;
     });
   }
-  
+
   return extPoint;
 }
 
@@ -762,7 +762,7 @@ function buildExtensionPoint(type, config) {
  * Builds out a control container
  */
 function buildControlContainer(type, config) {
-  
+
   var container = {};
   switch(type){
     case 'TabDefault': // Default tab (used by Outlook)
@@ -772,14 +772,14 @@ function buildControlContainer(type, config) {
         Group: buildGroup(config)
       };
       break;
-    case 'TabCustom': // Custom tab 
+    case 'TabCustom': // Custom tab
       config.customContainerCount++;
       container.nodeName = 'CustomTab';
       container.node = {
         '$': { id: type + config.customContainerCount },
         Group: buildGroup(config),
-        Label: { 
-          '$': { 
+        Label: {
+          '$': {
             resid: createShortStringResource('customTabLabel', config.customContainerCount,
               'Custom Tab ' + config.customContainerCount, config)
           }
@@ -788,7 +788,7 @@ function buildControlContainer(type, config) {
 
       break;
   }
- 
+
   return container;
 }
 
@@ -796,19 +796,19 @@ function buildControlContainer(type, config) {
  * Builds out a group
  */
 function buildGroup(config) {
-  
+
   config.groupCount++;
-  
+
   var group = {
     '$': { id: 'group' + config.groupCount },
-    Label: { 
-      '$': { 
-        resid: createShortStringResource('groupLabel', config.groupCount, 
-          'Group ' + config.groupCount, config) 
-      } 
+    Label: {
+      '$': {
+        resid: createShortStringResource('groupLabel', config.groupCount,
+          'Group ' + config.groupCount, config)
+      }
     }
   };
-  
+
   var buttons = [];
   _.forEach(config.buttonTypes, function(buttonType){
     switch(buttonType) {
@@ -823,9 +823,9 @@ function buildGroup(config) {
         break;
     }
   });
-  
+
   group.Control = buttons;
-  
+
   return group;
 }
 
@@ -834,37 +834,37 @@ function buildGroup(config) {
  */
 function buildUiLessButton(config) {
   config.uilessCount++;
-  
-  var icon16 = config.iconUrl !== undefined ? config.iconUrl : 
+
+  var icon16 = config.iconUrl !== undefined ? config.iconUrl :
       'https://localhost:8443/images/icon-16.png';
-  var icon32 = config.iconUrl !== undefined ? config.iconUrl : 
+  var icon32 = config.iconUrl !== undefined ? config.iconUrl :
       'https://localhost:8443/images/icon-32.png';
-  var icon80 = config.iconUrl !== undefined ? config.iconUrl : 
+  var icon80 = config.iconUrl !== undefined ? config.iconUrl :
       'https://localhost:8443/images/icon-80.png';
-  
+
   var button = {
     '$': {
       'xsi:type': 'Button',
       id: 'uilessButton' + config.uilessCount
     },
-    Label: { 
-      '$': { 
+    Label: {
+      '$': {
         resid: createShortStringResource('uilessButtonLabel', config.uilessCount,
           'UI-less Button ' + config.uilessCount, config)
-      } 
+      }
     },
     Supertip: {
-      Title: { 
-        '$': { 
+      Title: {
+        '$': {
           resid: createShortStringResource('uilessButtonSuperTipTitle', config.uilessCount,
-            'UI-less Button ' + config.uilessCount, config) 
-        } 
+            'UI-less Button ' + config.uilessCount, config)
+        }
       },
-      Description: { 
-        '$': { 
+      Description: {
+        '$': {
           resid: createLongStringResource('uilessButtonSuperTipDesc', config.uilessCount,
             'This is the description for UI-less Button ' + config.uilessCount, config)
-        } 
+        }
       }
     },
     Icon: {
@@ -890,14 +890,14 @@ function buildUiLessButton(config) {
               icon80, config)
           }
         }
-      ] 
+      ]
     },
     Action: {
       '$': { 'xsi:type': 'ExecuteFunction' },
       FunctionName: 'buttonFunction' + config.uilessCount
     }
   };
-  
+
   return button;
 }
 
@@ -906,20 +906,20 @@ function buildUiLessButton(config) {
  */
 function buildMenu(config) {
   config.menuCount++;
-  
-  var icon16 = config.iconUrl !== undefined ? config.iconUrl : 
+
+  var icon16 = config.iconUrl !== undefined ? config.iconUrl :
       'https://localhost:8443/images/icon-16.png';
-  var icon32 = config.iconUrl !== undefined ? config.iconUrl : 
+  var icon32 = config.iconUrl !== undefined ? config.iconUrl :
       'https://localhost:8443/images/icon-32.png';
-  var icon80 = config.iconUrl !== undefined ? config.iconUrl : 
+  var icon80 = config.iconUrl !== undefined ? config.iconUrl :
       'https://localhost:8443/images/icon-80.png';
-  
+
   // Create a UI-less button to put inside the menu
   var uilessButton = buildUiLessButton(config);
   // Remove the 'xsi:type' attribute from the button, it isn't
   // used in menu items.
   delete uilessButton.$['xsi:type'];
-  
+
   var menu = {
     '$': {
       'xsi:type': 'Menu',
@@ -932,17 +932,17 @@ function buildMenu(config) {
       }
     },
     Supertip: {
-      Title: { 
-        '$': { 
+      Title: {
+        '$': {
           resid: createShortStringResource('menuSuperTipTitle', config.menuCount,
-            'Menu ' + config.menuCount, config) 
-        } 
+            'Menu ' + config.menuCount, config)
+        }
       },
-      Description: { 
-        '$': { 
+      Description: {
+        '$': {
           resid: createLongStringResource('menuSuperTipDesc', config.menuCount,
             'This is the description for Menu ' + config.menuCount, config)
-        } 
+        }
       }
     },
     Icon: {
@@ -968,13 +968,13 @@ function buildMenu(config) {
               icon80, config)
           }
         }
-      ] 
+      ]
     },
     Items: {
       Item: uilessButton
     }
   };
-  
+
   return menu;
 }
 
@@ -983,39 +983,39 @@ function buildMenu(config) {
  */
 function buildTaskPaneButton(config) {
   config.taskPaneCount++;
-  
-  var icon16 = config.iconUrl !== undefined ? config.iconUrl : 
+
+  var icon16 = config.iconUrl !== undefined ? config.iconUrl :
       'https://localhost:8443/images/icon-16.png';
-  var icon32 = config.iconUrl !== undefined ? config.iconUrl : 
+  var icon32 = config.iconUrl !== undefined ? config.iconUrl :
       'https://localhost:8443/images/icon-32.png';
-  var icon80 = config.iconUrl !== undefined ? config.iconUrl : 
+  var icon80 = config.iconUrl !== undefined ? config.iconUrl :
       'https://localhost:8443/images/icon-80.png';
-  var taskPaneUrl = config.taskPaneUrl !== undefined ? config.taskPaneUrl : 
+  var taskPaneUrl = config.taskPaneUrl !== undefined ? config.taskPaneUrl :
       'https://localhost:8443/TaskPane/TaskPane.html';
-  
+
   var button = {
     '$': {
       'xsi:type': 'Button',
       id: 'taskpaneButton' + config.taskPaneCount
     },
-    Label: { 
-      '$': { 
+    Label: {
+      '$': {
         resid: createShortStringResource('taskpaneButtonLabel', config.taskPaneCount,
           'Taskpane Button ' + config.taskPaneCount, config)
-      } 
+      }
     },
     Supertip: {
-      Title: { 
-        '$': { 
+      Title: {
+        '$': {
           resid: createShortStringResource('taskpaneButtonSuperTipTitle', config.taskPaneCount,
-            'Taskpane Button ' + config.taskPaneCount, config) 
-        } 
+            'Taskpane Button ' + config.taskPaneCount, config)
+        }
       },
-      Description: { 
-        '$': { 
+      Description: {
+        '$': {
           resid: createLongStringResource('taskpaneButtonSuperTipDesc', config.taskPaneCount,
             'This is the description for Taskpane Button ' + config.taskPaneCount, config)
-        } 
+        }
       }
     },
     Icon: {
@@ -1041,7 +1041,7 @@ function buildTaskPaneButton(config) {
               icon80, config)
           }
         }
-      ] 
+      ]
     },
     Action: {
       '$': { 'xsi:type': 'ShowTaskpane' },
@@ -1053,7 +1053,7 @@ function buildTaskPaneButton(config) {
       }
     }
   };
-  
+
   return button;
 }
 
@@ -1066,14 +1066,14 @@ function createUrlResource(prefix, suffix, value, config) {
   if (resid.length > 32) {
     throw 'Invalid resource ID: must be 32 characters or less';
   }
-  
+
   config.resources.urls.push({
     '$': {
       id: resid,
       DefaultValue: value
     }
   });
-  
+
   return resid;
 }
 
@@ -1086,14 +1086,14 @@ function createImageResource(prefix, suffix, value, config) {
   if (resid.length > 32) {
     throw 'Invalid resource ID: must be 32 characters or less';
   }
-  
+
   config.resources.images.push({
     '$': {
       id: resid,
       DefaultValue: value
     }
   });
-  
+
   return resid;
 }
 
@@ -1106,14 +1106,14 @@ function createShortStringResource(prefix, suffix, value, config) {
   if (resid.length > 32) {
     throw 'Invalid resource ID: must be 32 characters or less';
   }
-  
+
   config.resources.shortStrings.push({
     '$': {
       id: resid,
       DefaultValue: value
     }
   });
-  
+
   return resid;
 }
 
@@ -1126,13 +1126,13 @@ function createLongStringResource(prefix, suffix, value, config) {
   if (resid.length > 32) {
     throw 'Invalid resource ID: must be 32 characters or less';
   }
-  
+
   config.resources.longStrings.push({
     '$': {
       id: resid,
       DefaultValue: value
     }
   });
-  
+
   return resid;
 }

@@ -26,7 +26,6 @@ module.exports = generators.Base.extend({
     this.option('root-path', {
       type: String,
       desc: 'Relative path where the project should be created (blank = current directory)',
-      default: '.',
       required: false
     });
 
@@ -41,13 +40,13 @@ module.exports = generators.Base.extend({
       desc: 'Office client product that can host the add-in',
       required: false
     });
-    
+
     this.option('extensionPoint', {
       type: String,
       desc: 'Supported extension points',
       required: false
     });
-    
+
     this.option('appId', {
       type: String,
       desc: 'Application ID as registered in Azure AD',
@@ -97,9 +96,9 @@ module.exports = generators.Base.extend({
           + ' from current (src / public): ',
           default: 'current folder',
           when: this.options['root-path'] === undefined,
-          filter: /* istanbul ignore next */ function(response){
+          filter: /* istanbul ignore next */ function (response) {
             if (response === 'current folder') {
-              return '';
+              return '.';
             } else {
               return response;
             }
@@ -124,27 +123,6 @@ module.exports = generators.Base.extend({
               name: 'Content Add-in',
               value: 'content'
             }]
-        },
-        // technology used to create the addin (html / angular / etc)
-        {
-          name: 'tech',
-          message: 'Technology to use:',
-          type: 'list',
-          when: this.options.tech === undefined,
-          choices: [
-            {
-              name: 'HTML, CSS & JavaScript',
-              value: 'html'
-            }, {
-              name: 'Angular',
-              value: 'ng'
-            }, {
-              name: 'Angular ADAL',
-              value: 'ng-adal'
-            }, {
-              name: 'Manifest.xml only (no application source files)',
-              value: 'manifest-only'
-            }]
         }];
 
       // trigger prompts
@@ -153,9 +131,8 @@ module.exports = generators.Base.extend({
         this.genConfig = extend(this.genConfig, responses);
         done();
       }.bind(this));
-
     }, // askFor()
-    
+
     askForAdalConfig: function(){
       // if it's not an ADAL app, don't ask the questions
       if (this.genConfig.tech !== 'ng-adal') {
@@ -231,7 +208,6 @@ module.exports = generators.Base.extend({
       }.bind(this));
 
     } // askForOfficeClients()
-
   }, // prompting()
 
   default: function(){
@@ -264,7 +240,7 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
-            appId: this.genConfig.appId,            
+            appId: this.genConfig.appId,
             clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
           }
