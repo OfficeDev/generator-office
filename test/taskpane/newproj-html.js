@@ -264,6 +264,21 @@ describe('office:taskpane', function(){
 
           done();
         });
+		
+		/**
+         * OneNote present in host entry.
+         */
+        it('includes OneNote in Hosts', function(done){
+          var found = false;
+          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
+            if (h.$.Name === 'Notebook') {
+              found = true;
+            }
+          });
+          expect(found, '<Host Name="Notebook"/> exist').to.be.true;
+
+          done();
+        });
 
         /**
          * Project present in host entry.
