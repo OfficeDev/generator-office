@@ -133,6 +133,11 @@ module.exports = generators.Base.extend({
               value: 'Presentation',
               checked: true
             },
+			{
+              name: 'OneNote',
+              value: 'Notebook',
+              checked: true
+            },
             {
               name: 'Project',
               value: 'Project',
