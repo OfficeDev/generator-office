@@ -52,7 +52,6 @@ describe('office:mail', function () {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
       tech: 'ng',
-      skipIncludeNgOfficeUIFabric: true,
       extensionPoint: [
         'MessageReadCommandSurface', 
         'MessageComposeCommandSurface', 
@@ -107,17 +106,15 @@ describe('office:mail', function () {
     /**
      * Test addin when technology = ng
      */
-    describe('technology:ng', function () {
+    describe('technology:ng, includeNgOfficeUIFabric', function () {
 
       describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface, '
              + 'AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface', 
       function () {
 
         beforeEach(function (done) {
-          // set language to html
           options.tech = 'ng';
-          options.skipIncludeNgOfficeUIFabric = true,
-  
+          options.includeNgOfficeUIFabric = true;
           // set outlook form type
           options.extensionPoint = [
             'MessageReadCommandSurface', 
@@ -189,7 +186,8 @@ describe('office:mail', function () {
               angular: '~1.4.4',
               'angular-route': '~1.4.4',
               'angular-sanitize': '~1.4.4',
-              'office-ui-fabric': '*'
+              'office-ui-fabric': '*',
+              'ng-office-ui-fabric': '*'
             }
           };
 

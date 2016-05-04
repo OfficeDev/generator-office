@@ -41,7 +41,6 @@ describe('office:content', function(){
     options = {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
-      skipIncludeNgOfficeUIFabric: true,
       tech: 'ng',
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
@@ -94,12 +93,11 @@ describe('office:content', function(){
     /**
      * Test addin when technology = ng
      */
-    describe('technology:ng', function(){
+    describe('technology:ng, includeNgOfficeUIFabric', function(){
 
       beforeEach(function(done){
-        // set language to html
         options.tech = 'ng';
-        options.skipIncludeNgOfficeUIFabric = true;
+        options.includeNgOfficeUIFabric = true;
 
         // set products
         options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
@@ -159,7 +157,8 @@ describe('office:content', function(){
             angular: '~1.4.4',
             'angular-route': '~1.4.4',
             'angular-sanitize': '~1.4.4',
-            'office-ui-fabric': '*'
+            'office-ui-fabric': '*',
+            'ng-office-ui-fabric': '*'
           }
         };
 
@@ -274,21 +273,6 @@ describe('office:content', function(){
             }
           });
           expect(found, '<Host Name="Presentation"/> exist').to.be.true;
-
-          done();
-        });
-		
-		/**
-         * OneNote present in host entry.
-         */
-        it('includes OneNote in Hosts', function(done){
-          var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
-            if (h.$.Name === 'Notebook') {
-              found = true;
-            }
-          });
-          expect(found, '<Host Name="Notebook"/> exist').to.be.true;
 
           done();
         });

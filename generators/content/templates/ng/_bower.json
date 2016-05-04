@@ -6,6 +6,7 @@
     "angular": "~1.4.4",
     "angular-route": "~1.4.4",
     "angular-sanitize": "~1.4.4",
-    "office-ui-fabric": "*"
+    "office-ui-fabric": "*" <% if(includeNgOfficeUIFabric) { %>, 
+    "ng-office-ui-fabric": "*" <% } %>
   }
 }

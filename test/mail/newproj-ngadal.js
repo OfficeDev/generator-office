@@ -52,6 +52,7 @@ describe('office:mail', function () {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
       tech: 'ng-adal',
+      skipIncludeNgOfficeUIFabric: true,
       extensionPoint: [
         'MessageReadCommandSurface', 
         'MessageComposeCommandSurface', 
@@ -115,7 +116,7 @@ describe('office:mail', function () {
         beforeEach(function (done) {
           // set language to html
           options.tech = 'ng-adal';
-
+          options.skipIncludeNgOfficeUIFabric = true;
           options.appId = '03ad2348-c459-4573-8f7d-0ca44d822e7c';
   
           // set outlook form type
