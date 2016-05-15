@@ -35,7 +35,7 @@ In addition to the above support articles, the following instructions demonstrat
 
     ![](assets/ssl-keychain-02.png)
 
-At this point everything has been configured. Quick Chrome and all other browsers and try again to navigate to the local HTTPS site. The browser should report it as a valid certificate:
+At this point everything has been configured. Quit Chrome and all other browsers and try again to navigate to the local HTTPS site. The browser should report it as a valid certificate:
 
 ![](assets/ssl-good.png)
 
