@@ -212,7 +212,7 @@ gulp.task('dist-minify-css', function() {
 });
 
 /**
- * Replace local URL in manifest file if supplied via gulp dist --url
+ * Replace local URL in manifest file if supplied via gulp dist  --url
  */
 gulp.task('replace-url', function(){
     if(argv.url){
