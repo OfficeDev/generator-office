@@ -98,7 +98,7 @@ describe('office:taskpane', function(){
         options.tech = 'html';
 
         // set products
-        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
 
         // run the generator
         helpers.run(path.join(__dirname, '../../generators/taskpane'))

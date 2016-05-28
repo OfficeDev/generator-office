@@ -56,7 +56,7 @@ describe('office:taskpane', function(){
         options.tech = 'ng-adal';
 
         // set products
-        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
         
         options.appId = '03ad2348-c459-4573-8f7d-0ca44d822e7c';
 

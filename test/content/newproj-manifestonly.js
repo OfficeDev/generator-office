@@ -54,7 +54,7 @@ describe('office:content', function(){
         options.tech = 'manifest-only';
 
         // set products
-        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
 
         options.startPage = 'https://localhost:8443/manifest-only/index.html';
 

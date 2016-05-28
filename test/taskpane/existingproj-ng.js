@@ -56,7 +56,7 @@ describe('office:taskpane', function(){
         options.tech = 'ng';
 
         // set products
-        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
 
         helpers.run(path.join(__dirname, '../../generators/taskpane'))
           .withOptions(options)
