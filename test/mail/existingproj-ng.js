@@ -75,6 +75,7 @@ describe('office:mail', function () {
             gulp: '^3.9.0',
             'gulp-load-plugins': '^1.0.0',
             'gulp-minify-css': '^1.2.2',
+            'gulp-replace': '^0.5.4',
             'gulp-task-listing': '^1.0.1',
             'gulp-uglify': '^1.5.1',
             'gulp-webserver': '^0.9.1',

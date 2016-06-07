@@ -1,6 +1,8 @@
 'use script';
 
 var gulp = require('gulp');
+var replace=require('gulp-replace');
+var argv = require('yargs').argv;
 var webserver = require('gulp-webserver');
 var fs = require('fs');
 var minimist = require('minimist');
@@ -12,7 +14,8 @@ var runSequence = require('run-sequence');
 var Xml2Js = require('xml2js');
 
 var config = {
-  release: './dist'
+  release: './dist',
+  localUrl:'https://localhost:8443/'
 };
 
 gulp.task('help', $.taskListing.withFilters(function (task) {
@@ -208,6 +211,19 @@ gulp.task('dist-minify-css', function() {
     .pipe(gulp.dest(config.release));
 });
 
+/**
+ * Replace local URL in manifest file if supplied via gulp dist  --url
+ */
+ gulp.task('replace-url', function(){
+     if(argv.url){
+         gulp.src([
+             config.release+'/manifest-*.xml'
+         ], { base: config.release+'/' })
+             .pipe(replace(config.localUrl, argv.url))
+             .pipe(gulp.dest(config.release));
+     }        
+ });
+ 
 /**
  * Creates a release version of the project
  */
