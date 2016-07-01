@@ -54,9 +54,9 @@ describe('office:taskpane', function(){
       beforeEach(function(done){
         // set language to html
         options.tech = 'ng';
-        options.skipIncludeNgOfficeUIFabric = true;
+
         // set products
-        options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
 
         helpers.run(path.join(__dirname, '../../generators/taskpane'))
           .withOptions(options)
@@ -232,21 +232,6 @@ describe('office:taskpane', function(){
           done();
         });
 
-		/**
-         * OneNote present in host entry.
-         */
-        it('includes OneNote in Hosts', function(done){
-          var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
-            if (h.$.Name === 'Notebook') {
-              found = true;
-            }
-          });
-          expect(found, '<Host Name="Notebook"/> exist').to.be.true;
-
-          done();
-        });
-		
         /**
          * Project present in host entry.
          */

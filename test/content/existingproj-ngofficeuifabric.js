@@ -19,15 +19,14 @@ var util = require('./../_testUtils');
 // sub:generator options
 var options = {};
 
-
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
-describe('office:taskpane', function(){
+describe('office:content', function(){
 
   var projectDisplayName = 'My Office Add-in';
   var projectEscapedName = 'my-office-add-in';
   var manifestFileName = 'manifest-' + projectEscapedName + '.xml';
-
+  
   beforeEach(function(done){
     options = {
       name: projectDisplayName
@@ -35,6 +34,50 @@ describe('office:taskpane', function(){
     done();
   });
 
+  /**
+   * Test scrubbing of name with illegal characters
+   */
+  it('project name is alphanumeric only', function(done){
+    options = {
+      name: 'Some\'s bad * character$ ~!@#$%^&*()',
+      rootPath: '',
+      tech: 'ng',
+      startPage: 'https://localhost:8443/manifest-only/index.html'
+    };
+
+    // run generator
+    helpers.run(path.join(__dirname, '../../generators/content'))
+      .withOptions(options)
+      .on('end', function(){
+        var expected = {
+          name: 'somes-bad-character',
+          version: '0.1.0',
+          devDependencies: {
+            chalk: '^1.1.1',
+            del: '^2.1.0',
+            gulp: '^3.9.0',
+            'gulp-load-plugins': '^1.0.0',
+            'gulp-minify-css': '^1.2.2',
+            'gulp-task-listing': '^1.0.1',
+            'gulp-uglify': '^1.5.1',
+            'gulp-webserver': '^0.9.1',
+            minimist: '^1.2.0',
+            'run-sequence': '^1.1.5',
+            'xml2js': '^0.4.15',
+            xmllint: 'git+https://github.com/kripken/xml.js.git'
+          }
+        };
+
+        assert.file('package.json');
+        util.assertJSONFileContains('package.json', expected);
+
+        done();
+      });
+  });
+
+  /**
+   * Test addin when running on an exsting folder.
+   */
   describe('run on existing project (non-empty folder)', function(){
     var addinRootPath = 'src/public';
 
@@ -46,19 +89,20 @@ describe('office:taskpane', function(){
       done();
     });
 
+
     /**
      * Test addin when technology = ng
      */
-    describe('technology:ng', function(){
+    describe('technology:ng, includeNgOfficeUIFabric', function(){
 
       beforeEach(function(done){
-        // set language to html
         options.tech = 'ng';
-        options.skipIncludeNgOfficeUIFabric = true;
-        // set products
-        options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
+        options.includeNgOfficeUIFabric = true;
 
-        helpers.run(path.join(__dirname, '../../generators/taskpane'))
+        // set products
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
+
+        helpers.run(path.join(__dirname, '../../generators/content'))
           .withOptions(options)
           .on('ready', function(gen){
             util.setupExistingProject(gen);
@@ -113,7 +157,8 @@ describe('office:taskpane', function(){
             angular: '~1.4.4',
             'angular-route': '~1.4.4',
             'angular-sanitize': '~1.4.4',
-            'office-ui-fabric': '*'
+            'office-ui-fabric': '*',
+            'ng-office-ui-fabric': '*'
           }
         };
 
@@ -155,7 +200,7 @@ describe('office:taskpane', function(){
       });
 
       /**
-       * manifest-*.xml is good
+       * manifest.xml is good
        */
       describe('manifest-*.xml contents', function(){
         var manifest = {};
@@ -232,21 +277,6 @@ describe('office:taskpane', function(){
           done();
         });
 
-		/**
-         * OneNote present in host entry.
-         */
-        it('includes OneNote in Hosts', function(done){
-          var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
-            if (h.$.Name === 'Notebook') {
-              found = true;
-            }
-          });
-          expect(found, '<Host Name="Notebook"/> exist').to.be.true;
-
-          done();
-        });
-		
         /**
          * Project present in host entry.
          */

@@ -52,6 +52,19 @@ module.exports = generators.Base.extend({
       desc: 'Application ID as registered in Azure AD',
       required: false
     });
+    
+    this.option('includeNgOfficeUIFabric', {
+      type: Boolean,
+      desc: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
+      required: false
+    });
+    
+    this.option('skipIncludeNgOfficeUIFabric', {
+      type: Boolean,
+      desc: 'Do not include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
+      required: false
+      
+    });
 
   }, // constructor()
 
@@ -227,6 +240,8 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
+            includeNgOfficeUIFabric: this.options.includeNgOfficeUIFabric,
+            skipIncludeNgOfficeUIFabric: this.options.skipIncludeNgOfficeUIFabric,
             outlookForm: this.genConfig.outlookForm,
             extensionPoint: this.genConfig.extensionPoint,
             appId: this.genConfig.appId,
@@ -245,6 +260,8 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
+            includeNgOfficeUIFabric: this.options.includeNgOfficeUIFabric,
+            skipIncludeNgOfficeUIFabric: this.options.skipIncludeNgOfficeUIFabric,
             appId: this.genConfig.appId,
             clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
@@ -261,6 +278,8 @@ module.exports = generators.Base.extend({
             name: this.genConfig.name,
             'root-path': this.genConfig['root-path'],
             tech: this.genConfig.tech,
+            includeNgOfficeUIFabric: this.options.includeNgOfficeUIFabric,
+            skipIncludeNgOfficeUIFabric: this.options.skipIncludeNgOfficeUIFabric,
             appId: this.genConfig.appId,
             clients: this.genConfig.clients,
             'skip-install': this.options['skip-install']
