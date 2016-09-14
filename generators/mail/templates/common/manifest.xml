@@ -7,6 +7,7 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
   <Description DefaultValue="[Outlook Add-in description]"/>
+  <SupportUrl DefaultValue="http://contoso.com/support" />
   <HighResolutionIconUrl DefaultValue="https://localhost:8443/images/hi-res-icon.png"/>
   <Hosts>
     <Host Name="Mailbox" />
