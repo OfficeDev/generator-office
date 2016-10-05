@@ -7,7 +7,10 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
   <Description DefaultValue="[Outlook Add-in description]"/>
+  <IconUrl DefaultValue="https://localhost:8443/images/icon-32.png"/>
   <HighResolutionIconUrl DefaultValue="https://localhost:8443/images/hi-res-icon.png"/>
+  <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
+  <!--<SupportUrl DefaultValue="[Insert the URL of a page that provides support information for the app]">-->
   <Hosts>
     <Host Name="Mailbox" />
   </Hosts>

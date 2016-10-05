@@ -255,6 +255,12 @@ describe('office:mail', function () {
             expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
             done();
           });
+
+          it('has valid icon URL', function (done) {
+            expect(manifest.OfficeApp.IconUrl[0].$.DefaultValue)
+              .to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
+            done();
+          });
           
           it('has valid hi-res icon URL', function (done) {
             expect(manifest.OfficeApp.HighResolutionIconUrl[0].$.DefaultValue)
