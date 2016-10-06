@@ -187,6 +187,12 @@ describe('office:taskpane', function(){
           done();
         });
 
+        it('has valid icon URL', function (done) {
+          expect(manifest.OfficeApp.IconUrl[0].$.DefaultValue)
+            .to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
+          done();
+        });
+
         /**
          * Word present in host entry.
          */

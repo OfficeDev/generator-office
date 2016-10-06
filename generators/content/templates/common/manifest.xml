@@ -6,6 +6,9 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
   <Description DefaultValue="[Task pane Add-in description]"/>
+  <IconUrl DefaultValue="https://localhost:8443/images/icon-32.png"/>
+  <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
+  <!--<SupportUrl DefaultValue="[Insert the URL of a page that provides support information for the app]">-->
   <Hosts>
   </Hosts>
   <DefaultSettings>

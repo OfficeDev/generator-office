@@ -230,6 +230,12 @@ describe('office:taskpane', function(){
           expect(subject).to.equal('https://localhost:8443/index.html');
           done();
         });
+
+        it('has valid icon URL', function (done) {
+          expect(manifest.OfficeApp.IconUrl[0].$.DefaultValue)
+            .to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
+          done();
+        });
         
         it('includes AAD App Domains', function(done){
           var loginWindowsNetFound = false;
