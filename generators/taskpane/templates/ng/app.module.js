@@ -4,7 +4,10 @@
   // create
   var officeAddin = angular.module('officeAddin', [
     'ngRoute',
-    'ngSanitize'
+    'ngSanitize'<% if(includeNgOfficeUIFabric) { %>, 
+    'officeuifabric.core',
+    'officeuifabric.components' 
+    <% } %>
   ]);
 
   // configure

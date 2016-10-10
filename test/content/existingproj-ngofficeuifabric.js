@@ -26,7 +26,7 @@ describe('office:content', function(){
   var projectDisplayName = 'My Office Add-in';
   var projectEscapedName = 'my-office-add-in';
   var manifestFileName = 'manifest-' + projectEscapedName + '.xml';
-
+  
   beforeEach(function(done){
     options = {
       name: projectDisplayName
@@ -42,7 +42,6 @@ describe('office:content', function(){
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
       tech: 'ng',
-      skipIncludeNgOfficeUIFabric: true,
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
 
@@ -77,32 +76,37 @@ describe('office:content', function(){
   });
 
   /**
-   * Test addin when running on empty folder.
+   * Test addin when running on an exsting folder.
    */
-  describe('run on new project (empty folder)', function(){
+  describe('run on existing project (non-empty folder)', function(){
+    var addinRootPath = 'src/public';
 
+    // generator ran at 'src/public' so for files
+    //  in the root, need to back up to the root
     beforeEach(function(done){
       // set to current folder
-      options.rootPath = '';
+      options.rootPath = addinRootPath;
       done();
     });
 
+
     /**
-     * Test addin when technology = angular
+     * Test addin when technology = ng
      */
-    describe('addin technology:ng', function(){
+    describe('technology:ng, includeNgOfficeUIFabric', function(){
 
       beforeEach(function(done){
-        // set language to html
         options.tech = 'ng';
-        options.skipIncludeNgOfficeUIFabric = true;
-        
-        // set products
-        options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
+        options.includeNgOfficeUIFabric = true;
 
-        // run the generator
+        // set products
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
+
         helpers.run(path.join(__dirname, '../../generators/content'))
           .withOptions(options)
+          .on('ready', function(gen){
+            util.setupExistingProject(gen);
+          }.bind(this))
           .on('end', done);
       });
 
@@ -117,23 +121,25 @@ describe('office:content', function(){
         var expected = [
           '.bowerrc',
           'bower.json',
-          'package.json',
           'gulpfile.js',
+          'package.json',
           manifestFileName,
           'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
           'tsconfig.json',
-          'index.html',
-          'app/app.module.js',
-          'app/app.routes.js',
-          'app/home/home.controller.js',
-          'app/home/home.html',
-          'app/services/data.service.js',
-          'content/Office.css',
-          'images/close.png',
-          'scripts/MicrosoftAjax.js'
+          addinRootPath + '/index.html',
+          addinRootPath + '/app/app.module.js',
+          addinRootPath + '/app/app.routes.js',
+          addinRootPath + '/app/home/home.controller.js',
+          addinRootPath + '/app/home/home.html',
+          addinRootPath + '/app/services/data.service.js',
+          addinRootPath + '/content/Office.css',
+          addinRootPath + '/images/close.png',
+          addinRootPath + '/scripts/MicrosoftAjax.js'
         ];
+
+
         assert.file(expected);
         done();
       });
@@ -143,14 +149,16 @@ describe('office:content', function(){
        */
       it('bower.json contains correct values', function(done){
         var expected = {
-          name: projectEscapedName,
+          name: 'ProjectName',
           version: '0.1.0',
           dependencies: {
             'microsoft.office.js': '*',
+            jquery: '~1.9.1',
             angular: '~1.4.4',
             'angular-route': '~1.4.4',
             'angular-sanitize': '~1.4.4',
-            'office-ui-fabric': '*'
+            'office-ui-fabric': '*',
+            'ng-office-ui-fabric': '*'
           }
         };
 
@@ -164,10 +172,12 @@ describe('office:content', function(){
        */
       it('package.json contains correct values', function(done){
         var expected = {
-          name: projectEscapedName,
+          name: 'ProjectName',
+          description: 'HTTPS site using Express and Node.js',
           version: '0.1.0',
-          scripts: {
-            postinstall: 'bower install'
+          main: 'src/server/server.js',
+          dependencies: {
+            express: '^4.12.2'
           },
           devDependencies: {
             chalk: '^1.1.1',
@@ -180,7 +190,6 @@ describe('office:content', function(){
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
             'run-sequence': '^1.1.5',
-            'xml2js': '^0.4.15',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
@@ -191,7 +200,7 @@ describe('office:content', function(){
       });
 
       /**
-       * manifest-*.xml is good
+       * manifest.xml is good
        */
       describe('manifest-*.xml contents', function(){
         var manifest = {};
@@ -233,7 +242,7 @@ describe('office:content', function(){
               found = true;
             }
           });
-          expect(found,'<Host Name="Document"/> exist').to.be.true;
+          expect(found, '<Host Name="Document"/> exist').to.be.true;
 
           done();
         });
@@ -248,7 +257,7 @@ describe('office:content', function(){
               found = true;
             }
           });
-          expect(found,'<Host Name="Workbook"/> exist').to.be.true;
+          expect(found, '<Host Name="Workbook"/> exist').to.be.true;
 
           done();
         });
@@ -263,22 +272,7 @@ describe('office:content', function(){
               found = true;
             }
           });
-          expect(found,'<Host Name="Presentation"/> exist').to.be.true;
-
-          done();
-        });
-		
-		/**
-         * OneNote present in host entry.
-         */
-        it('includes OneNote in Hosts', function(done){
-          var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
-            if (h.$.Name === 'Notebook') {
-              found = true;
-            }
-          });
-          expect(found, '<Host Name="Notebook"/> exist').to.be.true;
+          expect(found, '<Host Name="Presentation"/> exist').to.be.true;
 
           done();
         });
@@ -293,7 +287,7 @@ describe('office:content', function(){
               found = true;
             }
           });
-          expect(found,'<Host Name="Project"/> exist').to.be.true;
+          expect(found, '<Host Name="Project"/> exist').to.be.true;
 
           done();
         });
@@ -314,8 +308,11 @@ describe('office:content', function(){
           });
         });
 
-        it ('has correct *.d.ts references', function(done){
+        it('has correct *.d.ts references', function(done){
           expect(tsd.installed).to.exist;
+          // make sure the existing ones are present (to verify we didn't overwrite, but rather update)
+          expect(tsd.installed['lodash/lodash.d.ts']).to.exist;
+          // make sure the new ones are present
           expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.exist;
@@ -418,6 +415,7 @@ describe('office:content', function(){
       }); // describe('gulpfile.js contents')
 
     }); // describe('technology:ng')
-  });
+
+  }); // describe('run on existing project (non-empty folder)')
 
 });

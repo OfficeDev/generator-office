@@ -11,7 +11,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-sanitize.min.js"></script>
   <link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.min.css" rel="stylesheet">
-  <!--<link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.components.min.css" rel="stylesheet">-->
+  <link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.components.min.css" rel="stylesheet">
   <script src="//appsforoffice.microsoft.com/lib/1/hosted/Office.js"></script>
 
   <!-- To enable offline debugging using a local reference to Angular-*.js & Office.js, use: -->
@@ -24,6 +24,9 @@
   <!--<script src="../scripts/jquery.fabric.min.js"></script>  -->
 
   <link href="../content/Office.css" rel="stylesheet" type="text/css" />
+  <% if(includeNgOfficeUIFabric) { %> 
+    <script src="bower_components/ng-office-ui-fabric/ngOfficeUIFabric.js" type="text/javascript"></script> 
+  <% } %>
   <link href="../bower_components/microsoft.office.js/styles/OfficeThemes.css" rel="stylesheet" type="text/css" />
 </head>
 

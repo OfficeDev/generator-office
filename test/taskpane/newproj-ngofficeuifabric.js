@@ -19,9 +19,10 @@ var util = require('./../_testUtils');
 // sub:generator options
 var options = {};
 
+
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
-describe('office:content', function(){
+describe('office:taskpane', function(){
 
   var projectDisplayName = 'My Office Add-in';
   var projectEscapedName = 'my-office-add-in';
@@ -29,7 +30,7 @@ describe('office:content', function(){
 
   beforeEach(function(done){
     options = {
-      name: projectDisplayName
+      name: 'My Office Add-in'
     };
     done();
   });
@@ -42,12 +43,11 @@ describe('office:content', function(){
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
       tech: 'ng',
-      skipIncludeNgOfficeUIFabric: true,
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
 
     // run generator
-    helpers.run(path.join(__dirname, '../../generators/content'))
+    helpers.run(path.join(__dirname, '../../generators/taskpane'))
       .withOptions(options)
       .on('end', function(){
         var expected = {
@@ -90,18 +90,16 @@ describe('office:content', function(){
     /**
      * Test addin when technology = angular
      */
-    describe('addin technology:ng', function(){
+    describe('addin technology:ng, includeNgOfficeUIFabric', function(){
 
       beforeEach(function(done){
-        // set language to html
         options.tech = 'ng';
-        options.skipIncludeNgOfficeUIFabric = true;
-        
+        options.includeNgOfficeUIFabric = true;
         // set products
-        options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
 
         // run the generator
-        helpers.run(path.join(__dirname, '../../generators/content'))
+        helpers.run(path.join(__dirname, '../../generators/taskpane'))
           .withOptions(options)
           .on('end', done);
       });
@@ -150,7 +148,8 @@ describe('office:content', function(){
             angular: '~1.4.4',
             'angular-route': '~1.4.4',
             'angular-sanitize': '~1.4.4',
-            'office-ui-fabric': '*'
+            'office-ui-fabric': '*',
+            'ng-office-ui-fabric': '*'
           }
         };
 
@@ -213,7 +212,7 @@ describe('office:content', function(){
         });
 
         it('has correct display name', function(done){
-          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
+          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal('My Office Add-in');
           done();
         });
 
@@ -224,8 +223,8 @@ describe('office:content', function(){
         });
 
         /**
-         * Word present in host entry.
-         */
+      * Word present in host entry.
+      */
         it('includes Word in Hosts', function(done){
           var found = false;
           _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
@@ -233,7 +232,7 @@ describe('office:content', function(){
               found = true;
             }
           });
-          expect(found,'<Host Name="Document"/> exist').to.be.true;
+          expect(found, '<Host Name="Document"/> exist').to.be.true;
 
           done();
         });
@@ -248,7 +247,7 @@ describe('office:content', function(){
               found = true;
             }
           });
-          expect(found,'<Host Name="Workbook"/> exist').to.be.true;
+          expect(found, '<Host Name="Workbook"/> exist').to.be.true;
 
           done();
         });
@@ -263,22 +262,7 @@ describe('office:content', function(){
               found = true;
             }
           });
-          expect(found,'<Host Name="Presentation"/> exist').to.be.true;
-
-          done();
-        });
-		
-		/**
-         * OneNote present in host entry.
-         */
-        it('includes OneNote in Hosts', function(done){
-          var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
-            if (h.$.Name === 'Notebook') {
-              found = true;
-            }
-          });
-          expect(found, '<Host Name="Notebook"/> exist').to.be.true;
+          expect(found, '<Host Name="Presentation"/> exist').to.be.true;
 
           done();
         });
@@ -293,7 +277,7 @@ describe('office:content', function(){
               found = true;
             }
           });
-          expect(found,'<Host Name="Project"/> exist').to.be.true;
+          expect(found, '<Host Name="Project"/> exist').to.be.true;
 
           done();
         });
@@ -314,7 +298,7 @@ describe('office:content', function(){
           });
         });
 
-        it ('has correct *.d.ts references', function(done){
+        it('has correct *.d.ts references', function(done){
           expect(tsd.installed).to.exist;
           expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
@@ -328,7 +312,7 @@ describe('office:content', function(){
       /**
        * gulpfile.js is good
        */
-      describe('gulpfule.js contents', function(){
+      describe('gulpfile.js contents', function(){
         
         it('contains task \'help\'', function(done){
           assert.file('gulpfile.js');
@@ -418,6 +402,7 @@ describe('office:content', function(){
       }); // describe('gulpfile.js contents')
 
     }); // describe('technology:ng')
-  });
+
+  }); // describe('run on new project (empty folder)')
 
 });

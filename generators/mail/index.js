@@ -51,6 +51,18 @@ module.exports = generators.Base.extend({
       desc: 'Application ID as registered in Azure AD',
       required: false
     });
+    
+    this.option('includeNgOfficeUIFabric', {
+      type: Boolean,
+      desc: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
+      required: false
+    });
+    
+    this.option('skipIncludeNgOfficeUIFabric', {
+      type: Boolean,
+      desc: 'Do not include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
+      required: false
+    });
 
     // create global config object on this generator
     this.genConfig = {};
@@ -182,6 +194,38 @@ module.exports = generators.Base.extend({
       }.bind(this));
 
     }, // askForAdalConfig()
+
+    askForNgConfig: function(){      
+      // if it's not an NG app, don't ask the questions
+      if (this.genConfig.tech !== 'ng' && this.genConfig.tech !== 'ng-adal') {
+        this.genConfig.includeNgOfficeUIFabric = false;
+        return;
+      }     
+      
+      if (this.options.skipIncludeNgOfficeUIFabric) {
+        this.genConfig.includeNgOfficeUIFabric = false;
+        return;
+      }
+           
+      var done = this.async();
+
+      // office client application that can host the addin
+      var prompts = [{
+        name: 'includeNgOfficeUIFabric',
+        message: 'Include ngOfficeUIFabric (Angular Directives for Office UI Fabric)?',
+        type: 'confirm',
+        default: true,
+        when: !this.options.includeNgOfficeUIFabric
+      }];
+
+      // trigger prompts
+      this.prompt(prompts, function(responses){
+        this.genConfig = extend(this.genConfig, responses);        
+        done();
+      }.bind(this));     
+      
+
+    }, // askForNgConfig()
 
     /**
      * If user specified tech:manifest-only, prompt for start page.
@@ -402,6 +446,10 @@ module.exports = generators.Base.extend({
               if (!bowerJson.dependencies['angular-sanitize']) {
                 bowerJson.dependencies['angular-sanitize'] = '~1.4.4';
               }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['ng-office-ui-fabric'] && yoGenerator.genConfig.includeNgOfficeUIFabric) {
+                bowerJson.dependencies['ng-office-ui-fabric'] = '*';
+              }
               break;
             case 'ng-adal':
               /* istanbul ignore else */
@@ -419,6 +467,10 @@ module.exports = generators.Base.extend({
               /* istanbul ignore else */
               if (!bowerJson.dependencies['adal-angular']) {
                 bowerJson.dependencies['adal-angular'] = '~1.0.5';
+              }
+              /* istanbul ignore else */
+              if (!bowerJson.dependencies['ng-office-ui-fabric'] && yoGenerator.genConfig.includeNgOfficeUIFabric) {
+                bowerJson.dependencies['ng-office-ui-fabric'] = '*';
               }
               break;
           }
@@ -673,10 +725,12 @@ module.exports = generators.Base.extend({
             if (this.genConfig.extensionPoint &&
                 (this.genConfig.extensionPoint.indexOf('MessageComposeCommandSurface') > -1 ||
                 this.genConfig.extensionPoint.indexOf('AppointmentOrganizerCommandSurface') > -1)) {
-              this.fs.copy(this.templatePath('ng/appcompose/index.html'),
-                          this.destinationPath(this._parseTargetPath('appcompose/index.html')));
-              this.fs.copy(this.templatePath('ng/appcompose/app.module.js'),
-                          this.destinationPath(this._parseTargetPath('appcompose/app.module.js')));
+              this.fs.copyTpl(this.templatePath('ng/appcompose/index.html'),
+                          this.destinationPath(this._parseTargetPath('appcompose/index.html')),
+                          this.genConfig);                          
+              this.fs.copyTpl(this.templatePath('ng/appcompose/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.module.js')),
+                         this.genConfig);
               this.fs.copy(this.templatePath('ng/appcompose/app.routes.js'),
                           this.destinationPath(this._parseTargetPath('appcompose/app.routes.js')));
               this.fs.copy(this.templatePath('ng/appcompose/home/home.controller.js'),
@@ -690,10 +744,12 @@ module.exports = generators.Base.extend({
             if (this.genConfig.extensionPoint &&
                 (this.genConfig.extensionPoint.indexOf('MessageReadCommandSurface') > -1 ||
                 this.genConfig.extensionPoint.indexOf('AppointmentAttendeeCommandSurface') > -1)) {
-              this.fs.copy(this.templatePath('ng/appread/index.html'),
-                          this.destinationPath(this._parseTargetPath('appread/index.html')));
-              this.fs.copy(this.templatePath('ng/appread/app.module.js'),
-                          this.destinationPath(this._parseTargetPath('appread/app.module.js')));
+              this.fs.copyTpl(this.templatePath('ng/appread/index.html'),
+                          this.destinationPath(this._parseTargetPath('appread/index.html')),
+                          this.genConfig);
+              this.fs.copyTpl(this.templatePath('ng/appread/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appread/app.module.js')),
+                         this.genConfig);
               this.fs.copy(this.templatePath('ng/appread/app.routes.js'),
                           this.destinationPath(this._parseTargetPath('appread/app.routes.js')));
               this.fs.copy(this.templatePath('ng/appread/home/home.controller.js'),
@@ -729,10 +785,12 @@ module.exports = generators.Base.extend({
             if (this.genConfig.extensionPoint &&
                 (this.genConfig.extensionPoint.indexOf('MessageComposeCommandSurface') > -1 ||
                 this.genConfig.extensionPoint.indexOf('AppointmentOrganizerCommandSurface') > -1)) {
-              this.fs.copy(this.templatePath('ng-adal/appcompose/index.html'),
-                          this.destinationPath(this._parseTargetPath('appcompose/index.html')));
-              this.fs.copy(this.templatePath('ng-adal/appcompose/app.module.js'),
-                          this.destinationPath(this._parseTargetPath('appcompose/app.module.js')));
+              this.fs.copyTpl(this.templatePath('ng-adal/appcompose/index.html'),
+                          this.destinationPath(this._parseTargetPath('appcompose/index.html')),
+                          this.genConfig);
+              this.fs.copyTpl(this.templatePath('ng/appcompose/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appcompose/app.module.js')),
+                          this.genConfig);
               this.fs.copy(this.templatePath('ng-adal/appcompose/app.adalconfig.js'),
                           this.destinationPath(this._parseTargetPath('appcompose/app.adalconfig.js')));
               this.fs.copyTpl(this.templatePath('ng-adal/appcompose/app.config.js'),
@@ -751,10 +809,12 @@ module.exports = generators.Base.extend({
             if (this.genConfig.extensionPoint &&
                 (this.genConfig.extensionPoint.indexOf('MessageReadCommandSurface') > -1 ||
                 this.genConfig.extensionPoint.indexOf('AppointmentAttendeeCommandSurface') > -1)) {
-              this.fs.copy(this.templatePath('ng-adal/appread/index.html'),
-                          this.destinationPath(this._parseTargetPath('appread/index.html')));
-              this.fs.copy(this.templatePath('ng-adal/appread/app.module.js'),
-                          this.destinationPath(this._parseTargetPath('appread/app.module.js')));
+              this.fs.copyTpl(this.templatePath('ng-adal/appread/index.html'),
+                          this.destinationPath(this._parseTargetPath('appread/index.html')),
+                          this.genConfig);
+              this.fs.copyTpl(this.templatePath('ng/appread/app.module.js'),
+                          this.destinationPath(this._parseTargetPath('appread/app.module.js')),
+                         this.genConfig);
               this.fs.copy(this.templatePath('ng-adal/appread/app.adalconfig.js'),
                           this.destinationPath(this._parseTargetPath('appread/app.adalconfig.js')));
               this.fs.copyTpl(this.templatePath('ng-adal/appread/app.config.js'),
