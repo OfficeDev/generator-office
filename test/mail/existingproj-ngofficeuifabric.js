@@ -246,7 +246,7 @@ describe('office:mail', function () {
           });
 
           it('has valid ID', function (done) {
-            expect(validator.isUUID(manifest.OfficeApp.Id)).to.be.true;
+            expect(validator.isUUID(manifest.OfficeApp.Id + '')).to.be.true;
             done();
           });
 
