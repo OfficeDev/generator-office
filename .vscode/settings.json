@@ -1,0 +1,8 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  // trimTrailingWhitespace deliberately ommited as this could mess up .md files
+  // "files.trimTrailingWhitespace": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "files.encoding": "utf8"
+}

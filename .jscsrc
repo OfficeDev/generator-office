@@ -28,7 +28,7 @@
       "beforeOpeningRoundBrace": true,
       "beforeOpeningCurlyBrace": true
   },
-  "disallowMultipleVarDecl": null,  
+  "disallowMultipleVarDecl": null,
   "requireSpaceAfterKeywords": [
     "if",
     "else",
@@ -42,7 +42,7 @@
   ],
   "requireSpaceBeforeBinaryOperators": [
       "=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", ">>>=",
-      "&=", "|=", "^=", "+=",
+      "&=", "|=", "^=",
       "+", "-", "*", "/", "%", "<<", ">>", ">>>", "&",
       "|", "^", "&&", "||", "===", "==", ">=",
       "<=", "<", ">", "!=", "!=="

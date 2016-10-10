@@ -19,6 +19,8 @@ All code must pass the [JSHint](http://www.jshint.com) & [JSCS](http://jscs.info
 - JSHint Settings: `.jshintrc`
 - JSCS Settings: `.jscsrc`
 
+*If you're using VSCode then the autoformat option provided will cause a few issues around the whitespace it inserts between the parenthesis and braces for functions and inside JavaScript Objects.*
+
 Check all source files to ensure they meet these guidelines using the provided gulp task **vet**:
 
 ```
