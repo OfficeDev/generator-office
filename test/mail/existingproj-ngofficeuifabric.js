@@ -18,6 +18,7 @@ var util = require('./../_testUtils');
 
 // sub:generator options
 var options = {};
+var prompts = {};
 
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
@@ -31,6 +32,15 @@ describe('office:mail', function () {
     options = {
       name: projectDisplayName
     };
+    
+    // Since mail invokes commands, we
+    // need to mock responding to the prompts for
+    // info
+    prompts = {
+      buttonTypes: ['uiless'],
+      functionFileUrl: 'https://localhost:8443/manifest-only/functions.html',
+      iconUrl: 'https://localhost:8443/manifest-only/icon.png'
+    };
     done();
   });
 
@@ -41,7 +51,7 @@ describe('office:mail', function () {
     options = {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
-      tech: 'html',
+      tech: 'ng',
       extensionPoint: [
         'MessageReadCommandSurface', 
         'MessageComposeCommandSurface', 
@@ -54,6 +64,7 @@ describe('office:mail', function () {
     // run generator
     helpers.run(path.join(__dirname, '../../generators/mail'))
       .withOptions(options)
+      .withPrompts(prompts)
       .on('end', function () {
         var expected = {
           name: 'somes-bad-character',
@@ -64,8 +75,6 @@ describe('office:mail', function () {
             gulp: '^3.9.0',
             'gulp-load-plugins': '^1.0.0',
             'gulp-minify-css': '^1.2.2',
-            'gulp-replace': '^0.5.4',
-            'yargs': '^3.24.0',
             'gulp-task-listing': '^1.0.1',
             'gulp-uglify': '^1.5.1',
             'gulp-webserver': '^0.9.1',
@@ -83,30 +92,29 @@ describe('office:mail', function () {
       });
   });
 
-  /**
-   * Test addin when running on empty folder.
-   */
-  describe('run on new project (empty folder)', function () {
+  describe('run on existing project (non-empty folder)', function () {
+    var addinRootPath = 'src/public';
 
+    // generator ran at 'src/public' so for files
+    //  in the root, need to back up to the root
     beforeEach(function (done) {
       // set to current folder
-      options.rootPath = '';
+      options.rootPath = addinRootPath;
       done();
     });
 
     /**
-     * Test addin when technology = html
+     * Test addin when technology = ng
      */
-    describe('addin technology:html', function () {
+    describe('technology:ng, includeNgOfficeUIFabric', function () {
 
       describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface, '
              + 'AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface', 
       function () {
 
         beforeEach(function (done) {
-          // set language to html
-          options.tech = 'html';
-  
+          options.tech = 'ng';
+          options.includeNgOfficeUIFabric = true;
           // set outlook form type
           options.extensionPoint = [
             'MessageReadCommandSurface', 
@@ -114,10 +122,13 @@ describe('office:mail', function () {
             'AppointmentAttendeeCommandSurface', 
             'AppointmentOrganizerCommandSurface'
           ];
-  
-          // run the generator
+
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
+            .withPrompts(prompts)
+            .on('ready', function (gen) {
+              util.setupExistingProject(gen);
+            }.bind(this))
             .on('end', done);
         });
 
@@ -132,28 +143,32 @@ describe('office:mail', function () {
           var expected = [
             '.bowerrc',
             'bower.json',
-            'package.json',
             'gulpfile.js',
+            'package.json',
             manifestFileName,
             'manifest.xsd',
             'tsd.json',
             'jsconfig.json',
             'tsconfig.json',
-            'appcompose/app.js',
-            'appcompose/app.css',
-            'appcompose/home/home.js',
-            'appcompose/home/home.html',
-            'appcompose/home/home.css',
-            'appread/app.js',
-            'appread/app.css',
-            'appread/home/home.js',
-            'appread/home/home.html',
-            'appread/home/home.css',
-            'content/Office.css',
-            'images/close.png',
-            'images/hi-res-icon.png',
-            'scripts/MicrosoftAjax.js'
+            addinRootPath + '/appcompose/index.html',
+            addinRootPath + '/appcompose/app.module.js',
+            addinRootPath + '/appcompose/app.routes.js',
+            addinRootPath + '/appcompose/home/home.controller.js',
+            addinRootPath + '/appcompose/home/home.html',
+            addinRootPath + '/appcompose/services/data.service.js',
+            addinRootPath + '/appread/index.html',
+            addinRootPath + '/appread/app.module.js',
+            addinRootPath + '/appread/app.routes.js',
+            addinRootPath + '/appread/home/home.controller.js',
+            addinRootPath + '/appread/home/home.html',
+            addinRootPath + '/appread/services/data.service.js',
+            addinRootPath + '/content/Office.css',
+            addinRootPath + '/images/close.png',
+            addinRootPath + '/images/hi-res-icon.png',
+            addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
+
+
           assert.file(expected);
           done();
         });
@@ -163,12 +178,16 @@ describe('office:mail', function () {
         */
         it('bower.json contains correct values', function (done) {
           var expected = {
-            name: projectEscapedName,
+            name: 'ProjectName',
             version: '0.1.0',
             dependencies: {
               'microsoft.office.js': '*',
               jquery: '~1.9.1',
-              'office-ui-fabric': '*'
+              angular: '~1.4.4',
+              'angular-route': '~1.4.4',
+              'angular-sanitize': '~1.4.4',
+              'office-ui-fabric': '*',
+              'ng-office-ui-fabric': '*'
             }
           };
 
@@ -182,10 +201,12 @@ describe('office:mail', function () {
         */
         it('package.json contains correct values', function (done) {
           var expected = {
-            name: projectEscapedName,
+            name: 'ProjectName',
+            description: 'HTTPS site using Express and Node.js',
             version: '0.1.0',
-            scripts: {
-              postinstall: 'bower install'
+            main: 'src/server/server.js',
+            dependencies: {
+              express: '^4.12.2'
             },
             devDependencies: {
               chalk: '^1.1.1',
@@ -193,14 +214,11 @@ describe('office:mail', function () {
               gulp: '^3.9.0',
               'gulp-load-plugins': '^1.0.0',
               'gulp-minify-css': '^1.2.2',
-              'gulp-replace': '^0.5.4',
-              'yargs': '^3.24.0',
               'gulp-task-listing': '^1.0.1',
               'gulp-uglify': '^1.5.1',
               'gulp-webserver': '^0.9.1',
               minimist: '^1.2.0',
               'run-sequence': '^1.1.5',
-              'xml2js': '^0.4.15',
               xmllint: 'git+https://github.com/kripken/xml.js.git'
             }
           };
@@ -236,12 +254,6 @@ describe('office:mail', function () {
             expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
             done();
           });
-
-          it('has valid icon URL', function (done) {
-            expect(manifest.OfficeApp.IconUrl[0].$.DefaultValue)
-              .to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
-            done();
-          });
           
           it('has valid hi-res icon URL', function (done) {
             expect(manifest.OfficeApp.HighResolutionIconUrl[0].$.DefaultValue)
@@ -254,8 +266,8 @@ describe('office:mail', function () {
             var subject = manifest.OfficeApp.FormSettings[0].Form[0]
                                   .DesktopSettings[0].SourceLocation[0].$.DefaultValue;
 
-            if (subject === 'https://localhost:8443/appcompose/home/home.html' ||
-              subject === 'https://localhost:8443/appread/home/home.html') {
+            if (subject === 'https://localhost:8443/appcompose/index.html' ||
+              subject === 'https://localhost:8443/appread/index.html') {
               valid = true;
             }
 
@@ -379,10 +391,12 @@ describe('office:mail', function () {
 
           it('has correct *.d.ts references', function (done) {
             expect(tsd.installed).to.exist;
-            expect(tsd.installed['jquery/jquery.d.ts']).to.exist;
-            expect(tsd.installed['angularjs/angular.d.ts']).to.not.exist;
-            expect(tsd.installed['angularjs/angular-route.d.ts']).to.not.exist;
-            expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.not.exist;
+            // make sure the existing ones are present (to verify we didn't overwrite, but rather update)
+            expect(tsd.installed['lodash/lodash.d.ts']).to.exist;
+            // make sure the new ones are present
+            expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
+            expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
+            expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.exist;
             expect(tsd.installed['office-js/office-js.d.ts']).to.exist;
             done();
           });
@@ -480,9 +494,9 @@ describe('office:mail', function () {
           });
 
         }); // describe('gulpfile.js contents')
-      
-      }); //describe('Outlook extension points:MessageReadCommandSurface, 
-          // MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, 
+
+      }); // describe('Outlook extension points:MessageReadCommandSurface,
+          // MessageComposeCommandSurface, AppointmentAttendeeCommandSurface,
           // AppointmentOrganizerCommandSurface')
       
       describe('Outlook extension points:MessageReadCommandSurface, '
@@ -491,17 +505,20 @@ describe('office:mail', function () {
 
         beforeEach(function (done) {
           // set language to html
-          options.tech = 'html';
+          options.tech = 'ng';
   
           // set outlook form type
           options.extensionPoint = [
             'MessageReadCommandSurface', 
             'AppointmentAttendeeCommandSurface'
           ];
-  
-          // run the generator
+
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
+            .withPrompts(prompts)
+            .on('ready', function (gen) {
+              util.setupExistingProject(gen);
+            }.bind(this))
             .on('end', done);
         });
 
@@ -516,27 +533,30 @@ describe('office:mail', function () {
           var expected = [
             '.bowerrc',
             'bower.json',
-            'package.json',
             'gulpfile.js',
+            'package.json',
             manifestFileName,
             'manifest.xsd',
             'tsd.json',
             'jsconfig.json',
             'tsconfig.json',
-            'appread/app.js',
-            'appread/app.css',
-            'appread/home/home.js',
-            'appread/home/home.html',
-            'appread/home/home.css',
-            'content/Office.css',
-            'images/close.png',
-            'images/hi-res-icon.png',
-            'scripts/MicrosoftAjax.js'
+            addinRootPath + '/appread/index.html',
+            addinRootPath + '/appread/app.module.js',
+            addinRootPath + '/appread/app.routes.js',
+            addinRootPath + '/appread/home/home.controller.js',
+            addinRootPath + '/appread/home/home.html',
+            addinRootPath + '/appread/services/data.service.js',
+            addinRootPath + '/content/Office.css',
+            addinRootPath + '/images/close.png',
+            addinRootPath + '/images/hi-res-icon.png',
+            addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
+
+
           assert.file(expected);
           done();
         });
-    
+  
         /**
         * manifest-*.xml is good
         */
@@ -638,7 +658,7 @@ describe('office:mail', function () {
           /**
           * Rule for Appointment Edit not present
           */
-          it('doesn\'t includes rule for appointment edit', function (done) {
+          it('doesn\'t include rule for appointment edit', function (done) {
             var found = false;
             _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
               if (rule.$['xsi:type'] === 'ItemIs' &&
@@ -652,9 +672,9 @@ describe('office:mail', function () {
             done();
           });
 
-        }); // describe('manifest-*.xml contents')   
-      
-      }); // describe('Outlook extension points:MessageReadCommandSurface,
+        }); // describe('manifest-*.xml contents')
+  
+      }); // describe('Outlook extension points:MessageReadCommandSurface, 
           // AppointmentAttendeeCommandSurface')
       
       describe('Outlook extension points:MessageComposeCommandSurface, '
@@ -663,17 +683,20 @@ describe('office:mail', function () {
 
         beforeEach(function (done) {
           // set language to html
-          options.tech = 'html';
+          options.tech = 'ng';
   
           // set outlook form type
           options.extensionPoint = [
             'MessageComposeCommandSurface', 
             'AppointmentOrganizerCommandSurface'
           ];
-  
-          // run the generator
+
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
+            .withPrompts(prompts)
+            .on('ready', function (gen) {
+              util.setupExistingProject(gen);
+            }.bind(this))
             .on('end', done);
         });
 
@@ -688,23 +711,26 @@ describe('office:mail', function () {
           var expected = [
             '.bowerrc',
             'bower.json',
-            'package.json',
             'gulpfile.js',
+            'package.json',
             manifestFileName,
             'manifest.xsd',
             'tsd.json',
             'jsconfig.json',
             'tsconfig.json',
-            'appcompose/app.js',
-            'appcompose/app.css',
-            'appcompose/home/home.js',
-            'appcompose/home/home.html',
-            'appcompose/home/home.css',
-            'content/Office.css',
-            'images/close.png',
-            'images/hi-res-icon.png',
-            'scripts/MicrosoftAjax.js'
+            addinRootPath + '/appcompose/index.html',
+            addinRootPath + '/appcompose/app.module.js',
+            addinRootPath + '/appcompose/app.routes.js',
+            addinRootPath + '/appcompose/home/home.controller.js',
+            addinRootPath + '/appcompose/home/home.html',
+            addinRootPath + '/appcompose/services/data.service.js',
+            addinRootPath + '/content/Office.css',
+            addinRootPath + '/images/close.png',
+            addinRootPath + '/images/hi-res-icon.png',
+            addinRootPath + '/scripts/MicrosoftAjax.js'
           ];
+
+
           assert.file(expected);
           done();
         });
@@ -826,11 +852,11 @@ describe('office:mail', function () {
 
         }); // describe('manifest-*.xml contents')
   
-      }); // describe(''Outlook extension points:MessageComposeCommandSurface, 
+      }); // describe('Outlook extension points:MessageComposeCommandSurface, 
           // AppointmentOrganizerCommandSurface')
-      
-    }); // describe('technology:html')
 
-  }); // describe('run on new project (empty folder)')
+    }); // describe('technology:ng')
+
+  }); // describe('run on existing project (non-empty folder)')
 
 });

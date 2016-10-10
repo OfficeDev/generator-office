@@ -18,6 +18,7 @@ var util = require('./../_testUtils');
 
 // sub:generator options
 var options = {};
+var prompts = {};
 
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
@@ -31,6 +32,15 @@ describe('office:mail', function () {
     options = {
       name: projectDisplayName
     };
+    
+    // Since mail invokes commands, we
+    // need to mock responding to the prompts for
+    // info
+    prompts = {
+      buttonTypes: ['uiless'],
+      functionFileUrl: 'https://localhost:8443/manifest-only/functions.html',
+      iconUrl: 'https://localhost:8443/manifest-only/icon.png'
+    };
     done();
   });
 
@@ -41,7 +51,7 @@ describe('office:mail', function () {
     options = {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
-      tech: 'html',
+      tech: 'ng',
       extensionPoint: [
         'MessageReadCommandSurface', 
         'MessageComposeCommandSurface', 
@@ -54,6 +64,7 @@ describe('office:mail', function () {
     // run generator
     helpers.run(path.join(__dirname, '../../generators/mail'))
       .withOptions(options)
+      .withPrompts(prompts)
       .on('end', function () {
         var expected = {
           name: 'somes-bad-character',
@@ -64,8 +75,6 @@ describe('office:mail', function () {
             gulp: '^3.9.0',
             'gulp-load-plugins': '^1.0.0',
             'gulp-minify-css': '^1.2.2',
-            'gulp-replace': '^0.5.4',
-            'yargs': '^3.24.0',
             'gulp-task-listing': '^1.0.1',
             'gulp-uglify': '^1.5.1',
             'gulp-webserver': '^0.9.1',
@@ -95,9 +104,9 @@ describe('office:mail', function () {
     });
 
     /**
-     * Test addin when technology = html
+     * Test addin when technology = angular
      */
-    describe('addin technology:html', function () {
+    describe('addin technology:ng, includeNgOfficeUIFabric', function () {
 
       describe('Outlook extension points:MessageReadCommandSurface, MessageComposeCommandSurface, '
              + 'AppointmentAttendeeCommandSurface, AppointmentOrganizerCommandSurface', 
@@ -105,8 +114,8 @@ describe('office:mail', function () {
 
         beforeEach(function (done) {
           // set language to html
-          options.tech = 'html';
-  
+          options.tech = 'ng';
+          options.includeNgOfficeUIFabric = true;
           // set outlook form type
           options.extensionPoint = [
             'MessageReadCommandSurface', 
@@ -118,6 +127,7 @@ describe('office:mail', function () {
           // run the generator
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
+            .withPrompts(prompts)
             .on('end', done);
         });
 
@@ -139,16 +149,18 @@ describe('office:mail', function () {
             'tsd.json',
             'jsconfig.json',
             'tsconfig.json',
-            'appcompose/app.js',
-            'appcompose/app.css',
-            'appcompose/home/home.js',
+            'appcompose/index.html',
+            'appcompose/app.module.js',
+            'appcompose/app.routes.js',
+            'appcompose/home/home.controller.js',
             'appcompose/home/home.html',
-            'appcompose/home/home.css',
-            'appread/app.js',
-            'appread/app.css',
-            'appread/home/home.js',
+            'appcompose/services/data.service.js',
+            'appread/index.html',
+            'appread/app.module.js',
+            'appread/app.routes.js',
+            'appread/home/home.controller.js',
             'appread/home/home.html',
-            'appread/home/home.css',
+            'appread/services/data.service.js',
             'content/Office.css',
             'images/close.png',
             'images/hi-res-icon.png',
@@ -167,8 +179,11 @@ describe('office:mail', function () {
             version: '0.1.0',
             dependencies: {
               'microsoft.office.js': '*',
-              jquery: '~1.9.1',
-              'office-ui-fabric': '*'
+              angular: '~1.4.4',
+              'angular-route': '~1.4.4',
+              'angular-sanitize': '~1.4.4',
+              'office-ui-fabric': '*',
+              'ng-office-ui-fabric': '*'
             }
           };
 
@@ -193,8 +208,6 @@ describe('office:mail', function () {
               gulp: '^3.9.0',
               'gulp-load-plugins': '^1.0.0',
               'gulp-minify-css': '^1.2.2',
-              'gulp-replace': '^0.5.4',
-              'yargs': '^3.24.0',
               'gulp-task-listing': '^1.0.1',
               'gulp-uglify': '^1.5.1',
               'gulp-webserver': '^0.9.1',
@@ -236,12 +249,6 @@ describe('office:mail', function () {
             expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
             done();
           });
-
-          it('has valid icon URL', function (done) {
-            expect(manifest.OfficeApp.IconUrl[0].$.DefaultValue)
-              .to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
-            done();
-          });
           
           it('has valid hi-res icon URL', function (done) {
             expect(manifest.OfficeApp.HighResolutionIconUrl[0].$.DefaultValue)
@@ -254,8 +261,8 @@ describe('office:mail', function () {
             var subject = manifest.OfficeApp.FormSettings[0].Form[0]
                                   .DesktopSettings[0].SourceLocation[0].$.DefaultValue;
 
-            if (subject === 'https://localhost:8443/appcompose/home/home.html' ||
-              subject === 'https://localhost:8443/appread/home/home.html') {
+            if (subject === 'https://localhost:8443/appcompose/index.html' ||
+              subject === 'https://localhost:8443/appread/index.html') {
               valid = true;
             }
 
@@ -304,6 +311,7 @@ describe('office:mail', function () {
                 rule.$.FormType === 'Read') {
                 found = true;
               }
+
             });
 
             expect(found, '<Rule xsi:type="ItemIs" ItemType="Message" FormType="Read" />').to.be.true;
@@ -379,10 +387,9 @@ describe('office:mail', function () {
 
           it('has correct *.d.ts references', function (done) {
             expect(tsd.installed).to.exist;
-            expect(tsd.installed['jquery/jquery.d.ts']).to.exist;
-            expect(tsd.installed['angularjs/angular.d.ts']).to.not.exist;
-            expect(tsd.installed['angularjs/angular-route.d.ts']).to.not.exist;
-            expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.not.exist;
+            expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
+            expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
+            expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.exist;
             expect(tsd.installed['office-js/office-js.d.ts']).to.exist;
             done();
           });
@@ -480,8 +487,8 @@ describe('office:mail', function () {
           });
 
         }); // describe('gulpfile.js contents')
-      
-      }); //describe('Outlook extension points:MessageReadCommandSurface, 
+        
+      }); // describe('Outlook extension points:MessageReadCommandSurface, 
           // MessageComposeCommandSurface, AppointmentAttendeeCommandSurface, 
           // AppointmentOrganizerCommandSurface')
       
@@ -491,7 +498,7 @@ describe('office:mail', function () {
 
         beforeEach(function (done) {
           // set language to html
-          options.tech = 'html';
+          options.tech = 'ng';
   
           // set outlook form type
           options.extensionPoint = [
@@ -502,6 +509,7 @@ describe('office:mail', function () {
           // run the generator
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
+            .withPrompts(prompts)
             .on('end', done);
         });
 
@@ -523,11 +531,12 @@ describe('office:mail', function () {
             'tsd.json',
             'jsconfig.json',
             'tsconfig.json',
-            'appread/app.js',
-            'appread/app.css',
-            'appread/home/home.js',
+            'appread/index.html',
+            'appread/app.module.js',
+            'appread/app.routes.js',
+            'appread/home/home.controller.js',
             'appread/home/home.html',
-            'appread/home/home.css',
+            'appread/services/data.service.js',
             'content/Office.css',
             'images/close.png',
             'images/hi-res-icon.png',
@@ -536,7 +545,7 @@ describe('office:mail', function () {
           assert.file(expected);
           done();
         });
-    
+  
         /**
         * manifest-*.xml is good
         */
@@ -595,6 +604,7 @@ describe('office:mail', function () {
                 rule.$.FormType === 'Read') {
                 found = true;
               }
+
             });
 
             expect(found, '<Rule xsi:type="ItemIs" ItemType="Message" FormType="Read" />').to.be.true;
@@ -638,7 +648,7 @@ describe('office:mail', function () {
           /**
           * Rule for Appointment Edit not present
           */
-          it('doesn\'t includes rule for appointment edit', function (done) {
+          it('doesn\'t include rule for appointment edit', function (done) {
             var found = false;
             _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
               if (rule.$['xsi:type'] === 'ItemIs' &&
@@ -652,9 +662,9 @@ describe('office:mail', function () {
             done();
           });
 
-        }); // describe('manifest-*.xml contents')   
-      
-      }); // describe('Outlook extension points:MessageReadCommandSurface,
+        }); // describe('manifest-*.xml contents')
+          
+      }); // describe('Outlook extension points:MessageReadCommandSurface, 
           // AppointmentAttendeeCommandSurface')
       
       describe('Outlook extension points:MessageComposeCommandSurface, '
@@ -663,7 +673,7 @@ describe('office:mail', function () {
 
         beforeEach(function (done) {
           // set language to html
-          options.tech = 'html';
+          options.tech = 'ng';
   
           // set outlook form type
           options.extensionPoint = [
@@ -674,6 +684,7 @@ describe('office:mail', function () {
           // run the generator
           helpers.run(path.join(__dirname, '../../generators/mail'))
             .withOptions(options)
+            .withPrompts(prompts)
             .on('end', done);
         });
 
@@ -695,11 +706,12 @@ describe('office:mail', function () {
             'tsd.json',
             'jsconfig.json',
             'tsconfig.json',
-            'appcompose/app.js',
-            'appcompose/app.css',
-            'appcompose/home/home.js',
+            'appcompose/index.html',
+            'appcompose/app.module.js',
+            'appcompose/app.routes.js',
+            'appcompose/home/home.controller.js',
             'appcompose/home/home.html',
-            'appcompose/home/home.css',
+            'appcompose/services/data.service.js',
             'content/Office.css',
             'images/close.png',
             'images/hi-res-icon.png',
@@ -767,6 +779,7 @@ describe('office:mail', function () {
                 rule.$.FormType === 'Read') {
                 found = true;
               }
+
             });
 
             expect(found, '<Rule xsi:type="ItemIs" ItemType="Message" FormType="Read" />').to.be.false;
@@ -793,7 +806,7 @@ describe('office:mail', function () {
           /**
           * Rule for Appointment Read not present
           */
-          it('doesn\'t include rule for appointment read', function (done) {
+          it('doesn\'t includes rule for appointment read', function (done) {
             var found = false;
             _.forEach(manifest.OfficeApp.Rule[0].Rule, function (rule) {
               if (rule.$['xsi:type'] === 'ItemIs' &&
@@ -825,11 +838,11 @@ describe('office:mail', function () {
           });
 
         }); // describe('manifest-*.xml contents')
-  
-      }); // describe(''Outlook extension points:MessageComposeCommandSurface, 
+          
+      }); // describe('Outlook extension points:MessageComposeCommandSurface, 
           // AppointmentOrganizerCommandSurface')
-      
-    }); // describe('technology:html')
+
+    }); // describe('technology:ng')
 
   }); // describe('run on new project (empty folder)')
 

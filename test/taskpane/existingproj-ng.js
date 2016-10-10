@@ -54,10 +54,10 @@ describe('office:taskpane', function(){
       beforeEach(function(done){
         // set language to html
         options.tech = 'ng';
-
+        options.skipIncludeNgOfficeUIFabric = true;
+        
         // set products
         options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
-
         helpers.run(path.join(__dirname, '../../generators/taskpane'))
           .withOptions(options)
           .on('ready', function(gen){
@@ -172,7 +172,7 @@ describe('office:taskpane', function(){
         });
 
         it('has valid ID', function(done){
-          expect(validator.isUUID(manifest.OfficeApp.Id)).to.be.true;
+          expect(validator.isUUID(manifest.OfficeApp.Id + '')).to.be.true;
           done();
         });
 

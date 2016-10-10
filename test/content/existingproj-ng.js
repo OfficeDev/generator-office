@@ -41,6 +41,7 @@ describe('office:content', function(){
     options = {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
+      skipIncludeNgOfficeUIFabric: true,
       tech: 'ng',
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
@@ -100,6 +101,7 @@ describe('office:content', function(){
       beforeEach(function(done){
         // set language to html
         options.tech = 'ng';
+        options.skipIncludeNgOfficeUIFabric = true;
 
         // set products
         options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
@@ -218,7 +220,7 @@ describe('office:content', function(){
         });
 
         it('has valid ID', function(done){
-          expect(validator.isUUID(manifest.OfficeApp.Id)).to.be.true;
+          expect(validator.isUUID(manifest.OfficeApp.Id + '')).to.be.true;
           done();
         });
 

@@ -30,7 +30,7 @@ describe('office:taskpane', function(){
 
   beforeEach(function(done){
     options = {
-      name: projectDisplayName
+      name: 'My Office Add-in'
     };
     done();
   });
@@ -42,8 +42,7 @@ describe('office:taskpane', function(){
     options = {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
-      tech: 'ng-adal',
-      skipIncludeNgOfficeUIFabric: true,
+      tech: 'ng',
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
 
@@ -60,8 +59,6 @@ describe('office:taskpane', function(){
             gulp: '^3.9.0',
             'gulp-load-plugins': '^1.0.0',
             'gulp-minify-css': '^1.2.2',
-            'gulp-replace': '^0.5.4',
-            'yargs': '^3.24.0',
             'gulp-task-listing': '^1.0.1',
             'gulp-uglify': '^1.5.1',
             'gulp-webserver': '^0.9.1',
@@ -93,16 +90,13 @@ describe('office:taskpane', function(){
     /**
      * Test addin when technology = angular
      */
-    describe('addin technology:ng-adal', function(){
+    describe('addin technology:ng, includeNgOfficeUIFabric', function(){
 
       beforeEach(function(done){
-        // set language to html
-        options.tech = 'ng-adal';
-        options.skipIncludeNgOfficeUIFabric = true;
+        options.tech = 'ng';
+        options.includeNgOfficeUIFabric = true;
         // set products
-        options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
-        
-        options.appId = '03ad2348-c459-4573-8f7d-0ca44d822e7c';
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
 
         // run the generator
         helpers.run(path.join(__dirname, '../../generators/taskpane'))
@@ -130,8 +124,6 @@ describe('office:taskpane', function(){
           'tsconfig.json',
           'index.html',
           'app/app.module.js',
-          'app/app.adalconfig.js',
-          'app/app.config.js',
           'app/app.routes.js',
           'app/home/home.controller.js',
           'app/home/home.html',
@@ -156,8 +148,8 @@ describe('office:taskpane', function(){
             angular: '~1.4.4',
             'angular-route': '~1.4.4',
             'angular-sanitize': '~1.4.4',
-            'adal-angular': '~1.0.5',
-            'office-ui-fabric': '*'
+            'office-ui-fabric': '*',
+            'ng-office-ui-fabric': '*'
           }
         };
 
@@ -182,8 +174,6 @@ describe('office:taskpane', function(){
             gulp: '^3.9.0',
             'gulp-load-plugins': '^1.0.0',
             'gulp-minify-css': '^1.2.2',
-            'gulp-replace': '^0.5.4',
-            'yargs': '^3.24.0',
             'gulp-task-listing': '^1.0.1',
             'gulp-uglify': '^1.5.1',
             'gulp-webserver': '^0.9.1',
@@ -222,42 +212,13 @@ describe('office:taskpane', function(){
         });
 
         it('has correct display name', function(done){
-          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal(projectDisplayName);
+          expect(manifest.OfficeApp.DisplayName[0].$.DefaultValue).to.equal('My Office Add-in');
           done();
         });
 
         it('has correct start page', function(done){
           var subject = manifest.OfficeApp.DefaultSettings[0].SourceLocation[0].$.DefaultValue;
           expect(subject).to.equal('https://localhost:8443/index.html');
-          done();
-        });
-
-        it('has valid icon URL', function (done) {
-          expect(manifest.OfficeApp.IconUrl[0].$.DefaultValue)
-            .to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
-          done();
-        });
-        
-        it('includes AAD App Domains', function(done){
-          var loginWindowsNetFound = false;
-          var loginMicrosoftonlineNetFound = false;
-          var loginMicrosoftonlineComFound = false;
-          
-          _.forEach(manifest.OfficeApp.AppDomains[0].AppDomain, function(a){
-            if (a === 'https://login.windows.net') {
-              loginWindowsNetFound = true;
-            }
-            else if (a === 'https://login.microsoftonline.net') {
-              loginMicrosoftonlineNetFound = true;
-            }
-            else if (a === 'https://login.microsoftonline.com') {
-              loginMicrosoftonlineComFound = true;
-            }
-          });
-          expect(loginWindowsNetFound, 'App Domain https://login.windows.net exist').to.be.true;
-          expect(loginMicrosoftonlineNetFound, 'App Domain https://login.microsoftonline.net exist').to.be.true;
-          expect(loginMicrosoftonlineComFound, 'App Domain https://login.microsoftonline.com exist').to.be.true;
-
           done();
         });
 
@@ -305,21 +266,6 @@ describe('office:taskpane', function(){
 
           done();
         });
-		
-		/**
-         * OneNote present in host entry.
-         */
-        it('includes OneNote in Hosts', function(done){
-          var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
-            if (h.$.Name === 'Notebook') {
-              found = true;
-            }
-          });
-          expect(found, '<Host Name="Notebook"/> exist').to.be.true;
-
-          done();
-        });
 
         /**
          * Project present in host entry.
@@ -337,18 +283,6 @@ describe('office:taskpane', function(){
         });
 
       }); // describe('manifest-*.xml contents')
-      
-      /**
-       * app.config.js is good
-       */
-      describe('app.config.js contents', function(){
-        it('contains correct appId', function(done){
-          assert.file('app/app.config.js');
-          assert.fileContent('app/app.config.js', '03ad2348-c459-4573-8f7d-0ca44d822e7c');
-          done();
-        });
-
-      }); // describe('app.config.js contents')
 
       /**
        * tsd.json is good

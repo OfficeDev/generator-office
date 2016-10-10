@@ -52,6 +52,7 @@ describe('office:mail', function () {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
       tech: 'ng',
+      skipIncludeNgOfficeUIFabric: true,
       extensionPoint: [
         'MessageReadCommandSurface', 
         'MessageComposeCommandSurface', 
@@ -117,6 +118,7 @@ describe('office:mail', function () {
         beforeEach(function (done) {
           // set language to html
           options.tech = 'ng';
+          options.skipIncludeNgOfficeUIFabric = true,
   
           // set outlook form type
           options.extensionPoint = [
@@ -248,7 +250,7 @@ describe('office:mail', function () {
           });
 
           it('has valid ID', function (done) {
-            expect(validator.isUUID(manifest.OfficeApp.Id)).to.be.true;
+            expect(validator.isUUID(manifest.OfficeApp.Id + '')).to.be.true;
             done();
           });
 

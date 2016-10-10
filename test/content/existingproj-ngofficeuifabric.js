@@ -19,15 +19,14 @@ var util = require('./../_testUtils');
 // sub:generator options
 var options = {};
 
-
 /* +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ */
 
-describe('office:taskpane', function(){
+describe('office:content', function(){
 
   var projectDisplayName = 'My Office Add-in';
   var projectEscapedName = 'my-office-add-in';
   var manifestFileName = 'manifest-' + projectEscapedName + '.xml';
-
+  
   beforeEach(function(done){
     options = {
       name: projectDisplayName
@@ -42,13 +41,12 @@ describe('office:taskpane', function(){
     options = {
       name: 'Some\'s bad * character$ ~!@#$%^&*()',
       rootPath: '',
-      tech: 'ng-adal',
-      skipIncludeNgOfficeUIFabric: true,
+      tech: 'ng',
       startPage: 'https://localhost:8443/manifest-only/index.html'
     };
 
     // run generator
-    helpers.run(path.join(__dirname, '../../generators/taskpane'))
+    helpers.run(path.join(__dirname, '../../generators/content'))
       .withOptions(options)
       .on('end', function(){
         var expected = {
@@ -60,8 +58,6 @@ describe('office:taskpane', function(){
             gulp: '^3.9.0',
             'gulp-load-plugins': '^1.0.0',
             'gulp-minify-css': '^1.2.2',
-            'gulp-replace': '^0.5.4',
-            'yargs': '^3.24.0',
             'gulp-task-listing': '^1.0.1',
             'gulp-uglify': '^1.5.1',
             'gulp-webserver': '^0.9.1',
@@ -80,33 +76,37 @@ describe('office:taskpane', function(){
   });
 
   /**
-   * Test addin when running on empty folder.
+   * Test addin when running on an exsting folder.
    */
-  describe('run on new project (empty folder)', function(){
+  describe('run on existing project (non-empty folder)', function(){
+    var addinRootPath = 'src/public';
 
+    // generator ran at 'src/public' so for files
+    //  in the root, need to back up to the root
     beforeEach(function(done){
       // set to current folder
-      options.rootPath = '';
+      options.rootPath = addinRootPath;
       done();
     });
 
+
     /**
-     * Test addin when technology = angular
+     * Test addin when technology = ng
      */
-    describe('addin technology:ng-adal', function(){
+    describe('technology:ng, includeNgOfficeUIFabric', function(){
 
       beforeEach(function(done){
-        // set language to html
-        options.tech = 'ng-adal';
-        options.skipIncludeNgOfficeUIFabric = true;
-        // set products
-        options.clients = ['Document', 'Workbook', 'Presentation', 'Project','Notebook'];
-        
-        options.appId = '03ad2348-c459-4573-8f7d-0ca44d822e7c';
+        options.tech = 'ng';
+        options.includeNgOfficeUIFabric = true;
 
-        // run the generator
-        helpers.run(path.join(__dirname, '../../generators/taskpane'))
+        // set products
+        options.clients = ['Document', 'Workbook', 'Presentation', 'Project'];
+
+        helpers.run(path.join(__dirname, '../../generators/content'))
           .withOptions(options)
+          .on('ready', function(gen){
+            util.setupExistingProject(gen);
+          }.bind(this))
           .on('end', done);
       });
 
@@ -121,25 +121,25 @@ describe('office:taskpane', function(){
         var expected = [
           '.bowerrc',
           'bower.json',
-          'package.json',
           'gulpfile.js',
+          'package.json',
           manifestFileName,
           'manifest.xsd',
           'tsd.json',
           'jsconfig.json',
           'tsconfig.json',
-          'index.html',
-          'app/app.module.js',
-          'app/app.adalconfig.js',
-          'app/app.config.js',
-          'app/app.routes.js',
-          'app/home/home.controller.js',
-          'app/home/home.html',
-          'app/services/data.service.js',
-          'content/Office.css',
-          'images/close.png',
-          'scripts/MicrosoftAjax.js'
+          addinRootPath + '/index.html',
+          addinRootPath + '/app/app.module.js',
+          addinRootPath + '/app/app.routes.js',
+          addinRootPath + '/app/home/home.controller.js',
+          addinRootPath + '/app/home/home.html',
+          addinRootPath + '/app/services/data.service.js',
+          addinRootPath + '/content/Office.css',
+          addinRootPath + '/images/close.png',
+          addinRootPath + '/scripts/MicrosoftAjax.js'
         ];
+
+
         assert.file(expected);
         done();
       });
@@ -149,15 +149,16 @@ describe('office:taskpane', function(){
        */
       it('bower.json contains correct values', function(done){
         var expected = {
-          name: projectEscapedName,
+          name: 'ProjectName',
           version: '0.1.0',
           dependencies: {
             'microsoft.office.js': '*',
+            jquery: '~1.9.1',
             angular: '~1.4.4',
             'angular-route': '~1.4.4',
             'angular-sanitize': '~1.4.4',
-            'adal-angular': '~1.0.5',
-            'office-ui-fabric': '*'
+            'office-ui-fabric': '*',
+            'ng-office-ui-fabric': '*'
           }
         };
 
@@ -171,10 +172,12 @@ describe('office:taskpane', function(){
        */
       it('package.json contains correct values', function(done){
         var expected = {
-          name: projectEscapedName,
+          name: 'ProjectName',
+          description: 'HTTPS site using Express and Node.js',
           version: '0.1.0',
-          scripts: {
-            postinstall: 'bower install'
+          main: 'src/server/server.js',
+          dependencies: {
+            express: '^4.12.2'
           },
           devDependencies: {
             chalk: '^1.1.1',
@@ -182,14 +185,11 @@ describe('office:taskpane', function(){
             gulp: '^3.9.0',
             'gulp-load-plugins': '^1.0.0',
             'gulp-minify-css': '^1.2.2',
-            'gulp-replace': '^0.5.4',
-            'yargs': '^3.24.0',
             'gulp-task-listing': '^1.0.1',
             'gulp-uglify': '^1.5.1',
             'gulp-webserver': '^0.9.1',
             minimist: '^1.2.0',
             'run-sequence': '^1.1.5',
-            'xml2js': '^0.4.15',
             xmllint: 'git+https://github.com/kripken/xml.js.git'
           }
         };
@@ -200,7 +200,7 @@ describe('office:taskpane', function(){
       });
 
       /**
-       * manifest-*.xml is good
+       * manifest.xml is good
        */
       describe('manifest-*.xml contents', function(){
         var manifest = {};
@@ -232,38 +232,9 @@ describe('office:taskpane', function(){
           done();
         });
 
-        it('has valid icon URL', function (done) {
-          expect(manifest.OfficeApp.IconUrl[0].$.DefaultValue)
-            .to.match(/^https:\/\/.+\.(png|jpe?g|gif|bmp)$/i);
-          done();
-        });
-        
-        it('includes AAD App Domains', function(done){
-          var loginWindowsNetFound = false;
-          var loginMicrosoftonlineNetFound = false;
-          var loginMicrosoftonlineComFound = false;
-          
-          _.forEach(manifest.OfficeApp.AppDomains[0].AppDomain, function(a){
-            if (a === 'https://login.windows.net') {
-              loginWindowsNetFound = true;
-            }
-            else if (a === 'https://login.microsoftonline.net') {
-              loginMicrosoftonlineNetFound = true;
-            }
-            else if (a === 'https://login.microsoftonline.com') {
-              loginMicrosoftonlineComFound = true;
-            }
-          });
-          expect(loginWindowsNetFound, 'App Domain https://login.windows.net exist').to.be.true;
-          expect(loginMicrosoftonlineNetFound, 'App Domain https://login.microsoftonline.net exist').to.be.true;
-          expect(loginMicrosoftonlineComFound, 'App Domain https://login.microsoftonline.com exist').to.be.true;
-
-          done();
-        });
-
         /**
-      * Word present in host entry.
-      */
+         * Word present in host entry.
+         */
         it('includes Word in Hosts', function(done){
           var found = false;
           _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
@@ -305,21 +276,6 @@ describe('office:taskpane', function(){
 
           done();
         });
-		
-		/**
-         * OneNote present in host entry.
-         */
-        it('includes OneNote in Hosts', function(done){
-          var found = false;
-          _.forEach(manifest.OfficeApp.Hosts[0].Host, function(h){
-            if (h.$.Name === 'Notebook') {
-              found = true;
-            }
-          });
-          expect(found, '<Host Name="Notebook"/> exist').to.be.true;
-
-          done();
-        });
 
         /**
          * Project present in host entry.
@@ -337,18 +293,6 @@ describe('office:taskpane', function(){
         });
 
       }); // describe('manifest-*.xml contents')
-      
-      /**
-       * app.config.js is good
-       */
-      describe('app.config.js contents', function(){
-        it('contains correct appId', function(done){
-          assert.file('app/app.config.js');
-          assert.fileContent('app/app.config.js', '03ad2348-c459-4573-8f7d-0ca44d822e7c');
-          done();
-        });
-
-      }); // describe('app.config.js contents')
 
       /**
        * tsd.json is good
@@ -366,6 +310,9 @@ describe('office:taskpane', function(){
 
         it('has correct *.d.ts references', function(done){
           expect(tsd.installed).to.exist;
+          // make sure the existing ones are present (to verify we didn't overwrite, but rather update)
+          expect(tsd.installed['lodash/lodash.d.ts']).to.exist;
+          // make sure the new ones are present
           expect(tsd.installed['angularjs/angular.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-route.d.ts']).to.exist;
           expect(tsd.installed['angularjs/angular-sanitize.d.ts']).to.exist;
@@ -378,7 +325,7 @@ describe('office:taskpane', function(){
       /**
        * gulpfile.js is good
        */
-      describe('gulpfile.js contents', function(){
+      describe('gulpfule.js contents', function(){
         
         it('contains task \'help\'', function(done){
           assert.file('gulpfile.js');
@@ -469,6 +416,6 @@ describe('office:taskpane', function(){
 
     }); // describe('technology:ng')
 
-  }); // describe('run on new project (empty folder)')
+  }); // describe('run on existing project (non-empty folder)')
 
 });
