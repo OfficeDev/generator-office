@@ -45,7 +45,7 @@ module.exports = generators.Base.extend({
       desc: 'Office client product that can host the add-in',
       required: false
     });
-    
+
     this.option('appId', {
       type: String,
       desc: 'Application ID as registered in Azure AD',
@@ -152,14 +152,14 @@ module.exports = generators.Base.extend({
         }];
 
       // trigger prompts
-      this.prompt(prompts, function(responses){
+      this.prompt(prompts).then(function(responses){
         this.genConfig = extend(this.genConfig, this.options);
         this.genConfig = extend(this.genConfig, responses);
         done();
       }.bind(this));
 
     }, // askFor()
-    
+
     askForAdalConfig: function(){
       // if it's not an ADAL app, don't ask the questions
       if (this.genConfig.tech !== 'ng-adal') {
@@ -177,7 +177,7 @@ module.exports = generators.Base.extend({
       }];
 
       // trigger prompts
-      this.prompt(prompts, function(responses){
+      this.prompt(prompts).then(function(responses){
         this.genConfig = extend(this.genConfig, responses);
         done();
       }.bind(this));
@@ -210,7 +210,7 @@ module.exports = generators.Base.extend({
         }];
 
       // trigger prompts
-      this.prompt(prompts, function(responses){
+      this.prompt(prompts).then(function(responses){
         this.genConfig = extend(this.genConfig, responses);
         done();
       }.bind(this));
