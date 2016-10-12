@@ -124,7 +124,7 @@ module.exports = generators.Base.extend({
       ];
 
       // trigger prompts
-      this.prompt(prompts, function(responses){
+      this.prompt(prompts).then(function(responses){
         this.genConfig = extend(this.genConfig, this.options);
         this.genConfig = extend(this.genConfig, responses);
         done();
@@ -238,7 +238,7 @@ module.exports = generators.Base.extend({
         ];
 
         var done = this.async();
-        this.prompt(prompts, function(responses){
+        this.prompt(prompts).then(function(responses){
           this.genConfig = extend(this.genConfig, responses);
           done();
         }.bind(this));
@@ -311,7 +311,7 @@ module.exports = generators.Base.extend({
       ];
 
       var done = this.async();
-      this.prompt(prompts, function(response) {
+      this.prompt(prompts).then(function(response) {
         this.genConfig = extend(this.genConfig, response);
         done();
       }.bind(this));
@@ -358,7 +358,7 @@ module.exports = generators.Base.extend({
       }
 
       var done = this.async();
-      this.prompt(prompts, function(response) {
+      this.prompt(prompts).then(function(response) {
         this.genConfig = extend(this.genConfig, response);
         done();
       }.bind(this));
