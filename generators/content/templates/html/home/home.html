@@ -7,7 +7,7 @@
   <link href="../../content/Office.css" rel="stylesheet" type="text/css" />
   <link href="../../bower_components/microsoft.office.js/styles/OfficeThemes.css" rel="stylesheet" type="text/css" />
   <link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.min.css" rel="stylesheet">
-  <!--<link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.components.min.css" rel="stylesheet">-->
+  <link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.components.min.css" rel="stylesheet">
   <script src="//appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
 
   <!-- To enable offline debugging using a local reference to Office.js, use:                        -->
@@ -26,18 +26,62 @@
   <script src="Home.js"></script>
 </head>
 
-<body>
-  <div id="content-main">
-    <div class="padding">
-      <h1>Welcome</h1>
-      <p>This example will read the current document selection.</p>
-      <button id="get-data-from-selection">Get data from selection</button>
-
-      <p style="margin-top: 30px;">
-        <a target="_blank" href="http://dev.office.com/code-samples#?filters=office%20add-ins">Find more samples online...</a>
-      </p>
-    </div>
-  </div>
+<body class="ms-font-l ms-landing-page">
+    <main class="ms-landing-page__main">
+        <section class="ms-landing-page__header ms-bgColor-themeLighter">
+            <div class="ms-landing-page__header--center ms-font-m ms-fontWeight-light">
+                <p>
+                    <i class="ms-Icon ms-Icon--plus ms-fontColor-themePrimary"></i>
+                    Item 1
+                </p><p>
+                    <i class="ms-Icon ms-Icon--plus ms-fontColor-themePrimary"></i>
+                    Item 2
+                </p>       
+            </div>
+            <div class="ms-landing-page__header--right ms-font-m ms-fontWeight-light">
+                <i class="ms-Icon ms-Icon--reactivate ms-fontColor-themePrimary"></i>
+            </div>
+        </section>
+        <section class="ms-landing-page__content ms-font-m ms-fontColor-neutralPrimary">
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__img"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--para"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--para"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__button ms-bgColor-themeLight"></div>
+            </article>
+        </section>
+    </main>
+    <footer class="ms-landing-page__footer  ms-bgColor-themePrimary">
+        <div class="ms-landing-page__footer--left">
+            <img src="/images/logo-filled.png" />
+            <h1 class="ms-font-xl ms-fontWeight-semilight ms-fontColor-white">My Add-in Name</h1>
+        </div>
+        <div class="ms-landing-page__footer--right">
+            <i class="ms-Icon enlarge ms-Icon--gear ms-fontColor-white"></i>
+        </div>
+    </footer>
 </body>
 
 </html>
