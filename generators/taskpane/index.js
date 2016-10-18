@@ -558,6 +558,8 @@ module.exports = generators.Base.extend({
                      this.destinationPath(this._parseTargetPath('content/Office.css')));
         this.fs.copy(this.templatePath('common/images/close.png'),
                      this.destinationPath(this._parseTargetPath('images/close.png')));
+        this.fs.copy(this.templatePath('common/images/logo-filled.png'),
+                     this.destinationPath(this._parseTargetPath('images/logo-filled.png')));
         this.fs.copy(this.templatePath('common/scripts/MicrosoftAjax.js'),
                      this.destinationPath(this._parseTargetPath('scripts/MicrosoftAjax.js')));
 
@@ -622,6 +624,8 @@ module.exports = generators.Base.extend({
                          this.destinationPath(this._parseTargetPath('app/app.routes.js')));
             this.fs.copy(this.templatePath('ng/home/home.controller.js'),
                          this.destinationPath(this._parseTargetPath('app/home/home.controller.js')));
+            this.fs.copy(this.templatePath('ng/home/home.css'),
+                         this.destinationPath(this._parseTargetPath('app/home/home.css')));
             this.fs.copy(this.templatePath('ng/home/home.html'),
                          this.destinationPath(this._parseTargetPath('app/home/home.html')));
             this.fs.copy(this.templatePath('ng/services/data.service.js'),
@@ -661,6 +665,8 @@ module.exports = generators.Base.extend({
                          this.destinationPath(this._parseTargetPath('app/app.routes.js')));
             this.fs.copy(this.templatePath('ng-adal/home/home.controller.js'),
                          this.destinationPath(this._parseTargetPath('app/home/home.controller.js')));
+            this.fs.copy(this.templatePath('ng-adal/home/home.css'),
+                         this.destinationPath(this._parseTargetPath('app/home/home.css')));
             this.fs.copy(this.templatePath('ng-adal/home/home.html'),
                          this.destinationPath(this._parseTargetPath('app/home/home.html')));
             this.fs.copy(this.templatePath('ng-adal/services/data.service.js'),
