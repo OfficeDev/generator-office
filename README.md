@@ -92,14 +92,6 @@ $ gulp serve-static
 
 You can add the `open` property set to a URL to have your default browser open & navigate to when running this task.
 
-## Validating your manifest files
-
-There is a gulp task to validate your manifest file, since the generated manifest file has changed to have the name <project-name>-manifest.xml it is necessary to pass the name of the file as an arguement to the validate task like so:
-
-```bash
-$ gulp validate --xmlfile your-project-manifest.xml
-```
-
 ## Examples
 
 Refer to the [docs](docs) for example executions & output of the generator.
