@@ -92,6 +92,10 @@ $ gulp serve-static
 
 You can add the `open` property set to a URL to have your default browser open & navigate to when running this task.
 
+## Validate manifest.xml
+
+Refer to the docs on [Add-in manifests](https://dev.office.com/docs/add-ins/overview/add-in-manifests) for information of manifest validation.
+
 ## Examples
 
 Refer to the [docs](docs) for example executions & output of the generator.

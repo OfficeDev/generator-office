@@ -139,7 +139,7 @@ describe('office:taskpane', function(){
             del: '^2.1.0',
             gulp: '^3.9.0',
             'gulp-load-plugins': '^1.0.0',
-            'gulp-minify-css': '^1.2.2',
+            'gulp-clean-css': '^2.0.13',
             'gulp-task-listing': '^1.0.1',
             'gulp-uglify': '^1.5.1',
             'gulp-webserver': '^0.9.1',
