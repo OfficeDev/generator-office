@@ -1,0 +1,36 @@
+{
+    "name": "generator-office-prototype",
+    "version": "0.0.0",
+    "description": "",
+    "repository": "/generator-office-prototype",
+    "scripts": {
+        "start": "tsc -p tsconfig.json -w",
+        "postinstall": "typings install"
+    },
+    "homepage": "",
+    "license": "MIT",
+    "author": {
+        "name": "",
+        "email": "me@xyz.com",
+        "url": ""
+    },
+    "files": [
+        "generators"
+    ],
+    "main": "generators/index.js",
+    "keywords": [
+        "",
+        "yeoman-generator"
+    ],
+    "dependencies": {
+        "typescript": "2.1.1",
+        "typings": "^2.0.0",
+        "yeoman-generator": "^0.24.1",
+        "yosay": "^1.2.1",
+        "chalk": "^1.1.3",
+        "lodash": "^4.17.2",
+        "js-yaml": "^3.7.0",
+        "rimraf": "^2.5.4",
+        "ncp": "^2.0.0"
+    }
+}
