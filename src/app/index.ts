@@ -1,28 +1,78 @@
 import yo = require('yeoman-generator');
 import chalk = require('chalk');
 import yosay = require('yosay');
-import * as path from 'path';
 import ncp = require('ncp');
+import * as path from 'path';
 
 module.exports = yo.Base.extend({
   /**
+   * Setup the generator
+   */
+  constructor: function(){
+    yo.Base.apply(this, arguments);
+
+    this.option('skip-install', {
+      type: Boolean,
+      required: false,
+      defaults: false,
+      desc: 'Skip running package managers (NPM, bower, etc) post scaffolding'
+    });
+
+    this.option('name', {
+      type: String,
+      desc: 'Title of the Office Add-in',
+      required: false
+    });
+
+    this.option('root-path', {
+      type: String,
+      desc: 'Relative path where the Add-in should be created (blank = current directory)',
+      required: false
+    });
+
+    this.option('tech', {
+      type: String,
+      desc: 'Technology to use for the Add-in (html = HTML; ng = Angular)',
+      required: false
+    });
+
+    this.option('client', {
+      type: String,
+      desc: 'Office client product that can host the add-in',
+      required: false
+    });
+
+    this.option('extensionPoint', {
+      type: String,
+      desc: 'Supported extension points',
+      required: false
+    });
+
+    this.option('appId', {
+      type: String,
+      desc: 'Application ID as registered in Azure AD',
+      required: false
+    });
+  }, // constructor()
+
+  /**
    * Generator initalization
    */
-  initializing: async function () {
+  initializing: async function() {
     this.log(yosay('Welcome to the ' +
       chalk.red('Office Project') +
       ' generator, by ' +
       chalk.red('@OfficeDev') +
       '! Let\'s create a project together!'));
 
-    // generator configuration
+    // create global config object on this generator
     this.genConfig = {};
   }, // initializing()
 
   /**
    * Prompt users for options
    */
-  prompting: async function () {
+  prompting: async function() {
     let prompts = [
       // friendly name of the generator
       {
@@ -73,8 +123,8 @@ module.exports = yo.Base.extend({
       },
       // office client application that can host the addin
       {
-        name: 'clients',
-        message: 'Supported Office applications:',
+        name: 'client',
+        message: 'Supported Office application:',
         type: 'list',
         choices: [
           {
@@ -102,19 +152,30 @@ module.exports = yo.Base.extend({
             value: 'Project'
           }
         ],
-        when: this.options.clients === undefined
+        when: this.options.client === undefined
       }];
-
-    // trigger prompts
-    this.props = await this.prompt(prompts);
+    
+    // trigger prompts and store user input
+    await this.prompt(prompts).then(function(responses){
+      this.genConfig = {
+        name: responses.name,
+        tech: responses.tech,
+        'root-path': responses['root-path'],
+        client: responses.client
+      };
+    }.bind(this));
   },
 
   writing: function () {
-    if (this.options.tech === 'html') {
-      ncp.ncp(this.templatePath('html'), this.destinationPath(), err => console.log(err));
-    }
-    else {
-      ncp.ncp(this.templatePath('common'), this.destinationPath(), err => console.log(err));
+    ncp.ncp(this.templatePath('common'), this.destinationPath(), err => console.log(err));
+
+    switch (this.genConfig.tech) {
+      case 'html':
+        ncp.ncp(this.templatePath('html'), this.destinationPath(), err => console.log(err));
+        break;
+      case 'ng':
+        ncp.ncp(this.templatePath('ng'), this.destinationPath(), err => console.log(err));
+        break;
     }
   },
 
