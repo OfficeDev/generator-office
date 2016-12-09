@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -11,6 +11,8 @@ const yo = require("yeoman-generator");
 const chalk = require("chalk");
 const yosay = require("yosay");
 const ncp = require("ncp");
+const cuid = require("cuid");
+const Xml2Js = require("xml2js");
 module.exports = yo.Base.extend({
     /**
      * Setup the generator
@@ -135,23 +137,23 @@ module.exports = yo.Base.extend({
                         },
                         {
                             name: 'Word',
-                            value: 'Document'
+                            value: 'document'
                         },
                         {
                             name: 'Excel',
-                            value: 'Workbook'
+                            value: 'workbook'
                         },
                         {
                             name: 'PowerPoint',
-                            value: 'Presentation'
+                            value: 'presentation'
                         },
                         {
                             name: 'OneNote',
-                            value: 'Notebook'
+                            value: 'notebook'
                         },
                         {
                             name: 'Project',
-                            value: 'Project'
+                            value: 'project'
                         }
                     ],
                     when: this.options.client === undefined
@@ -168,15 +170,62 @@ module.exports = yo.Base.extend({
             }.bind(this));
         });
     },
-    writing: function () {
-        ncp.ncp(this.templatePath('common'), this.destinationPath(), err => console.log(err));
-        switch (this.genConfig.tech) {
-            case 'html':
-                ncp.ncp(this.templatePath('html'), this.destinationPath(), err => console.log(err));
-                break;
-            case 'ng':
-                ncp.ncp(this.templatePath('ng'), this.destinationPath(), err => console.log(err));
-                break;
+    /**
+     * save configurations & config project
+     */
+    configuring: function () {
+        // take name submitted and strip everything out non-alphanumeric or space
+        var projectName = this.genConfig.name;
+        projectName = projectName.replace(/[^\w\s\-]/g, '');
+        projectName = projectName.replace(/\s{2,}/g, ' ');
+        projectName = projectName.trim();
+        // add the result of the question to the generator configuration object
+        this.genConfig.projectInternalName = projectName.toLowerCase().replace(/ /g, '-');
+        this.genConfig.projectDisplayName = projectName;
+        this.genConfig.rootPath = this.genConfig['root-path'];
+        this.genConfig.projectId = cuid();
+    },
+    writing: {
+        copyFiles: function () {
+            var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
+            ncp.ncp(this.templatePath('common'), this.destinationPath(), err => console.log(err));
+            switch (this.genConfig.tech) {
+                case 'html':
+                    ncp.ncp(this.templatePath('tech/html'), this.destinationPath(), err => console.log(err));
+                    break;
+                case 'ng':
+                    ncp.ncp(this.templatePath('tech/ng'), this.destinationPath(), err => console.log(err));
+                    break;
+            }
+            ;
+            switch (this.genConfig.client) {
+                case 'document':
+                    this.fs.copyTpl(this.templatePath('hosts/word/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
+                    break;
+            }
+            ;
+        },
+        updateXml: function () {
+            /**
+             * Update the manifest.xml elements with the client input.
+             */
+            // manifest filename
+            var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
+            // workaround to 'this' context issue... I know it's hacky. Don't judge.
+            var self = this;
+            // load manifest.xml
+            var manifestXml = self.fs.read(self.destinationPath(manifestFilename));
+            // convert it to JSON
+            var parser = new Xml2Js.Parser();
+            parser.parseString(manifestXml, function (err, manifestJson) {
+                manifestJson.OfficeApp.Id = self.genConfig.projectId;
+                manifestJson.OfficeApp.DisplayName[0].$['DefaultValue'] = self.genConfig.projectDisplayName;
+                // convert JSON => XML
+                var xmlBuilder = new Xml2Js.Builder();
+                var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
+                // write updated manifest
+                self.fs.write(self.destinationPath(manifestFilename), updatedManifestXml);
+            });
         }
     },
     install: function () {

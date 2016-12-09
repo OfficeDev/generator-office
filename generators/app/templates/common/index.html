@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Landing Page</title>
+  <link href="resources/Office.css" rel="stylesheet" type="text/css" />
+  <!--<link href="bower_components/microsoft.office.js/content/officethemes.css" rel="stylesheet" type="text/css" />-->
+  <link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.min.css" rel="stylesheet">
+  <link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.components.min.css" rel="stylesheet">
+  <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+  <script src="//appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <script src="resources/MicrosoftAjax.js"></script>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <title>Landing Page</title>
+  <link href="../app.css" rel="stylesheet" type="text/css" />
+  <script src="../app.js"></script>
 
-    <link rel="stylesheet" href="node_modules/office-ui-fabric-core/dist/css/fabric.min.css">
-    <link rel="stylesheet" href="node_modules/office-ui-fabric-js/dist/css/fabric.components.min.css">
-    <link href="app.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body class="ms-font-l ms-landing-page">
@@ -16,20 +21,51 @@
         <section class="ms-landing-page__header ms-bgColor-themeLighter">
             <div class="ms-landing-page__header--center ms-font-m ms-fontWeight-light">
                 <p>
-                    <i class="ms-Icon ms-Icon--plus ms-fontColor-themePrimary"></i> Item 1
-                </p>
-                <p>
-                    <i class="ms-Icon ms-Icon--plus ms-fontColor-themePrimary"></i> Item 2
-                </p>
+                    <i class="ms-Icon ms-Icon--plus ms-fontColor-themePrimary"></i>
+                    Item 1
+                </p><p>
+                    <i class="ms-Icon ms-Icon--plus ms-fontColor-themePrimary"></i>
+                    Item 2
+                </p>       
             </div>
             <div class="ms-landing-page__header--right ms-font-m ms-fontWeight-light">
                 <i class="ms-Icon ms-Icon--reactivate ms-fontColor-themePrimary"></i>
             </div>
         </section>
+        <section class="ms-landing-page__content ms-font-m ms-fontColor-neutralPrimary">
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__img"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--para"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--para"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__button ms-bgColor-themeLight"></div>
+            </article>
+        </section>
     </main>
     <footer class="ms-landing-page__footer  ms-bgColor-themePrimary">
         <div class="ms-landing-page__footer--left">
-            <img src="/assets/logo-filled.png" />
+            <img src="/images/logo-filled.png" />
             <h1 class="ms-font-xl ms-fontWeight-semilight ms-fontColor-white">My Add-in Name</h1>
         </div>
         <div class="ms-landing-page__footer--right">
