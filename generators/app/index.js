@@ -191,7 +191,8 @@ module.exports = yo.Base.extend({
     writing: {
         copyFiles: function () {
             var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
-            ncp.ncp(this.templatePath('common'), this.destinationPath(), err => console.log(err));
+            ncp.ncp(this.templatePath('common-static'), this.destinationPath(), err => console.log(err));
+            this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), this.destinationPath('package.json'), this.genConfig);
             switch (this.genConfig.tech) {
                 case 'html':
                     ncp.ncp(this.templatePath('tech/html'), this.destinationPath(), err => console.log(err));
@@ -204,7 +205,6 @@ module.exports = yo.Base.extend({
             switch (this.genConfig.client) {
                 case 'document':
                     this.fs.copyTpl(this.templatePath('hosts/word/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
-                    this.fs.copyTpl(this.templatePath('hosts/word/package.json'), this.destinationPath('package.json'), this.genConfig);
                     break;
             }
             ;
