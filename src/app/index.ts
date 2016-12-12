@@ -1,10 +1,13 @@
 'use strict'
 
+//http://mammal.io/articles/yeoman-generators-es6/
+
+//import cuid = require('cuid');
+const guid = require('uuid');
 import yo = require('yeoman-generator');
 import chalk = require('chalk');
 import yosay = require('yosay');
 import ncp = require('ncp');
-import cuid = require('cuid');
 import Xml2Js = require('xml2js');
 import * as path from 'path';
 
@@ -185,7 +188,8 @@ module.exports = yo.Base.extend({
     this.genConfig.projectDisplayName = projectName;
     this.genConfig.rootPath = this.genConfig['root-path'];
 
-    this.genConfig.projectId = cuid();
+    this.genConfig.projectId = guid.v4();
+    // this.genConfig.projectId = cuid();
   }, // configuring()
 
   writing: {
@@ -208,6 +212,9 @@ module.exports = yo.Base.extend({
           this.fs.copyTpl(this.templatePath('hosts/word/' + manifestFilename), 
                           this.destinationPath(manifestFilename),
                           this.genConfig);
+          this.fs.copyTpl(this.templatePath('hosts/word/package.json'), 
+                this.destinationPath('package.json'),
+                this.genConfig);
           break;
       };
     },

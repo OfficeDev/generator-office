@@ -10,7 +10,7 @@ var config = {
 };
 
 gulp.task('help', $.taskListing.withFilters(function (task) {
-  var mainTasks = ['default', 'help', 'serve-static', 'validate', 'dist'];
+  var mainTasks = ['default', 'help', 'serve-static'];
   var isSubTask = mainTasks.indexOf(task) < 0;
   return isSubTask;
 }));

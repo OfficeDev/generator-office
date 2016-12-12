@@ -1,16 +1,14 @@
 {
   "globalDependencies": {
     "chalk": "registry:dt/chalk#0.4.0+20160317120654",
-    "cuid": "registry:dt/cuid#0.0.0+20160316155526",
     "js-yaml": "registry:dt/js-yaml#3.5.2+20160316171810",
     "lodash": "registry:dt/lodash#4.14.0+20161110215204",
     "ncp": "registry:dt/ncp#0.5.1+20160906145159",
     "node": "registry:dt/node#6.0.0+20161121110008",
+    "uuid": "registry:dt/uuid#3.3.0+20160728152600",
     "xml2js": "registry:dt/xml2js#0.0.0+20160317120654",
     "yeoman-generator": "registry:dt/yeoman-generator#0.0.0+20160831020201",
     "yosay": "registry:dt/yosay#0.0.0+20160316155526"
   },
-  "dependencies": {
-    "uuid": "registry:npm/uuid#3.0.1+20161206160008"
-  }
+  "dependencies": {}
 }

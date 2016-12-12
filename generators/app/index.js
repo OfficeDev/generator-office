@@ -7,11 +7,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
+//http://mammal.io/articles/yeoman-generators-es6/
+//import cuid = require('cuid');
+const guid = require('uuid');
 const yo = require("yeoman-generator");
 const chalk = require("chalk");
 const yosay = require("yosay");
 const ncp = require("ncp");
-const cuid = require("cuid");
 const Xml2Js = require("xml2js");
 module.exports = yo.Base.extend({
     /**
@@ -183,7 +185,8 @@ module.exports = yo.Base.extend({
         this.genConfig.projectInternalName = projectName.toLowerCase().replace(/ /g, '-');
         this.genConfig.projectDisplayName = projectName;
         this.genConfig.rootPath = this.genConfig['root-path'];
-        this.genConfig.projectId = cuid();
+        this.genConfig.projectId = guid.v4();
+        // this.genConfig.projectId = cuid();
     },
     writing: {
         copyFiles: function () {
@@ -201,6 +204,7 @@ module.exports = yo.Base.extend({
             switch (this.genConfig.client) {
                 case 'document':
                     this.fs.copyTpl(this.templatePath('hosts/word/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
+                    this.fs.copyTpl(this.templatePath('hosts/word/package.json'), this.destinationPath('package.json'), this.genConfig);
                     break;
             }
             ;
