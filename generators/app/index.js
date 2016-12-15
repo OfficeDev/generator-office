@@ -41,6 +41,11 @@ module.exports = yo.Base.extend({
             desc: 'Technology to use for the Add-in (html = HTML; ng = Angular)',
             required: false
         });
+        this.option('is-project-new', {
+            type: String,
+            desc: 'To create a new project or update exisiting project',
+            required: false
+        });
         this.option('client', {
             type: String,
             desc: 'Office client product that can host the add-in',
@@ -75,12 +80,50 @@ module.exports = yo.Base.extend({
     prompting: function () {
         return __awaiter(this, void 0, void 0, function* () {
             let prompts = [
+                // allow customer to create new project or update existing project
+                {
+                    name: 'is-project-new',
+                    message: 'Create new project or update existing project:',
+                    type: 'list',
+                    default: 'New project',
+                    choices: [
+                        {
+                            name: 'Create new project',
+                            value: 'new'
+                        },
+                        {
+                            name: 'Update existing project',
+                            value: 'existing'
+                        }
+                    ],
+                    when: this.options['is-project-new'] === undefined
+                },
                 // friendly name of the generator
                 {
                     name: 'name',
                     message: 'Project name (display name):',
                     default: 'My Office Project',
                     when: this.options.name === undefined
+                },
+                // root path where the addin should be created; should go in current folder where
+                //  generator is being executed, or within a subfolder?
+                {
+                    name: 'root-path',
+                    message: 'Root folder of project?'
+                        + ' Default to current directory\n'
+                        + ' (' + this.destinationRoot() + '),'
+                        + ' or specify relative path\n'
+                        + ' from current (src / public): ',
+                    default: 'current folder',
+                    when: this.options['root-path'] === undefined,
+                    filter: /* istanbul ignore next */ function (response) {
+                        if (response === 'current folder') {
+                            return '.';
+                        }
+                        else {
+                            return response;
+                        }
+                    }
                 },
                 // technology used to create the addin (html / angular / etc)
                 {
@@ -103,26 +146,6 @@ module.exports = yo.Base.extend({
                             value: 'manifest-only'
                         }
                     ]
-                },
-                // root path where the addin should be created; should go in current folder where
-                //  generator is being executed, or within a subfolder?
-                {
-                    name: 'root-path',
-                    message: 'Root folder of project?'
-                        + ' Default to current directory\n'
-                        + ' (' + this.destinationRoot() + '),'
-                        + ' or specify relative path\n'
-                        + ' from current (src / public): ',
-                    default: 'current folder',
-                    when: this.options['root-path'] === undefined,
-                    filter: /* istanbul ignore next */ function (response) {
-                        if (response === 'current folder') {
-                            return '.';
-                        }
-                        else {
-                            return response;
-                        }
-                    }
                 },
                 // office client application that can host the addin
                 {
@@ -163,6 +186,7 @@ module.exports = yo.Base.extend({
                 this.genConfig = {
                     name: responses.name,
                     tech: responses.tech,
+                    'is-project-new': responses['is-project-new'],
                     'root-path': responses['root-path'],
                     client: responses.client
                 };
@@ -182,6 +206,7 @@ module.exports = yo.Base.extend({
         this.genConfig.projectInternalName = projectName.toLowerCase().replace(/ /g, '-');
         this.genConfig.projectDisplayName = projectName;
         this.genConfig.rootPath = this.genConfig['root-path'];
+        this.genConfig.isProjectNew = this.genConfig['is-project-new'];
         this.genConfig.projectId = guid.v4();
     },
     writing: {
@@ -190,23 +215,25 @@ module.exports = yo.Base.extend({
              * Output files
              */
             var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
-            ncp.ncp(this.templatePath('common-static'), this.destinationPath(), err => console.log(err));
-            this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), this.destinationPath('package.json'), this.genConfig);
-            switch (this.genConfig.tech) {
-                case 'html':
-                    ncp.ncp(this.templatePath('tech/html'), this.destinationPath(), err => console.log(err));
-                    break;
-                case 'ng':
-                    ncp.ncp(this.templatePath('tech/ng'), this.destinationPath(), err => console.log(err));
-                    break;
+            if (this.genConfig.isProjectNew === 'new') {
+                ncp.ncp(this.templatePath('common-static'), this.destinationPath(), err => console.log(err));
+                this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), this.destinationPath('package.json'), this.genConfig);
+                switch (this.genConfig.tech) {
+                    case 'html':
+                        ncp.ncp(this.templatePath('tech/html'), this.destinationPath(), err => console.log(err));
+                        break;
+                    case 'ng':
+                        ncp.ncp(this.templatePath('tech/ng'), this.destinationPath(), err => console.log(err));
+                        break;
+                }
+                ;
+                switch (this.genConfig.client) {
+                    case 'document':
+                        this.fs.copyTpl(this.templatePath('hosts/word/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
+                        break;
+                }
+                ;
             }
-            ;
-            switch (this.genConfig.client) {
-                case 'document':
-                    this.fs.copyTpl(this.templatePath('hosts/word/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
-                    break;
-            }
-            ;
         },
         updateXml: function () {
             /**
