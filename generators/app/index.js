@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 //http://mammal.io/articles/yeoman-generators-es6/
-//import cuid = require('cuid');
 const guid = require('uuid');
 const yo = require("yeoman-generator");
 const chalk = require("chalk");
@@ -62,15 +61,13 @@ module.exports = yo.Base.extend({
      * Generator initalization
      */
     initializing: function () {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.log(yosay('Welcome to the ' +
-                chalk.red('Office Project') +
-                ' generator, by ' +
-                chalk.red('@OfficeDev') +
-                '! Let\'s create a project together!'));
-            // create global config object on this generator
-            this.genConfig = {};
-        });
+        this.log(yosay('Welcome to the ' +
+            chalk.red('Office Project') +
+            ' generator, by ' +
+            chalk.red('@OfficeDev') +
+            '! Let\'s create a project together!'));
+        // create global config object on this generator
+        this.genConfig = {};
     },
     /**
      * Prompt users for options
@@ -186,10 +183,12 @@ module.exports = yo.Base.extend({
         this.genConfig.projectDisplayName = projectName;
         this.genConfig.rootPath = this.genConfig['root-path'];
         this.genConfig.projectId = guid.v4();
-        // this.genConfig.projectId = cuid();
     },
     writing: {
         copyFiles: function () {
+            /**
+             * Output files
+             */
             var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
             ncp.ncp(this.templatePath('common-static'), this.destinationPath(), err => console.log(err));
             this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), this.destinationPath('package.json'), this.genConfig);

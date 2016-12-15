@@ -2,7 +2,6 @@
 
 //http://mammal.io/articles/yeoman-generators-es6/
 
-//import cuid = require('cuid');
 const guid = require('uuid');
 import yo = require('yeoman-generator');
 import chalk = require('chalk');
@@ -65,7 +64,7 @@ module.exports = yo.Base.extend({
   /**
    * Generator initalization
    */
-  initializing: async function () {
+  initializing: function () {
     this.log(yosay('Welcome to the ' +
       chalk.red('Office Project') +
       ' generator, by ' +
@@ -189,11 +188,13 @@ module.exports = yo.Base.extend({
     this.genConfig.rootPath = this.genConfig['root-path'];
 
     this.genConfig.projectId = guid.v4();
-    // this.genConfig.projectId = cuid();
   }, // configuring()
 
   writing: {
     copyFiles: function () {
+      /**
+       * Output files
+       */
       var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
 
       ncp.ncp(this.templatePath('common-static'), this.destinationPath(), err => console.log(err));
@@ -216,6 +217,11 @@ module.exports = yo.Base.extend({
                           this.destinationPath(manifestFilename),
                           this.genConfig);
           break;
+          //  case 'workbook':
+          // this.fs.copyTpl(this.templatePath('hosts/workbook/' + manifestFilename), 
+          //                 this.destinationPath(manifestFilename),
+          //                 this.genConfig);
+          // break;
       };
     },
 
