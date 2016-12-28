@@ -1,4 +1,4 @@
-# Yo Office 1.0
+# Yo Office 1.0.0
 
 ```
     # to install typings use:

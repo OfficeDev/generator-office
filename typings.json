@@ -7,7 +7,6 @@
     "node": "registry:dt/node#6.0.0+20161121110008",
     "uuid": "registry:dt/uuid#3.3.0+20160728152600",
     "xml2js": "registry:dt/xml2js#0.0.0+20160317120654",
-    "yeoman-generator": "registry:dt/yeoman-generator#0.0.0+20160831020201",
     "yosay": "registry:dt/yosay#0.0.0+20160316155526"
   },
   "dependencies": {}

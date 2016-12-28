@@ -9,17 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 //http://mammal.io/articles/yeoman-generators-es6/
 const guid = require('uuid');
-const yo = require("yeoman-generator");
+const yo = require('yeoman-generator');
 const chalk = require("chalk");
 const yosay = require("yosay");
 const ncp = require("ncp");
 const Xml2Js = require("xml2js");
-module.exports = yo.Base.extend({
+module.exports = yo.extend({
     /**
      * Setup the generator
      */
     constructor: function () {
-        yo.Base.apply(this, arguments);
+        yo.apply(this, arguments);
         this.option('skip-install', {
             type: Boolean,
             required: false,
@@ -241,7 +241,7 @@ module.exports = yo.Base.extend({
              */
             // manifest filename
             var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
-            // workaround to 'this' context issue... I know it's hacky. Don't judge.
+            // workaround 'this' context issue... I know it's hacky. Don't judge.
             var self = this;
             // load manifest.xml
             var manifestXml = self.fs.read(self.destinationPath(manifestFilename));

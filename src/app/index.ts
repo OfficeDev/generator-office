@@ -3,19 +3,19 @@
 //http://mammal.io/articles/yeoman-generators-es6/
 
 const guid = require('uuid');
-import yo = require('yeoman-generator');
+const yo = require('yeoman-generator');
 import chalk = require('chalk');
 import yosay = require('yosay');
 import ncp = require('ncp');
 import Xml2Js = require('xml2js');
 import * as path from 'path';
 
-module.exports = yo.Base.extend({
+module.exports = yo.extend({
   /**
    * Setup the generator
    */
   constructor: function () {
-    yo.Base.apply(this, arguments);
+    yo.apply(this, arguments);
 
     this.option('skip-install', {
       type: Boolean,
@@ -266,7 +266,7 @@ module.exports = yo.Base.extend({
       // manifest filename
       var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
 
-      // workaround to 'this' context issue... I know it's hacky. Don't judge.
+      // workaround 'this' context issue... I know it's hacky. Don't judge.
       var self = this;
 
       // load manifest.xml
