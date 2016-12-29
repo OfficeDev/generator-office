@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Landing Page</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-sanitize.min.js"></script>
+  <link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.min.css" rel="stylesheet">
+  <link href="//appsforoffice.microsoft.com/fabric/1.0/fabric.components.min.css" rel="stylesheet">
+  <script src="//appsforoffice.microsoft.com/lib/1/hosted/Office.js"></script>
+
+  <link href="resources/Office.css" rel="stylesheet" type="text/css" />
+  <link href="../app.css" rel="stylesheet" type="text/css" />
+  <script src="../app.module.js"></script>  
+	<script src="../app.routes.js"></script>
+  <script src="../services/data.service.js"></script>
+  <script src="../controller.js"></script>
+</head>
+<body class="ms-font-l ms-landing-page">
+    <main class="ms-landing-page__main">
+        <section class="ms-landing-page__header ms-bgColor-themeLighter">
+            <div class="ms-landing-page__header--center ms-font-m ms-fontWeight-light">
+                <p>
+                    <i class="ms-Icon ms-Icon--plus ms-fontColor-themePrimary"></i>
+                    Item 1
+                </p><p>
+                    <i class="ms-Icon ms-Icon--plus ms-fontColor-themePrimary"></i>
+                    Item 2
+                </p>       
+            </div>
+            <div class="ms-landing-page__header--right ms-font-m ms-fontWeight-light">
+                <i class="ms-Icon ms-Icon--reactivate ms-fontColor-themePrimary"></i>
+            </div>
+        </section>
+        <section class="ms-landing-page__content ms-font-m ms-fontColor-neutralPrimary">
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__img"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--para"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__text demo-placeholder__text--half"></div>
+                <div class="demo-placeholder__text demo-placeholder__text--para"></div>
+            </article>
+            <article class="demo-placeholder">
+                <div class="demo-placeholder__button ms-bgColor-themeLight"></div>
+            </article>
+        </section>
+    </main>
+    <footer class="ms-landing-page__footer  ms-bgColor-themePrimary">
+        <div class="ms-landing-page__footer--left">
+            <img src="/images/logo-filled.png" />
+            <h1 class="ms-font-xl ms-fontWeight-semilight ms-fontColor-white">My Add-in Name</h1>
+        </div>
+        <div class="ms-landing-page__footer--right">
+            <i class="ms-Icon enlarge ms-Icon--gear ms-fontColor-white"></i>
+        </div>
+    </footer>
+</body>
+</html>

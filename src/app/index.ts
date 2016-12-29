@@ -1,9 +1,8 @@
 'use strict'
 
-//http://mammal.io/articles/yeoman-generators-es6/
-
 const guid = require('uuid');
 const yo = require('yeoman-generator');
+
 import chalk = require('chalk');
 import yosay = require('yosay');
 import ncp = require('ncp');
@@ -124,7 +123,7 @@ module.exports = yo.extend({
         + ' from current (src / public): ',
         default: 'current folder',
         when: this.options['root-path'] === undefined,
-        filter: /* istanbul ignore next */ function (response) {
+        filter: function (response) {
           if (response === 'current folder') {
             return '.';
           } else {
@@ -258,37 +257,39 @@ module.exports = yo.extend({
       }
     },
 
-    updateXml: function () {
-      /**
-       * Update the manifest.xml elements with the client input.
-       */
+    // updateXml: function () {
+    //   /**
+    //    * Update the manifest.xml elements with the client input.
+    //    */
 
-      // manifest filename
-      var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
+    //   // manifest filename
+    //   var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
 
-      // workaround 'this' context issue... I know it's hacky. Don't judge.
-      var self = this;
+    //   // workaround 'this' context issue... I know it's hacky. Don't judge.
+    //   var self = this;
 
-      // load manifest.xml
-      var manifestXml = self.fs.read(self.destinationPath(manifestFilename));
+    //   // load manifest.xml
+    //   var manifestXml = self.fs.read(self.destinationPath(manifestFilename));
 
-      // convert it to JSON
-      var parser = new Xml2Js.Parser();
-      parser.parseString(manifestXml, function (err, manifestJson) {
-        manifestJson.OfficeApp.Id = self.genConfig.projectId;
-        manifestJson.OfficeApp.DisplayName[0].$['DefaultValue'] = self.genConfig.projectDisplayName;
+    //   // convert it to JSON
+    //   var parser = new Xml2Js.Parser();
+    //   parser.parseString(manifestXml, function (err, manifestJson) {
+    //     manifestJson.OfficeApp.Id = self.genConfig.projectId;
+    //     manifestJson.OfficeApp.DisplayName[0].$['DefaultValue'] = self.genConfig.projectDisplayName;
 
-        // convert JSON => XML
-        var xmlBuilder = new Xml2Js.Builder();
-        var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
+    //     // convert JSON => XML
+    //     var xmlBuilder = new Xml2Js.Builder();
+    //     var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
 
-        // write updated manifest
-        self.fs.write(self.destinationPath(manifestFilename), updatedManifestXml);
-      });
-    }
+    //     // write updated manifest
+    //     self.fs.write(self.destinationPath(manifestFilename), updatedManifestXml);
+    //   });
+    // }
   },
 
   install: function () {
-    this.installDependencies();
+    if (!this.options['skip-install'] && this.genConfig.tech !== 'manifest-only') {
+      this.npmInstall();
+    }
   }
 } as any);
