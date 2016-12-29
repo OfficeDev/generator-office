@@ -47,7 +47,7 @@ module.exports = yo.extend({
       required: false
     });
 
-    this.option('client', {
+    this.option('host', {
       type: String,
       desc: 'Office client product that can host the add-in',
       required: false
@@ -156,7 +156,7 @@ module.exports = yo.extend({
 
       // office client application that can host the addin
       {
-        name: 'client',
+        name: 'host',
         message: 'Supported Office application:',
         type: 'list',
         choices: [
@@ -185,7 +185,7 @@ module.exports = yo.extend({
             value: 'project'
           }
         ],
-        when: this.options.client === undefined
+        when: this.options.host === undefined
       }];
 
     // trigger prompts and store user input
@@ -195,7 +195,7 @@ module.exports = yo.extend({
         tech: responses.tech,
         'is-project-new': responses['is-project-new'],
         'root-path': responses['root-path'],
-        client: responses.client
+        host: responses.host
       };
     }.bind(this));
   },
@@ -224,7 +224,7 @@ module.exports = yo.extend({
       /**
        * Output files
        */
-      var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
+      var manifestFilename = 'manifest-' + this.genConfig.host + '.xml';
 
       if (this.genConfig.isProjectNew === 'new')
       {
@@ -232,6 +232,9 @@ module.exports = yo.extend({
         this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), 
               this.destinationPath('package.json'),
               this.genConfig);
+        this.fs.copyTpl(this.templatePath('manifest/' + manifestFilename), 
+          this.destinationPath(manifestFilename),
+          this.genConfig);
 
         switch (this.genConfig.tech) {
           case 'html':
@@ -241,50 +244,8 @@ module.exports = yo.extend({
             ncp.ncp(this.templatePath('tech/ng'), this.destinationPath(), err => console.log(err));
             break;
         };
-
-        switch (this.genConfig.client) {
-          case 'document':
-            this.fs.copyTpl(this.templatePath('hosts/word/' + manifestFilename), 
-                            this.destinationPath(manifestFilename),
-                            this.genConfig);
-            break;
-            //  case 'workbook':
-            // this.fs.copyTpl(this.templatePath('hosts/workbook/' + manifestFilename), 
-            //                 this.destinationPath(manifestFilename),
-            //                 this.genConfig);
-            // break;
-        };
       }
-    },
-
-    // updateXml: function () {
-    //   /**
-    //    * Update the manifest.xml elements with the client input.
-    //    */
-
-    //   // manifest filename
-    //   var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
-
-    //   // workaround 'this' context issue... I know it's hacky. Don't judge.
-    //   var self = this;
-
-    //   // load manifest.xml
-    //   var manifestXml = self.fs.read(self.destinationPath(manifestFilename));
-
-    //   // convert it to JSON
-    //   var parser = new Xml2Js.Parser();
-    //   parser.parseString(manifestXml, function (err, manifestJson) {
-    //     manifestJson.OfficeApp.Id = self.genConfig.projectId;
-    //     manifestJson.OfficeApp.DisplayName[0].$['DefaultValue'] = self.genConfig.projectDisplayName;
-
-    //     // convert JSON => XML
-    //     var xmlBuilder = new Xml2Js.Builder();
-    //     var updatedManifestXml = xmlBuilder.buildObject(manifestJson);
-
-    //     // write updated manifest
-    //     self.fs.write(self.destinationPath(manifestFilename), updatedManifestXml);
-    //   });
-    // }
+    }
   },
 
   install: function () {

@@ -44,7 +44,7 @@ module.exports = yo.extend({
             desc: 'To create a new project or update exisiting project',
             required: false
         });
-        this.option('client', {
+        this.option('host', {
             type: String,
             desc: 'Office client product that can host the add-in',
             required: false
@@ -147,7 +147,7 @@ module.exports = yo.extend({
                 },
                 // office client application that can host the addin
                 {
-                    name: 'client',
+                    name: 'host',
                     message: 'Supported Office application:',
                     type: 'list',
                     choices: [
@@ -176,7 +176,7 @@ module.exports = yo.extend({
                             value: 'project'
                         }
                     ],
-                    when: this.options.client === undefined
+                    when: this.options.host === undefined
                 }
             ];
             // trigger prompts and store user input
@@ -186,7 +186,7 @@ module.exports = yo.extend({
                     tech: responses.tech,
                     'is-project-new': responses['is-project-new'],
                     'root-path': responses['root-path'],
-                    client: responses.client
+                    host: responses.host
                 };
             }.bind(this));
         });
@@ -212,10 +212,11 @@ module.exports = yo.extend({
             /**
              * Output files
              */
-            var manifestFilename = 'manifest-' + this.genConfig.client + '.xml';
+            var manifestFilename = 'manifest-' + this.genConfig.host + '.xml';
             if (this.genConfig.isProjectNew === 'new') {
                 ncp.ncp(this.templatePath('common-static'), this.destinationPath(), err => console.log(err));
                 this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), this.destinationPath('package.json'), this.genConfig);
+                this.fs.copyTpl(this.templatePath('manifest/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
                 switch (this.genConfig.tech) {
                     case 'html':
                         ncp.ncp(this.templatePath('tech/html'), this.destinationPath(), err => console.log(err));
@@ -225,14 +226,8 @@ module.exports = yo.extend({
                         break;
                 }
                 ;
-                switch (this.genConfig.client) {
-                    case 'document':
-                        this.fs.copyTpl(this.templatePath('hosts/word/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
-                        break;
-                }
-                ;
             }
-        },
+        }
     },
     install: function () {
         if (!this.options['skip-install'] && this.genConfig.tech !== 'manifest-only') {

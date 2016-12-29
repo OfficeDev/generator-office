@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Created:ce44715c-8c4e-446b-879c-ea9ebe0f09c8-->
 <OfficeApp 
           xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -18,7 +17,7 @@
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
-  <Description DefaultValue="[Outlook Add-in description]"/>
+  <Description DefaultValue="[Project Add-in description]"/>
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
   <IconUrl DefaultValue="https://localhost:8443/images/icon-32.png" />
@@ -120,9 +119,9 @@
     <!-- You can use resources across hosts and form factors. -->
     <Resources>
       <bt:Images>
-        <bt:Image id="Contoso.tpicon_16x16" DefaultValue="https://localhost:8443/images/icon-32.png" />
+        <bt:Image id="Contoso.tpicon_16x16" DefaultValue="https://localhost:8443/images/icon-16.png" />
         <bt:Image id="Contoso.tpicon_32x32" DefaultValue="https://localhost:8443/images/icon-32.png" />
-        <bt:Image id="Contoso.tpicon_80x80" DefaultValue="https://localhost:8443/images/icon-32.png" />
+        <bt:Image id="Contoso.tpicon_80x80" DefaultValue="https://localhost:8443/images/icon-80.png" />
       </bt:Images>
       <bt:Urls>
         <bt:Url id="Contoso.Taskpane.Url" DefaultValue="https://localhost:8443/index.html" />
