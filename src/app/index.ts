@@ -9,6 +9,7 @@ import yosay = require('yosay');
 import ncp = require('ncp');
 import * as path from 'path';
 
+process.env.APPINSIGHTS_INSTRUMENTATIONKEY = "1fd62c46-f0ef-4cfb-9560-448c857ab690";
 var insight = appInsight.getClient();
 
 module.exports = yo.extend({
@@ -237,6 +238,7 @@ module.exports = yo.extend({
 
       if (this.genConfig.isProjectNew === 'new')
       {
+        console.log(this.templatePath(''));
         ncp.ncp(this.templatePath('common-static'), this.destinationPath(), err => console.log(err));
         this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), 
               this.destinationPath('package.json'),

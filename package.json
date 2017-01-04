@@ -4,7 +4,7 @@
   "description": "",
   "repository": "/generator-office-prototype",
   "scripts": {
-    "copy": "cpx \"src/app/templates/**/*.*\" generators --watch",
+    "copy": "cpx \"src/app/templates/**/*.*\" generators/app/templates --watch",
     "tsc": "tsc -p tsconfig.json -w",
     "start": "concurrently \"npm run tsc\" \"npm run copy\"",
     "postinstall": "typings install"
