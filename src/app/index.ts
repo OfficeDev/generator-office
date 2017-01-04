@@ -3,11 +3,13 @@
 const guid = require('uuid');
 const yo = require('yeoman-generator');
 
+import appInsight = require('applicationinsights');
 import chalk = require('chalk');
 import yosay = require('yosay');
 import ncp = require('ncp');
-import Xml2Js = require('xml2js');
 import * as path from 'path';
+
+var insight = appInsight.getClient();
 
 module.exports = yo.extend({
   /**
@@ -187,9 +189,16 @@ module.exports = yo.extend({
         ],
         when: this.options.host === undefined
       }];
+    
+    insight.trackTrace('User begins to choose options');
+    var start = (new Date()).getTime();
 
     // trigger prompts and store user input
     await this.prompt(prompts).then(function (responses) {
+      var end = (new Date()).getTime();
+      var duration = (end - start)/1000;
+      insight.trackEvent('WHYME', { Project_Type: this.genConfig.type }, { duration });
+
       this.genConfig = {
         name: responses.name,
         tech: responses.tech,

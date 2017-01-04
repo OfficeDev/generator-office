@@ -1,12 +1,12 @@
 {
   "globalDependencies": {
+    "applicationinsights": "registry:dt/applicationinsights#0.15.12+20161119044246",
     "chalk": "registry:dt/chalk#0.4.0+20160317120654",
     "js-yaml": "registry:dt/js-yaml#3.5.2+20160316171810",
     "lodash": "registry:dt/lodash#4.14.0+20161110215204",
     "ncp": "registry:dt/ncp#0.5.1+20160906145159",
     "node": "registry:dt/node#6.0.0+20161121110008",
     "uuid": "registry:dt/uuid#3.3.0+20160728152600",
-    "xml2js": "registry:dt/xml2js#0.0.0+20160317120654",
     "yosay": "registry:dt/yosay#0.0.0+20160316155526"
   },
   "dependencies": {}
