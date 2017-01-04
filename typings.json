@@ -9,5 +9,8 @@
     "uuid": "registry:dt/uuid#3.3.0+20160728152600",
     "yosay": "registry:dt/yosay#0.0.0+20160316155526"
   },
-  "dependencies": {}
+  "dependencies": {
+    "yeoman-generator": "registry:dt/yeoman-generator#0.0.0+20160915014424",
+    "yosay": "registry:dt/yosay#0.0.0+20160505014246"
+  }
 }

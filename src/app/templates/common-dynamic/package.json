@@ -2,7 +2,7 @@
   "name":"<%= projectInternalName %>",
   "version": "0.1.0",
   "scripts": {
-    "postinstall": ""
+    "start": "npm start"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

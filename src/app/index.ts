@@ -1,22 +1,20 @@
-'use strict'
-
-const guid = require('uuid');
-const yo = require('yeoman-generator');
-
-import appInsight = require('applicationinsights');
-import chalk = require('chalk');
-import yosay = require('yosay');
-import ncp = require('ncp');
+import { IPromptOptions } from 'yeoman-generator';
+import * as cpx from 'cpx';
 import * as path from 'path';
+import * as uuid from 'uuid';
+import * as appInsights from 'applicationinsights';
+import * as chalk from 'chalk';
+import * as _ from 'lodash';
+import yosay = require('yosay');
+let yo = require('yeoman-generator');
 
-process.env.APPINSIGHTS_INSTRUMENTATIONKEY = "1fd62c46-f0ef-4cfb-9560-448c857ab690";
-var insight = appInsight.getClient();
+let insight = appInsights.getClient('1fd62c46-f0ef-4cfb-9560-448c857ab690');
 
 module.exports = yo.extend({
   /**
    * Setup the generator
    */
-  constructor: function () {
+  constructor: () => {
     yo.apply(this, arguments);
 
     this.option('skip-install', {
@@ -25,142 +23,104 @@ module.exports = yo.extend({
       defaults: false,
       desc: 'Skip running package managers (NPM, bower, etc) post scaffolding'
     });
-
-    this.option('name', {
-      type: String,
-      desc: 'Title of the Office Add-in',
-      required: false
-    });
-
-    this.option('root-path', {
-      type: String,
-      desc: 'Relative path where the Add-in should be created (blank = current directory)',
-      required: false
-    });
-
-    this.option('tech', {
-      type: String,
-      desc: 'Technology to use for the Add-in (html = HTML; ng = Angular)',
-      required: false
-    });
-
-    this.option('is-project-new', {
-      type: String,
-      desc: 'To create a new project or update exisiting project',
-      required: false
-    });
-
-    this.option('host', {
-      type: String,
-      desc: 'Office client product that can host the add-in',
-      required: false
-    });
-
-    this.option('extensionPoint', {
-      type: String,
-      desc: 'Supported extension points',
-      required: false
-    });
-
-    this.option('appId', {
-      type: String,
-      desc: 'Application ID as registered in Azure AD',
-      required: false
-    });
-  }, // constructor()
+  },
 
   /**
    * Generator initalization
    */
-  initializing: function () {
-    this.log(yosay('Welcome to the ' +
-      chalk.red('Office Project') +
-      ' generator, by ' +
-      chalk.red('@OfficeDev') +
-      '! Let\'s create a project together!'));
-
-    // create global config object on this generator
+  initializing: () => {
+    let message = `Welcome to the ${chalk.red('Office Project')} generator, by ${chalk.red('@OfficeDev')}! Let\'s create a project together!`;
+    this.log(yosay(message));
     this.genConfig = {};
-  }, // initializing()
+  },
 
   /**
    * Prompt users for options
    */
-  prompting: async function () {
+  prompting: async () => {
     let prompts = [
-
-      // allow customer to create new project or update existing project
+      /** allow user to create new project or update existing project */
       {
         name: 'is-project-new',
-        message: 'Create new project or update existing project:',
+        message: 'Create new Add-in or update existing Add-in:',
         type: 'list',
-        default: 'New project',
+        default: 'new',
         choices: [
           {
-            name: 'Create new project',
+            name: 'Create new Add-in',
             value: 'new'
           },
           {
-            name: 'Update existing project',
+            name: 'Update existing Add-in',
             value: 'existing'
-          }],
-        when: this.options['is-project-new'] === undefined
+          }
+        ]
       },
 
-      // friendly name of the generator
+      /** name for the project */
       {
         name: 'name',
-        message: 'Project name (display name):',
-        default: 'My Office Project',
-        when: this.options.name === undefined
+        type: 'input',
+        message: 'Name of the Add-in',
+        default: 'My Office Add-in'
       },
 
-      // root path where the addin should be created; should go in current folder where
-      //  generator is being executed, or within a subfolder?
+      /**
+       * root path where the addin should be created.
+       * should go in current folder where generator is being executed,
+       * or within a subfolder?
+       */
       {
         name: 'root-path',
-        message: 'Root folder of project?'
-        + ' Default to current directory\n'
-        + ' (' + this.destinationRoot() + '),'
-        + ' or specify relative path\n'
-        + ' from current (src / public): ',
+        message: `Root folder of project? Default to current directory\n (${this.destinationRoot()}), or specify relative path\n from current (src / public):`,
         default: 'current folder',
-        when: this.options['root-path'] === undefined,
-        filter: function (response) {
+        filter: response => {
           if (response === 'current folder') {
             return '.';
-          } else {
+          }
+          else {
             return response;
           }
         }
       },
 
-      // technology used to create the addin (html / angular / etc)
+      /** use TypeScript for the project */
       {
-        name: 'tech',
-        message: 'Technology to use:',
-        type: 'list',
-        when: this.options.tech === undefined,
-        choices: [
-          {
-            name: 'HTML, CSS & JavaScript',
-            value: 'html'
-          }, {
-            name: 'Angular',
-            value: 'ng'
-          }, {
-            name: 'Angular ADAL',
-            value: 'ng-adal'
-          }, {
-            name: 'Manifest.xml only (no application source files)',
-            value: 'manifest-only'
-          }]
+        name: 'ts',
+        type: 'confirm',
+        message: 'Would you like to use TypeScript',
+        default: true
       },
 
-      // office client application that can host the addin
+      /** technology used to create the addin (html / angular / etc) */
+      {
+        name: 'framework',
+        message: 'Framework to use',
+        type: 'list',
+        choices: [
+          {
+            name: 'jQuery',
+            value: '$'
+          },
+          {
+            name: 'Angular',
+            value: 'angular'
+          },
+          {
+            name: 'Angular + ADAL',
+            value: 'angular-adal'
+          },
+          {
+            name: 'Manifest.xml only (no application source files)',
+            value: 'manifest-only'
+          }
+        ]
+      },
+
+      /** office client application that can host the addin */
       {
         name: 'host',
-        message: 'Supported Office application:',
+        message: 'Create the add-in for',
         type: 'list',
         choices: [
           {
@@ -187,79 +147,71 @@ module.exports = yo.extend({
             name: 'Project',
             value: 'project'
           }
-        ],
-        when: this.options.host === undefined
-      }];
-    
+        ]
+      }
+    ];
+
     insight.trackTrace('User begins to choose options');
-    var start = (new Date()).getTime();
+    let start = (new Date()).getTime();
 
     // trigger prompts and store user input
-    await this.prompt(prompts).then(function (responses) {
-      var end = (new Date()).getTime();
-      var duration = (end - start)/1000;
-      insight.trackEvent('WHYME', { Project_Type: this.genConfig.type }, { duration });
+    let answers = await this.prompt(prompts);
 
-      this.genConfig = {
-        name: responses.name,
-        tech: responses.tech,
-        'is-project-new': responses['is-project-new'],
-        'root-path': responses['root-path'],
-        host: responses.host
-      };
-    }.bind(this));
+    let end = (new Date()).getTime();
+    let duration = (end - start) / 1000;
+    insight.trackEvent('WHYME', { Project_Type: this.genConfig.type }, { duration });
+
+    this.genConfig = {
+      name: answers.name,
+      framework: answers.framework,
+      ts: answers.ts,
+      'is-project-new': answers['is-project-new'],
+      'root-path': answers['root-path'],
+      host: answers.host
+    };
   },
 
   /**
    * save configurations & config project
    */
-  configuring: function () {
+  configuring: () => {
     // take name submitted and strip everything out non-alphanumeric or space
-    var projectName = this.genConfig.name;
-    projectName = projectName.replace(/[^\w\s\-]/g, '');
-    projectName = projectName.replace(/\s{2,}/g, ' ');
-    projectName = projectName.trim();
+    let projectName = _.kebabCase(this.genConfig.name);
 
     // add the result of the question to the generator configuration object
-    this.genConfig.projectInternalName = projectName.toLowerCase().replace(/ /g, '-');
-    this.genConfig.projectDisplayName = projectName;
+    this.genConfig.projectInternalName = projectName;
+    this.genConfig.projectDisplayName = this.genConfig.name;
     this.genConfig.rootPath = this.genConfig['root-path'];
     this.genConfig.isProjectNew = this.genConfig['is-project-new'];
-
-    this.genConfig.projectId = guid.v4();
-  }, // configuring()
+    this.genConfig.projectId = uuid.v4();
+  },
 
   writing: {
-    copyFiles: function () {
+    copyFiles: () => {
       /**
        * Output files
        */
-      var manifestFilename = 'manifest-' + this.genConfig.host + '.xml';
+      let manifestFilename = 'manifest-' + this.genConfig.host + '.xml';
 
-      if (this.genConfig.isProjectNew === 'new')
-      {
-        console.log(this.templatePath(''));
-        ncp.ncp(this.templatePath('common-static'), this.destinationPath(), err => console.log(err));
-        this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), 
-              this.destinationPath('package.json'),
-              this.genConfig);
-        this.fs.copyTpl(this.templatePath('manifest/' + manifestFilename), 
-          this.destinationPath(manifestFilename),
-          this.genConfig);
+      if (this.genConfig.isProjectNew === 'new') {
+        cpx(this.templatePath('common-static'), this.destinationPath(), err => console.log(err));
+
+        this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), this.destinationPath('package.json'), this.genConfig);
+        this.fs.copyTpl(this.templatePath('manifest/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
 
         switch (this.genConfig.tech) {
-          case 'html':
-            ncp.ncp(this.templatePath('tech/html'), this.destinationPath(), err => console.log(err));
+          case '$':
+            cpx(this.templatePath('tech/html'), this.destinationPath(), err => console.log(err));
             break;
-          case 'ng':
-            ncp.ncp(this.templatePath('tech/ng'), this.destinationPath(), err => console.log(err));
+          case 'angular':
+            cpx(this.templatePath('tech/angular'), this.destinationPath(), err => console.log(err));
             break;
         };
       }
     }
   },
 
-  install: function () {
+  install: () => {
     if (!this.options['skip-install'] && this.genConfig.tech !== 'manifest-only') {
       this.npmInstall();
     }
