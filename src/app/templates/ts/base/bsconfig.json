@@ -1,0 +1,9 @@
+{
+    "ui": {
+        "port": 3000
+    },
+    "server": true,
+    "https": true,
+    "watch": true,
+    "files": "*.*"
+}
