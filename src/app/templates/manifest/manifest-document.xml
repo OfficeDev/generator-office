@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<OfficeApp 
-          xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-          xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" 
+<OfficeApp
+          xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
           xsi:type="TaskPaneApp">
 
@@ -20,8 +20,8 @@
   <Description DefaultValue="[Document Add-in description]"/>
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
-  <IconUrl DefaultValue="https://localhost:8443/images/icon-32.png" />
-  <HighResolutionIconUrl DefaultValue="https://localhost:8443/images/hi-res-icon.png"/>
+  <IconUrl DefaultValue="https://localhost:3000/images/icon-32.png" />
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/images/hi-res-icon.png"/>
 
   <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
   <!--<SupportUrl DefaultValue="[Insert the URL of a page that provides support information for the app]">-->
@@ -33,13 +33,13 @@
     <AppDomain>AppDomain3</AppDomain>
   </AppDomains>
   <!--End Basic Settings. -->
-  
+
   <!--Begin TaskPane Mode integration. This section is used if there are no VersionOverrides or if the Office client version does not support add-in commands. -->
   <Hosts>
     <Host Name="Document" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://localhost:8443/index.html" />
+    <SourceLocation DefaultValue="https://localhost:3000/index.html" />
   </DefaultSettings>
   <!-- End TaskPane Mode integration.  -->
 
@@ -47,7 +47,7 @@
 
   <!-- Begin Add-in Commands Mode integration. -->
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
-    
+
     <!-- The Hosts node is required. -->
     <Hosts>
       <!-- Each host can have a different set of commands. -->
@@ -67,7 +67,7 @@
             <!-- Point to a url resource which details how the add-in should be used. -->
             <LearnMoreUrl resid="Contoso.GetStarted.LearnMoreUrl"/>
           </GetStarted>
-          <!-- Function file is a HTML page that includes the JavaScript where functions for ExecuteAction will be called. 
+          <!-- Function file is a HTML page that includes the JavaScript where functions for ExecuteAction will be called.
             Think of the FunctionFile as the code behind ExecuteFunction. -->
           <FunctionFile resid="Contoso.DesktopFunctionFile.Url" />
 
@@ -115,18 +115,18 @@
         </DesktopFormFactor>
       </Host>
     </Hosts>
-    
+
     <!-- You can use resources across hosts and form factors. -->
     <Resources>
       <bt:Images>
-        <bt:Image id="Contoso.tpicon_16x16" DefaultValue="https://localhost:8443/images/icon-16.png" />
-        <bt:Image id="Contoso.tpicon_32x32" DefaultValue="https://localhost:8443/images/icon-32.png" />
-        <bt:Image id="Contoso.tpicon_80x80" DefaultValue="https://localhost:8443/images/icon-80.png" />
+        <bt:Image id="Contoso.tpicon_16x16" DefaultValue="https://localhost:3000/images/icon-16.png" />
+        <bt:Image id="Contoso.tpicon_32x32" DefaultValue="https://localhost:3000/images/icon-32.png" />
+        <bt:Image id="Contoso.tpicon_80x80" DefaultValue="https://localhost:3000/images/icon-80.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Contoso.Taskpane.Url" DefaultValue="https://localhost:8443/index.html" />
+        <bt:Url id="Contoso.Taskpane.Url" DefaultValue="https://localhost:3000/index.html" />
         <bt:Url id="Contoso.GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
-        <bt:Url id="Contoso.DesktopFunctionFile.Url" DefaultValue="https://localhost:8443/function-file/function-file.html" />
+        <bt:Url id="Contoso.DesktopFunctionFile.Url" DefaultValue="https://localhost:3000/function-file/function-file.html" />
       </bt:Urls>
       <!-- ShortStrings max characters==125. -->
       <bt:ShortStrings>

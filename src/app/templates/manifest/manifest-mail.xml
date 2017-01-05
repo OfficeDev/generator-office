@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<OfficeApp 
-          xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-          xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" 
-          xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0" 
+<OfficeApp
+          xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+          xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
           xsi:type="MailApp">
 
   <!-- Begin Basic Settings: Add-in metadata, used for all versions of Office unless override provided. -->
@@ -27,7 +27,7 @@
     <AppDomain>AppDomain3</AppDomain>
   </AppDomains>
   <!--End Basic Settings. -->
-  
+
   <Hosts>
     <Host Name="Mailbox" />
   </Hosts>
@@ -39,7 +39,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://localhost:8443/index.html"/>
+        <SourceLocation DefaultValue="https://localhost:3000/index.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -98,13 +98,13 @@
 
     <Resources>
       <bt:Images>
-        <bt:Image id="icon16" DefaultValue="https://localhost:8443/images/icon-16.png"/>
-        <bt:Image id="icon32" DefaultValue="https://localhost:8443/images/icon-32.png"/>
-        <bt:Image id="icon80" DefaultValue="https://localhost:8443/images/icon-80.png"/>
+        <bt:Image id="icon16" DefaultValue="https://localhost:3000/images/icon-16.png"/>
+        <bt:Image id="icon32" DefaultValue="https://localhost:3000/images/icon-32.png"/>
+        <bt:Image id="icon80" DefaultValue="https://localhost:3000/images/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="functionFile" DefaultValue="~https://localhost:8443/function-file/function-file.html"/>
-        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://localhost:8443/index.html"/>
+        <bt:Url id="functionFile" DefaultValue="~https://localhost:3000/function-file/function-file.html"/>
+        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://localhost:3000/index.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="groupLabel" DefaultValue="My Add-in Group"/>

@@ -89,7 +89,7 @@ module.exports = yo.extend({
         name: 'ts',
         type: 'confirm',
         message: 'Would you like to use TypeScript',
-        default: true
+        default: false
       },
 
       /** technology used to create the addin (html / angular / etc) */
@@ -100,7 +100,7 @@ module.exports = yo.extend({
         choices: [
           {
             name: 'jQuery',
-            value: '$'
+            value: 'jquery'
           },
           {
             name: 'Angular',
@@ -192,21 +192,23 @@ module.exports = yo.extend({
        * Output files
        */
       let manifestFilename = 'manifest-' + this.genConfig.host + '.xml';
+      let folder = this.genConfig.ts ? 'ts' : 'js';
 
       if (this.genConfig.isProjectNew === 'new') {
-        cpx(this.templatePath('common-static'), this.destinationPath(), err => console.log(err));
-
-        this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), this.destinationPath('package.json'), this.genConfig);
+        /** Copy the base folder structure as is */
+        cpx(this.templatePath(`${folder}/base`), this.destinationPath(), err => console.log(err));
         this.fs.copyTpl(this.templatePath('manifest/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
 
-        switch (this.genConfig.tech) {
-          case '$':
-            cpx(this.templatePath('tech/html'), this.destinationPath(), err => console.log(err));
-            break;
-          case 'angular':
-            cpx(this.templatePath('tech/angular'), this.destinationPath(), err => console.log(err));
-            break;
-        };
+        copyTempaltesFromFolder(this.fs, this.templatePath('${folder}/aangular'), this.destinationPath(''), this.genConfig);
+        // this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), this.destinationPath('package.json'), this.genConfig);
+        // switch (this.genConfig.tech) {
+        //   case '$':
+        //     cpx(this.templatePath('tech/html'), this.destinationPath(), err => console.log(err));
+        //     break;
+        //   case 'angular':
+        //     cpx(this.templatePath('tech/angular'), this.destinationPath(), err => console.log(err));
+        //     break;
+        // };
       }
     }
   },
@@ -217,3 +219,23 @@ module.exports = yo.extend({
     }
   }
 } as any);
+
+// https://gist.github.com/kethinov/6658166
+const walkSync = (fs, dir, filelist = []) => {
+  fs.readdirSync(dir).forEach(file => {
+
+    filelist = fs.statSync(path.join(dir, file)).isDirectory()
+      ? walkSync(path.join(dir, file), filelist)
+      : filelist.concat(path.join(dir, file));
+
+  });
+  return filelist;
+};
+
+function copyTempaltesFromFolder(fs, source, destination, context) {
+  let files = walkSync(fs, source);
+  console.log(source);
+  console.log(destination);
+  console.log(context);
+  console.log(files);
+}
