@@ -1,7 +1,6 @@
-let cpx = require('cpx');
 import * as fs from 'fs';
 import * as path from 'path';
-let uuid = require('uuid');
+let uuid = require('uuid/v4');
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as _ from 'lodash';
@@ -185,7 +184,7 @@ module.exports = yo.extend({
     this.genConfig.projectDisplayName = this.genConfig.name;
     this.genConfig.rootPath = this.genConfig['root-path'];
     this.genConfig.isProjectNew = this.genConfig['is-project-new'];
-    this.genConfig.projectId = uuid.v4();
+    this.genConfig.projectId = uuid();
   },
 
   writing: {
@@ -194,18 +193,14 @@ module.exports = yo.extend({
       let folder = this.genConfig.ts ? 'ts' : 'js';
 
       if (this.genConfig.isProjectNew === 'new') {
-        cpx.copy(this.templatePath(`${folder}/base/**`), this.destinationPath());
+        /** Copy the base template */
+        this.fs.copy(this.templatePath(`${folder}/base/**`), this.destinationPath());
+
+        /** Copy the framework specific overrides */
+        this.fs.copyTpl(this.templatePath(`${folder}/${this.genConfig.framework}/**`), this.destinationPath(), this.genConfig);
+
+        /** Copy the manifest */
         this.fs.copyTpl(this.templatePath('manifest/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
-
-        switch (this.genConfig.framework) {
-          case 'jquery':
-            this.fs.copyTpl(this.templatePath(`${folder}/jquery/**/*`), this.destinationPath(), this.genConfig);
-            break;
-
-          case 'angular':
-            this._recurrsiveCopy(this.templatePath(`${folder}/angular/**/*`), this.destinationPath(), this.genConfig);
-            break;
-        };
       }
     }
   },
