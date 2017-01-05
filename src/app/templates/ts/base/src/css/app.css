@@ -30,6 +30,8 @@ h6 {
     flex-wrap: nowrap;
     min-height: 500px;
     min-width: 320px;
+    overflow: auto;
+    overflow-x: hidden;
 }
 
 .ms-welcome__header {
@@ -78,7 +80,8 @@ h6 {
 }
 
 .ms-welcome__features.ms-List .ms-ListItem {
-    margin-bottom: 20px;
+    padding: 0px;
+    padding-bottom: 20px;
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: row;
