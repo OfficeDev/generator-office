@@ -6,7 +6,6 @@ import * as chalk from 'chalk';
 import * as _ from 'lodash';
 let yosay = require('yosay');
 let yo = require('yeoman-generator');
-
 let insight = appInsights.getClient('1fd62c46-f0ef-4cfb-9560-448c857ab690');
 
 module.exports = yo.extend({
@@ -40,20 +39,10 @@ module.exports = yo.extend({
     let prompts = [
       /** allow user to create new project or update existing project */
       {
-        name: 'is-project-new',
-        message: 'Create new Add-in or update existing Add-in:',
-        type: 'list',
-        default: 'new',
-        choices: [
-          {
-            name: 'Create new Add-in',
-            value: 'new'
-          },
-          {
-            name: 'Update existing Add-in',
-            value: 'existing'
-          }
-        ]
+        name: 'is-new',
+        message: 'Would you like to create a new add-in?',
+        type: 'confirm',
+        default: 'true'
       },
 
       /** name for the project */
@@ -85,9 +74,9 @@ module.exports = yo.extend({
 
       /** use TypeScript for the project */
       {
-        name: 'ts',
+        name: 'is-ts',
         type: 'confirm',
-        message: 'Would you like to use TypeScript',
+        message: 'Would you like to use TypeScript?',
         default: false
       },
 
@@ -105,10 +94,6 @@ module.exports = yo.extend({
           {
             name: 'Angular',
             value: 'angular'
-          },
-          {
-            name: 'Angular + ADAL',
-            value: 'angular-adal'
           },
           {
             name: 'Manifest.xml only (no application source files)',
@@ -166,7 +151,7 @@ module.exports = yo.extend({
       name: answers.name,
       framework: answers.framework,
       ts: answers.ts,
-      'is-project-new': answers['is-project-new'],
+      'is-new': answers['is-new'],
       'root-path': answers['root-path'],
       host: answers.host
     };
@@ -183,7 +168,7 @@ module.exports = yo.extend({
     this.genConfig.projectInternalName = projectName;
     this.genConfig.projectDisplayName = this.genConfig.name;
     this.genConfig.rootPath = this.genConfig['root-path'];
-    this.genConfig.isProjectNew = this.genConfig['is-project-new'];
+    this.genConfig.isNew = this.genConfig['is-new'];
     this.genConfig.projectId = uuid();
   },
 
@@ -192,7 +177,7 @@ module.exports = yo.extend({
       let manifestFilename = 'manifest-' + this.genConfig.host + '.xml';
       let folder = this.genConfig.ts ? 'ts' : 'js';
 
-      if (this.genConfig.isProjectNew === 'new') {
+      if (this.genConfig.isNew === true) {
         /** Copy the base template */
         this.fs.copy(this.templatePath(`${folder}/base/**`), this.destinationPath());
 
