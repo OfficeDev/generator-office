@@ -1,4 +1,5 @@
 let cpx = require('cpx');
+import * as fs from 'fs';
 import * as path from 'path';
 let uuid = require('uuid');
 import * as appInsights from 'applicationinsights';
@@ -13,7 +14,7 @@ module.exports = yo.extend({
   /**
    * Setup the generator
    */
-  constructor: () => {
+  constructor: function () {
     yo.apply(this, arguments);
 
     this.option('skip-install', {
@@ -27,7 +28,7 @@ module.exports = yo.extend({
   /**
    * Generator initalization
    */
-  initializing: () => {
+  initializing: function () {
     let message = `Welcome to the ${chalk.red('Office Project')} generator, by ${chalk.red('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
     this.genConfig = {};
@@ -36,7 +37,7 @@ module.exports = yo.extend({
   /**
    * Prompt users for options
    */
-  prompting: async () => {
+  prompting: async function () {
     let prompts = [
       /** allow user to create new project or update existing project */
       {
@@ -96,6 +97,7 @@ module.exports = yo.extend({
         name: 'framework',
         message: 'Framework to use',
         type: 'list',
+        default: 'jquery',
         choices: [
           {
             name: 'jQuery',
@@ -121,6 +123,7 @@ module.exports = yo.extend({
         name: 'host',
         message: 'Create the add-in for',
         type: 'list',
+        default: 'excel',
         choices: [
           {
             name: 'Mail',
@@ -173,7 +176,7 @@ module.exports = yo.extend({
   /**
    * save configurations & config project
    */
-  configuring: () => {
+  configuring: function () {
     // take name submitted and strip everything out non-alphanumeric or space
     let projectName = _.kebabCase(this.genConfig.name);
 
@@ -186,55 +189,30 @@ module.exports = yo.extend({
   },
 
   writing: {
-    copyFiles: () => {
-      /**
-       * Output files
-       */
+    copyFiles: function () {
       let manifestFilename = 'manifest-' + this.genConfig.host + '.xml';
       let folder = this.genConfig.ts ? 'ts' : 'js';
 
       if (this.genConfig.isProjectNew === 'new') {
-        /** Copy the base folder structure as is */
-        cpx(this.templatePath(`${folder}/base`), this.destinationPath(), err => console.log(err));
+        cpx.copy(this.templatePath(`${folder}/base/**`), this.destinationPath());
         this.fs.copyTpl(this.templatePath('manifest/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
 
-        copyTempaltesFromFolder(this.fs, this.templatePath('${folder}/aangular'), this.destinationPath(''), this.genConfig);
-        // this.fs.copyTpl(this.templatePath('common-dynamic/package.json'), this.destinationPath('package.json'), this.genConfig);
-        // switch (this.genConfig.tech) {
-        //   case '$':
-        //     cpx(this.templatePath('tech/html'), this.destinationPath(), err => console.log(err));
-        //     break;
-        //   case 'angular':
-        //     cpx(this.templatePath('tech/angular'), this.destinationPath(), err => console.log(err));
-        //     break;
-        // };
+        switch (this.genConfig.framework) {
+          case 'jquery':
+            this.fs.copyTpl(this.templatePath(`${folder}/jquery/**/*`), this.destinationPath(), this.genConfig);
+            break;
+
+          case 'angular':
+            this._recurrsiveCopy(this.templatePath(`${folder}/angular/**/*`), this.destinationPath(), this.genConfig);
+            break;
+        };
       }
     }
   },
 
-  install: () => {
+  install: function () {
     if (!this.options['skip-install'] && this.genConfig.tech !== 'manifest-only') {
       this.npmInstall();
     }
   }
 } as any);
-
-// https://gist.github.com/kethinov/6658166
-const walkSync = (fs, dir, filelist = []) => {
-  fs.readdirSync(dir).forEach(file => {
-
-    filelist = fs.statSync(path.join(dir, file)).isDirectory()
-      ? walkSync(path.join(dir, file), filelist)
-      : filelist.concat(path.join(dir, file));
-
-  });
-  return filelist;
-};
-
-function copyTempaltesFromFolder(fs, source, destination, context) {
-  let files = walkSync(fs, source);
-  console.log(source);
-  console.log(destination);
-  console.log(context);
-  console.log(files);
-}
