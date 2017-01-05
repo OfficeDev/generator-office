@@ -1,11 +1,10 @@
-import { IPromptOptions } from 'yeoman-generator';
-import * as cpx from 'cpx';
+let cpx = require('cpx');
 import * as path from 'path';
-import * as uuid from 'uuid';
+let uuid = require('uuid');
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as _ from 'lodash';
-import yosay = require('yosay');
+let yosay = require('yosay');
 let yo = require('yeoman-generator');
 
 let insight = appInsights.getClient('1fd62c46-f0ef-4cfb-9560-448c857ab690');

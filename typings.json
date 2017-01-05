@@ -6,11 +6,6 @@
     "lodash": "registry:dt/lodash#4.14.0+20161110215204",
     "ncp": "registry:dt/ncp#0.5.1+20160906145159",
     "node": "registry:dt/node#6.0.0+20161121110008",
-    "uuid": "registry:dt/uuid#3.3.0+20160728152600",
-    "yosay": "registry:dt/yosay#0.0.0+20160316155526"
-  },
-  "dependencies": {
-    "yeoman-generator": "registry:dt/yeoman-generator#0.0.0+20160915014424",
-    "yosay": "registry:dt/yosay#0.0.0+20160505014246"
+    "uuid": "registry:dt/uuid#3.3.0+20160728152600"
   }
 }
