@@ -2,8 +2,13 @@
     "ui": {
         "port": 3000
     },
-    "server": true,
+    "server": {
+        "baseDir": "dist",
+        "routes": {
+            "/node_modules": "node_modules"
+        }
+    },
     "https": true,
     "watch": true,
-    "files": "*.*"
+    "files": "dist/**/*"
 }

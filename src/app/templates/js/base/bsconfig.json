@@ -2,7 +2,11 @@
     "ui": {
         "port": 3000
     },
-    "server": true,
+    "server": {
+        "routes": {
+            "/node_modules": "node_modules"
+        }
+    },
     "https": true,
     "watch": true,
     "files": "*.*"
