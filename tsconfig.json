@@ -17,6 +17,8 @@
         ]
     },
     "exclude": [
+        "generators/**",
+        "src/app/templates/**/*",
         "node_modules"
     ]
 }
