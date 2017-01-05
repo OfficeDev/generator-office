@@ -6,6 +6,7 @@ import * as chalk from 'chalk';
 import * as _ from 'lodash';
 let yosay = require('yosay');
 let yo = require('yeoman-generator');
+let opn = require('opn');
 let insight = appInsights.getClient('1fd62c46-f0ef-4cfb-9560-448c857ab690');
 
 module.exports = yo.extend({
@@ -15,11 +16,20 @@ module.exports = yo.extend({
   constructor: function () {
     yo.apply(this, arguments);
 
+    this.argument('host', { type: String, required: false });
+    this.argument('name', { type: String, required: false });
+
     this.option('skip-install', {
       type: Boolean,
       required: false,
       defaults: false,
-      desc: 'Skip running package managers (NPM, bower, etc) post scaffolding'
+      desc: 'Skip running `npm install` post scaffolding.'
+    });
+
+    this.option('js', {
+      type: Boolean,
+      required: false,
+      desc: 'Use JavaScript templates instead of TypeScript.'
     });
   },
 
@@ -27,9 +37,9 @@ module.exports = yo.extend({
    * Generator initalization
    */
   initializing: function () {
-    let message = `Welcome to the ${chalk.red('Office Project')} generator, by ${chalk.red('@OfficeDev')}! Let\'s create a project together!`;
+    let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
-    this.genConfig = {};
+    this.project = {};
   },
 
   /**
@@ -39,18 +49,20 @@ module.exports = yo.extend({
     let prompts = [
       /** allow user to create new project or update existing project */
       {
-        name: 'is-new',
+        name: 'new',
         message: 'Would you like to create a new add-in?',
         type: 'confirm',
-        default: 'true'
+        default: 'true',
+        when: (this.options.name == null)
       },
 
       /** name for the project */
       {
         name: 'name',
         type: 'input',
-        message: 'Name of the Add-in',
-        default: 'My Office Add-in'
+        message: 'Name of your add-in:',
+        default: 'My Office Add-in',
+        when: (this.options.name == null)
       },
 
       /**
@@ -59,31 +71,26 @@ module.exports = yo.extend({
        * or within a subfolder?
        */
       {
-        name: 'root-path',
-        message: `Root folder of project? Default to current directory\n (${this.destinationRoot()}), or specify relative path\n from current (src / public):`,
-        default: 'current folder',
-        filter: response => {
-          if (response === 'current folder') {
-            return '.';
-          }
-          else {
-            return response;
-          }
-        }
+        name: 'folder',
+        message: `Create a new folder?`,
+        type: 'confirm',
+        default: 'true',
+        when: (this.options.name == null)
       },
 
       /** use TypeScript for the project */
       {
-        name: 'is-ts',
+        name: 'ts',
         type: 'confirm',
         message: 'Would you like to use TypeScript?',
-        default: false
+        default: true,
+        when: (this.options.name == null)
       },
 
       /** technology used to create the addin (html / angular / etc) */
       {
         name: 'framework',
-        message: 'Framework to use',
+        message: 'Choose a framework:',
         type: 'list',
         default: 'jquery',
         choices: [
@@ -96,34 +103,35 @@ module.exports = yo.extend({
             value: 'angular'
           },
           {
-            name: 'Manifest.xml only (no application source files)',
+            name: 'Manifest only (no application source files)',
             value: 'manifest-only'
           }
-        ]
+        ],
+        when: (this.options.name == null)
       },
 
       /** office client application that can host the addin */
       {
         name: 'host',
-        message: 'Create the add-in for',
+        message: 'Create the add-in for:',
         type: 'list',
-        default: 'excel',
+        default: 'workbook',
         choices: [
           {
-            name: 'Mail',
-            value: 'mail'
+            name: 'Excel',
+            value: 'workbook'
           },
           {
             name: 'Word',
             value: 'document'
           },
           {
-            name: 'Excel',
-            value: 'workbook'
-          },
-          {
             name: 'PowerPoint',
             value: 'presentation'
+          },
+          {
+            name: 'Mail',
+            value: 'mail'
           },
           {
             name: 'OneNote',
@@ -133,7 +141,8 @@ module.exports = yo.extend({
             name: 'Project',
             value: 'project'
           }
-        ]
+        ],
+        when: (this.options.host == null)
       }
     ];
 
@@ -145,53 +154,53 @@ module.exports = yo.extend({
 
     let end = (new Date()).getTime();
     let duration = (end - start) / 1000;
-    insight.trackEvent('WHYME', { Project_Type: this.genConfig.type }, { duration });
+    insight.trackEvent('WHYME', { Project_Type: this.project.type }, { duration });
 
-    this.genConfig = {
-      name: answers.name,
-      framework: answers.framework,
-      ts: answers.ts,
-      'is-new': answers['is-new'],
-      'root-path': answers['root-path'],
-      host: answers.host
+    this.project = {
+      name: answers.name || this.options.name,
+      framework: answers.framework || 'jquery',
+      ts: answers.ts || this.options.js || true,
+      new: answers.new || true,
+      folder: answers.folder || true,
+      host: answers.host || this.options.host
     };
   },
 
   /**
-   * save configurations & config project
+   * save configs & config project
    */
   configuring: function () {
-    // take name submitted and strip everything out non-alphanumeric or space
-    let projectName = _.kebabCase(this.genConfig.name);
-
-    // add the result of the question to the generator configuration object
-    this.genConfig.projectInternalName = projectName;
-    this.genConfig.projectDisplayName = this.genConfig.name;
-    this.genConfig.rootPath = this.genConfig['root-path'];
-    this.genConfig.isNew = this.genConfig['is-new'];
-    this.genConfig.projectId = uuid();
+    this.project.projectInternalName = _.kebabCase(this.project.name);
+    this.project.projectDisplayName = this.project.name;
+    this.project.isNew = this.project.new;
+    this.project.projectId = uuid();
+    if (this.project.folder) {
+      this.destinationRoot(this.project.projectInternalName);
+    }
   },
 
   writing: {
     copyFiles: function () {
-      let manifestFilename = 'manifest-' + this.genConfig.host + '.xml';
-      let folder = this.genConfig.ts ? 'ts' : 'js';
+      let manifestFilename = 'manifest-' + this.project.host + '.xml';
+      let language = this.project.ts ? 'ts' : 'js';
 
-      if (this.genConfig.isNew === true) {
+      if (this.project.isNew === true) {
         /** Copy the base template */
-        this.fs.copy(this.templatePath(`${folder}/base/**`), this.destinationPath());
+        this.fs.copyTpl(this.templatePath(`${language}/base/**`), this.destinationPath(), this.project);
 
         /** Copy the framework specific overrides */
-        this.fs.copyTpl(this.templatePath(`${folder}/${this.genConfig.framework}/**`), this.destinationPath(), this.genConfig);
+        this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), this.project);
 
         /** Copy the manifest */
-        this.fs.copyTpl(this.templatePath('manifest/' + manifestFilename), this.destinationPath(manifestFilename), this.genConfig);
+        this.fs.copyTpl(this.templatePath('manifest/' + manifestFilename), this.destinationPath(manifestFilename), this.project);
       }
     }
   },
 
   install: function () {
-    if (!this.options['skip-install'] && this.genConfig.tech !== 'manifest-only') {
+    this.spawnCommand('project_readme.html');
+    // opn(this.destinationPath(`${this.project.path}project_readme.html`));
+    if (!this.options['skip-install'] && this.project.framework !== 'manifest-only') {
       this.npmInstall();
     }
   }
