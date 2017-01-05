@@ -4,7 +4,7 @@
   "author": "",
   "version": "0.1.0",
   "scripts": {
-    "start": "npm start"
+    "start": "browser-sync start --config bsconfig.json"
   },
   "dependencies": {
     "office-ui-fabric-js": "^1.3.0",
