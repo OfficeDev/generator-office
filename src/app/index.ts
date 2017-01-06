@@ -157,13 +157,25 @@ module.exports = yo.extend({
     insight.trackEvent('WHYME', { Project_Type: this.project.type }, { duration });
 
     this.project = {
-      name: answers.name || this.options.name,
+      name: this.options.name || answers.name,
+      host: this.options.host || answers.host,
+      ts: answers.ts,
+      folder: answers.folder,
       framework: answers.framework || 'jquery',
-      ts: answers.ts || this.options.js || true,
-      new: answers.new || true,
-      folder: answers.folder || true,
-      host: answers.host || this.options.host
+      new: answers.new
     };
+
+    if (!(this.options.js == null)) {
+      this.project.ts = !this.options.js;
+    }
+
+    if (answers.folder == null) {
+      this.project.folder = true;
+    }
+
+    if (answers.new == null) {
+      this.project.new = true;
+    }
   },
 
   /**
@@ -183,6 +195,10 @@ module.exports = yo.extend({
     copyFiles: function () {
       let manifestFilename = 'manifest-' + this.project.host + '.xml';
       let language = this.project.ts ? 'ts' : 'js';
+
+      console.log('----------------------------------------------------------------------------------\n');
+      console.log(`Creating ${chalk.bold.green(this.project.host)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
+      console.log('----------------------------------------------------------------------------------\n\n');
 
       if (this.project.isNew === true) {
         /** Copy the base template */
