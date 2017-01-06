@@ -48,7 +48,7 @@ module.exports = yo.extend({
   prompting: async function () {
     let jsTemplates = getDirectories(this.templatePath('js')).concat('manifest');
     let tsTempaltes = getDirectories(this.templatePath('ts')).concat('manifest');
-    let hosts = getFiles(this.templatePath('manifest')).map(manifest => manifest.replace('manifest-', '').replace('.xml', ''));
+    let manifests = getFiles(this.templatePath('manifest')).map(manifest => manifest.replace('.xml', ''));
 
     let prompts = [
       /** allow user to create new project or update existing project */
@@ -75,7 +75,7 @@ module.exports = yo.extend({
         message: 'Create the add-in for:',
         type: 'list',
         default: 'workbook',
-        choices: hosts.map(manifest => ({ name: manifest, value: manifest })),
+        choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
         when: (this.options.host == null)
       },
 
@@ -173,7 +173,6 @@ module.exports = yo.extend({
 
   writing: {
     copyFiles: function () {
-      let manifestFilename = 'manifest-' + this.project.host + '.xml';
       let language = this.project.ts ? 'ts' : 'js';
 
       console.log('----------------------------------------------------------------------------------\n');
@@ -188,7 +187,7 @@ module.exports = yo.extend({
         this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), this.project);
 
         /** Copy the manifest */
-        this.fs.copyTpl(this.templatePath('manifest/' + manifestFilename), this.destinationPath(manifestFilename), this.project);
+        this.fs.copyTpl(this.templatePath(`manifest/${this.project.host}.xml`), this.destinationPath(`manifest-${this.project.host}.xml`), this.project);
       }
     }
   },
