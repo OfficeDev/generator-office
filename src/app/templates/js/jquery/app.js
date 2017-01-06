@@ -6,21 +6,17 @@
   Office.initialize = function (reason) {
     $(document).ready(function () {
       app.initialize();
-      $('#get-data-from-selection').click(getDataFromSelection);
+      $('#get-started').click(runGetStarted);
     });
   };
 
-  // Reads data from current document selection and displays a notification
-  function getDataFromSelection() {
-    Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
-      function (result) {
-        if (result.status === Office.AsyncResultStatus.Succeeded) {
-          app.showNotification('The selected text is:', '"' + result.value + '"');
-        } else {
-          app.showNotification('Error:', result.error.message);
-        }
-      }
-    );
+  function runGetStarted() {
+    return <%= host %>.run(function (context) {
+      /**
+       * Insert your <%= host %> code here
+       */
+      return context.sync();
+    });
   }
 
 })();

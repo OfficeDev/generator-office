@@ -6,7 +6,6 @@
     });
   };
 
-  // Reads data from current document selection and displays a notification
   function runGetStarted() {
     return <%= host %>.run(async (context) => {
       /**
