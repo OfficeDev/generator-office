@@ -6,7 +6,7 @@
   "scripts": {
     "copy": "cpx \"src/app/templates/**/*.*\" generators/app/templates --watch",
     "tsc": "tsc -p tsconfig.json -w",
-    "start": "concurrently \"npm run tsc\" \"npm run copy\"",
+    "start": "rimraf generators && concurrently \"npm run tsc\" \"npm run copy\"",
     "postinstall": "typings install"
   },
   "homepage": "",
