@@ -74,7 +74,7 @@ module.exports = yo.extend({
         name: 'host',
         message: 'Create the add-in for:',
         type: 'list',
-        default: 'workbook',
+        default: 'excel',
         choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
         when: (this.options.host == null)
       },
@@ -148,6 +148,9 @@ module.exports = yo.extend({
     if (!(this.options.js == null)) {
       this.project.ts = !this.options.js;
     }
+    else {
+      this.project.ts = true;
+    }
 
     if (answers.folder == null) {
       this.project.folder = true;
@@ -164,6 +167,8 @@ module.exports = yo.extend({
   configuring: function () {
     this.project.projectInternalName = _.kebabCase(this.project.name);
     this.project.projectDisplayName = this.project.name;
+    this.project.manifest = this.project.host;
+    this.project.host = _.capitalize(this.project.host);
     this.project.isNew = this.project.new;
     this.project.projectId = uuid();
     if (this.project.folder) {
@@ -176,7 +181,7 @@ module.exports = yo.extend({
       let language = this.project.ts ? 'ts' : 'js';
 
       console.log('----------------------------------------------------------------------------------\n');
-      console.log(`Creating ${chalk.bold.green(this.project.host)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
+      console.log(`Creating ${chalk.bold.green(this.project.manifest)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
       console.log('----------------------------------------------------------------------------------\n\n');
 
       if (this.project.isNew === true) {
@@ -187,7 +192,7 @@ module.exports = yo.extend({
         this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), this.project);
 
         /** Copy the manifest */
-        this.fs.copyTpl(this.templatePath(`manifest/${this.project.host}.xml`), this.destinationPath(`manifest-${this.project.host}.xml`), this.project);
+        this.fs.copyTpl(this.templatePath(`manifest/${this.project.manifest}.xml`), this.destinationPath(`manifest-${this.project.manifest}.xml`), this.project);
       }
     }
   },
