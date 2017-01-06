@@ -47,7 +47,7 @@ module.exports = yo.extend({
    */
   prompting: async function () {
     let jsTemplates = getDirectories(this.templatePath('js')).concat('manifest');
-    let tsTempaltes = getDirectories(this.templatePath('ts')).concat('manifest');
+    let tsTemplates = getDirectories(this.templatePath('ts')).concat('manifest');
     let manifests = getFiles(this.templatePath('manifest')).map(manifest => manifest.replace('.xml', ''));
 
     let prompts = [
@@ -115,7 +115,7 @@ module.exports = yo.extend({
         message: 'Choose a framework:',
         type: 'list',
         default: 'jquery',
-        choices: tsTempaltes.map(template => ({ name: template, value: template })),
+        choices: tsTemplates.map(template => ({ name: template, value: template })),
         when: (this.options.name == null) && answers.ts
       },
 
