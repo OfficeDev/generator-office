@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
-let uuid = require('uuid/v4');
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as _ from 'lodash';
+
+let uuid = require('uuid/v4');
 let yosay = require('yosay');
 let yo = require('yeoman-generator');
-let opn = require('opn');
 let insight = appInsights.getClient('1fd62c46-f0ef-4cfb-9560-448c857ab690');
 
 module.exports = yo.extend({
@@ -46,6 +46,10 @@ module.exports = yo.extend({
    * Prompt users for options
    */
   prompting: async function () {
+    let jsTemplates = getDirectories(this.templatePath('js')).concat('manifest');
+    let tsTempaltes = getDirectories(this.templatePath('ts')).concat('manifest');
+    let hosts = getFiles(this.templatePath('manifest')).map(manifest => manifest.replace('manifest-', '').replace('.xml', ''));
+
     let prompts = [
       /** allow user to create new project or update existing project */
       {
@@ -63,6 +67,16 @@ module.exports = yo.extend({
         message: 'Name of your add-in:',
         default: 'My Office Add-in',
         when: (this.options.name == null)
+      },
+
+      /** office client application that can host the addin */
+      {
+        name: 'host',
+        message: 'Create the add-in for:',
+        type: 'list',
+        default: 'workbook',
+        choices: hosts.map(manifest => ({ name: manifest, value: manifest })),
+        when: (this.options.host == null)
       },
 
       /**
@@ -85,64 +99,6 @@ module.exports = yo.extend({
         message: 'Would you like to use TypeScript?',
         default: true,
         when: (this.options.name == null)
-      },
-
-      /** technology used to create the addin (html / angular / etc) */
-      {
-        name: 'framework',
-        message: 'Choose a framework:',
-        type: 'list',
-        default: 'jquery',
-        choices: [
-          {
-            name: 'jQuery',
-            value: 'jquery'
-          },
-          {
-            name: 'Angular',
-            value: 'angular'
-          },
-          {
-            name: 'Manifest only (no application source files)',
-            value: 'manifest-only'
-          }
-        ],
-        when: (this.options.name == null)
-      },
-
-      /** office client application that can host the addin */
-      {
-        name: 'host',
-        message: 'Create the add-in for:',
-        type: 'list',
-        default: 'workbook',
-        choices: [
-          {
-            name: 'Excel',
-            value: 'workbook'
-          },
-          {
-            name: 'Word',
-            value: 'document'
-          },
-          {
-            name: 'PowerPoint',
-            value: 'presentation'
-          },
-          {
-            name: 'Mail',
-            value: 'mail'
-          },
-          {
-            name: 'OneNote',
-            value: 'notebook'
-          },
-          {
-            name: 'Project',
-            value: 'project'
-          }
-        ],
-        when: (this.options.host == null)
       }
     ];
 
@@ -151,6 +107,30 @@ module.exports = yo.extend({
 
     // trigger prompts and store user input
     let answers = await this.prompt(prompts);
+
+    let frameworkPrompts = [
+      /** technology used to create the addin (html / angular / etc) */
+      {
+        name: 'framework',
+        message: 'Choose a framework:',
+        type: 'list',
+        default: 'jquery',
+        choices: tsTempaltes.map(template => ({ name: template, value: template })),
+        when: (this.options.name == null) && answers.ts
+      },
+
+      /** technology used to create the addin (html / angular / etc) */
+      {
+        name: 'framework',
+        message: 'Choose a framework:',
+        type: 'list',
+        default: 'jquery',
+        choices: jsTemplates.map(template => ({ name: template, value: template })),
+        when: (this.options.name == null) && !answers.ts
+      }
+    ];
+
+    let frameworkAnswers = await this.prompt(frameworkPrompts);
 
     let end = (new Date()).getTime();
     let duration = (end - start) / 1000;
@@ -161,7 +141,7 @@ module.exports = yo.extend({
       host: this.options.host || answers.host,
       ts: answers.ts,
       folder: answers.folder,
-      framework: answers.framework || 'jquery',
+      framework: frameworkAnswers.framework || 'jquery',
       new: answers.new
     };
 
@@ -221,3 +201,18 @@ module.exports = yo.extend({
     }
   }
 } as any);
+
+function getDirectories(root) {
+  return fs.readdirSync(root).filter(file => {
+    if (file === 'base') {
+      return false;
+    }
+    return fs.statSync(path.join(root, file)).isDirectory();
+  });
+}
+
+function getFiles(root) {
+  return fs.readdirSync(root).filter(file => {
+    return !(fs.statSync(path.join(root, file)).isDirectory());
+  });
+}
