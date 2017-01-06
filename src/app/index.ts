@@ -22,7 +22,6 @@ module.exports = yo.extend({
     this.option('skip-install', {
       type: Boolean,
       required: false,
-      defaults: false,
       desc: 'Skip running `npm install` post scaffolding.'
     });
 
@@ -56,8 +55,8 @@ module.exports = yo.extend({
         name: 'new',
         message: 'Would you like to create a new add-in?',
         type: 'confirm',
-        default: 'true',
-        when: (this.options.name == null)
+        default: true,
+        when: (this.options.new == null)
       },
 
       /** name for the project */
@@ -69,16 +68,6 @@ module.exports = yo.extend({
         when: (this.options.name == null)
       },
 
-      /** office client application that can host the addin */
-      {
-        name: 'host',
-        message: 'Create the add-in for:',
-        type: 'list',
-        default: 'excel',
-        choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
-        when: (this.options.host == null)
-      },
-
       /**
        * root path where the addin should be created.
        * should go in current folder where generator is being executed,
@@ -88,8 +77,18 @@ module.exports = yo.extend({
         name: 'folder',
         message: `Create a new folder?`,
         type: 'confirm',
-        default: 'true',
-        when: (this.options.name == null)
+        default: true,
+        when: (this.options.folder == null)
+      },
+
+      /** office client application that can host the addin */
+      {
+        name: 'host',
+        message: 'Create the add-in for:',
+        type: 'list',
+        default: 'excel',
+        choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
+        when: (this.argument.host == null)
       },
 
       /** use TypeScript for the project */
@@ -98,7 +97,7 @@ module.exports = yo.extend({
         type: 'confirm',
         message: 'Would you like to use TypeScript?',
         default: true,
-        when: (this.options.name == null)
+        when: (this.options.js == null)
       }
     ];
 
@@ -116,7 +115,7 @@ module.exports = yo.extend({
         type: 'list',
         default: 'jquery',
         choices: tsTemplates.map(template => ({ name: template, value: template })),
-        when: (this.options.name == null) && answers.ts
+        when: (this.options.framework == null) && answers.ts
       },
 
       /** technology used to create the addin (html / angular / etc) */
@@ -126,7 +125,7 @@ module.exports = yo.extend({
         type: 'list',
         default: 'jquery',
         choices: jsTemplates.map(template => ({ name: template, value: template })),
-        when: (this.options.name == null) && !answers.ts
+        when: (this.options.framework == null) && !answers.ts
       }
     ];
 
@@ -149,7 +148,7 @@ module.exports = yo.extend({
       this.project.ts = !this.options.js;
     }
     else {
-      this.project.ts = true;
+      this.project.ts = answers.ts;
     }
 
     if (answers.folder == null) {
@@ -169,7 +168,7 @@ module.exports = yo.extend({
     this.project.projectDisplayName = this.project.name;
     this.project.manifest = this.project.host;
     this.project.host = _.capitalize(this.project.host);
-    this.project.isNew = this.project.new;
+    this.project.new = this.project.new;
     this.project.projectId = uuid();
     if (this.project.folder) {
       this.destinationRoot(this.project.projectInternalName);
@@ -184,22 +183,20 @@ module.exports = yo.extend({
       console.log(`Creating ${chalk.bold.green(this.project.manifest)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
       console.log('----------------------------------------------------------------------------------\n\n');
 
-      if (this.project.isNew === true) {
+      /** Copy the manifest */
+      this.fs.copyTpl(this.templatePath(`manifest/${this.project.manifest}.xml`), this.destinationPath(`manifest-${this.project.manifest}.xml`), this.project);
+    
+      if (this.project.new === true) {
         /** Copy the base template */
         this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath());
 
         /** Copy the framework specific overrides */
         this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), this.project);
-
-        /** Copy the manifest */
-        this.fs.copyTpl(this.templatePath(`manifest/${this.project.manifest}.xml`), this.destinationPath(`manifest-${this.project.manifest}.xml`), this.project);
       }
     }
   },
 
   install: function () {
-    this.spawnCommand('project_readme.html');
-    // opn(this.destinationPath(`${this.project.path}project_readme.html`));
     if (!this.options['skip-install'] && this.project.framework !== 'manifest-only') {
       this.npmInstall();
     }
