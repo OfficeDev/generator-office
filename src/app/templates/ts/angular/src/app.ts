@@ -1,3 +1,5 @@
+declare var angular: any;
+
 (function(){
 
   // create
