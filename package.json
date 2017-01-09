@@ -7,6 +7,7 @@
     "copy": "cpx \"src/app/templates/**/*.*\" generators/app/templates --watch",
     "tsc": "tsc -p tsconfig.json -w",
     "start": "rimraf generators && concurrently \"npm run tsc\" \"npm run copy\"",
+    "test": "./node_modules/mocha/bin/_mocha -R dot test/**",
     "postinstall": "typings install"
   },
   "homepage": "",
@@ -23,13 +24,14 @@
   "keywords": [
     "office",
     "yeoman-generator",
-    "office",
     "office-add-in",
     "add-in",
     "outlook",
     "excel",
     "word",
-    "powerpoint"
+    "powerpoint",
+    "onenote",
+    "project"
   ],
   "dependencies": {
     "applicationinsights": "^0.17.1",
@@ -41,9 +43,12 @@
     "yosay": "^1.2.1"
   },
   "devDependencies": {
-    "cpx": "^1.5.0",
     "concurrently": "^3.1.0",
+    "cpx": "^1.5.0",
+    "mocha": "^3.2.0",
     "typescript": "^2.1.4",
-    "typings": "^2.0.0"
+    "typings": "^2.0.0",
+    "yeoman-assert": "^2.2.2",
+    "yeoman-test": "^1.6.0"
   }
 }

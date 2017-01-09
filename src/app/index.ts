@@ -7,7 +7,9 @@ import * as _ from 'lodash';
 let uuid = require('uuid/v4');
 let yosay = require('yosay');
 let yo = require('yeoman-generator');
-let insight = appInsights.getClient('1fd62c46-f0ef-4cfb-9560-448c857ab690');
+
+// TODO: waiting for app insight data pipeline followup
+//let insight = appInsights.getClient('1fd62c46-f0ef-4cfb-9560-448c857ab690');
 
 module.exports = yo.extend({
   /**
@@ -77,7 +79,7 @@ module.exports = yo.extend({
         name: 'folder',
         message: `Create a new folder?`,
         type: 'confirm',
-        default: true,
+        default: false,
         when: (this.options.folder == null)
       },
 
@@ -101,8 +103,8 @@ module.exports = yo.extend({
       }
     ];
 
-    insight.trackTrace('User begins to choose options');
-    let start = (new Date()).getTime();
+    // insight.trackTrace('User begins to choose options');
+    // let start = (new Date()).getTime();
 
     // trigger prompts and store user input
     let answers = await this.prompt(prompts);
@@ -131,17 +133,17 @@ module.exports = yo.extend({
 
     let frameworkAnswers = await this.prompt(frameworkPrompts);
 
-    let end = (new Date()).getTime();
-    let duration = (end - start) / 1000;
-    insight.trackEvent('WHYME', { Project_Type: this.project.type }, { duration });
+    // let end = (new Date()).getTime();
+    // let duration = (end - start) / 1000;
+    // insight.trackEvent('WHYME', { Project_Type: this.project.host }, { duration });
 
     this.project = {
+      new: answers.new,
       name: this.options.name || answers.name,
       host: this.options.host || answers.host,
       ts: answers.ts,
       folder: answers.folder,
-      framework: frameworkAnswers.framework || 'jquery',
-      new: answers.new
+      framework: frameworkAnswers.framework || 'jquery'
     };
 
     if (!(this.options.js == null)) {
@@ -165,9 +167,8 @@ module.exports = yo.extend({
    */
   configuring: function () {
     this.project.projectInternalName = _.kebabCase(this.project.name);
-    this.project.projectDisplayName = this.project.name;
-    this.project.manifest = this.project.host;
-    this.project.host = _.capitalize(this.project.host);
+    this.project.projectDisplayName = _.capitalize(this.project.name);
+    this.project.manifest = this.project.host + '-' + this.project.projectInternalName;
     this.project.new = this.project.new;
     this.project.projectId = uuid();
     if (this.project.folder) {
@@ -180,11 +181,11 @@ module.exports = yo.extend({
       let language = this.project.ts ? 'ts' : 'js';
 
       console.log('----------------------------------------------------------------------------------\n');
-      console.log(`Creating ${chalk.bold.green(this.project.manifest)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
+      console.log(`Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
       console.log('----------------------------------------------------------------------------------\n\n');
 
       /** Copy the manifest */
-      this.fs.copyTpl(this.templatePath(`manifest/${this.project.manifest}.xml`), this.destinationPath(`manifest-${this.project.manifest}.xml`), this.project);
+      this.fs.copyTpl(this.templatePath(`manifest/${this.project.host}.xml`), this.destinationPath(`manifest-${this.project.manifest}.xml`), this.project);
     
       if (this.project.new === true) {
         /** Copy the base template */
