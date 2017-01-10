@@ -2,7 +2,7 @@ let helpers = require('yeoman-test');
 let assert = require('yeoman-assert');
 import * as path from 'path';
 
-describe('office-prototype:app', () => {
+describe('office:app', () => {
 	let projectDisplayName = 'My Office Add-in';
 	let projectEscapedName = 'my-office-add-in';
 	let answers = {
@@ -19,7 +19,7 @@ describe('office-prototype:app', () => {
 		helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
 	});
 
-	it('creates expected files', function (done) {
+	it('creates expected files', (done) => {
 		let expected = [
 			manifestFileName,
 			'package.json',
@@ -34,6 +34,7 @@ describe('office-prototype:app', () => {
 			'src/index.html',
 			'typings.json',
 		];
+
 		assert.file(expected);
 		done();
 	})

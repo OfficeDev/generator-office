@@ -20,6 +20,7 @@ module.exports = yo.extend({
 
     this.argument('host', { type: String, required: false });
     this.argument('name', { type: String, required: false });
+    this.argument('framework', { type: String, required: false });
 
     this.option('skip-install', {
       type: Boolean,
@@ -57,8 +58,7 @@ module.exports = yo.extend({
         name: 'new',
         message: 'Would you like to create a new add-in?',
         type: 'confirm',
-        default: true,
-        when: (this.options.new == null)
+        default: true
       },
 
       /** name for the project */
@@ -79,8 +79,7 @@ module.exports = yo.extend({
         name: 'folder',
         message: `Create a new folder?`,
         type: 'confirm',
-        default: false,
-        when: (this.options.folder == null)
+        default: false
       },
 
       /** office client application that can host the addin */
@@ -90,7 +89,7 @@ module.exports = yo.extend({
         type: 'list',
         default: 'excel',
         choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
-        when: (this.argument.host == null)
+        when: (this.options.host == null)
       },
 
       /** use TypeScript for the project */
