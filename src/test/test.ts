@@ -1,8 +1,8 @@
 let helpers = require('yeoman-test');
 let assert = require('yeoman-assert');
-var path = require('path');
+import * as path from 'path';
 
-describe('office-prototype:app', function () {
+describe('office-prototype:app', () => {
 	let projectDisplayName = 'My Office Add-in';
 	let projectEscapedName = 'my-office-add-in';
 	let answers = {
@@ -15,8 +15,8 @@ describe('office-prototype:app', function () {
 	};
 	let manifestFileName = 'manifest-' + answers.host + '-' + projectEscapedName + '.xml';
 
-	beforeEach(function (done) {
-		helpers.run(path.join(__dirname, '../generators/app')).withPrompts(answers).on('end', done);
+	beforeEach((done) => {
+		helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
 	});
 
 	it('creates expected files', function (done) {

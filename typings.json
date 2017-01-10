@@ -3,6 +3,7 @@
     "applicationinsights": "registry:dt/applicationinsights#0.15.12+20161119044246",
     "chalk": "registry:dt/chalk#0.4.0+20160317120654",
     "lodash": "registry:dt/lodash#4.14.0+20161110215204",
+    "mocha": "registry:dt/mocha#2.2.5+20161221010438",
     "node": "registry:dt/node#6.0.0+20161121110008"
   }
 }
