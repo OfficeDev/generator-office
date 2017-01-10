@@ -4,12 +4,14 @@
   "description": "",
   "repository": "/generator-office-prototype",
   "scripts": {
-    "copy": "cpx \"src/app/templates/**/*.*\" generators/app/templates --watch",
-    "tsc": "tsc -p tsconfig.json -w",
-    "start": "rimraf generators && concurrently \"npm run tsc\" \"npm run copy\"",
+    "copy": "cpx \"src/app/templates/**/*.*\" generators/app/templates",
+    "tsc": "tsc -p tsconfig.json",
+    "start": "rimraf generators && concurrently \"npm run tsc -w\" \"npm run copy --watch\"",
     "test": "mocha --recursive test/**",
+    "build": "rimraf generators && concurrently \"npm run tsc\" \"npm run copy\"",
     "postinstall": "typings install"
   },
+  "engines": {"node": ">6.9.0"},
   "homepage": "",
   "license": "MIT",
   "author": {

@@ -6,4 +6,5 @@ cache:
 node_js:
   - 'stable'
   - '6.9.1'
-script: "npm run-script test"
+before_script: "npm run build"
+script: "npm run test"
