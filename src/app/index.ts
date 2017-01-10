@@ -179,9 +179,9 @@ module.exports = yo.extend({
     copyFiles: function () {
       let language = this.project.ts ? 'ts' : 'js';
 
-      console.log('----------------------------------------------------------------------------------\n');
-      console.log(`Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
-      console.log('----------------------------------------------------------------------------------\n\n');
+      this.log('----------------------------------------------------------------------------------\n');
+      this.log(`Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
+      this.log('----------------------------------------------------------------------------------\n\n');
 
       /** Copy the manifest */
       this.fs.copyTpl(this.templatePath(`manifest/${this.project.host}.xml`), this.destinationPath(`manifest-${this.project.manifest}.xml`), this.project);
