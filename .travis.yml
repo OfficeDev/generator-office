@@ -6,4 +6,4 @@ cache:
 node_js:
   - 'stable'
   - '6.9.1'
-script: "npm run-script test-travis"
+script: "npm run-script test"
