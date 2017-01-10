@@ -7,7 +7,7 @@
     "copy": "cpx \"src/app/templates/**/*.*\" generators/app/templates --watch",
     "tsc": "tsc -p tsconfig.json -w",
     "start": "rimraf generators && concurrently \"npm run tsc\" \"npm run copy\"",
-    "test": "./node_modules/mocha/bin/_mocha -R dot test/**",
+    "test": "mocha --recursive test/**",
     "postinstall": "typings install"
   },
   "homepage": "",
