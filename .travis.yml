@@ -4,4 +4,6 @@ cache:
   directories:
   - node_modules
 node_js:
-- 6.9.1
+  - 'stable'
+  - '6.9.1'
+script: "npm run-script test-travis"
