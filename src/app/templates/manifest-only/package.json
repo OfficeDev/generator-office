@@ -1,0 +1,8 @@
+{
+  "name": "<%= projectInternalName %>",
+  "description": "",
+  "author": "",
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {}
+}
