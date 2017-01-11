@@ -60,7 +60,7 @@ module.exports = yo.extend({
         type: 'confirm',
         default: true
       },
-      
+
       /** name for the project */
       {
         name: 'name',
@@ -142,15 +142,15 @@ module.exports = yo.extend({
       folder: newProjectAnswers.folder,
       framework: frameworkAnswers.framework || 'jquery'
     };
-    
+
     if (!this.project.new) {
-      this.project.framework = 'manifest-only'
+      this.project.framework = 'manifest-only';
     }
     else if (frameworkAnswers.framework == null) {
-      this.project.framework = 'jquery'
+      this.project.framework = 'jquery';
     }
     else {
-      this.project.framework = frameworkAnswers.framework
+      this.project.framework = frameworkAnswers.framework;
     }
 
     if (!(this.options.js == null)) {
