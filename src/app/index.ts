@@ -116,7 +116,7 @@ module.exports = yo.extend({
         type: 'list',
         default: 'jquery',
         choices: tsTemplates.map(template => ({ name: template, value: template })),
-        when: answers.new && (this.options.framework == null) && answers.ts
+        when: answers.new && (this.options.framework == null) && newProjectAnswers.ts
       },
 
       /** technology used to create the addin (html / angular / etc) */
@@ -126,7 +126,7 @@ module.exports = yo.extend({
         type: 'list',
         default: 'jquery',
         choices: jsTemplates.map(template => ({ name: template, value: template })),
-        when: answers.new && (this.options.framework == null) && !answers.ts
+        when: answers.new && (this.options.framework == null) && !newProjectAnswers.ts
       }
     ];
     let frameworkAnswers = await this.prompt(frameworkPrompts); // trigger prompts and store user input
@@ -138,8 +138,8 @@ module.exports = yo.extend({
       new: answers.new,
       name: this.options.name || answers.name,
       host: this.options.host || answers.host,
-      ts: answers.ts,
-      folder: answers.folder,
+      ts: newProjectAnswers.ts,
+      folder: newProjectAnswers.folder,
       framework: frameworkAnswers.framework || 'jquery'
     };
     
@@ -157,10 +157,10 @@ module.exports = yo.extend({
       this.project.ts = !this.options.js;
     }
     else {
-      this.project.ts = answers.ts;
+      this.project.ts = newProjectAnswers.ts;
     }
 
-    if (answers.folder == null) {
+    if (newProjectAnswers.folder == null) {
       this.project.folder = false;
     }
 
