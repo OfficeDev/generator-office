@@ -9,7 +9,7 @@ let yosay = require('yosay');
 let yo = require('yeoman-generator');
 
 // TODO: waiting for app insight data pipeline followup
-//let insight = appInsights.getClient('1fd62c46-f0ef-4cfb-9560-448c857ab690');
+// let insight = appInsights.getClient('1fd62c46-f0ef-4cfb-9560-448c857ab690');
 
 module.exports = yo.extend({
   /**
@@ -60,7 +60,7 @@ module.exports = yo.extend({
         type: 'confirm',
         default: true
       },
-
+      
       /** name for the project */
       {
         name: 'name',
@@ -68,18 +68,6 @@ module.exports = yo.extend({
         message: 'Name of your add-in:',
         default: 'My Office Add-in',
         when: (this.options.name == null)
-      },
-
-      /**
-       * root path where the addin should be created.
-       * should go in current folder where generator is being executed,
-       * or within a subfolder?
-       */
-      {
-        name: 'folder',
-        message: `Create a new folder?`,
-        type: 'confirm',
-        default: false
       },
 
       /** office client application that can host the addin */
@@ -90,6 +78,23 @@ module.exports = yo.extend({
         default: 'excel',
         choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
         when: (this.options.host == null)
+      }
+    ];
+    let answers = await this.prompt(prompts); // trigger prompts and store user input
+
+    /** newProjectPrompts and frameworkPrompts will only be triggered if it's a new project */
+    let newProjectPrompts = [
+      /**
+       * root path where the addin should be created.
+       * should go in current folder where generator is being executed,
+       * or within a subfolder?
+       */
+      {
+        name: 'folder',
+        message: `Create a new folder?`,
+        type: 'confirm',
+        default: false,
+        when: answers.new
       },
 
       /** use TypeScript for the project */
@@ -98,15 +103,10 @@ module.exports = yo.extend({
         type: 'confirm',
         message: 'Would you like to use TypeScript?',
         default: true,
-        when: (this.options.js == null)
+        when: (this.options.js == null) && answers.new
       }
     ];
-
-    // insight.trackTrace('User begins to choose options');
-    // let start = (new Date()).getTime();
-
-    // trigger prompts and store user input
-    let answers = await this.prompt(prompts);
+    let newProjectAnswers = await this.prompt(newProjectPrompts); // trigger prompts and store user input
 
     let frameworkPrompts = [
       /** technology used to create the addin (html / angular / etc) */
@@ -116,7 +116,7 @@ module.exports = yo.extend({
         type: 'list',
         default: 'jquery',
         choices: tsTemplates.map(template => ({ name: template, value: template })),
-        when: (this.options.framework == null) && answers.ts
+        when: answers.new && (this.options.framework == null) && newProjectAnswers.ts
       },
 
       /** technology used to create the addin (html / angular / etc) */
@@ -126,39 +126,48 @@ module.exports = yo.extend({
         type: 'list',
         default: 'jquery',
         choices: jsTemplates.map(template => ({ name: template, value: template })),
-        when: (this.options.framework == null) && !answers.ts
+        when: answers.new && (this.options.framework == null) && !newProjectAnswers.ts
       }
     ];
+    let frameworkAnswers = await this.prompt(frameworkPrompts); // trigger prompts and store user input
 
-    let frameworkAnswers = await this.prompt(frameworkPrompts);
-
-    // let end = (new Date()).getTime();
-    // let duration = (end - start) / 1000;
-    // insight.trackEvent('WHYME', { Project_Type: this.project.host }, { duration });
-
+    /**
+     * Configure user input to have correct values
+     */
     this.project = {
       new: answers.new,
       name: this.options.name || answers.name,
       host: this.options.host || answers.host,
-      ts: answers.ts,
-      folder: answers.folder,
+      ts: newProjectAnswers.ts,
+      folder: newProjectAnswers.folder,
       framework: frameworkAnswers.framework || 'jquery'
     };
+    
+    if (!this.project.new) {
+      this.project.framework = 'manifest-only'
+    }
+    else if (frameworkAnswers.framework == null) {
+      this.project.framework = 'jquery'
+    }
+    else {
+      this.project.framework = frameworkAnswers.framework
+    }
 
     if (!(this.options.js == null)) {
       this.project.ts = !this.options.js;
     }
     else {
-      this.project.ts = answers.ts;
+      this.project.ts = newProjectAnswers.ts;
     }
 
-    if (answers.folder == null) {
-      this.project.folder = true;
+    if (newProjectAnswers.folder == null) {
+      this.project.folder = false;
     }
 
     if (answers.new == null) {
       this.project.new = true;
     }
+
   },
 
   /**
@@ -185,8 +194,11 @@ module.exports = yo.extend({
 
       /** Copy the manifest */
       this.fs.copyTpl(this.templatePath(`manifest/${this.project.host}.xml`), this.destinationPath(`manifest-${this.project.manifest}.xml`), this.project);
-    
-      if (this.project.new === true) {
+
+      if (this.project.framework === 'manifest-only') {
+        this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), this.project);
+      }
+      else {
         /** Copy the base template */
         this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath());
 

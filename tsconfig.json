@@ -19,7 +19,6 @@
     "exclude": [
         "generators/**",
         "src/app/templates/**/*",
-        //"src/test/**",
         "node_modules"
     ]
 }
