@@ -1,8 +1,8 @@
 {
-  "name": "generator-office-prototype",
-  "version": "0.1.0",
+  "name": "generator-office",
+  "version": "1.0.0-beta.1",
   "description": "",
-  "repository": "/generator-office-prototype",
+  "repository": "/generator-office",
   "scripts": {
     "copy": "cpx \"src/app/templates/**/*.*\" generators/app/templates",
     "tsc": "tsc -p tsconfig.json",

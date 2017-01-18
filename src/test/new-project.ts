@@ -195,7 +195,7 @@ describe('new project - answers & args - jquery & typescript', () => {
 	 * Test addin when user pass in argument 
 	 * "my-office-add-in excel"
 	 */
-	describe('argument: name host', () => {
+	describe('arguments: name host', () => {
 		before((done) => {
 			answers.framework = 'jquery';
 			argument[0] = projectEscapedName;
@@ -234,7 +234,7 @@ describe('new project - answers & args - jquery & typescript', () => {
 	 * Test addin when user pass in argument 
 	 * "my-office-add-in excel jquery"
 	 */
-	describe('argument: name host framework', () => {
+	describe('arguments: name host framework', () => {
 		before((done) => {
 			argument[0] = projectEscapedName;
 			argument[1] = 'excel';
