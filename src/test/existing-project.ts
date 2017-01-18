@@ -1,3 +1,8 @@
+/* 
+ * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
+ */
+
 let helpers = require('yeoman-test');
 let assert = require('yeoman-assert');
 import * as path from 'path';

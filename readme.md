@@ -115,3 +115,5 @@ Specifying `--js` tells the generator to use Javascript.
   - Type: Boolean
   - Default: False
   - Optional
+
+Copyright (c) 2017 Microsoft Corporation. All rights reserved.
