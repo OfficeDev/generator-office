@@ -26,7 +26,7 @@ Check out the announcement blog post: [Office Dev Center Blog - Creating Office 
 
 Read up on [how to use the generator to create Office Add-ins with Visual Studio Code](https://code.visualstudio.com/Docs/runtimes/office).
 
-If you are interested in contributing, read the the [Contributing Guidelines](docs/contributing.md). 
+If you are interested in contributing, read the the [Contributing Guidelines](CONTRIBUTING.md). 
 
 ## YO Office Demo (screenshot & video)
 ![](docs/assets/generatoroffice.png)
