@@ -7,9 +7,8 @@ import * as _ from 'lodash';
 let uuid = require('uuid/v4');
 let yosay = require('yosay');
 let yo = require('yeoman-generator');
-
-// TODO: waiting for app insight data pipeline followup
-// let insight = appInsights.getClient('1fd62c46-f0ef-4cfb-9560-448c857ab690');
+let insight = appInsights.getClient('c448bdfb-520d-4ecb-be25-7b7578118025');
+// TODO: use prod instrumentation key: 68a8ef35-112c-4d33-a118-3c346947f2fe
 
 module.exports = yo.extend({
   /**
@@ -89,6 +88,10 @@ module.exports = yo.extend({
         when: this.options.host == null
       }
     ];
+
+    /**
+     * Configure user input to have correct values
+     */
     let answers = await this.prompt(prompts); // trigger prompts and store user input
     this.project = {
       new: answers.new,
@@ -197,6 +200,8 @@ module.exports = yo.extend({
     if (this.project.folder) {
       this.destinationRoot(this.project.projectInternalName);
     }
+
+    insight.trackEvent('App_Data', { AppID: this.project.projectId, Host: this.project.host, Framework: this.project.framework, isTypeScript: this.project.ts });
   },
 
   writing: {
@@ -213,7 +218,7 @@ module.exports = yo.extend({
         this.log(`Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} add-in`);
         this.log('----------------------------------------------------------------------------------\n\n');
       }
-      
+
       /** Copy the manifest */
       this.fs.copyTpl(this.templatePath(`manifest/${this.project.host}.xml`), this.destinationPath(`manifest-${this.project.manifest}.xml`), this.project);
 
