@@ -52,33 +52,26 @@ module.exports = yo.extend({
    * Prompt users for options
    */
   prompting: async function () {
-    let jsTemplates = getDirectories(this.templatePath('js')).concat('manifest');
-    let tsTemplates = getDirectories(this.templatePath('ts')).concat('manifest');
+    let jsTemplates = getDirectories(this.templatePath('js'));
+    let tsTemplates = getDirectories(this.templatePath('ts'));
     let manifests = getFiles(this.templatePath('manifest')).map(manifest => manifest.replace('.xml', ''));
 
     let prompts = [
-      /** allow user to create new project or update existing project */
+      /** whether to create a new folder for the project */
+
+      // TODO: Do we always prompt this?
       {
-        name: 'new',
-        message: 'Would you like to create a new add-in with everything or manifest only?',
-        type: 'list',
-        choices: [{
-          name: 'Everything',
-          value: 'everything'
-        },
-        {
-          name: 'Manifest Only',
-          value: 'manifest-only'
-        }],
-        default: 'everything',
-        when: this.options.framework == null
+        name: 'folder',
+        message: `Would you like to create a new folder?`,
+        type: 'confirm',
+        default: false
       },
 
       /** name for the project */
       {
         name: 'name',
         type: 'input',
-        message: 'Name of your add-in:',
+        message: 'What\'s the name of your add-in:',
         default: 'My Office Add-in',
         when: this.options.name == null
       },
@@ -86,11 +79,20 @@ module.exports = yo.extend({
       /** office client application that can host the addin */
       {
         name: 'host',
-        message: 'Create the add-in for:',
+        message: 'What client application are you creating the add-in for:',
         type: 'list',
         default: 'excel',
         choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
         when: this.options.host == null
+      },
+
+      /** set flag for manifest-only to prompt accordingly later */
+      {
+        name: 'isManifestOnly',
+        message: 'Would you like to create ONLY a manifest file for an existing project?',
+        type: 'confirm',
+        default: false,
+        when: this.options.framework == null
       }
     ];
 
@@ -99,44 +101,38 @@ module.exports = yo.extend({
      */
     let answers = await this.prompt(prompts); // trigger prompts and store user input
     this.project = {
-      new: answers.new,
+      folder: answers.folder,
       name: this.options.name || answers.name,
       host: this.options.host || answers.host,
-      framework: null
+      framework: this.options.framework || null,
+      isManifestOnly: answers.isManifestOnly || null
     };
-    if (answers.new == null) {
-      this.project.framework = this.options.framework;
-      this.project.new = 'manifest-only';
+    if (answers.isManifestOnly) {
+      this.project.framework = 'manifest-only';
     }
-    if (answers.host == null) {
-      this.project.host = this.options.host;
+    if (this.options.framework === 'manifest-only') {
+      this.project.isManifestOnly = true;
     }
 
-    /** newProjectPrompts and frameworkPrompts will only be triggered if it's a new project */
-    let newProjectPrompts = [
-      /**
-       * root path where the addin should be created.
-       * should go in current folder where generator is being executed,
-       * or within a subfolder?
-       */
-      {
-        name: 'folder',
-        message: `Create a new folder?`,
-        type: 'confirm',
-        default: false,
-        when: this.project.new == 'everything'
-      },
-
+    /** tsPrompts and frameworkPrompts will only be triggered if it's not a manifest-only project */
+    let tsPrompts = [
       /** use TypeScript for the project */
       {
         name: 'ts',
         type: 'confirm',
         message: 'Would you like to use TypeScript?',
         default: true,
-        when: (this.options.js == null) && (this.project.new == 'everything') && (this.options.framework == null)
+        when: (this.options.js == null) && (!this.project.isManifestOnly) && (this.options.framework == null)
       }
     ];
-    let newProjectAnswers = await this.prompt(newProjectPrompts); // trigger prompts and store user input
+    let tsAnswers = await this.prompt(tsPrompts); // trigger prompts and store user input
+    this.project.ts = tsAnswers.ts;
+    if (!(this.options.js == null)) {
+      this.project.ts = !this.options.js;
+    }
+    else {
+      this.project.ts = tsAnswers.ts;
+    }
 
     let frameworkPrompts = [
       /** technology used to create the addin (html / angular / etc) */
@@ -146,7 +142,7 @@ module.exports = yo.extend({
         type: 'list',
         default: 'jquery',
         choices: tsTemplates.map(template => ({ name: template, value: template })),
-        when: (this.project.new == 'everything') && (this.options.framework == null) && newProjectAnswers.ts
+        when: (this.project.framework == null) && tsAnswers.ts && !answers.isManifestOnly
       },
 
       /** technology used to create the addin (html / angular / etc) */
@@ -156,41 +152,19 @@ module.exports = yo.extend({
         type: 'list',
         default: 'jquery',
         choices: jsTemplates.map(template => ({ name: template, value: template })),
-        when: (this.project.new == 'everything') && (this.options.framework == null) && !newProjectAnswers.ts
+        when: (this.project.framework == null) && !tsAnswers.ts && !answers.isManifestOnly
       }
     ];
     let frameworkAnswers = await this.prompt(frameworkPrompts); // trigger prompts and store user input
-
-    /**
-     * Configure user input to have correct values
-     */
-    this.project.ts = newProjectAnswers.ts;
-    this.project.folder = newProjectAnswers.folder;
-
-    if (this.project.new == 'manifest-only') {
-      this.project.framework = 'manifest-only'
-    }
-    else if (!(this.options.framework == null)) {
+    if (!(this.options.framework == null)) {
       this.project.framework = this.options.framework;
     }
-    else if ((frameworkAnswers.framework == null) && (this.options.framework == null)) {
-      this.project.framework = 'jquery'
+    else if (this.project.isManifestOnly === true) {
+      this.project.framework = 'manifest-only';
     }
     else {
       this.project.framework = frameworkAnswers.framework;
     }
-
-    if (!(this.options.js == null)) {
-      this.project.ts = !this.options.js;
-    }
-    else {
-      this.project.ts = newProjectAnswers.ts;
-    }
-
-    if (newProjectAnswers.folder == null) {
-      this.project.folder = false;
-    }
-
   },
 
   /**
@@ -200,7 +174,6 @@ module.exports = yo.extend({
     this.project.projectInternalName = _.kebabCase(this.project.name);
     this.project.projectDisplayName = _.capitalize(this.project.name);
     this.project.manifest = this.project.host + '-' + this.project.projectInternalName;
-    this.project.new = this.project.new;
     this.project.projectId = uuid();
     if (this.project.folder) {
       this.destinationRoot(this.project.projectInternalName);
@@ -213,7 +186,7 @@ module.exports = yo.extend({
     copyFiles: function () {
       let language = this.project.ts ? 'ts' : 'js';
 
-      if (this.project.framework != 'manifest-only') {
+      if (this.project.framework !== 'manifest-only') {
         this.log('----------------------------------------------------------------------------------\n');
         this.log(`Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
         this.log('----------------------------------------------------------------------------------\n\n');
