@@ -56,10 +56,8 @@ module.exports = yo.extend({
     let tsTemplates = getDirectories(this.templatePath('ts'));
     let manifests = getFiles(this.templatePath('manifest')).map(manifest => manifest.replace('.xml', ''));
 
-    let prompts = [
+    let askForBasic = [
       /** whether to create a new folder for the project */
-
-      // TODO: Do we always prompt this?
       {
         name: 'folder',
         message: `Would you like to create a new folder?`,
@@ -90,8 +88,18 @@ module.exports = yo.extend({
       {
         name: 'isManifestOnly',
         message: 'Would you like to create ONLY a manifest file for an existing project?',
-        type: 'confirm',
+        type: 'list',
         default: false,
+        choices: [
+          {
+            name: 'Yes, I only need manifest file.',
+            value: true
+          },
+          {
+            name: 'No, I want a brand new project.',
+            value: false
+          }
+        ],
         when: this.options.framework == null
       }
     ];
@@ -99,7 +107,7 @@ module.exports = yo.extend({
     /**
      * Configure user input to have correct values
      */
-    let answers = await this.prompt(prompts); // trigger prompts and store user input
+    let answers = await this.prompt(askForBasic); // trigger prompts and store user input
     this.project = {
       folder: answers.folder,
       name: this.options.name || answers.name,
@@ -114,8 +122,8 @@ module.exports = yo.extend({
       this.project.isManifestOnly = true;
     }
 
-    /** tsPrompts and frameworkPrompts will only be triggered if it's not a manifest-only project */
-    let tsPrompts = [
+    /** askForTs and askForFramework will only be triggered if it's not a manifest-only project */
+    let askForTs = [
       /** use TypeScript for the project */
       {
         name: 'ts',
@@ -125,7 +133,7 @@ module.exports = yo.extend({
         when: (this.options.js == null) && (!this.project.isManifestOnly) && (this.options.framework == null)
       }
     ];
-    let tsAnswers = await this.prompt(tsPrompts); // trigger prompts and store user input
+    let tsAnswers = await this.prompt(askForTs); // trigger prompts and store user input
     this.project.ts = tsAnswers.ts;
     if (!(this.options.js == null)) {
       this.project.ts = !this.options.js;
@@ -134,7 +142,7 @@ module.exports = yo.extend({
       this.project.ts = tsAnswers.ts;
     }
 
-    let frameworkPrompts = [
+    let askForFramework = [
       /** technology used to create the addin (html / angular / etc) */
       {
         name: 'framework',
@@ -155,7 +163,7 @@ module.exports = yo.extend({
         when: (this.project.framework == null) && !tsAnswers.ts && !answers.isManifestOnly
       }
     ];
-    let frameworkAnswers = await this.prompt(frameworkPrompts); // trigger prompts and store user input
+    let frameworkAnswers = await this.prompt(askForFramework); // trigger prompts and store user input
     if (!(this.options.framework == null)) {
       this.project.framework = this.options.framework;
     }
@@ -186,14 +194,15 @@ module.exports = yo.extend({
     copyFiles: function () {
       let language = this.project.ts ? 'ts' : 'js';
 
+      /** Show type of project creating in progress */
       if (this.project.framework !== 'manifest-only') {
         this.log('----------------------------------------------------------------------------------\n');
-        this.log(`Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
+        this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
         this.log('----------------------------------------------------------------------------------\n\n');
       }
       else {
         this.log('----------------------------------------------------------------------------------\n');
-        this.log(`Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} add-in`);
+        this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} add-in`);
         this.log('----------------------------------------------------------------------------------\n\n');
       }
 
@@ -215,8 +224,24 @@ module.exports = yo.extend({
 
   install: function () {
     if (!this.options['skip-install'] && this.project.framework !== 'manifest-only') {
-      this.npmInstall();
+      this.installDependencies({
+        npm: true,
+        bower: false,
+        callback: this._postInstallHints.bind(this)
+      });
     }
+    else {
+      this._postInstallHints();
+    }
+  },
+
+  _postInstallHints: function () {
+    /** Next steps and npm commands */
+    this.log('----------------------------------------------------------------------------------\n');
+    this.log(`      ${chalk.bold.green('Congratulations!')} You have successfully created ${chalk.bold.magenta(this.project.projectDisplayName)} Add-in.\n`);
+    this.log(`      Now try ${chalk.inverse(' npm start ')} to run the web server.\n`);
+    this.log(`      Make sure you add Self Signed Cert as Trusted Root Certificate.\n`);
+    this.log('----------------------------------------------------------------------------------\n');
   }
 } as any);
 
