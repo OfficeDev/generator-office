@@ -60,7 +60,7 @@ module.exports = yo.extend({
       /** whether to create a new folder for the project */
       {
         name: 'folder',
-        message: `Would you like to create a new folder?`,
+        message: 'Would you like to create a new subfolder for your project?',
         type: 'confirm',
         default: false
       },
@@ -69,7 +69,7 @@ module.exports = yo.extend({
       {
         name: 'name',
         type: 'input',
-        message: 'What\'s the name of your add-in:',
+        message: 'What do you want to name your add-in?',
         default: 'My Office Add-in',
         when: this.options.name == null
       },
@@ -77,17 +77,17 @@ module.exports = yo.extend({
       /** office client application that can host the addin */
       {
         name: 'host',
-        message: 'What client application are you creating the add-in for:',
+        message: 'Which Office client application would you like to support?',
         type: 'list',
         default: 'excel',
-        choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
+        choices: manifests.map(manifest => ({ name: _.capitalize(manifest), value: manifest })),
         when: this.options.host == null
       },
 
       /** set flag for manifest-only to prompt accordingly later */
       {
         name: 'isManifestOnly',
-        message: 'Would you like to create ONLY a manifest file for an existing project?',
+        message: 'Would you like to create ONLY a manifest file?',
         type: 'list',
         default: false,
         choices: [
@@ -149,7 +149,7 @@ module.exports = yo.extend({
         message: 'Choose a framework:',
         type: 'list',
         default: 'jquery',
-        choices: tsTemplates.map(template => ({ name: template, value: template })),
+        choices: tsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
         when: (this.project.framework == null) && tsAnswers.ts && !answers.isManifestOnly
       },
 
@@ -159,7 +159,7 @@ module.exports = yo.extend({
         message: 'Choose a framework:',
         type: 'list',
         default: 'jquery',
-        choices: jsTemplates.map(template => ({ name: template, value: template })),
+        choices: jsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
         when: (this.project.framework == null) && !tsAnswers.ts && !answers.isManifestOnly
       }
     ];
@@ -181,7 +181,7 @@ module.exports = yo.extend({
   configuring: function () {
     this.project.projectInternalName = _.kebabCase(this.project.name);
     this.project.projectDisplayName = _.capitalize(this.project.name);
-    this.project.manifest = this.project.host + '-' + this.project.projectInternalName;
+    this.project.hostDisplayName = _.capitalize(this.project.host);
     this.project.projectId = uuid();
     if (this.project.folder) {
       this.destinationRoot(this.project.projectInternalName);
@@ -207,7 +207,7 @@ module.exports = yo.extend({
       }
 
       /** Copy the manifest */
-      this.fs.copyTpl(this.templatePath(`manifest/${this.project.host}.xml`), this.destinationPath(`manifest-${this.project.manifest}.xml`), this.project);
+      this.fs.copyTpl(this.templatePath(`manifest/${this.project.host}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), this.project);
 
       if (this.project.framework === 'manifest-only') {
         this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), this.project);
@@ -235,13 +235,27 @@ module.exports = yo.extend({
     }
   },
 
-  _postInstallHints: function () {
+  _postInstallHints: async function () {
     /** Next steps and npm commands */
     this.log('----------------------------------------------------------------------------------\n');
-    this.log(`      ${chalk.bold.green('Congratulations!')} You have successfully created ${chalk.bold.magenta(this.project.projectDisplayName)} Add-in.\n`);
-    this.log(`      Now try ${chalk.inverse(' npm start ')} to run the web server.\n`);
+    this.log(`      ${chalk.bold.green('Congratulations!')} Your ${chalk.bold.magenta(this.project.projectDisplayName)} project is ready!\n`);
+    this.log(`      Use ${chalk.inverse(' npm start ')} to run the web server.\n`);
     this.log(`      Make sure you add Self Signed Cert as Trusted Root Certificate.\n`);
-    this.log('----------------------------------------------------------------------------------\n');
+    this.log(`      Read more instruction on https://github.com/OfficeDev/generator-office`);
+    this.log('----------------------------------------------------------------------------------\n\n');
+    let askForOpenResourcePage = [
+      /** ask to open resource page */
+      {
+        name: 'open',
+        type: 'confirm',
+        message: 'Would you like to open resource.html file now?',
+        default: true
+      }
+    ];
+    let openResourcePageAnswers = await this.prompt(askForOpenResourcePage); // trigger prompts and store user input
+    if (openResourcePageAnswers.open === true) {
+      this.spawnCommand('open', ['resource.html']);
+    }
   }
 } as any);
 
