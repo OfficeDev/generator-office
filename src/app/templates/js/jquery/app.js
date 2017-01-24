@@ -16,7 +16,7 @@
   };
 
   function runGetStarted() {
-    return <%= host %>.run(function (context) {
+    return <%= hostDisplayName %>.run(function (context) {
       /**
        * Insert your <%= host %> code here
        */

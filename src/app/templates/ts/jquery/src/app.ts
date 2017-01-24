@@ -12,7 +12,7 @@
   };
 
   function runGetStarted() {
-    return <%= host %>.run(async (context) => {
+    return <%= hostDisplayName %>.run(async (context) => {
       /**
        * Insert your <%= host %> code here
        */
