@@ -22,7 +22,7 @@ describe('new project - answers', () => {
     ts: null,
     framework: null
   };
-  let manifestFileName = 'manifest-' + answers.host + '-' + projectEscapedName + '.xml';
+  let manifestFileName = projectEscapedName + '-manifest.xml';
 
 	/** Test addin when user chooses jquery and typescript. */
   describe('jquery & typescript', () => {
@@ -174,7 +174,7 @@ describe('new project - answers & args - jquery & typescript', () => {
     it('creates expected files', (done) => {
       let host = argument[1] ? argument[1] : answers.host;
       let name = argument[0] ? argument[0] : answers.name;
-      let manifestFileName = 'manifest-' + host + '-' + name + '.xml';
+      let manifestFileName = name + '-manifest.xml';
 
       let expected = [
         manifestFileName,
@@ -213,7 +213,7 @@ describe('new project - answers & args - jquery & typescript', () => {
     it('creates expected files', (done) => {
       let host = argument[1] ? argument[1] : answers.host;
       let name = argument[0] ? argument[0] : answers.name;
-      let manifestFileName = 'manifest-' + host + '-' + name + '.xml';
+      let manifestFileName = name + '-manifest.xml';
 
       let expected = [
         manifestFileName,
@@ -252,7 +252,7 @@ describe('new project - answers & args - jquery & typescript', () => {
     it('creates expected files', (done) => {
       let host = argument[1] ? argument[1] : answers.host;
       let name = argument[0] ? argument[0] : answers.name;
-      let manifestFileName = 'manifest-' + host + '-' + name + '.xml';
+      let manifestFileName = name + '-manifest.xml';
 
       let expected = [
         manifestFileName,
@@ -294,7 +294,7 @@ describe('new project - answers & opts - jquery & typescript', () => {
     'skip-install': null,
     js: null
   };
-  let manifestFileName = 'manifest-' + answers.host + '-' + projectEscapedName + '.xml';
+  let manifestFileName = projectEscapedName + '-manifest.xml';
 
 	/** Test addin when user pass in --js. */
   describe('options: --js', () => {
