@@ -9,7 +9,7 @@
 [Yeoman](http://yeoman.io) generator for creating Microsoft Office projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
 
 - use an editor other than Visual Studio
-- interested in using a technology other than plain HTML, CSS & JavaScript
+- are interested in using a technology other than plain HTML, CSS & JavaScript
 
 Like other Yeoman generators, this simply creates the scaffolding of files for your Office project. It allows you to create Add-ins for:
 
@@ -70,6 +70,10 @@ Start developing and launch a local HTTPS site on `https://localhost:3000` by si
 ```bash
 $ npm start
 ```
+
+Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc [Adding Self-Signed Certificates as Tusted Root Certificate](docs/ssl.md) for instructions on how to do this.
+
+Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
 
 ## Validate manifest.xml
 
