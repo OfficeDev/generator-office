@@ -29,7 +29,7 @@ Read up on [how to use the generator to create Office Add-ins with Visual Studio
 If you are interested in contributing, read the the [Contributing Guidelines](CONTRIBUTING.md). 
 
 ## YO Office Demo (screenshot & video)
-![](docs/assets/generatoroffice.png)
+![](src/docs/assets/generatoroffice.png)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/78b18BLVosM" frameborder="0" allowfullscreen></iframe>
 
@@ -71,7 +71,7 @@ Start developing and launch a local HTTPS site on `https://localhost:3000` by si
 $ npm start
 ```
 
-Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc [Adding Self-Signed Certificates as Tusted Root Certificate](docs/ssl.md) for instructions on how to do this.
+Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc [Adding Self-Signed Certificates as Tusted Root Certificate](src/docs/ssl.md) for instructions on how to do this.
 
 Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
 
@@ -81,7 +81,7 @@ Refer to the docs on [Add-in manifests](https://dev.office.com/docs/add-ins/over
 
 ## Examples
 
-Refer to the [docs](docs) for example executions & output of the generator.
+Refer to the [docs](src/docs) for example executions & output of the generator.
 
 ## Command Line Arguments:
 List of supported arguments. The generator will prompt you accordingly based on the arguments you provided.
