@@ -22,10 +22,6 @@ Like other Yeoman generators, this simply creates the scaffolding of files for y
 
 Choose to create the Office projects using plain HTML, CSS & JavaScript (*mirroring the same projects that Visual Studio creates*) or create Angular-based projects.
 
-Check out the announcement blog post: [Office Dev Center Blog - Creating Office Add-ins with any editor - Introducing YO OFFICE!](http://dev.office.com/blogs/creating-office-add-ins-with-any-editor-introducing-yo-office) 
-
-Read up on [how to use the generator to create Office Add-ins with Visual Studio Code](https://code.visualstudio.com/Docs/runtimes/office).
-
 If you are interested in contributing, read the the [Contributing Guidelines](CONTRIBUTING.md). 
 
 ## YO Office Demo (screenshot & video)
@@ -39,13 +35,13 @@ If you are interested in contributing, read the the [Contributing Guidelines](CO
 
 > **Wait!** 
 
-> Is this the first time you're using Yeoman or installing a Yeoman generator? When working with Yeoman there are a few common prerequisites. Ensure you have already have a copy of the popular source control solution [Git](https://git-scm.com/download) installed.
+> Is this the first time you're using Yeoman or installing a Yeoman generator? When working with Yeoman there are a few common prerequisites. Ensure you already have a copy of the popular source control solution [Git](https://git-scm.com/download) installed.
 
 > If you don't have git installed, once you install it we recommend you restart your console (or if on Windows, restart your machine) as system environment variables are set/updated during this installation.
 
 Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org). 
 
-In the v1.0.0 release we added TypeScript type definitions for autocompletion / IntelliSense... for this you need to install typings.
+In the v1.0.0 release we added TypeScript type definitions for autocompletion / IntelliSense... for this you also need to install typings.
 
 ```bash
 $ npm install -g typings yo generator-office

@@ -1,25 +1,25 @@
 # Adding Self-Signed Certificates as Trusted Root Certificate
 
-This generator leverages [Browsersync](https://browsersync.io/) to start a web server, which requires a self-signed certificate. Your workstation will not trust this certificate and thus, the Office client where you are running your Office Add-in from will not load your add-in from an untrusted and unsecure location.
+Office clients require add-ins and webpages to come from a trusted and secure location. This generator leverages [Browsersync](https://browsersync.io/) to start a web server, which requires a self-signed certificate. Your workstation will not trust this certificate and thus, the Office client, in which you are running your Office Add-in, will not load your add-in.
 
-To fix this, you need to configure your developer workstation to trust the self-signed certifiacte from the gulp plugin. The steps for this differ depending on your developer environment (OSX / Windows / Linux). Use these instructions to trust the certificate:
+To fix this, you need to configure your developer workstation to trust the self-signed certificate. The steps for this differ depending on your developer environment (OSX / Windows / Linux). Use these instructions to trust the certificate:
 
 - OS X: [Apple Support - OS X Yosemite: If your Certificate Isn't Being Accepted](https://support.apple.com/kb/PH18677)
 - Windows: [TechNet - Manage Trusted Root Certificates](https://technet.microsoft.com/en-us/library/cc754841.aspx)
 
 ## OS X
 
-Using Chrome, when you browse to a site that has an untrusted certificate, the browser will display an error with the certificate:
+When you browse to a site that has an untrusted certificate, the browser will display an error with the certificate:
 
   ![](assets/ssl-chrome-error.png)
 
-### Option #1: Simply Proceed using the Chrome browser
+### Option #1: Bypassing the error in Chrome
 
 choose the “Advanced” link, then choose “Proceed to local (unsafe)“.
 
   ![](assets/ssl-chrome-bypass.gif)
 
-### Option #2: Trsting a certificate
+### Option #2: Trusting a certificate
 
 #### Get certificate in Chrome
 
@@ -54,7 +54,7 @@ You can locate the server.crt file at **~/your_yo_office_project/node_modules/br
 
   ![](assets/ssl-keychain-02.png)
   
-At this point everything has been configured. Quit Chrome and all other browsers and try again to navigate to the local HTTPS site. The browser should report it as a valid certificate:
+At this point everything has been configured. Quit all browsers, then reopen and try to navigate to the local HTTPS site. The browser should report it as a valid certificate:
 
   ![](assets/ssl-chrome-good.png)
 
