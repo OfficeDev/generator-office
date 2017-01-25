@@ -12,8 +12,7 @@ import * as _ from 'lodash';
 let uuid = require('uuid/v4');
 let yosay = require('yosay');
 let yo = require('yeoman-generator');
-let insight = appInsights.getClient('c448bdfb-520d-4ecb-be25-7b7578118025');
-// TODO: use prod instrumentation key: 68a8ef35-112c-4d33-a118-3c346947f2fe
+let insight = appInsights.getClient('68a8ef35-112c-4d33-a118-3c346947f2fe');
 
 module.exports = yo.extend({
   /**
@@ -130,7 +129,7 @@ module.exports = yo.extend({
         type: 'confirm',
         message: 'Would you like to use TypeScript?',
         default: true,
-        when: (this.options.js == null) && (!this.project.isManifestOnly) && (this.options.framework == null)
+        when: (this.options.js == null) && (!this.project.isManifestOnly)
       }
     ];
     let tsAnswers = await this.prompt(askForTs); // trigger prompts and store user input
@@ -237,12 +236,13 @@ module.exports = yo.extend({
 
   _postInstallHints: async function () {
     /** Next steps and npm commands */
-    this.log('----------------------------------------------------------------------------------\n');
-    this.log(`      ${chalk.bold.green('Congratulations!')} Your ${chalk.bold.magenta(this.project.projectDisplayName)} project is ready!\n`);
-    this.log(`      Use ${chalk.inverse(' npm start ')} to run the web server.\n`);
-    this.log(`      Make sure you add Self Signed Cert as Trusted Root Certificate.\n`);
-    this.log(`      Read more instruction on https://github.com/OfficeDev/generator-office`);
-    this.log('----------------------------------------------------------------------------------\n\n');
+    this.log('----------------------------------------------------------------------------------------------------------\n');
+    this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
+    this.log(`      1. Launch your local web server via ${chalk.inverse(' npm start ')} (you may also need to trust`);
+    this.log(`         the Self-Signed Certificate for the site, if you haven't done that before)`);
+    this.log(`      2. Sideload the add-in into your Office application.\n`);
+    this.log(`      We have created a resource.html file in your project for more info & resources on these topics.\n`);
+    this.log('----------------------------------------------------------------------------------------------------------\n');
     let askForOpenResourcePage = [
       /** ask to open resource page */
       {

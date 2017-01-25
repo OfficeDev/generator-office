@@ -79,10 +79,6 @@ Browse to the 'External' IP address listed in your console to test your web app 
 
 Refer to the docs on [Add-in manifests](https://dev.office.com/docs/add-ins/overview/add-in-manifests) for information of manifest validation.
 
-## Examples
-
-Refer to the [docs](src/docs) for example executions & output of the generator.
-
 ## Command Line Arguments:
 List of supported arguments. The generator will prompt you accordingly based on the arguments you provided.
 
@@ -97,7 +93,7 @@ The Microsoft Office client application that can host the add-in. The supported 
   - Optional
 
 ### `framework`
-Framework to use for the project. The supported arguments include JQuery (`jquery`), and Angular (`ng`). You can also use Manifest.xml only (`manifest-only`) which will create only the `manifest.xml` for an an Office addin.
+Framework to use for the project. The supported arguments include JQuery (`jquery`), and Angular (`angular`). You can also use Manifest.xml only (`manifest-only`) which will create only the `manifest.xml` for an an Office addin.
   - Type: String
   - Optional
 
@@ -106,7 +102,7 @@ List of supported options. If these are not provided, the generator will prompt 
 
 ### `--skip-install`
 
-After scaffolding the project, the generator (and all sub generators) run all package management install commands such as `npm install` & `bower install`. Specifying `--skip-install` tells the generator to skip this step.
+After scaffolding the project, the generator (and all sub generators) run all package management install commands such as `npm install` & `typings install`. Specifying `--skip-install` tells the generator to skip this step.
 
   - Type: Boolean
   - Default: False
