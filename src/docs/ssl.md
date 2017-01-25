@@ -33,7 +33,7 @@ choose the “Advanced” link, then choose “Proceed to local (unsafe)“.
 
 1. Click and drag the image to your desktop. It looks like a little certificate.
 
-  ![](assets/ssl-get-cert.png)
+  ![](assets/ssl-chorme-getcert.png)
 
 #### Get certificate file from project directory
 
@@ -56,7 +56,7 @@ You can locate the server.crt file at **~/your_yo_office_project/node_modules/br
   
 At this point everything has been configured. Quit Chrome and all other browsers and try again to navigate to the local HTTPS site. The browser should report it as a valid certificate:
 
-  ![](assets/ssl-good.png)
+  ![](assets/ssl-chrome-good.png)
 
 ## Windows
 
