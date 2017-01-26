@@ -12,14 +12,6 @@ Office clients require add-ins and webpages to come from a trusted and secure lo
  
 ## [OS X](https://support.apple.com/kb/PH18677)
 
-### Option #1: Bypassing the error in Chrome
-
-choose the “Advanced” link, then choose “Proceed to local (unsafe)“.
-
-  ![](assets/ssl-chrome-bypass.gif)
-
-### Option #2: Trusting a certificate
-
 #### Get certificate in Chrome
 
 1. Start Chrome and do the following:
@@ -58,14 +50,6 @@ At this point everything has been configured. Quit all browsers, then reopen and
   ![](assets/ssl-chrome-good.png)
 
 ## [Windows](https://technet.microsoft.com/en-us/library/cc754841.aspx)
-
-### Option #1: Simply Proceed using the Edge browser
-
-choose the "Continue to this webpage (not recommended)" link.
-
-  ![](assets/ssl-edge-bypass.gif)
-
-### Option #2: Trusting a certificate
 
 #### Get certificate file from project directory
 
