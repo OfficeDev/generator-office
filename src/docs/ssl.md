@@ -24,7 +24,7 @@ Office clients require add-ins and webpages to come from a trusted and secure lo
 
 1. Click and drag the image to your desktop. It looks like a little certificate.
 
-  ![](assets/ssl-chorme-getcert.png)
+  ![](assets/ssl-chrome-getcert.png)
 
 #### Get certificate file from project directory
 
