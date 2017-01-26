@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
@@ -24,7 +24,7 @@ describe('new project - answers', () => {
   };
   let manifestFileName = projectEscapedName + '-manifest.xml';
 
-	/** Test addin when user chooses jquery and typescript. */
+  /** Test addin when user chooses jquery and typescript. */
   describe('jquery & typescript', () => {
     before((done) => {
       answers.ts = true;
@@ -45,7 +45,7 @@ describe('new project - answers', () => {
         'tsconfig.json',
         'src/app.ts',
         'src/index.html',
-        'typings.json',
+        'resource.html'
       ];
 
       assert.file(expected);
@@ -53,7 +53,7 @@ describe('new project - answers', () => {
     });
   });
 
-	/** Test addin when user chooses jquery and javascript. */
+  /** Test addin when user chooses jquery and javascript. */
   describe('jquery & javascript', () => {
     before((done) => {
       answers.ts = false;
@@ -72,7 +72,8 @@ describe('new project - answers', () => {
         'assets/logo-filled.png',
         'bsconfig.json',
         'app.js',
-        'index.html'
+        'index.html',
+        'resource.html'
       ];
 
       assert.file(expected);
@@ -80,7 +81,7 @@ describe('new project - answers', () => {
     });
   });
 
-	/** Test addin when user chooses angular and typescript. */
+  /** Test addin when user chooses angular and typescript. */
   describe('angular & typescript', () => {
     before((done) => {
       answers.ts = true;
@@ -103,7 +104,7 @@ describe('new project - answers', () => {
         'src/data.service.ts',
         'src/index.controller.ts',
         'src/index.html',
-        'typings.json'
+        'resource.html'
       ];
 
       assert.file(expected);
@@ -111,7 +112,7 @@ describe('new project - answers', () => {
     });
   });
 
-	/** Test addin when user chooses angular and javascript. */
+  /** Test addin when user chooses angular and javascript. */
   describe('angular & javascript', () => {
     before((done) => {
       answers.ts = false;
@@ -132,7 +133,8 @@ describe('new project - answers', () => {
         'app.js',
         'controllers/home.controller.js',
         'index.html',
-        'services/data.service.js'
+        'services/data.service.js',
+        'resource.html'
       ];
 
       assert.file(expected);
@@ -158,8 +160,8 @@ describe('new project - answers & args - jquery & typescript', () => {
   };
   let argument = [];
 
-	/** 
-	 * Test addin when user pass in argument 
+	/**
+	 * Test addin when user pass in argument
 	 * "my-office-add-in"
 	 */
   describe('argument: name', () => {
@@ -188,7 +190,7 @@ describe('new project - answers & args - jquery & typescript', () => {
         'tsconfig.json',
         'src/app.ts',
         'src/index.html',
-        'typings.json',
+        'resource.html'
       ];
 
       assert.file(expected);
@@ -196,8 +198,8 @@ describe('new project - answers & args - jquery & typescript', () => {
     });
   });
 
-	/** 
-	 * Test addin when user pass in argument 
+	/**
+	 * Test addin when user pass in argument
 	 * "my-office-add-in excel"
 	 */
   describe('arguments: name host', () => {
@@ -227,7 +229,7 @@ describe('new project - answers & args - jquery & typescript', () => {
         'tsconfig.json',
         'src/app.ts',
         'src/index.html',
-        'typings.json',
+        'resource.html'
       ];
 
       assert.file(expected);
@@ -235,8 +237,8 @@ describe('new project - answers & args - jquery & typescript', () => {
     });
   });
 
-	/** 
-	 * Test addin when user pass in argument 
+	/**
+	 * Test addin when user pass in argument
 	 * "my-office-add-in excel jquery"
 	 */
   describe('arguments: name host framework', () => {
@@ -266,7 +268,7 @@ describe('new project - answers & args - jquery & typescript', () => {
         'tsconfig.json',
         'src/app.ts',
         'src/index.html',
-        'typings.json',
+        'resource.html'
       ];
 
       assert.file(expected);
@@ -296,7 +298,7 @@ describe('new project - answers & opts - jquery & typescript', () => {
   };
   let manifestFileName = projectEscapedName + '-manifest.xml';
 
-	/** Test addin when user pass in --js. */
+  /** Test addin when user pass in --js. */
   describe('options: --js', () => {
     before((done) => {
       options.js = true;
@@ -318,15 +320,15 @@ describe('new project - answers & opts - jquery & typescript', () => {
         'tsconfig.json',
         'src/app.ts',
         'src/index.html',
-        'typings.json',
+        'resource.html'
       ];
 
       assert.file(expected);
       done();
     });
- });
+  });
 
-	/** Test addin when user pass in --skip-install. */
+  /** Test addin when user pass in --skip-install. */
   describe('options: --skip-install', () => {
     before((done) => {
       options['skip-install'] = true;
@@ -349,7 +351,7 @@ describe('new project - answers & opts - jquery & typescript', () => {
         'tsconfig.json',
         'src/app.ts',
         'src/index.html',
-        'typings.json',
+        'resource.html'
       ];
 
       assert.file(expected);
