@@ -2,16 +2,15 @@
 
 Office clients require add-ins and webpages to come from a trusted and secure location. This generator leverages [Browsersync](https://browsersync.io/) to start a web server, which requires a self-signed certificate. Your workstation will not trust this certificate and thus, the Office client, in which you are running your Office Add-in, will not load your add-in.
 
-To fix this, you need to configure your developer workstation to trust the self-signed certificate. The steps for this differ depending on your developer environment (OSX / Windows / Linux). Use these instructions to trust the certificate:
-
-- OS X: [Apple Support - OS X Yosemite: If your Certificate Isn't Being Accepted](https://support.apple.com/kb/PH18677)
-- Windows: [TechNet - Manage Trusted Root Certificates](https://technet.microsoft.com/en-us/library/cc754841.aspx)
-
-## OS X
-
-When you browse to a site that has an untrusted certificate, the browser will display an error with the certificate:
-
-  ![](assets/ssl-chrome-error.png)
+ When you browse to a site that has an untrusted certificate, the browser will display an error with the certificate:
+  		  
+   ![](assets/ssl-chrome-error.png)
+   
+   ![](assets/ssl-edge-error.png)
+   
+ To fix this, you need to configure your developer workstation to trust the self-signed certificate. The steps for this differ depending on your developer environment (OSX / Windows / Linux). Use these instructions to trust the certificate:
+ 
+## [OS X](https://support.apple.com/kb/PH18677)
 
 ### Option #1: Bypassing the error in Chrome
 
@@ -58,11 +57,7 @@ At this point everything has been configured. Quit all browsers, then reopen and
 
   ![](assets/ssl-chrome-good.png)
 
-## Windows
-
-Using Edge, when you browse to a site that has an untrusted certificate, the browser will display an error with the certificate:
-
-  ![](assets/ssl-edge-error.png)
+## [Windows](https://technet.microsoft.com/en-us/library/cc754841.aspx)
 
 ### Option #1: Simply Proceed using the Edge browser
 
@@ -70,7 +65,7 @@ choose the "Continue to this webpage (not recommended)" link.
 
   ![](assets/ssl-edge-bypass.gif)
 
-### Option #2: Trsting a certificate
+### Option #2: Trusting a certificate
 
 #### Get certificate file from project directory
 

@@ -55,13 +55,11 @@ $ yo office [arguments] [options]
 
 The generator is intended to be run from within a folder where you want the project scaffolding created. This can be in the root of the current folder or within a subfolder.
 
-> Note: Office Add-ins must be hosted, even in development, in a **HTTPS** site. Refer to the section [Running the Generated Site](/OfficeDev/generator-office#running-the-generated-site) below for details.
-
 ## Running the Generated Site
 
-All generators create a `bsconfig.json`. This uses [Browsersync](https://browsersync.io/) to make your tweaking and testing faster by synchronising file changes and interactions across multiple devices. 
-
-Start developing and launch a local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:
+Office Add-ins must be hosted, even in development, in a HTTPS site. Yo Office creates a `bsconfig.json`, which uses [Browsersync](https://browsersync.io/) to make your tweaking and testing faster by synchronizing file changes across multiple devices. 
+  		  
+Start developing and launch a local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:		 +Launch the local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:
 
 ```bash
 $ npm start
