@@ -1,11 +1,5 @@
 # Microsoft Office Project Generator - YO OFFICE!
 
-[![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office)
-[![Downloads](http://img.shields.io/npm/dm/generator-office.svg)](https://npmjs.org/package/generator-office)
-[![TravisCI Build Status](https://travis-ci.org/OfficeDev/generator-office.svg)](https://travis-ci.org/OfficeDev/generator-office)
-[![Dependency Status](https://david-dm.org/officedev/generator-office.svg)](https://david-dm.org/officedev/generator-office)
-[![devDependency Status](https://david-dm.org/officedev/generator-office/dev-status.svg)](https://david-dm.org/officedev/generator-office#info=devDependencies)
-
 [Yeoman](http://yeoman.io) generator for creating Microsoft Office projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
 
 - use an editor other than Visual Studio
