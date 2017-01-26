@@ -1,8 +1,0 @@
-{
-  "globalDependencies": {
-    "office-js": "registry:dt/office-js#0.0.0+20161213215240"
-  },
-  "dependencies": {
-    "angular": "registry:dt/angular#1.5.0+20170103054634"
-  }
-}

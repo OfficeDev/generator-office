@@ -7,8 +7,7 @@
     "tsc": "tsc -p tsconfig.json -w",
     "server": "browser-sync start --config bsconfig.json",
     "copy": "cpx \"src/**/!(*.ts)\" dist --watch",
-    "start": "rimraf dist && concurrently \"npm run tsc\" \"npm run copy\" \"npm run server\"",
-    "postinstall": "typings install"
+    "start": "rimraf dist && concurrently \"npm run tsc\" \"npm run copy\" \"npm run server\""
   },
   "dependencies": {
     "office-ui-fabric-js": "^1.3.0",
@@ -20,6 +19,7 @@
     "rimraf": "^2.5.4",
     "browser-sync": "^2.18.5",
     "typescript": "^2.1.4",
-    "typings": "^2.1.0"
+    "@types/office-js": "^0.0.37",
+    "@types/jquery": "^2.0.39"
   }
 }
