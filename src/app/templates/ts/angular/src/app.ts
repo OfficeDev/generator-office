@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
@@ -20,7 +20,7 @@ declare var angular: any;
 
   // when Office has initalized, manually bootstrap the app
   Office.initialize = function() {
-    angular.bootstrap(document.body, ['officeAddin']);
+    angular.bootstrap(document.body, ['<%= projectInternalName %>']);
   };
 
 })();
