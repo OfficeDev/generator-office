@@ -53,7 +53,7 @@ The generator is intended to be run from within a folder where you want the proj
 
 Office Add-ins must be hosted, even in development, in a HTTPS site. Yo Office creates a `bsconfig.json`, which uses [Browsersync](https://browsersync.io/) to make your tweaking and testing faster by synchronizing file changes across multiple devices. 
   		  
-Start developing and launch a local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:		 +Launch the local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:
+Launch the local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:
 
 ```bash
 $ npm start
