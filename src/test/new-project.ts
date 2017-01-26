@@ -101,8 +101,6 @@ describe('new project - answers', () => {
         'src/assets/logo-filled.png',
         'tsconfig.json',
         'src/app.ts',
-        'src/data.service.ts',
-        'src/index.controller.ts',
         'src/index.html',
         'resource.html'
       ];
@@ -131,9 +129,7 @@ describe('new project - answers', () => {
         'assets/logo-filled.png',
         'bsconfig.json',
         'app.js',
-        'controllers/home.controller.js',
         'index.html',
-        'services/data.service.js',
         'resource.html'
       ];
 
@@ -285,7 +281,7 @@ describe('new project - answers & opts - jquery & typescript', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
-    folder: false,
+    folder: true,
     name: projectDisplayName,
     host: 'excel',
     isManifestOnly: false,
@@ -333,7 +329,6 @@ describe('new project - answers & opts - jquery & typescript', () => {
     before((done) => {
       options['skip-install'] = true;
       answers.ts = true;
-
       helpers.run(path.join(__dirname, '../app')).withOptions(options).withPrompts(answers);
       done();
     });

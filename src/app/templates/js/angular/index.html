@@ -32,7 +32,7 @@
         <img width="90" height="90" src="assets/logo-filled.png" alt="<%= projectDisplayName %>" title="<%= projectDisplayName %>" />
         <h1 class="ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary">Welcome</h1>
     </header>
-    <main class="ms-welcome__main">
+    <main class="ms-welcome__main" ng-controller="HomeController as home">
         <h2 class="ms-font-xl ms-fontWeight-semilight ms-fontColor-neutralPrimary ms-u-slideUpIn20"> Discover what <%= projectDisplayName %> can do for you today! </h2>
         <ul class="ms-List ms-welcome__features ms-u-slideUpIn10">
             <li class="ms-ListItem">
@@ -48,19 +48,21 @@
                 <span class="ms-font-m ms-fontColor-neutralPrimary">Create and visualize like a pro</span>
             </li>
         </ul>
-        <button class="ms-welcome__action ms-Button ms-Button--hero ms-u-slideUpIn20">
-            <span class="ms-Button-label">Get Started!</span>
+        <br />
+        <br />
+        <p class="ms-font-l">Modify the source files, then click <b>Run</b>.</p>
+        <button class="ms-welcome__action ms-Button ms-Button--hero ms-u-slideUpIn20" ng-click="home.run()">
+            <span class="ms-Button-label">Run</span>
             <span class="ms-Button-icon"><i class="ms-Icon ms-Icon--ChevronRight"></i></span>
         </button>
     </main>
 
+    <script type="text/javascript" src="node_modules/core-js/client/core.js"></script>
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="node_modules/angular/angular.js"></script>
     <script type="text/javascript" src="node_modules/office-ui-fabric-js/dist/js/fabric.js"></script>
 
     <script type="text/javascript" src="app.js"></script>
-    <script type="text/javascript" src="services/data.service.js"></script>
-    <script type="text/javascript" src="controllers/home.controller.js"></script>
 </body>
 
 </html>
