@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
@@ -8,6 +8,7 @@ import * as path from 'path';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as _ from 'lodash';
+import * as opn from 'opn';
 
 let uuid = require('uuid/v4');
 let yosay = require('yosay');
@@ -61,7 +62,7 @@ module.exports = yo.extend({
         name: 'folder',
         message: 'Would you like to create a new subfolder for your project?',
         type: 'confirm',
-        default: false
+        default: true
       },
 
       /** name for the project */
@@ -86,17 +87,17 @@ module.exports = yo.extend({
       /** set flag for manifest-only to prompt accordingly later */
       {
         name: 'isManifestOnly',
-        message: 'Would you like to create ONLY a manifest file?',
+        message: 'Would you like to create a new project?',
         type: 'list',
         default: false,
         choices: [
           {
-            name: 'Yes, I only need manifest file.',
-            value: true
+            name: 'Yes, I want a new project.',
+            value: false
           },
           {
-            name: 'No, I want a brand new project.',
-            value: false
+            name: 'No, I only need the manifest file.',
+            value: true
           }
         ],
         when: this.options.framework == null
@@ -230,7 +231,9 @@ module.exports = yo.extend({
       });
     }
     else {
-      this._postInstallHints();
+      if (this.project.framework !== 'manifest-only') {
+        this._postInstallHints();
+      }
     }
   },
 
@@ -254,7 +257,7 @@ module.exports = yo.extend({
     ];
     let openResourcePageAnswers = await this.prompt(askForOpenResourcePage); // trigger prompts and store user input
     if (openResourcePageAnswers.open === true) {
-      this.spawnCommand('open', ['resource.html']);
+      opn('resource.html');
     }
   }
 } as any);
