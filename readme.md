@@ -16,7 +16,7 @@ Like other Yeoman generators, this simply creates the scaffolding of files for y
 
 Choose to create the Office projects using plain HTML, CSS & JavaScript (*mirroring the same projects that Visual Studio creates*) or create Angular-based projects.
 
-If you are interested in contributing, read the the [Contributing Guidelines](CONTRIBUTING.md). 
+If you are interested in contributing, read the [Contributing Guidelines](CONTRIBUTING.md). 
 
 ## YO Office Demo (screenshot & video)
 ![](src/docs/assets/generatoroffice.png)
@@ -38,7 +38,7 @@ Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requi
 In the v1.0.0 release we added TypeScript type definitions for autocompletion / IntelliSense... for this you also need to install typings.
 
 ```bash
-$ npm install -g typings yo generator-office@1.0.0-beta.1
+$ npm install -g yo generator-office@1.0.0-beta.1
 ```
 
 ## Usage
@@ -59,7 +59,7 @@ Launch the local HTTPS site on `https://localhost:3000` by simply typing the fol
 $ npm start
 ```
 
-Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc [Adding Self-Signed Certificates as Tusted Root Certificate](src/docs/ssl.md) for instructions on how to do this.
+Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md) for instructions on how to do this.
 
 Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
 
@@ -81,7 +81,7 @@ The Microsoft Office client application that can host the add-in. The supported 
   - Optional
 
 ### `framework`
-Framework to use for the project. The supported arguments include JQuery (`jquery`), and Angular (`angular`). You can also use Manifest.xml only (`manifest-only`) which will create only the `manifest.xml` for an an Office addin.
+Framework to use for the project. The supported arguments include JQuery (`jquery`), and Angular (`angular`). You can also use Manifest Only (`manifest-only`) which will create only the `manifest.xml` for an Office Add-in.
   - Type: String
   - Optional
 
@@ -98,7 +98,7 @@ After scaffolding the project, the generator (and all sub generators) run all pa
 
 ### `--js`
 
-Specifying `--js` tells the generator to use Javascript.
+Specifying `--js` tells the generator to use JavaScript.
 
   - Type: Boolean
   - Default: False
