@@ -1,3 +1,7 @@
+***
+It’s been a long time coming, but generator-office 1.0 will finally be available on February 8th.  If you have forked this repository and have your own working branch, we highly encourage you to check the changes before you migrate to the new version. The new generator will be updated to depend on the latest yeoman generator, which will introduce breaking changes in the way you compose generators and the way you handle options and arguments passed to your generator. We also changed the structure of the generator quite significantly to make it easier for contributors. If you are simply using generator-office to create add-in projects, we expect the update process to be relatively painless.
+***
+
 # Microsoft Office Project Generator - YO OFFICE!
 
 [![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office)
@@ -7,7 +11,6 @@
 [![Coverage Status](https://coveralls.io/repos/OfficeDev/generator-office/badge.svg?branch=master&service=github)](https://coveralls.io/github/OfficeDev/generator-office?branch=master)
 [![Dependency Status](https://david-dm.org/officedev/generator-office.svg)](https://david-dm.org/officedev/generator-office)
 [![devDependency Status](https://david-dm.org/officedev/generator-office/dev-status.svg)](https://david-dm.org/officedev/generator-office#info=devDependencies)
-[![Slack Network](https://officedevslack.azurewebsites.net/badge.svg)](https://officedevslack.azurewebsites.net/)
 
 [Yeoman](http://yeoman.io) generator for creating Microsoft Office projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
 
