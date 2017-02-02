@@ -27,11 +27,7 @@ If you are interested in contributing, read the [Contributing Guidelines](CONTRI
 
 ## Install
 
-> **Wait!** 
-
-> Is this the first time you're using Yeoman or installing a Yeoman generator? When working with Yeoman there are a few common prerequisites. Ensure you already have a copy of the popular source control solution [Git](https://git-scm.com/download) installed.
-
-> If you don't have git installed, once you install it we recommend you restart your console (or if on Windows, restart your machine) as system environment variables are set/updated during this installation.
+> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, ensure you install [Git](https://git-scm.com/download). When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
 
 Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org). 
 
