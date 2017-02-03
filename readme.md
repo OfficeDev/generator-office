@@ -27,14 +27,12 @@ If you are interested in contributing, read the [Contributing Guidelines](CONTRI
 
 ## Install
 
-> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, ensure you install [Git](https://git-scm.com/download). When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
+> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, first install [Git](https://git-scm.com/download) and [npm](https://nodejs.org). When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
 
-Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org). 
-
-In the v1.0.0 release we added TypeScript type definitions for autocompletion / IntelliSense... for this you also need to install typings.
+Install `yo` (Yeoman) and `generator-office` globally using NPM. 
 
 ```bash
-$ npm install -g typings yo generator-office@1.0.0-beta.1
+$ npm install -g yo generator-office@1.0.0-beta.1
 ```
 
 ## Usage
