@@ -34,7 +34,7 @@ Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requi
 In the v1.0.0 release we added TypeScript type definitions for autocompletion / IntelliSense... for this you also need to install typings.
 
 ```bash
-$ npm install -g yo generator-office@1.0.0-beta.1
+$ npm install -g typings yo generator-office@1.0.0-beta.1
 ```
 
 ## Usage

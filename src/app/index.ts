@@ -8,8 +8,8 @@ import * as path from 'path';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as _ from 'lodash';
-import * as opn from 'opn';
 
+let opn = require('opn');
 let uuid = require('uuid/v4');
 let yosay = require('yosay');
 let yo = require('yeoman-generator');
