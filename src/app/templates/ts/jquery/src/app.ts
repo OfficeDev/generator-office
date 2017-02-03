@@ -12,7 +12,7 @@
   };
 
   async function run() {
-    await <%= hostDisplayName %>.run(async (context) => {
+    await <%= host %>.run(async (context) => {
       /**
        * Insert your <%= host %> code here
        */

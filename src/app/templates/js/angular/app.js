@@ -26,7 +26,7 @@
     console.log(this.title + ' is ready!');
 
     this.run = function () {
-      return <%= hostDisplayName %>.run(function (context) {
+      return <%= host %>.run(function (context) {
         /**
          * Insert your <%= host %> code here
          */

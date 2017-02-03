@@ -15,7 +15,7 @@
   };
 
   function run() {
-    return <%= hostDisplayName %>.run(function (context) {
+    return <%= host %>.run(function (context) {
       /**
        * Insert your <%= host %> code here
        */

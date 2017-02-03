@@ -24,7 +24,7 @@
     console.log(`${this.title} is ready!`);
 
     this.run = async () => {
-      await <%= hostDisplayName %>.run(async (context) => {
+      await <%= host %>.run(async (context) => {
         /**
          * Insert your <%= host %> code here
          */
