@@ -56,13 +56,23 @@ module.exports = yo.extend({
     let tsTemplates = getDirectories(this.templatePath('ts'));
     let manifests = getFiles(this.templatePath('manifest')).map(manifest => manifest.replace('.xml', ''));
 
+    /** configuring arguments to follow file naming convention. 
+     *  work around for PowerPoint and OneNote
+     */
+    if (_.toLower(this.options.host) === 'powerpoint') {
+      this.options.host = 'power-point';
+    }
+    if (_.toLower(this.options.host) === 'onenote') {
+      this.options.host = 'one-note';
+    }
+
     let askForBasic = [
       /** whether to create a new folder for the project */
       {
         name: 'folder',
         message: 'Would you like to create a new subfolder for your project?',
         type: 'confirm',
-        default: true
+        default: false
       },
 
       /** name for the project */
@@ -79,8 +89,8 @@ module.exports = yo.extend({
         name: 'host',
         message: 'Which Office client application would you like to support?',
         type: 'list',
-        default: 'excel',
-        choices: manifests.map(manifest => ({ name: _.capitalize(manifest), value: manifest })),
+        default: 'Excel',
+        choices: manifests.map(manifest => ({ name: _.replace(_.startCase(manifest), ' ', ''), value: manifest })),
         when: this.options.host == null
       },
 
@@ -181,7 +191,7 @@ module.exports = yo.extend({
   configuring: function () {
     this.project.projectInternalName = _.kebabCase(this.project.name);
     this.project.projectDisplayName = _.capitalize(this.project.name);
-    this.project.hostDisplayName = _.capitalize(this.project.host);
+    this.project.hostDisplayName = _.replace(_.startCase(this.project.host), ' ', '');
     this.project.projectId = uuid();
     if (this.project.folder) {
       this.destinationRoot(this.project.projectInternalName);
