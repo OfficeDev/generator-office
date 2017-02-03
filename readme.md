@@ -19,7 +19,7 @@ Choose to create the Office projects using plain HTML, CSS & JavaScript (*mirror
 If you are interested in contributing, read the [Contributing Guidelines](CONTRIBUTING.md). 
 
 ## YO Office Demo (screenshot & video)
-![](src/docs/assets/generatoroffice.png)
+![](src/docs/assets/getting-started.png)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/78b18BLVosM" frameborder="0" allowfullscreen></iframe>
 
