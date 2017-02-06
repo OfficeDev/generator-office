@@ -13,8 +13,8 @@ let opn = require('opn');
 let uuid = require('uuid/v4');
 let yosay = require('yosay');
 let yo = require('yeoman-generator');
-let insight = appInsights.getClient('c448bdfb-520d-4ecb-be25-7b7578118025');
-//68a8ef35-112c-4d33-a118-3c346947f2fe
+let insight = appInsights.getClient('68a8ef35-112c-4d33-a118-3c346947f2fe');
+
 module.exports = yo.extend({
   /**
    * Setup the generator
@@ -57,16 +57,6 @@ module.exports = yo.extend({
     let manifests = getFiles(this.templatePath('manifest')).map(manifest => _.capitalize(manifest.replace('.xml', '')));
     updateHostNames(manifests, 'Onenote', 'OneNote');
     updateHostNames(manifests, 'Powerpoint', 'PowerPoint');
-
-    /** configuring arguments to follow file naming convention. 
-     *  work around for PowerPoint and OneNote
-     */
-    if (_.toLower(this.options.host) === 'powerpoint') {
-      this.options.host = 'power-point';
-    }
-    if (_.toLower(this.options.host) === 'onenote') {
-      this.options.host = 'one-note';
-    }
 
     /** begin prompting */
     /** whether to create a new folder for the project */
@@ -139,7 +129,7 @@ module.exports = yo.extend({
       name: this.options.name || answerForName.name,
       host: this.options.host || answerForHost.host,
       framework: this.options.framework || null,
-      isManifestOnly: answerForManifestOnly.isManifestOnly || null
+      isManifestOnly: answerForManifestOnly.isManifestOnly
     };
     if (answerForManifestOnly.isManifestOnly) {
       this.project.framework = 'manifest-only';
@@ -206,7 +196,16 @@ module.exports = yo.extend({
       this.project.framework = answerForFramework.framework;
     }
 
-    insight.trackEvent('Folder', { Folder: this.project.folder }, { durationForFolder });
+    /** appInsights logging */
+    insight.trackEvent('Folder', { CreatedSubFolder: this.project.folder.toString() }, { durationForFolder });
+    insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
+    insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });
+    insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { durationForManifestOnly });
+
+    if (this.project.isManifestOnly === false) {
+      insight.trackEvent('IsTs', { IsTs: this.project.ts.toString() }, { durationForTs });
+      insight.trackEvent('Framework', { Framework: this.project.framework }, { durationForFramework });
+    }
 },
 
   /**
@@ -288,7 +287,7 @@ module.exports = yo.extend({
         default: true
       }
     ];
-    let openResourcePageAnswers = await this.prompt(askForOpenResourcePage); // trigger prompts and store user input
+    let openResourcePageAnswers = await this.prompt(askForOpenResourcePage);
     if (openResourcePageAnswers.open === true) {
       opn('resource.html');
     }
