@@ -13,8 +13,7 @@
     "tsc-watch": "tsc -p tsconfig.json -w",
     "start": "rimraf generators && concurrently \"npm run tsc-watch\" \"npm run copy-watch\"",
     "build": "rimraf generators && concurrently \"npm run tsc\" \"npm run copy\"",
-    "test": "mocha -r ts-node/register generators/test/**.js",
-    "postinstall": "typings install"
+    "test": "mocha -r ts-node/register generators/test/**.js"
   },
   "engines": {
     "node": ">6.9.0"
@@ -54,8 +53,12 @@
     "mocha": "^3.2.0",
     "ts-node": "^2.0.0",
     "typescript": "^2.1.4",
-    "typings": "^2.0.0",
     "yeoman-assert": "^2.2.2",
-    "yeoman-test": "^1.6.0"
+    "yeoman-test": "^1.6.0",
+    "@types/applicationinsights": "^0.15.33",
+    "@types/chalk": "^0.4.31",
+    "@types/lodash": "^4.14.52",
+    "@types/mocha": "^2.2.39",
+    "@types/node": "^7.0.5"
   }
 }
