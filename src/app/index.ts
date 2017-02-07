@@ -134,8 +134,12 @@ module.exports = yo.extend({
     if (answerForManifestOnly.isManifestOnly) {
       this.project.framework = 'manifest-only';
     }
-    if (this.options.framework === 'manifest-only') {
-      this.project.isManifestOnly = true;
+    if (this.options.framework != null) {
+      if (this.options.framework === 'manifest-only') {
+        this.project.isManifestOnly = true;
+      } else {
+        this.project.isManifestOnly = false;
+      }
     }
 
     /** askForTs and askForFramework will only be triggered if it's not a manifest-only project */
