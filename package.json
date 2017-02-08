@@ -1,6 +1,6 @@
 {
   "name": "generator-office",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0",
   "description": "Yeoman generator for creating Microsoft Office projects using any text editor.",
   "repository": {
     "type": "git",
