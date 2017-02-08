@@ -5,7 +5,7 @@
 - use an editor other than Visual Studio
 - are interested in using a technology other than plain HTML, CSS & JavaScript
 
-Like other Yeoman generators, this simply creates the scaffolding of files for your Office project. It allows you to create Add-ins for:
+Like other Yeoman generators, this simply creates the scaffolding of files for your Office project. It allows you to create add-ins for:
 
 - Excel
 - OneNote
@@ -18,7 +18,7 @@ Choose to create the Office projects using plain HTML, CSS & JavaScript (*mirror
 
 If you are interested in contributing, read the [Contributing Guidelines](CONTRIBUTING.md). 
 
-## YO Office Demo (screenshot & video)
+## Yo Office Demo (screenshot & video)
 ![](src/docs/assets/gettingstarted-slow.gif)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/78b18BLVosM" frameborder="0" allowfullscreen></iframe>
@@ -27,12 +27,12 @@ If you are interested in contributing, read the [Contributing Guidelines](CONTRI
 
 ## Install
 
-> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, first install [Git](https://git-scm.com/download) and [npm](https://nodejs.org). When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
+> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, first install [Git](https://git-scm.com/download) and [Node.js](https://nodejs.org). For developers on Mac, we recommend using [Node Version Manager](https://github.com/creationix/nvm) to install Node.js with the right permissions. When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
 
 Install `yo` (Yeoman) and `generator-office` globally using NPM.
 
 ```bash
-$ npm install -g yo generator-office@1.0.0-beta.1
+$ npm install -g yo generator-office
 ```
 
 ## Usage
@@ -53,7 +53,7 @@ Launch the local HTTPS site on `https://localhost:3000` by simply typing the fol
 $ npm start
 ```
 
-Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md) for instructions on how to do this.
+Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc, [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md), for instructions on how to do this.
 
 Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
 
@@ -61,7 +61,7 @@ Browse to the 'External' IP address listed in your console to test your web app 
 
 ## Validate manifest.xml
 
-Refer to the docs on [Add-in manifests](https://dev.office.com/docs/add-ins/overview/add-in-manifests) for information of manifest validation.
+Refer to the docs on [add-in manifests](https://dev.office.com/docs/add-ins/overview/add-in-manifests) for information on manifest validation.
 
 ## Command Line Arguments:
 List of supported arguments. The generator will prompt you accordingly based on the arguments you provided.
@@ -70,6 +70,8 @@ List of supported arguments. The generator will prompt you accordingly based on 
 Title of the project - this is the display name that is written the manifest.xml file.
   - Type: String
   - Optional
+ 
+>**Note:** The Windows command prompt requires this argument to be in quotes (e.g. "My Office Add-in")
 
 ### `host`
 The Microsoft Office client application that can host the add-in. The supported arguments include Excel (`excel`), OneNote (`onenote`), Outlook (`outlook`), PowerPoint (`powerpoint`), Project (`project`), and Word (`word`).
