@@ -214,9 +214,6 @@ module.exports = yo.extend({
     let answerForOpenResourcePage = await this.prompt(askForOpenResourcePage);
     let endForResourcePage = (new Date()).getTime();
     let durationForResourcePage = (endForResourcePage - startForResourcePage) / 1000;
-    if (answerForOpenResourcePage.open === true) {
-      opn('resource.html');
-    }
     this.project.isResourcePageOpened = answerForOpenResourcePage.open;
 
     /** appInsights logging */
@@ -281,6 +278,9 @@ module.exports = yo.extend({
   },
 
   install: function () {
+    if (this.project.isResourcePageOpened) {
+      opn(`resource.html`);
+    }
     if (!this.options['skip-install'] && this.project.framework !== 'manifest-only') {
       this.installDependencies({
         npm: true,
