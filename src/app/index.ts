@@ -102,12 +102,12 @@ module.exports = yo.extend({
     let startForManifestOnly = (new Date()).getTime();
     let askForManifestOnly = [{
       name: 'isManifestOnly',
-      message: 'Would you like to create a new project?',
+      message: 'Would you like to create a new add-in?',
       type: 'list',
       default: false,
       choices: [
         {
-          name: 'Yes, I want a new project.',
+          name: 'Yes, I want a new add-in.',
           value: false
         },
         {
@@ -200,11 +200,31 @@ module.exports = yo.extend({
       this.project.framework = answerForFramework.framework;
     }
 
+    let startForResourcePage = (new Date()).getTime();
+    this.log('We have created a resource.html file in your project for more info & resources on these topics.');
+    let askForOpenResourcePage = [
+      /** ask to open resource page */
+      {
+        name: 'open',
+        type: 'confirm',
+        message: 'Would you like to open it now while we finish creating your project?',
+        default: true
+      }
+    ];
+    let answerForOpenResourcePage = await this.prompt(askForOpenResourcePage);
+    let endForResourcePage = (new Date()).getTime();
+    let durationForResourcePage = (endForResourcePage - startForResourcePage) / 1000;
+    if (answerForOpenResourcePage.open === true) {
+      opn('resource.html');
+    }
+    this.project.isResourcePageOpened = answerForOpenResourcePage.open;
+
     /** appInsights logging */
     insight.trackEvent('Folder', { CreatedSubFolder: this.project.folder.toString() }, { durationForFolder });
     insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
     insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });
     insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { durationForManifestOnly });
+    insight.trackEvent('IsResourcePageOpened', { IsResourcePageOpened: this.project.isResourcePageOpened.toString() }, { durationForResourcePage });
 
     if (this.project.isManifestOnly === false) {
       insight.trackEvent('IsTs', { IsTs: this.project.ts.toString() }, { durationForTs });
@@ -273,28 +293,14 @@ module.exports = yo.extend({
     }
   },
 
-  _postInstallHints: async function () {
+  _postInstallHints: function () {
     /** Next steps and npm commands */
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
     this.log(`      1. Launch your local web server via ${chalk.inverse(' npm start ')} (you may also need to trust`);
     this.log(`         the Self-Signed Certificate for the site, if you haven't done that before)`);
     this.log(`      2. Sideload the add-in into your Office application.\n`);
-    this.log(`      We have created a resource.html file in your project for more info & resources on these topics.\n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
-    let askForOpenResourcePage = [
-      /** ask to open resource page */
-      {
-        name: 'open',
-        type: 'confirm',
-        message: 'Would you like to open resource.html file now?',
-        default: true
-      }
-    ];
-    let openResourcePageAnswers = await this.prompt(askForOpenResourcePage);
-    if (openResourcePageAnswers.open === true) {
-      opn('resource.html');
-    }
   }
 } as any);
 
