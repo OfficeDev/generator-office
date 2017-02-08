@@ -57,7 +57,7 @@ You can locate the server.crt file at **~/your_yo_office_project/node_modules/br
 
 #### Add certification file to Key Chain Access
 
-1. Click **Start**, go to **Search box**, type **mmc**, and then press **ENTER**.
+1. Click **Start**, go to **Search box**, type **run**, then type **mmc** in the input field, and then press **ENTER**.
 1. On the **File** menu, click **Add/Remove Snap-in**.
 
   ![](assets/ssl-windows-01.png)

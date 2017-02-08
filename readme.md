@@ -19,7 +19,7 @@ Choose to create the Office projects using plain HTML, CSS & JavaScript (*mirror
 If you are interested in contributing, read the [Contributing Guidelines](CONTRIBUTING.md). 
 
 ## YO Office Demo (screenshot & video)
-![](src/docs/assets/getting-started.png)
+![](src/docs/assets/gettingstarted.gif)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/78b18BLVosM" frameborder="0" allowfullscreen></iframe>
 
@@ -27,14 +27,12 @@ If you are interested in contributing, read the [Contributing Guidelines](CONTRI
 
 ## Install
 
-> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, ensure you install [Git](https://git-scm.com/download). When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
+> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, first install [Git](https://git-scm.com/download) and [npm](https://nodejs.org). When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
 
-Install `yo` (Yeoman) and `generator-office` globally using NPM (this also requires [Node.js](https://nodejs.org). 
-
-In the v1.0.0 release we added TypeScript type definitions for autocompletion / IntelliSense... for this you also need to install typings.
+Install `yo` (Yeoman) and `generator-office` globally using NPM.
 
 ```bash
-$ npm install -g typings yo generator-office@1.0.0-beta.1
+$ npm install -g yo generator-office@1.0.0-beta.1
 ```
 
 ## Usage
@@ -58,6 +56,8 @@ $ npm start
 Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md) for instructions on how to do this.
 
 Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
+
+![](src/docs/assets/browsersync.gif)
 
 ## Validate manifest.xml
 

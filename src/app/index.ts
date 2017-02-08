@@ -201,7 +201,7 @@ module.exports = yo.extend({
     }
 
     let startForResourcePage = (new Date()).getTime();
-    this.log('We have created a resource.html file in your project for more info & resources on these topics.');
+    this.log('\nFor more information and resources on your next steps, we have created a resource.html file in your project.');
     let askForOpenResourcePage = [
       /** ask to open resource page */
       {
@@ -239,6 +239,8 @@ module.exports = yo.extend({
     this.project.projectInternalName = _.kebabCase(this.project.name);
     this.project.projectDisplayName = _.capitalize(this.project.name);
     this.project.projectId = uuid();
+    this.project.hostInternalName = _.toLower(this.project.host).replace(' ', '');
+
     if (this.project.folder) {
       this.destinationRoot(this.project.projectInternalName);
     }
@@ -252,7 +254,7 @@ module.exports = yo.extend({
 
       /** Show type of project creating in progress */
       if (this.project.framework !== 'manifest-only') {
-        this.log('----------------------------------------------------------------------------------\n');
+        this.log('\n----------------------------------------------------------------------------------\n');
         this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
         this.log('----------------------------------------------------------------------------------\n\n');
       }
