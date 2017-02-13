@@ -234,9 +234,9 @@ module.exports = yo.extend({
    */
   configuring: function () {
     this.project.projectInternalName = _.kebabCase(this.project.name);
-    this.project.projectDisplayName = _.capitalize(this.project.name);
+    this.project.projectDisplayName = this.project.name;
     this.project.projectId = uuid();
-    this.project.hostInternalName = _.toLower(this.project.host).replace(' ', '');
+    this.project.hostInternalName = _.toLower(this.project.host);
 
     if (this.project.folder) {
       this.destinationRoot(this.project.projectInternalName);
@@ -262,7 +262,7 @@ module.exports = yo.extend({
       }
 
       /** Copy the manifest */
-      this.fs.copyTpl(this.templatePath(`manifest/${this.project.host}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), this.project);
+      this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), this.project);
 
       if (this.project.framework === 'manifest-only') {
         this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), this.project);
