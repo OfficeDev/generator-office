@@ -20,7 +20,8 @@ describe('new project - answers', () => {
     host: 'excel',
     isManifestOnly: false,
     ts: null,
-    framework: null
+    framework: null,
+    open: false
   };
   let manifestFileName = projectEscapedName + '-manifest.xml';
 
@@ -29,7 +30,9 @@ describe('new project - answers', () => {
     before((done) => {
       answers.ts = true;
       answers.framework = 'jquery';
-      helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
+      helpers.run(path.join(__dirname, '../app'))
+        .withPrompts(answers)
+        .on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -58,7 +61,9 @@ describe('new project - answers', () => {
     before((done) => {
       answers.ts = false;
       answers.framework = 'jquery';
-      helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
+      helpers.run(path.join(__dirname, '../app'))
+        .withPrompts(answers)
+        .on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -86,7 +91,9 @@ describe('new project - answers', () => {
     before((done) => {
       answers.ts = true;
       answers.framework = 'angular';
-      helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
+      helpers.run(path.join(__dirname, '../app'))
+        .withPrompts(answers)
+        .on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -115,7 +122,9 @@ describe('new project - answers', () => {
     before((done) => {
       answers.ts = false;
       answers.framework = 'angular';
-      helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
+      helpers.run(path.join(__dirname, '../app'))
+        .withPrompts(answers)
+        .on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -152,7 +161,8 @@ describe('new project - answers & args - jquery & typescript', () => {
     host: null,
     isManifestOnly: false,
     ts: true,
-    framework: null
+    framework: null,
+    open: false
   };
   let argument = [];
 
@@ -166,7 +176,10 @@ describe('new project - answers & args - jquery & typescript', () => {
       answers.framework = 'jquery';
       argument[0] = projectEscapedName;
 
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
+      helpers.run(path.join(__dirname, '../app'))
+        .withArguments(argument)
+        .withPrompts(answers)
+        .on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -204,8 +217,10 @@ describe('new project - answers & args - jquery & typescript', () => {
       argument[0] = projectEscapedName;
       argument[1] = 'excel';
 
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers);
-      done();
+      helpers.run(path.join(__dirname, '../app'))
+        .withArguments(argument)
+        .withPrompts(answers)
+        .on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -243,8 +258,10 @@ describe('new project - answers & args - jquery & typescript', () => {
       argument[1] = 'excel';
       argument[2] = 'jquery';
 
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers);
-      done();
+      helpers.run(path.join(__dirname, '../app'))
+        .withArguments(argument)
+        .withPrompts(answers)
+        .on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -281,26 +298,24 @@ describe('new project - answers & opts - jquery & typescript', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
-    folder: true,
+    folder: false,
     name: projectDisplayName,
     host: 'excel',
     isManifestOnly: false,
     ts: null,
-    framework: 'jquery'
+    framework: 'jquery',
+    open: false
   };
-  let options = {
-    'skip-install': null,
-    js: null
-  };
+
   let manifestFileName = projectEscapedName + '-manifest.xml';
 
   /** Test addin when user pass in --js. */
   describe('options: --js', () => {
     before((done) => {
-      options.js = true;
-
-      helpers.run(path.join(__dirname, '../app')).withOptions(options).withPrompts(answers);
-      done();
+      helpers.run(path.join(__dirname, '../app'))
+        .withOptions({ js: true })
+        .withPrompts(answers)
+        .on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -308,14 +323,13 @@ describe('new project - answers & opts - jquery & typescript', () => {
         manifestFileName,
         'package.json',
         'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
+        'app.css',
+        'assets/icon-16.png',
+        'assets/icon-32.png',
+        'assets/icon-80.png',
+        'assets/logo-filled.png',
+        'app.js',
+        'index.html',
         'resource.html'
       ];
 
@@ -327,10 +341,11 @@ describe('new project - answers & opts - jquery & typescript', () => {
   /** Test addin when user pass in --skip-install. */
   describe('options: --skip-install', () => {
     before((done) => {
-      options['skip-install'] = true;
       answers.ts = true;
-      helpers.run(path.join(__dirname, '../app')).withOptions(options).withPrompts(answers);
-      done();
+      helpers.run(path.join(__dirname, '../app'))
+        .withOptions({ 'skip-install': true })
+        .withPrompts(answers)
+        .on('end', done);
     });
 
     it('creates expected files', (done) => {

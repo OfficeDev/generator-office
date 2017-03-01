@@ -20,7 +20,8 @@ describe('manifest-only project - answers', () => {
     host: 'excel',
     isManifestOnly: true,
     ts: null,
-    framework: null
+    framework: null,
+    open: false
   };
   let manifestFileName = projectEscapedName + '-manifest.xml';
 
@@ -59,7 +60,8 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
     host: null,
     isManifestOnly: null,
     ts: null,
-    framework: null
+    framework: null,
+    open: false
   };
   let argument = [];
 
