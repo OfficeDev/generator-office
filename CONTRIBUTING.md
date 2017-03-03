@@ -71,13 +71,13 @@ Limit each branch to a single module to streamline the workflow and reduce the c
 * Code fixes in sample starter or completed projects
 * Spelling and grammar edits on a hands on lab
 
-##### Create a new branch
+#### Create a new branch
 1. Open GitBash.
 1. Type `git pull upstream master:<new_branch_name>` at the prompt. This creates a new branch locally that's copied from the latest OfficeDev master branch. **Note**: For internal contributors, replace `master` in the command with the branch for the publishing date you're targeting.
 1. Type `git push origin <new_branch_name>` at the prompt. This will alert GitHub to the new branch. You should now see the new branch in your fork of the repository on GitHub.
 1. Type `git checkout <new_branch_name>` to switch to your new branch.
 
-##### Add new content or edit existing content
+#### Add new content or edit existing content
 Navigate to the repository on your computer. On a Windows PC, the repository files are in `C:\Users\<yourusername>\<repo_name>`.
 Use the IDE of your choice to modify and build the library. Once you have completed your change, commented your code, and test, check the code into the remote branch on GitHub.
 
@@ -88,7 +88,7 @@ Be sure to satisfy all of the requirements in the following list before submitti
 Keep the size of your code change reasonable. If the repository owner cannot review your code change in 4 hours or less, your pull request may not be reviewed and approved quickly.
 * Avoid unnecessary changes to cloned or forked code. The reviewer will use a tool to find the differences between your code and the original code. Whitespace changes are called out along with your code. Be sure your changes will help improve the content.
 
-##### Push your code to the remote GitHub branch
+#### Push your code to the remote GitHub branch
 The files in `C:\Users\<yourusername>\<repo_name>` are a working copy of the new branch that you created in your local repository. Changing anything in this folder doesn't affect the local repository until you commit a change. To commit a change to the local repository, type the following commands in GitBash:
 ```
 git add .
@@ -100,7 +100,7 @@ The `commit` command applies the staged changes to the repository. The switch `-
 
 You can commit multiple times while you are doing your work, or you can commit once when you're done.
 
-##### Submit a pull request to the main repository
+#### Submit a pull request to the main repository
 
 When you're finished with your work and are ready to have it merged into the central repository, follow these steps.
 
@@ -114,7 +114,7 @@ When you're finished with your work and are ready to have it merged into the cen
 
 One of the site administrators will now process your pull request. Your pull request will surface on the `OfficeDev/<repo_name>` site under Issues. When the pull request is accepted, the issue will be resolved.
 
-##### Create a new branch after merging
+#### Create a new branch after merging
 After a branch is successfully merged (i.e., your pull request is accepted), don't continue working in the local branch that was successfully merged upstream. This can lead to merge conflicts if you submit another pull request. Instead, if you want to do another update, create a new local branch from the successfully merged upstream branch.
 
 For example, suppose your local branch X was successfully merged into the OfficeDev/generator-office master branch and you want to make additional updates to the content that was merged. Create a new local branch, X2, from the OfficeDev/generator-office master branch. To do this, open GitBash and execute the following commands:
@@ -129,7 +129,7 @@ git checkout X2
 ```
 ...and verifying the code. (The `checkout` command updates the files in `C:\Users\<yourusername>\generator-office` to the current state of the X2 branch.) Once you check out the new branch, you can make updates to the code and commit them as usual. However, to avoid working in the merged branch (X) by mistake, it's best to delete it (see the following **Delete a branch** section).
 
-##### Delete a branch
+#### Delete a branch
 Once your changes are successfully merged into the central repository, you can delete the branch you used because you no longer need it. Any additional work requires a new branch.
 
 To delete your branch follow these steps:
