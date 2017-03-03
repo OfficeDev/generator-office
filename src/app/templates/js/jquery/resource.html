@@ -53,6 +53,28 @@ npm start</pre>
             </article>
             <article class="slide">
                 <h1>Sideloading</h1>
+                <% if (host === 'Outlook') { %>
+                <%# Outlook-specific steps go here %>
+                <p>Load the add-in into <%= host %>. The easiest way to do this is by sideloading the add-in using the in-client Office Store UI.</p>
+                
+                <pre>1. Open the Office Store, either in Outlook 2016 for Windows or Outlook on the web:
+
+&nbsp;&nbsp;&nbsp;&nbsp;- In Outlook 2016 for Windows, choose the <b>Store</b> button on the <b>Home</b> tab.
+
+&nbsp;&nbsp;&nbsp;&nbsp;- In Outlook on the web, choose the gear icon in the upper-right corner, then choose <b>Manage integrations</b>.
+
+2. Click the text <b>Click here to add a custom add-in.</b>
+
+3. Choose <b>Add from file...</b>.
+
+4. Browse to and select the <%= projectInternalName %>-manifest.xml file from the root of the project folder, and then choose <b>Open</b>.
+
+5. Review the warning prompt and choose <b>Install</b>.
+
+6. Close the Office Store window. Your add-in will load in <a target="_blank" href="https://office.live.com/start/Outlook.aspx?auth=2&nf=1">Outlook</a>.
+</pre>
+                <% } else { %>
+                <%# Other Office apps steps go here %>
                 <p>Load the add-in into <%= host %>. The easiest way to do this is by sideloading the add-in in <%= host %> Online:
                 </p>
 
@@ -71,6 +93,7 @@ npm start</pre>
                 <p>If you would like to sideload your add-in into the <%= host %> desktop client, see our documentation for <a target="_blank"
                         href="https://dev.office.com/docs/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins">sideloading
                     on Windows</a> or <a target="_blank" href="https://dev.office.com/docs/add-ins/testing/sideload-an-office-add-in-on-ipad-and-mac">sideloading on iPad and Mac</a>.</p>
+                <% } %>
             </article>
             <article class="slide">
                 <section class="text">
