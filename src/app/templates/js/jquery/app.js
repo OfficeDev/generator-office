@@ -15,12 +15,19 @@
   };
 
   function run() {
+    <% if (host === 'Outlook') { %>
+    <%# Outlook doesn't expose Outlook.run(), so don't put that in %>
+    /**
+     * Insert your <%= host %> code here
+     */
+    <% } else { %>
     return <%= host %>.run(function (context) {
       /**
        * Insert your <%= host %> code here
        */
       return context.sync();
     });
+    <% } %>
   }
 
 })();
