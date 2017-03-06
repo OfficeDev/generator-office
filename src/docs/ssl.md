@@ -55,7 +55,11 @@ At this point everything has been configured. Quit all browsers, then reopen and
 
 You can locate the server.crt file at **~/your_yo_office_project/node_modules/browser-sync/lib/server/certs/server.crt**
 
-#### Add certification file to Key Chain Access
+#### Add certification file through IE
+
+  ![](assets/ssl-ie.gif)
+
+#### Add certification file through Management Console
 
 1. Click **Start**, go to **Search box**, type **run**, then type **mmc** in the input field, and then press **ENTER**.
 1. On the **File** menu, click **Add/Remove Snap-in**.
