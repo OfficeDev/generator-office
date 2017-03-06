@@ -11,15 +11,15 @@ You can contribute to Office Project Generator in these ways:
 * Provide feedback
   * Report bugs and suggest enhancements via [GitHub Issues](https://github.com/OfficeDev/generator-office/issues)
 * Do it yourself
-  * You can go and fix the [Issues](https://github.com/OfficeDev/generator-office/issues) yourself and submit the changes as a [Pull Request](https://github.com/OfficeDev/generator-office/pulls) for review.
+  * Fix [Issues](https://github.com/OfficeDev/generator-office/issues) yourself and submit the changes as a [Pull Request](https://github.com/OfficeDev/generator-office/pulls) for review.
   * You can submit [code comment contributions](https://github.com/OfficeDev/generator-office/blob/master/CONTRIBUTING.md#provide-better-code-comments) where you want a better explanation of the code.
 
 ## Before we can accept your pull request
-If you submit new or significant changes to documentation and code examples, you need to send us a signed Contribution License Agreement (CLA) before we can accept your pull request if you are in one of these groups:
+If you are in one of the following groups, you need to send us a signed Contribution License Agreement (CLA) before we can accept your pull request:
 * Members of the Microsoft Open Technologies group
 * Contributors who don't work for Microsoft
 
-As a community member, you must sign the Contribution License Agreement (CLA) before you can contribute large submissions to this project, but you need to complete and submit the documentation only once. The Office 365 organization on GitHub will send a link to the CLA that we want you to sign via email. By signing the CLA, you acknowledge the rights of the GitHub community to use any code that you submit. The intellectual property represented by the code contribution is licensed for use by Microsoft open source projects. Please carefully review the document; you may also need to have your employer sign the document.
+As a community member, you must sign the Contribution License Agreement (CLA) before you can contribute large submissions to this project, but you need to complete and submit the documentation only once. The Office 365 organization on GitHub will send a link to the CLA that we want you to sign via email. By signing the CLA, you acknowledge the rights of the GitHub community to use any code that you submit. The intellectual property represented by the code contribution is licensed for use by Microsoft open source projects. Please carefully review the document, as you may also need to have your employer sign the document.
 
 Signing the Contribution License Agreement (CLA) does not grant you rights to commit to the main repository, but it does mean that the Office Developer and Office Developer Content Publishing teams will be able to review and consider your contributions and you will get credit if we do.
 
