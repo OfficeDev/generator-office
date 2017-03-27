@@ -17,7 +17,8 @@ Office clients require add-ins and webpages to come from a trusted and secure lo
 1. Start Chrome and do the following:
    1. Open Developer Tools window by using keybaord shortcuts: Cmd + Opt + I.
    1. Click to go to 'security' panel and 'overview' screen.
-	 1. Click 'View certificate'.
+	 1. Click 'View certificate'. 
+
    ![](assets/ssl-chrome-devtool.png)
 
 1. Click and drag the image to your desktop. It looks like a little certificate.
@@ -80,21 +81,25 @@ You now have a self-signed certificate installed on your machine.
 #### Add certification file through Management Console
 
 1. Click **Start**, go to **Search box**, type **run**, then type **mmc** in the input field, and then press **ENTER**.
-1. On the **File** menu, click **Add/Remove Snap-in**.
+2. On the **File** menu, click **Add/Remove Snap-in**.
+
 ![](assets/ssl-windows-01.png)
-1. Under **Available snap-ins**, click **Certificates**, and then click **Add**.
+
+3. Under **Available snap-ins**, click **Certificates**, and then click **Add**.
 ![](assets/ssl-windows-02.png)
-1. Under **This snap-in will always manage certificates for**, click **Computer account**, and then click **Next**.
+
+4. Under **This snap-in will always manage certificates for**, click **Computer account**, and then click **Next**.
 ![](assets/ssl-windows-03.png)
-1. Click **Local computer**, and click **Finish**.
+
+5. Click **Local computer**, and click **Finish**.
 ![](assets/ssl-windows-04.png)
-1. If you have no more snap-ins to add to the console, click **OK**.
-1. In the console tree, double-click **Certificates**.
-1. Right-click the **Trusted Root Certification Authorities** store.
-1. Click **All Tasks** then **Import** to import the certificates and follow the steps in the Certificate Import Wizard.
+6. If you have no more snap-ins to add to the console, click **OK**.
+7. In the console tree, double-click **Certificates**.
+8. Right-click the **Trusted Root Certification Authorities** store.
+9. Click **All Tasks** then **Import** to import the certificates and follow the steps in the Certificate Import Wizard.
 ![](assets/ssl-windows-05.png)
-1. Find server.crt file and click **Open**.
-1. Follow the rest of the steps to finish Certificate import.
+10. Find server.crt file and click **Open**.
+11. Follow the rest of the steps to finish Certificate import.
 
 You now have a self-signed certificate installed on your machine.
 
