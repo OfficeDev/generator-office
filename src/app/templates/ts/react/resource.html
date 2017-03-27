@@ -8,6 +8,8 @@
     <style type="text/css">
     body,main.steps{display:-webkit-flex;display:-ms-flexbox}body,main{position:relative}#slider,body{height:100%;overflow:hidden}html{background:#f1f1f1;height:100%}body{background:#fff;color:#505050;margin:0;padding:0;font:11pt "Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Tahoma,sans-serif;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;overflow-y:auto;-webkit-font-smoothing:antialiased}h1{font-size:30pt}h2{font-size:18pt}h3{font-size:11pt}main{-webkit-flex:2 0 auto;-ms-flex:2 0 auto;flex:2 0 auto;background-color:#fff}main.steps{-webkit-flex:6 0 auto;-ms-flex:6 0 auto;flex:6 0 auto;background-color:#EDEDED;margin-bottom:20px;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;border-top:solid 10px #da3b01}#slider,section.resources{display:-webkit-flex;display:-ms-flexbox}main>h2{padding:0 20px;font-weight:200;margin:0;}#buttons{padding:20px;-webkit-flex:0 0 auto;-ms-flex:0 0 auto;flex:0 0 auto}#slider{color:#333;display:flex;width:100%;-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto}#slider .slide{-webkit-flex:0 0 calc(100% - 40px);-ms-flex:0 0 calc(100% - 40px);flex:0 0 calc(100% - 40px);width:calc(100% - 40px);padding:20px;display:none;height:calc(100% - 40px)}#slider .slide.active{display:block}#slider .slide h1{color:#da3b01;font-weight:200;margin:0 0 20px;padding:10px 0}#slider .slide p,#slider .slide pre{margin:20px 0 0;display:block}#slider .slide pre{font:11pt Consolas,Courier New,Courier,monospace;width:calc(100% - 40px);white-space:pre-line;padding:20px;background-color:#DDD;color:#333;line-height:16pt}#slider .slide pre span.comment{opacity:.7}#buttons button{font:11pt "Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Tahoma,sans-serif;font-size:14px;font-weight:400;margin:0 10px 0 0;color:#EDEDED;border:none;outline:0;background-color:#da3b01;cursor:pointer;height:32px;min-width:80px;padding:4px 20px 6px}#buttons button:active,#buttons button:hover{background-color:#333!important;color:#f2f2f2!important}#buttons button:active{-webkit-transform:scale3d(.98,.98,.98);transform:scale3d(.98,.98,.98)}section.resources{padding:0;clear:both;display:flex;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;overflow:auto;height:100%}section.links{display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-flex:1 1 250px;-ms-flex:1 1 250px;flex:1 1 250px;padding:20px;-webkit-align-items:center;-ms-flex-align:center;align-items:center}section.links h3{width:100%;text-transform:uppercase;margin:0 0 8px;border-bottom:1px solid silver;padding-bottom:12px}section.links img.circle{width:120px;height:120px;border-radius:100%;background-color:#EDEDED;margin:0 auto 20px}section.links.last{margin-right:0}ul{width:100%;list-style:none;padding:0;margin:0;line-height:20px}li{padding:4px 0}a{color:#da3b01;cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}footer{background-color:#EDEDED;padding:0 20px;-webkit-flex:0 0 40px;-ms-flex:0 0 40px;flex:0 0 40px;-webkit-align-self:flex-end;-ms-flex-item-align:end;align-self:flex-end;width:calc(100% - 40px)}footer p{bottom:10px}body.excel main.steps{border-top:solid 10px #217346}body.excel #slider .slide h1,body.excel a{color:#217346}body.excel #buttons button{background-color:#217346}body.word main.steps{border-top:solid 10px #2b579a}body.word #slider .slide h1,body.word a{color:#2b579a}body.word #buttons button{background-color:#2b579a}body.powerpoint main.steps{border-top:solid 10px #b7462a}body.powerpoint #slider .slide h1,body.powerpoint a{color:#b7462a}body.powerpoint #buttons button{background-color:#b7462a}body.onenote main.steps{border-top:solid 10px #80397b}body.onenote #slider .slide h1,body.onenote a{color:#80397b}body.onenote #buttons button{background-color:#80397b}body.outlook main.steps{border-top:solid 10px #0173c7}body.outlook #slider .slide h1,body.outlook a{color:#0173c7}body.outlook #buttons button{background-color:#0173c7}body.project main.steps{border-top:solid 10px #31752f}body.project #slider .slide h1,body.project a{color:#31752f}body.project #buttons button{background-color:#31752f}
     </style>
+
+    <script type="text/javascript">  var appInsights=window.appInsights||function(config){    function i(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s="AuthenticatedUserContext",h="start",c="stop",l="Track",a=l+"Event",v=l+"Page",y=u.createElement(o),r,f;y.src=config.url||"https://az416426.vo.msecnd.net/scripts/a/ai.0.js";u.getElementsByTagName(o)[0].parentNode.appendChild(y);try{t.cookie=u.cookie}catch(p){}for(t.queue=[],t.version="1.0",r=["Event","Exception","Metric","PageView","Trace","Dependency"];r.length;)i("track"+r.pop());return i("set"+s),i("clear"+s),i(h+a),i(c+a),i(h+v),i(c+v),i("flush"),config.disableExceptionTracking||(r="onerror",i("_"+r),f=e[r],e[r]=function(config,i,u,e,o){var s=f&&f(config,i,u,e,o);return s!==!0&&t["_"+r](config,i,u,e,o),s}),t    }({        instrumentationKey:"c36e2c25-f461-482c-9ead-bebc91e8b58b"    });           window.appInsights=appInsights;    appInsights.trackPageView();</script>
 </head>
 
 <body class="<%= hostInternalName %>">
@@ -22,7 +24,7 @@
 
 2. Sideload your add-in.
 
-    3. Use the <a target="_blank" href="https://dev.office.com/reference/add-ins/javascript-api-for-office">Office JavaScript APIs</a> to create rich interactions with <%= host %>.</pre>
+    3. Use the <a target="_blank" href="https://dev.office.com/reference/add-ins/javascript-api-for-office" onclick="appInsights.trackEvent('linkClick_office-javascript-apis');return true;">Office JavaScript APIs</a> to create rich interactions with <%= host %>.</pre>
 
                     <p>For more information, choose <b>Next</b>.</p>
                     <p>You can also explore the links in the additional resources section.</p>
@@ -35,7 +37,7 @@
                     also update the add-in’s source location in the manifest. </p>
 
                 <p>To help you get started, we have included <b>browser-sync</b> for your convenience. To learn more about it, see
-                    <a target="_blank" href="https://www.browsersync.io/">browsersync.io.</a></p>
+                    <a target="_blank" href="https://www.browsersync.io/" onclick="appInsights.trackEvent('linkClick_browsersync');return true;">browsersync.io.</a></p>
 
                 <pre>
                         <span class="comment"># To host the add-in using browser-sync, use the following command:</span>
@@ -49,14 +51,14 @@ npm start</pre>
 <a target="_blank" href="https://localhost:3000">https://localhost:3000</a></pre>
 
                 <p>
-                    See <a target="_blank" href="https://github.com/OfficeDev/generator-office/blob/beta/src/docs/ssl.md">our documentation</a>                    for information about adding the self-signed certificates.</p>
+                    See <a target="_blank" href="https://github.com/OfficeDev/generator-office/blob/beta/src/docs/ssl.md" onclick="appInsights.trackEvent('linkClick_ssl');return true;">our documentation</a>                    for information about adding the self-signed certificates.</p>
             </article>
             <article class="slide">
                 <h1>Sideloading</h1>
                 <% if (host === 'Outlook') { %>
                 <%# Outlook-specific steps go here %>
                 <p>Load the add-in into <%= host %>. The easiest way to do this is by sideloading the add-in using the in-client Office Store UI.</p>
-                
+
                 <pre>1. Open the Office Store, either in Outlook 2016 for Windows or Outlook on the web:
 
 &nbsp;&nbsp;&nbsp;&nbsp;- In Outlook 2016 for Windows, choose the <b>Store</b> button on the <b>Home</b> tab.
@@ -71,14 +73,14 @@ npm start</pre>
 
 5. Review the warning prompt and choose <b>Install</b>.
 
-6. Close the Office Store window. Your add-in will load in <a target="_blank" href="https://office.live.com/start/Outlook.aspx?auth=2&nf=1">Outlook</a>.
+6. Close the Office Store window. Your add-in will load in <a target="_blank" href="https://office.live.com/start/Outlook.aspx?auth=2&nf=1" onclick="appInsights.trackEvent('linkClick_outlook-sideload');return true;">Outlook</a>.
 </pre>
                 <% } else { %>
                 <%# Other Office apps steps go here %>
                 <p>Load the add-in into <%= host %>. The easiest way to do this is by sideloading the add-in in <%= host %> Online:
                 </p>
 
-                <pre>1. Go to <a target="_blank" href="https://office.live.com/start/<%= host %>.aspx?auth=2&nf=1"><%= host %></a> and create a blank document.
+                <pre>1. Go to <a target="_blank" href="https://office.live.com/start/<%= host %>.aspx?auth=2&nf=1" onclick="appInsights.trackEvent('linkClick_<%= host %>-sideload-step1');return true;"><%= host %></a> and create a blank document.
 
 2. Go to Insert > Office Add-ins.
 
@@ -88,11 +90,11 @@ npm start</pre>
 
 4. Choose <b>Browse</b> and select the <%= projectInternalName %>-manifest.xml file from the root of the project folder, and then choose <b>Upload</b>.
 
-5. Your add-in will load in <a target="_blank" href="https://office.live.com/start/<%= host %>.aspx?auth=2&nf=1"><%= host %></a>.</pre>
+5. Your add-in will load in <a target="_blank" href="https://office.live.com/start/<%= host %>.aspx?auth=2&nf=1" onclick="appInsights.trackEvent('linkClick_<%= host %>-sideload-step5');return true;"><%= host %></a>.</pre>
 
                 <p>If you would like to sideload your add-in into the <%= host %> desktop client, see our documentation for <a target="_blank"
-                        href="https://dev.office.com/docs/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins">sideloading
-                    on Windows</a> or <a target="_blank" href="https://dev.office.com/docs/add-ins/testing/sideload-an-office-add-in-on-ipad-and-mac">sideloading on iPad and Mac</a>.</p>
+                        href="https://dev.office.com/docs/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins" onclick="appInsights.trackEvent('linkClick_sideload-on-windows');return true;">sideloading
+                    on Windows</a> or <a target="_blank" href="https://dev.office.com/docs/add-ins/testing/sideload-an-office-add-in-on-ipad-and-mac" onclick="appInsights.trackEvent('linkClick_sideload-on-mac-ipad');return true;">sideloading on iPad and Mac</a>.</p>
                 <% } %>
             </article>
             <article class="slide">
@@ -100,11 +102,11 @@ npm start</pre>
                     <h1>Tips</h1>
                     <p>Here's some advice for building a stellar add-in:</p>
 
-                    <pre>● Use the <a target="_blank" href="https://dev.office.com/docs/add-ins/design/ux-design-patterns">Design Patterns</a> to create a rich and immersive UI.
+                    <pre>● Use the <a target="_blank" href="https://dev.office.com/docs/add-ins/design/ux-design-patterns" onclick="appInsights.trackEvent('linkClick_design-patterns');return true;">Design Patterns</a> to create a rich and immersive UI.
 
-● Use the <a target="_blank" href="https://github.com/officedev/office-js-helpers">Office Helpers</a> to simplify Authentication, Storage management etc.
+● Use the <a target="_blank" href="https://github.com/officedev/office-js-helpers" onclick="appInsights.trackEvent('linkClick_office-js-helpers');return true;">Office Helpers</a> to simplify Authentication, Storage management etc.
 
-● Ensure your add-in works on all browsers and platforms that <a target="_blank" href="https://dev.office.com/add-in-availability">Office supports</a>.</pre>
+● Ensure your add-in works on all browsers and platforms that <a target="_blank" href="https://dev.office.com/add-in-availability" onclick="appInsights.trackEvent('linkClick_office-supports');return true;">Office supports</a>.</pre>
 
                     <p> For more information and resources to help you develop your add-in project, follow through the next steps
                         or click on the additional resources to help you get started.</p>
@@ -122,34 +124,34 @@ npm start</pre>
             <section class="links">
                 <h3>Design & Develop</h2>
                     <ul>
-                        <li><a target="_blank" href="https://dev.office.com/reference/add-ins/javascript-api-for-office">Using the Office JavaScript APIs</a></li>
-                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/design/ux-design-patterns">Get the UX Design Templates</a></li>
-                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/design/add-in-design">Best practices for designing Office Add-ins</a></li>
-                        <li><a target="_blank" href="http://dev.office.com/fabric#/get-started">Using Fabric</a></li>
-                        <li><a target="_blank" href="https://github.com/OfficeDev/office-js-helpers">Using the Office JavaScript API Helpers</a></li>
+                        <li><a target="_blank" href="https://dev.office.com/reference/add-ins/javascript-api-for-office" onclick="appInsights.trackEvent('linkClick_using-the-office-javascript-apis');return true;">Using the Office JavaScript APIs</a></li>
+                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/design/ux-design-patterns" onclick="appInsights.trackEvent('linkClick_get-the-ux-design-templates');return true;">Get the UX Design Templates</a></li>
+                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/design/add-in-design" onclick="appInsights.trackEvent('linkClick_best-practices-for-designing-office-addins');return true;">Best practices for designing Office Add-ins</a></li>
+                        <li><a target="_blank" href="http://dev.office.com/fabric#/get-started" onclick="appInsights.trackEvent('linkClick_using-fabric');return true;">Using Fabric</a></li>
+                        <li><a target="_blank" href="https://github.com/OfficeDev/office-js-helpers" onclick="appInsights.trackEvent('linkClick_using-the-office-javascript-api-helpers');return true;">Using the Office JavaScript API Helpers</a></li>
                     </ul>
             </section>
             <section class="links">
                 <h3>Debug & Test</h2>
                     <ul>
-                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/get-started/create-an-office-add-in-using-any-editor#debugging-your-office-add-in">Debug add-ins</a></li>
-                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins">Sideload add-ins</a></li>
-                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/testing/troubleshoot-manifest">Validate your manifest</a></li>
+                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/get-started/create-an-office-add-in-using-any-editor#debugging-your-office-add-in" onclick="appInsights.trackEvent('linkClick_debug-addins');return true;">Debug add-ins</a></li>
+                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins" onclick="appInsights.trackEvent('linkClick_sideload-addins');return true;">Sideload add-ins</a></li>
+                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/testing/troubleshoot-manifest" onclick="appInsights.trackEvent('linkClick_validate-your-manifest');return true;">Validate your manifest</a></li>
                     </ul>
             </section>
             <section class="links">
                 <h3>Deploy & Publish</h2>
                     <ul>
-                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/publish/host-an-office-add-in-on-microsoft-azure">Deploy your add-in to Azure</a></li>
-                        <li><a target="_blank" href="https://msdn.microsoft.com/en-us/library/office/jj591603.aspx#Anchor_0">Prepare for Office store validation</a></li>
-                        <li><a target="_blank" href="https://msdn.microsoft.com/en-us/library/office/jj220037.aspx">Publish your Office add-in to the store</a></li>
+                        <li><a target="_blank" href="https://dev.office.com/docs/add-ins/publish/host-an-office-add-in-on-microsoft-azure" onclick="appInsights.trackEvent('linkClick_deploy-your-addin-to-azure');return true;">Deploy your add-in to Azure</a></li>
+                        <li><a target="_blank" href="https://msdn.microsoft.com/en-us/library/office/jj591603.aspx#Anchor_0" onclick="appInsights.trackEvent('linkClick_prepare-for-office-store-validation');return true;">Prepare for Office store validation</a></li>
+                        <li><a target="_blank" href="https://msdn.microsoft.com/en-us/library/office/jj220037.aspx" onclick="appInsights.trackEvent('linkClick_publish-your-office-addin-to-the-store');return true;">Publish your Office add-in to the store</a></li>
                     </ul>
             </section>
         </section>
     </main>
 
     <footer>
-        <p>We would love to hear your <a target="_blank" href="https://github.com/OfficeDev/generator-office/issues/new">feedback</a>.</p>
+        <p>We would love to hear your <a target="_blank" href="https://github.com/OfficeDev/generator-office/issues/new" onclick="appInsights.trackEvent('linkClick_feedback');return true;">feedback</a>.</p>
     </footer>
 
     <script type="text/javascript">
