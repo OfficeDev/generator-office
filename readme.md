@@ -25,10 +25,6 @@ If you are interested in contributing, read the [Contributing Guidelines](CONTRI
 ## YO Office Demo
 ![](src/docs/assets/gettingstarted-slow.gif)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/78b18BLVosM" frameborder="0" allowfullscreen></iframe>
-
-***
-
 ## Install
 
 > **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, first install [Git](https://git-scm.com/download) and [Node.js](https://nodejs.org). For developers on Mac, we recommend using [Node Version Manager](https://github.com/creationix/nvm) to install Node.js with the right permissions. When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
