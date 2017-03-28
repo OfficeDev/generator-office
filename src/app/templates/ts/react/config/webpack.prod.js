@@ -15,28 +15,6 @@ module.exports = webpackMerge(commonConfig, {
         hints: "warning"
     },
 
-    stats: {
-        assets: true,
-        cached: false,
-        children: false,
-        chunks: true,
-        chunkModules: true,
-        chunkOrigins: false,
-        context: "./dist/",
-        colors: true,
-        errors: true,
-        errorDetails: true,
-        hash: true,
-        modules: false,
-        modulesSort: "field",
-        publicPath: true,
-        reasons: false,
-        source: false,
-        timings: true,
-        version: true,
-        warnings: false
-    },
-
     plugins: [
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true,
