@@ -10,4 +10,6 @@ function main() {
     );
 }
 
-main();
+Office.initialize = () => {
+    main();
+};
