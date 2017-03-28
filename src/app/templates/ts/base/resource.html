@@ -20,18 +20,18 @@
                     <h1>Hey, <%= projectDisplayName %> is ready!</h1>
                     <p>Next steps:</p>
 
-                    <pre>1. Host the website.
+                    <pre>1. Host the add-in website.
 
 2. Sideload your add-in.
 
-    3. Use the <a target="_blank" href="https://dev.office.com/reference/add-ins/javascript-api-for-office" onclick="appInsights.trackEvent('linkClick_office-javascript-apis');return true;">Office JavaScript APIs</a> to create rich interactions with <%= host %>.</pre>
+    3. Build your <%= host %> Add-in using the <a target="_blank" href="https://dev.office.com/reference/add-ins/javascript-api-for-office" onclick="appInsights.trackEvent('linkClick_office-javascript-apis');return true;">Office JavaScript APIs</a>.</pre>
 
                     <p>For more information, choose <b>Next</b>.</p>
                     <p>You can also explore the links in the additional resources section.</p>
                 </section>
             </article>
             <article class="slide">
-                <h1>Hosting</h1>
+                <h1>Host</h1>
                 <!--<p>Follow through the next steps or click on the additional resources to help you get started.</p>-->
                 <p>You can host your add-in locally or use any web server. Make sure that the add-in is served using HTTPS and
                     also update the add-in’s source location in the manifest. </p>
@@ -51,10 +51,10 @@ npm start</pre>
 <a target="_blank" href="https://localhost:3000">https://localhost:3000</a></pre>
 
                 <p>
-                    See <a target="_blank" href="https://github.com/OfficeDev/generator-office/blob/beta/src/docs/ssl.md" onclick="appInsights.trackEvent('linkClick_ssl');return true;">our documentation</a>                    for information about adding the self-signed certificates.</p>
+                    See <a target="_blank" href="https://github.com/OfficeDev/generator-office/blob/master/src/docs/ssl.md" onclick="appInsights.trackEvent('linkClick_ssl');return true;">our documentation</a>                    for information about adding the self-signed certificates.</p>
             </article>
             <article class="slide">
-                <h1>Sideloading</h1>
+                <h1>Sideload</h1>
                 <% if (host === 'Outlook') { %>
                 <%# Outlook-specific steps go here %>
                 <p>Load the add-in into <%= host %>. The easiest way to do this is by sideloading the add-in using the in-client Office Store UI.</p>
@@ -99,14 +99,16 @@ npm start</pre>
             </article>
             <article class="slide">
                 <section class="text">
-                    <h1>Tips</h1>
+                    <h1>Build</h1>
                     <p>Here's some advice for building a stellar add-in:</p>
 
                     <pre>● Use the <a target="_blank" href="https://dev.office.com/docs/add-ins/design/ux-design-patterns" onclick="appInsights.trackEvent('linkClick_design-patterns');return true;">Design Patterns</a> to create a rich and immersive UI.
 
 ● Use the <a target="_blank" href="https://github.com/officedev/office-js-helpers" onclick="appInsights.trackEvent('linkClick_office-js-helpers');return true;">Office Helpers</a> to simplify Authentication, Storage management etc.
 
-● Ensure your add-in works on all browsers and platforms that <a target="_blank" href="https://dev.office.com/add-in-availability" onclick="appInsights.trackEvent('linkClick_office-supports');return true;">Office supports</a>.</pre>
+● Use the included <a target="_blank" href="https://github.com/officedev/office-addin-validator" onclick="appInsights.trackEvent('linkClick_office-addin-validator');return true;">Office Add-in Validator</a> to ensure your manifest.xml file is correct and complete. It will also give you information on against what platforms to test your add-in before submitting to the store.
+<span class="comment"># Type the following command in your console to validate your manifest:</span>
+$ validate-office-addin <%= projectInternalName %>-manifest.xml</pre>
 
                     <p> For more information and resources to help you develop your add-in project, follow through the next steps
                         or click on the additional resources to help you get started.</p>
