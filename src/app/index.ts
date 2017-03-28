@@ -281,7 +281,7 @@ module.exports = yo.extend({
         }
         else {
           /** Copy the base template */
-          this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath());
+          this.fs.copyTpl(this.templatePath(`${language}/base/**`), this.destinationPath(), this.project);
 
           /** Copy the framework specific overrides */
           this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), this.project);
