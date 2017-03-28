@@ -321,6 +321,8 @@ module.exports = yo.extend({
     this.log(`      1. Launch your local web server via ${chalk.inverse(' npm start ')} (you may also need to`);
     this.log(`         trust the Self-Signed Certificate for the site if you haven't done that)`);
     this.log(`      2. Sideload the add-in into your Office application.\n`);
+    this.log(`      Please refer to resource.html in your project for more information.`);
+    this.log(`      Or visit our repo at: https://github.com/officeDev/generator-office`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
   }
 } as any);
