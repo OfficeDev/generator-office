@@ -1,0 +1,18 @@
+@mixin flex-row() {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    @content
+}
+
+@mixin flex-column() {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    @content
+}
+
+@mixin flex-align($mainAxis, $crossAxis) {
+    justify-content: if($mainAxis, $mainAxis, center);
+    align-items: if($crossAxis, $crossAxis, center)
+}

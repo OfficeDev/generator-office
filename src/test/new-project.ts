@@ -154,6 +154,49 @@ describe('new project - answers', () => {
       done();
     });
   });
+
+  /** Test addin when user chooses react and typescript. */
+  describe('react & typescript', () => {
+    before((done) => {
+      answers.ts = true;
+      answers.framework = 'react';
+      helpers.run(path.join(__dirname, '../app'))
+        .withPrompts(answers)
+        .on('end', done);
+    });
+
+    it('creates expected files', (done) => {
+      let expected = [
+        manifestFileName,
+        'package.json',
+        'src/assets/icon-16.png',
+        'src/assets/icon-32.png',
+        'src/assets/icon-80.png',
+        'src/assets/logo-filled.png',
+        'src/function-file/function-file.html',
+        'src/function-file/function-file.ts',
+        'tsconfig.json',
+        'config/webpack.common.js',
+        'config/webpack.dev.js',
+        'config/webpack.prod.js',
+        'src/assets/styles/_flex.scss',
+        'src/assets/styles/global.scss',
+        'src/components/app.tsx',
+        'src/components/header.tsx',
+        'src/components/hero-list.tsx',
+        'src/index.html',
+        'src/main.tsx',
+        'src/polyfills.ts',
+        'src/vendor.ts',
+        'tsconfig.webpack.json',
+        'tslint.json',
+        'resource.html'
+      ];
+
+      assert.file(expected);
+      done();
+    });
+  });
 });
 
 /**

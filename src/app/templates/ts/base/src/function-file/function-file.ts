@@ -5,8 +5,8 @@
 
 (() => {
   // The initialize function must be run each time a new page is loaded
-  Office.initialize = (reason) => {
-    
+  Office.initialize = () => {
+
   };
 
   // Add any ui-less function here
