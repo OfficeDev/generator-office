@@ -14,7 +14,7 @@
     "start": "rimraf generators && concurrently \"npm run tsc-watch\" \"npm run copy-watch\"",
     "build": "rimraf generators && concurrently \"npm run tsc\" \"npm run copy\"",
     "test": "mocha -r ts-node/register generators/test/**.js",
-    "postinstall": "npm i -g office-addin-validator@latest"
+    "postinstall": "npm i -g office-addin-validator"
   },
   "engines": {
     "node": ">6.9.0"
