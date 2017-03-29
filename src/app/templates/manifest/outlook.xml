@@ -19,6 +19,12 @@
   <DisplayName DefaultValue="<%= projectDisplayName %>" />
   <Description DefaultValue="[Outlook Add-in description]"/>
 
+  <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
+  <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png" />
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/hi-res-icon.png"/>
+
+  <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
+  <SupportUrl DefaultValue="[Insert the URL of a page that provides support information for the app]" />
 
   <!-- Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list. -->
   <AppDomains>
