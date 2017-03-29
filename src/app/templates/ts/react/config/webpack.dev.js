@@ -6,17 +6,30 @@ const commonConfig = require('./webpack.common.js');
 module.exports = webpackMerge(commonConfig, {
     devtool: 'eval-source-map',
 
+    plugins: [
+        new BrowserSyncPlugin(
+            {
+                https: true,
+                host: 'localhost',
+                port: 3000,
+                proxy: 'https://localhost:3100/'
+            },
+            {
+                reload: false
+            }
+        )
+    ],
+
     devServer: {
         publicPath: '/',
         contentBase: path.resolve('dist'),
         https: true,
         compress: true,
-        open: true,
         overlay: {
             warnings: false,
             errors: true
         },
-        port: 3000,
+        port: 3100,
         historyApiFallback: true
     }
 });
