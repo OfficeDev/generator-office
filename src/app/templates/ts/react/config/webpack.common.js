@@ -19,7 +19,6 @@ const build = (() => {
 })();
 
 const entry = {
-    polyfills: './polyfills.ts',
     vendor: './vendor.ts',
     app: [
         'webpack-dev-server/client?http://localhost:3000',
@@ -89,8 +88,8 @@ const WEBPACK_PLUGINS = [
         }
     }),
     new webpack.optimize.CommonsChunkPlugin({
-        name: ['vendor', 'polyfills'],
-        minChunks: Infinity
+        name: ['vendor', 'app'],
+        minChunks: 2
     })
 ];
 
@@ -106,9 +105,9 @@ module.exports = {
     },
     plugins: [
         ...WEBPACK_PLUGINS,
-        new ExtractTextPlugin('[name].[chunkhash].css'),
+        new ExtractTextPlugin('[name].[hash].css'),
         new HtmlWebpackPlugin({
-            title: 'Word • Image Extractor',
+            title: '<%= projectDisplayName %>',
             filename: 'index.html',
             template: 'index.html',
             chunks: ['app', 'vendor', 'polyfills']

@@ -184,6 +184,7 @@ describe('new project - answers', () => {
         'src/components/app.tsx',
         'src/components/header.tsx',
         'src/components/hero-list.tsx',
+        'src/components/progress.tsx',
         'src/index.html',
         'src/main.tsx',
         'src/polyfills.ts',

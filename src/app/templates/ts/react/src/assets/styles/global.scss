@@ -32,6 +32,7 @@ body {
     overflow: auto;
     overflow-x: hidden;
 
+    &__progress,
     &__header {
         min-height: 250px;
         padding: 20px;
@@ -43,6 +44,29 @@ body {
         h1 {
             margin-top: 30px;
             text-align: center;
+        }
+    }
+
+    &__progress {
+        height: 100vh;
+        @include flex-column() {
+            @include flex-align(center, center);
+        }
+
+        h1 {
+            margin-bottom: 80px;
+        }
+
+        & .ms-Spinner {
+            .ms-Spinner-label {
+                color: #999;
+            }
+
+            .ms-Spinner-circle{
+                color: #333333;
+                border: 1.5px solid #CCC;
+                border-top-color: #333333;
+            }
         }
     }
 
