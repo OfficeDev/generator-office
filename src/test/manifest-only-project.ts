@@ -1,10 +1,10 @@
-/* 
+/*
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
 
-let helpers = require('yeoman-test');
-let assert = require('yeoman-assert');
+import * as helpers from 'yeoman-test';
+import * as assert from 'yeoman-assert';
 import * as path from 'path';
 
 /**
@@ -65,8 +65,8 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
   };
   let argument = [];
 
-	/** 
-	 * Test addin when user pass in argument 
+	/**
+	 * Test addin when user pass in argument
 	 * "my-office-add-in"
 	 */
   describe('argument: name', () => {
@@ -97,8 +97,8 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
     });
   });
 
-	/** 
-	 * Test addin when user pass in argument 
+	/**
+	 * Test addin when user pass in argument
 	 * "my-office-add-in excel"
 	 */
   describe('arguments: name host', () => {
@@ -128,8 +128,8 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
     });
   });
 
-	/** 
-	 * Test addin when user pass in argument 
+	/**
+	 * Test addin when user pass in argument
 	 * "my-office-add-in excel manifest-only"
 	 */
   describe('arguments: name host framework', () => {
@@ -159,4 +159,4 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
       done();
     });
   });
-})
+});

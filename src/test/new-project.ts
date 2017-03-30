@@ -3,8 +3,8 @@
  * See LICENSE in the project root for license information.
  */
 
-let helpers = require('yeoman-test');
-let assert = require('yeoman-assert');
+import * as helpers from 'yeoman-test';
+import * as assert from 'yeoman-assert';
 import * as path from 'path';
 
 /**
@@ -430,4 +430,4 @@ describe('new project - answers & opts - jquery & typescript', () => {
       done();
     });
   });
-})
+});
