@@ -8,11 +8,10 @@ import * as path from 'path';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as _ from 'lodash';
-
-let opn = require('opn');
-let uuid = require('uuid/v4');
-let yosay = require('yosay');
-let yo = require('yeoman-generator');
+import * as opn from 'opn';
+import * as uuid from 'uuid/v4';
+import * as yosay from 'yosay';
+import * as yo from 'yeoman-generator';
 let insight = appInsights.getClient('68a8ef35-112c-4d33-a118-3c346947f2fe');
 
 module.exports = yo.extend({
@@ -152,19 +151,20 @@ module.exports = yo.extend({
           type: 'confirm',
           message: 'Would you like to use TypeScript?',
           default: true,
-          when: (this.options.js == null) && (!this.project.isManifestOnly)
+          when: (this.options.js == null) && (!this.project.isManifestOnly) && (this.options.framework !== 'react')
         }
       ];
       let answerForTs = await this.prompt(askForTs);
       let endForTs = (new Date()).getTime();
       let durationForTs = (endForTs - startForTs) / 1000;
-
-      this.project.ts = answerForTs.ts;
       if (!(this.options.js == null)) {
         this.project.ts = !this.options.js;
       }
       else {
-        this.project.ts = answerForTs.ts;
+        this.project.ts = answerForTs.ts || false;
+      }
+      if (this.options.framework === 'react') {
+        this.project.ts = true;
       }
 
       /** technology used to create the addin (html / angular / etc) */
@@ -176,7 +176,7 @@ module.exports = yo.extend({
           type: 'list',
           default: 'react',
           choices: tsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
-          when: (this.project.framework == null) && answerForTs.ts && !answerForManifestOnly.isManifestOnly
+          when: (this.project.framework == null) && this.project.ts && !this.options.js && !answerForManifestOnly.isManifestOnly
         },
         {
           name: 'framework',
@@ -184,7 +184,7 @@ module.exports = yo.extend({
           type: 'list',
           default: 'jquery',
           choices: jsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
-          when: (this.project.framework == null) && !answerForTs.ts && !answerForManifestOnly.isManifestOnly
+          when: (this.project.framework == null) && !this.project.ts && this.options.js && !answerForManifestOnly.isManifestOnly
         }
       ];
       let answerForFramework = await this.prompt(askForFramework);
@@ -269,7 +269,7 @@ module.exports = yo.extend({
         }
         else {
           this.log('----------------------------------------------------------------------------------\n');
-          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} add-in`);
+          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} add-in\n`);
           this.log('----------------------------------------------------------------------------------\n\n');
         }
 
@@ -306,11 +306,23 @@ module.exports = yo.extend({
       }
       else {
         if (this.project.framework !== 'manifest-only') {
-          this._postInstallHints();
+          this.installDependencies({
+            npm: false,
+            bower: false,
+            callback: this._postInstallHints.bind(this)
+          });
+        }
+        else {
+          this.installDependencies({
+            npm: false,
+            bower: false,
+            callback: this._exitProcess.bind(this)
+          });
         }
       }
     } catch (err) {
       insight.trackException(new Error('Installation Error: ' + err));
+      process.exitCode = 1;
     }
   },
 
@@ -322,6 +334,11 @@ module.exports = yo.extend({
     this.log(`         trust the Self-Signed Certificate for the site if you haven't done that)`);
     this.log(`      2. Sideload the add-in into your Office application.\n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
+    this._exitProcess();
+  },
+
+  _exitProcess: function () {
+    process.exit();
   }
 } as any);
 
