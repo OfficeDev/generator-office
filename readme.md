@@ -61,7 +61,14 @@ Browse to the 'External' IP address listed in your console to test your web app 
 
 ## Validate manifest.xml
 
-Refer to the docs on [add-in manifests](https://dev.office.com/docs/add-ins/overview/add-in-manifests) for information on manifest validation.
+As you modify your `manifest.xml` file, use the included [Office Add-in Validator](https://github.com/OfficeDev/office-addin-validator) to ensure that your XML file is correct and complete. It will also give you information on against what platforms to test your add-ins before submitting to the store.
+
+To run Office Add-in Validator, type the following command in your console:
+```bash
+$ validate-office-addin your_manifest.xml
+```
+
+For more information on manifest validation, refer to our [add-in manifests documentation](https://dev.office.com/docs/add-ins/overview/add-in-manifests).
 
 ## Command Line Arguments:
 List of supported arguments. The generator will prompt you accordingly based on the arguments you provided.
