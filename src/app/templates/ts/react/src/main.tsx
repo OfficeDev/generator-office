@@ -17,6 +17,6 @@ import './assets/styles/global.scss';
     };
 
     /* Initial render showing a progress bar */
-    render(<Progress title={title} logo='assets/logo-filled.png' message='Loading' />, container);
+    render(<Progress title={title} logo='assets/logo-filled.png' message='Please sideload your addin to see app body.' />, container);
 })();
 
