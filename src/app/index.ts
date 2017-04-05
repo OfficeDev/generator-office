@@ -297,28 +297,19 @@ module.exports = yo.extend({
       if (this.project.isResourcePageOpened) {
         opn(`resource.html`);
       }
-      if (!this.options['skip-install'] && this.project.framework !== 'manifest-only') {
+      if (this.options['skip-install']) {
         this.installDependencies({
-          npm: true,
+          npm: false,
           bower: false,
           callback: this._postInstallHints.bind(this)
         });
       }
       else {
-        if (this.project.framework !== 'manifest-only') {
-          this.installDependencies({
-            npm: false,
-            bower: false,
-            callback: this._postInstallHints.bind(this)
-          });
-        }
-        else {
-          this.installDependencies({
-            npm: false,
-            bower: false,
-            callback: this._exitProcess.bind(this)
-          });
-        }
+        this.installDependencies({
+          npm: true,
+          bower: false,
+          callback: this._exitProcess.bind(this)
+        });
       }
     } catch (err) {
       insight.trackException(new Error('Installation Error: ' + err));
@@ -334,7 +325,7 @@ module.exports = yo.extend({
     this.log(`         trust the Self-Signed Certificate for the site if you haven't done that)`);
     this.log(`      2. Sideload the add-in into your Office application.\n`);
     this.log(`      Please refer to resource.html in your project for more information.`);
-    this.log(`      Or visit our repo at: https://github.com/officeDev/generator-office`);
+    this.log(`      Or visit our repo at: https://github.com/officeDev/generator-office \n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
   },

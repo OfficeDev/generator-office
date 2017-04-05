@@ -3,6 +3,11 @@
   "description": "",
   "author": "",
   "version": "0.1.0",
-  "dependencies": {},
+  "scripts": {
+    "validate": "./node_modules/.bin/validate-office-addin"
+  },
+  "dependencies": {
+    "office-addin-validator": "^1.0.1"
+  },
   "devDependencies": {}
 }
