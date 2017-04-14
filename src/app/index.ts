@@ -107,11 +107,11 @@ module.exports = yo.extend({
         default: false,
         choices: [
           {
-            name: 'Yes, I want a new add-in.',
+            name: 'Yes, I need to create a new web app and manifest file for my add-in.',
             value: false
           },
           {
-            name: 'No, I only need the manifest file.',
+            name: 'No, I already have a web app and only need a manifest file for my add-in.',
             value: true
           }
         ],
@@ -174,7 +174,7 @@ module.exports = yo.extend({
           name: 'framework',
           message: 'Choose a framework:',
           type: 'list',
-          default: 'react',
+          default: 'jquery',
           choices: tsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
           when: (this.project.framework == null) && this.project.ts && !this.options.js && !answerForManifestOnly.isManifestOnly
         },
