@@ -45,14 +45,17 @@
     "rimraf": "2.6.1",
     "uuid": "3.0.1",
     "yeoman-generator": "1.1.1",
-    "yosay": "2.0.0"
+    "yosay": "2.0.0",
+    "rxjs": "5.3.1"
   },
   "devDependencies": {
     "@types/applicationinsights": "0.15.33",
     "@types/chalk": "0.4.31",
+    "@types/inquirer": "0.0.34",
     "@types/lodash": "4.14.64",
     "@types/mocha": "2.2.41",
     "@types/node": "7.0.18",
+    "@types/yeoman-generator": "1.0.2",
     "concurrently": "3.4.0",
     "cpx": "1.5.0",
     "mocha": "3.3.0",
