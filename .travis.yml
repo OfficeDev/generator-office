@@ -2,12 +2,18 @@
 # See LICENSE in the project root for license information.
 
 sudo: false
+
 language: node_js
+
 cache:
+  yarn: true
   directories:
   - node_modules
+
 node_js:
   - 'stable'
   - '6.9.1'
+
 before_script: "npm run build"
+
 script: "npm run test"
