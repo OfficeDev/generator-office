@@ -19,6 +19,7 @@
     "exclude": [
         "generators/**",
         "src/app/templates/**/*",
+        "src/script-lab/templates/**/*",
         "node_modules"
     ]
 }
