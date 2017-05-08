@@ -1,0 +1,38 @@
+<!-- Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license in root of repo. -->
+<!-- This file shows how to design a first-run page that provides a welcome screen to the user about the features of the add-in. -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="<%= author %>" />
+    <title><%= name %></title>
+
+    <!-- Office JavaScript API -->
+    <% if (officeJS) { %>
+    <script src="<%= officeJS %>"></script>
+    <% } %>
+
+    <!-- CSS Libraries -->
+    <% for(const link of linkReferences) { %>
+    <link rel="stylesheet" href="<%= link %>" />
+    <% } %>
+
+    <link href="app.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="ms-font-m ms-welcome">
+    <%- template %>
+
+    <!-- JS Libraries -->
+    <% for(const script of scriptReferences) { %>
+    <script src="<%= script %>"></script>
+    <% } %>
+
+    <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>
