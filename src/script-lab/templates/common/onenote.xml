@@ -36,7 +36,7 @@
 
   <!--Begin TaskPane Mode integration. This section is used if there are no VersionOverrides or if the Office client version does not support add-in commands. -->
   <Hosts>
-    <Host Name="Workbook" />
+    <Host Name="Document" />
   </Hosts>
   <DefaultSettings>
     <SourceLocation DefaultValue="https://localhost:3000/index.html" />
@@ -53,7 +53,7 @@
       <!-- Each host can have a different set of commands. -->
       <!-- Excel host is Workbook, Word host is Document, and PowerPoint host is Presentation. -->
       <!-- Make sure the hosts you override match the hosts declared in the top section of the manifest. -->
-      <Host xsi:type="Workbook">
+      <Host xsi:type="Document">
         <!-- Form factor. Currently only DesktopFormFactor is supported. -->
         <DesktopFormFactor>
           <!--"This code enables a customizable message to be displayed when the add-in is loaded successfully upon individual install."-->
