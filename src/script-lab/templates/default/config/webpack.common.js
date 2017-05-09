@@ -88,8 +88,8 @@ module.exports = {
         ...WEBPACK_PLUGINS,
         new ExtractTextPlugin('[name].[hash].css'),
         new HtmlWebpackPlugin({
-            title: '<%= name %>',
-            filename: build.name,
+            title: build.name,
+            filename: 'index.html',
             template: 'index.html',
             chunks: ['app']
         }),
