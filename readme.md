@@ -55,6 +55,8 @@ $ npm start
 
 Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc, [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md), for instructions on how to do this.
 
+> **Important:** You may still face issue with the Browsersync self-signed SSL certificated since the certificate is signed for domain "Internet Widgits Pty Ltd" instead of localhost. See [this issue](https://github.com/OfficeDev/generator-office/issues/244) for more details and temporary workaround.
+
 Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
 
 ![](src/docs/assets/browsersync.gif)
