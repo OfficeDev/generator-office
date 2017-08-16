@@ -34,7 +34,6 @@ describe('manifest-only project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
         'assets/icon-16.png',
         'assets/icon-32.png',
         'assets/icon-80.png',
@@ -85,7 +84,6 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
         'assets/icon-16.png',
         'assets/icon-32.png',
         'assets/icon-80.png',
@@ -116,7 +114,6 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
         'assets/icon-16.png',
         'assets/icon-32.png',
         'assets/icon-80.png',
@@ -148,7 +145,6 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
         'assets/icon-16.png',
         'assets/icon-32.png',
         'assets/icon-80.png',
