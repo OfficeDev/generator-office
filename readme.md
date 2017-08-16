@@ -1,4 +1,4 @@
-# Microsoft Office Add-in Project Generator - YO OFFICE!
+# YO Office - Microsoft Office Add-in Project Generator
 
 [![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office)
 [![Downloads](http://img.shields.io/npm/dm/generator-office.svg)](https://npmjs.org/package/generator-office)
