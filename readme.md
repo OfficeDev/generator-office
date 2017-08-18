@@ -86,11 +86,6 @@ For more information on manifest validation, refer to our [add-in manifests docu
 >   "validate": "./node_modules/.bin/validate-office-addin"
 > }
 > ```
-> Now you can validate by
-> 
-> ```bash
-> npm validate
-> ```
 
 ## Command Line Arguments:
 List of supported arguments. The generator will prompt you accordingly based on the arguments you provided.
