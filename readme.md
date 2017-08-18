@@ -76,7 +76,7 @@ For more information on manifest validation, refer to our [add-in manifests docu
 > Note if you select generate manifest only when you `yo office`, to validate the manifest, first you need run
 > 
 > ```bash
-> npm i --dev office-addin-validator
+> npm i --save-dev office-addin-validator
 > ```
 > 
 > Update your **package.json** by adding
