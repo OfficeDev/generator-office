@@ -9,7 +9,7 @@
 - use an editor other than Visual Studio
 - are interested in using a technology other than plain HTML, CSS & JavaScript
 
-> If you are building an Angular or React add-in and would like to learn more about using Yo Office specifically for those frameworks, see [Build an Add-in with React](https://github.com/Hongbo-Miao/ignite-lab/blob/master/react.md) or [Build an Add-in with Angular](https://github.com/Hongbo-Miao/ignite-lab/blob/master/angular.md).
+> If you are building an Angular or React add-in and would like to learn more about using Yo Office specifically for those frameworks, see [Build an Add-in with React](https://dev.office.com/docs/add-ins/excel/excel-add-ins-get-started-react) or [Build an Add-in with Angular](https://dev.office.com/docs/add-ins/excel/excel-add-ins-get-started-angular).
 
 Like other Yeoman generators, this simply creates the scaffolding of files for your Office project. It allows you to create add-ins for:
 
