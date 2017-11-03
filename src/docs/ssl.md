@@ -2,14 +2,25 @@
 
 Office clients require add-ins and webpages to come from a trusted and secure location. This generator leverages [Browsersync](https://browsersync.io/) to start a web server, which requires a self-signed certificate. Your workstation will not trust this certificate and thus, the Office client, in which you are running your Office Add-in, will not load your add-in.
 
- When you browse to a site that has an untrusted certificate, the browser will display an error with the certificate:
+When you browse to a site that has an untrusted certificate, the browser will display an error with the certificate:
   		  
-   ![](assets/ssl-chrome-error.png)
+  ![](assets/ssl-chrome-error.png)
    
-   ![](assets/ssl-edge-error.png)
+  ![](assets/ssl-edge-error.png)
    
- To fix this, you need to configure your developer workstation to trust the self-signed certificate. The steps for this differ depending on your developer environment (OSX / Windows / Linux). Use these instructions to trust the certificate:
- 
+To fix this, you need to configure your developer workstation to trust the self-signed certificate. The steps for this differ depending on your developer environment (OSX / Windows / Linux). Use these instructions to trust the certificate:
+
+## Table of Contents
+
+* [OS X](#os-x)
+  * [Get certificate in Chrome](#get-certificate-in-chrome)
+  * [Get certificate file from project directory](#get-certificate-file-from-project-directory)
+  * [Add certification file to Key Chain Access](#add-certification-file-to-key-chain-access)
+* [Windows](#windows)
+  * [Get certificate file from project directory](#get-certificate-file-from-project-directory-1)
+  * [Add certification file through IE](#add-certification-file-through-ie)
+  * [Add certification file through Management Console](#add-certification-file-through-management-console)
+
 ## [OS X](https://support.apple.com/kb/PH18677)
 
 #### Get certificate in Chrome
