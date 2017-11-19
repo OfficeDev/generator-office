@@ -48,6 +48,20 @@ The generator is intended to be run from within a folder where you want the proj
 ## Running the Generated Site
 
 Office Add-ins must be hosted, even in development, in a HTTPS site. Yo Office creates a `bsconfig.json`, which uses [Browsersync](https://browsersync.io/) to make your tweaking and testing faster by synchronizing file changes across multiple devices. 
+
+> **Important:** There is currently a bug in the code that generates and trusts the SSL certificate that is needed to run the add-in with HTTPS. Before you continue with this Readme, take the following workaround steps:
+>
+>    1.	Go to {project root}\node_modules\browser-sync\lib\server\certs.
+>    2.	Rename or delete all the files there or move them to a subfolder.
+>    3.	Copy the file gen-cert.sh from the root of this repo into the folder.
+>    4.	Run gen-cert.sh. 
+>    5.	Several files are generated. 
+>    6.	Double-click ca.crt, and select **Install Certificate**.
+>    7.	Select **Local Machine** and select **Next** to continue.
+>    8.	Select **Place all certificates in the following store** and then select **Browse**.
+>    9.	Select **Trusted Root Certification Authorities** and then select **OK**.
+>    10.	Select **Next** and then **Finish**.
+
   		  
 Launch the local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:
 
