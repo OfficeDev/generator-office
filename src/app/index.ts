@@ -13,7 +13,6 @@ import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 let insight = appInsights.getClient('68a8ef35-112c-4d33-a118-3c346947f2fe');
-// let insight = appInsights.getClient('');
 
 module.exports = yo.extend({
   /**
