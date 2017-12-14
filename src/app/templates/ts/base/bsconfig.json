@@ -8,7 +8,10 @@
             "/node_modules": "node_modules"
         }
     },
-    "https": true,
+    "https": {
+        "key": "./certs/server.key",
+        "cert": "./certs/server.crt"
+    },
     "watch": true,
     "files": "dist/**/*"
 }
