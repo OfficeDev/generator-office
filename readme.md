@@ -4,14 +4,14 @@
 [![Downloads](http://img.shields.io/npm/dm/generator-office.svg)](https://npmjs.org/package/generator-office)
 [![TravisCI Build Status](https://travis-ci.org/OfficeDev/generator-office.svg)](https://travis-ci.org/OfficeDev/generator-office)
 
-[Yeoman](http://yeoman.io) generator for creating [Microsoft Office Add-in](https://dev.office.com/docs/add-ins/overview/office-add-ins) projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
+[Yeoman](http://yeoman.io) generator for creating [Microsoft Office Add-in](https://docs.microsoft.com/en-us/office/dev/add-ins/) projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
 
 - use an editor other than Visual Studio
 - are interested in using a technology other than plain HTML, CSS & JavaScript
 
-> If you are building an Angular or React add-in and would like to learn more about using Yo Office specifically for those frameworks, see [Build an Add-in with React](https://dev.office.com/docs/add-ins/excel/excel-add-ins-get-started-react) or [Build an Add-in with Angular](https://dev.office.com/docs/add-ins/excel/excel-add-ins-get-started-angular).
+> If you are building an Angular or React add-in and would like to learn more about using Yo Office specifically for those frameworks, see [Build an Add-in with React](https://docs.microsoft.com/en-us/office/dev/add-ins/excel/excel-add-ins-get-started-react) or [Build an Add-in with Angular](https://docs.microsoft.com/en-us/office/dev/add-ins/excel/excel-add-ins-get-started-angular).
 
-Like other Yeoman generators, this simply creates the scaffolding of files for your Office project. It allows you to create add-ins for:
+Like other Yeoman generators, this simply creates the scaffolding of files for your Office Add-in project. It allows you to create add-ins for:
 
 - Excel
 - OneNote
@@ -20,7 +20,7 @@ Like other Yeoman generators, this simply creates the scaffolding of files for y
 - Project
 - Word
 
-Choose to create the Office projects using plain HTML, CSS & JavaScript (*mirroring the same projects that Visual Studio creates*) or create Angular-based projects.
+Choose to create Office Add-in projects using plain HTML, CSS & JavaScript (*mirroring the same projects that Visual Studio creates*) or create Angular-based projects.
 
 If you are interested in contributing, read the [Contributing Guidelines](CONTRIBUTING.md). 
 
@@ -45,9 +45,50 @@ $ yo office [arguments] [options]
 
 The generator is intended to be run from within a folder where you want the project scaffolding created. This can be in the root of the current folder or within a subfolder.
 
+### Command Line Arguments
+The following command line arguments are supported. The generator will prompt you accordingly based upon the arguments that you specify.
+
+#### `name`
+Title of the project - this is the display name that is written the manifest.xml file.
+  - Type: String
+  - Optional
+ 
+>**Note:** The Windows command prompt requires this argument to be in quotes (e.g. "My Office Add-in")
+
+#### `host`
+The Microsoft Office client application that can host the add-in. The supported arguments include Excel (`excel`), OneNote (`onenote`), Outlook (`outlook`), PowerPoint (`powerpoint`), Project (`project`), and Word (`word`).
+  - Type: String
+  - Optional
+
+#### `framework`
+Framework to use for the project. The supported arguments include JQuery (`jquery`), Angular (`angular`), and React (`react`). You can also use Manifest Only (`manifest-only`) which will create only the `manifest.xml` for an Office Add-in.
+  - Type: String
+  - Optional
+
+### Command Line Options
+The following command line options are supported. If these are not specified, the generator will prompt you for the values before scaffolding the project.
+
+#### `--skip-install`
+
+After scaffolding the project, the generator (and all sub generators) run all package management install commands such as `npm install` & `typings install`. Specifying `--skip-install` tells the generator to skip this step.
+
+  - Type: Boolean
+  - Default: False
+  - Optional
+
+#### `--js`
+
+Specifying `--js` tells the generator to use JavaScript.
+
+  - Type: Boolean
+  - Default: False
+  - Optional
+
+>**Note:** Do not use this flag when you pass `react` as framework argument.
+
 ## Running the Generated Site
 
-Office Add-ins must be hosted in a HTTPS site. Yo Office generates a [Browsersync](https://browsersync.io/) configuration file (`bsconfig.json`) that references a self-signed certificate. Your computer will need to trust the certificate before you can use the generated add-in. 
+Office Add-ins must be hosted in an HTTPS site. Yo Office generates a [Browsersync](https://browsersync.io/) configuration file (`bsconfig.json`) that references a self-signed certificate. Your computer will need to trust the certificate before you can use the generated add-in. 
 
 > **Important:** Before you continue with this Readme, take the following steps (Windows):
 >
@@ -65,7 +106,7 @@ Launch the local HTTPS site on `https://localhost:3000` by simply typing the fol
 $ npm start
 ```
 
-Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc, [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md), for instructions on how to do this.
+Browsersync will start an HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc, [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md), for instructions on how to do this.
 
 Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
 
@@ -81,47 +122,6 @@ $ npm run validate your_manifest.xml
 ```
 ![](src/docs/assets/validator.gif)
 
-For more information on manifest validation, refer to our [add-in manifests documentation](https://dev.office.com/docs/add-ins/overview/add-in-manifests).
-
-## Command Line Arguments:
-List of supported arguments. The generator will prompt you accordingly based on the arguments you provided.
-
-### `name`
-Title of the project - this is the display name that is written the manifest.xml file.
-  - Type: String
-  - Optional
- 
->**Note:** The Windows command prompt requires this argument to be in quotes (e.g. "My Office Add-in")
-
-### `host`
-The Microsoft Office client application that can host the add-in. The supported arguments include Excel (`excel`), OneNote (`onenote`), Outlook (`outlook`), PowerPoint (`powerpoint`), Project (`project`), and Word (`word`).
-  - Type: String
-  - Optional
-
-### `framework`
-Framework to use for the project. The supported arguments include JQuery (`jquery`), Angular (`angular`), and React (`react`). You can also use Manifest Only (`manifest-only`) which will create only the `manifest.xml` for an Office Add-in.
-  - Type: String
-  - Optional
-
-## Command Line Options:
-List of supported options. If these are not provided, the generator will prompt you for the values before scaffolding the project.
-
-### `--skip-install`
-
-After scaffolding the project, the generator (and all sub generators) run all package management install commands such as `npm install` & `typings install`. Specifying `--skip-install` tells the generator to skip this step.
-
-  - Type: Boolean
-  - Default: False
-  - Optional
-
-### `--js`
-
-Specifying `--js` tells the generator to use JavaScript.
-
-  - Type: Boolean
-  - Default: False
-  - Optional
-
->**Note:** Do not use this flag when you pass `react` as framework argument.
+For more information on manifest validation, refer to our [add-in manifests documentation](https://docs.microsoft.com/en-us/office/dev/add-ins/develop/add-in-manifests).
 
 Copyright (c) 2017 Microsoft Corporation. All rights reserved.
