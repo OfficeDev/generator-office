@@ -47,11 +47,11 @@ The generator is intended to be run from within a folder where you want the proj
 
 ## Running the Generated Site
 
-Office Add-ins must be hosted, even in development, in a HTTPS site. Yo Office generates a [Browsersync](https://browsersync.io/) configuration file (`bsconfig.json`) that references a self-signed certificate. Your computer will need to trust the certificate before you can use the generated add-in. 
+Office Add-ins must be hosted in a HTTPS site. Yo Office generates a [Browsersync](https://browsersync.io/) configuration file (`bsconfig.json`) that references a self-signed certificate. Your computer will need to trust the certificate before you can use the generated add-in. 
 
-> **Important:** Before you continue with this Readme, take the following workaround steps (Windows):
+> **Important:** Before you continue with this Readme, take the following steps (Windows):
 >
->    1.	Go to {project root}\certs.
+>    1.	Go to {project root}\cert.
 >    2.	Double-click ca.crt, and select **Install Certificate**.
 >    3.	Select **Local Machine** and select **Next** to continue.
 >    4.	Select **Place all certificates in the following store** and then select **Browse**.
