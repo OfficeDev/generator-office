@@ -47,20 +47,16 @@ The generator is intended to be run from within a folder where you want the proj
 
 ## Running the Generated Site
 
-Office Add-ins must be hosted, even in development, in a HTTPS site. Yo Office creates a `bsconfig.json`, which uses [Browsersync](https://browsersync.io/) to make your tweaking and testing faster by synchronizing file changes across multiple devices. 
+Office Add-ins must be hosted, even in development, in a HTTPS site. Yo Office generates a [Browsersync](https://browsersync.io/) configuration file (`bsconfig.json`) that references a self-signed certificate. Your computer will need to trust the certificate before you can use the generated add-in. 
 
-> **Important:** There is currently a bug in the code that generates and trusts the SSL certificate that is needed to run the add-in with HTTPS. Before you continue with this Readme, take the following workaround steps:
+> **Important:** Before you continue with this Readme, take the following workaround steps (Windows):
 >
->    1.	Go to {project root}\node_modules\browser-sync\lib\server\certs.
->    2.	Rename or delete all the files there or move them to a subfolder.
->    3.	Copy the file gen-cert.sh from the root of this repo into the folder.
->    4.	Run gen-cert.sh. 
->    5.	Several files are generated. 
->    6.	Double-click ca.crt, and select **Install Certificate**.
->    7.	Select **Local Machine** and select **Next** to continue.
->    8.	Select **Place all certificates in the following store** and then select **Browse**.
->    9.	Select **Trusted Root Certification Authorities** and then select **OK**.
->    10.	Select **Next** and then **Finish**.
+>    1.	Go to {project root}\certs.
+>    2.	Double-click ca.crt, and select **Install Certificate**.
+>    3.	Select **Local Machine** and select **Next** to continue.
+>    4.	Select **Place all certificates in the following store** and then select **Browse**.
+>    5.	Select **Trusted Root Certification Authorities** and then select **OK**.
+>    6.	Select **Next** and then **Finish**.
 
   		  
 Launch the local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:
@@ -70,8 +66,6 @@ $ npm start
 ```
 
 Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc, [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md), for instructions on how to do this.
-
-> **Important:** You may still face issue with the Browsersync self-signed SSL certificated since the certificate is signed for domain "Internet Widgits Pty Ltd" instead of localhost. See [this issue](https://github.com/OfficeDev/generator-office/issues/244) for more details and temporary workaround.
 
 Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
 
