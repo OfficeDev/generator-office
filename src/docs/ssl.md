@@ -26,7 +26,7 @@ To fix this, you need to configure your developer workstation to trust the self-
 #### Get certificate in Chrome
 
 1. Start Chrome and do the following:
-   1. Open Developer Tools window by using keybaord shortcuts: Cmd + Opt + I.
+   1. Open Developer Tools window by using keyboard shortcuts: Cmd + Opt + I.
    1. Click to go to 'security' panel and 'overview' screen.
 	 1. Click 'View certificate'. 
 
@@ -37,7 +37,7 @@ To fix this, you need to configure your developer workstation to trust the self-
 
 #### Get certificate file from project directory
 
-You can locate the server.crt file at **~/your_yo_office_project/node_modules/browser-sync/lib/server/certs/server.crt**
+You can locate the server.crt file at **~/your_yo_office_project/certs/server.crt**
 
 #### Add certification file to Key Chain Access
 
@@ -61,7 +61,7 @@ At this point everything has been configured. Quit all browsers, then reopen and
 
 #### Get certificate file from project directory
 
-You can locate the server.crt file at **~/your_yo_office_project/node_modules/browser-sync/lib/server/certs/server.crt**
+You can locate the server.crt file at **~/your_yo_office_project/certs/server.crt**
 
 #### Add certification file through IE
 

@@ -58,14 +58,13 @@ Office Add-ins must be hosted in a HTTPS site. Yo Office generates a [Browsersyn
 >    5.	Select **Trusted Root Certification Authorities** and then select **OK**.
 >    6.	Select **Next** and then **Finish**.
 
+Follow the instructions in [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md) for how to do this on the Mac.
   		  
 Launch the local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:
 
 ```bash
 $ npm start
 ```
-
-Browsersync will start a HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc, [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md), for instructions on how to do this.
 
 Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
 
