@@ -90,16 +90,7 @@ Specifying `--js` tells the generator to use JavaScript.
 
 Office Add-ins must be hosted in an HTTPS site. Yo Office generates a [Browsersync](https://browsersync.io/) configuration file (`bsconfig.json`) that references a self-signed certificate. Your computer will need to trust the certificate before you can use the generated add-in. 
 
-> **Important:** Before you continue with this Readme, take the following steps (Windows):
->
->    1.	Go to {project root}\certs.
->    2.	Double-click ca.crt, and select **Install Certificate**.
->    3.	Select **Local Machine** and select **Next** to continue.
->    4.	Select **Place all certificates in the following store** and then select **Browse**.
->    5.	Select **Trusted Root Certification Authorities** and then select **OK**.
->    6.	Select **Next** and then **Finish**.
-
-Follow the instructions in [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md) for how to do this on the Mac.
+**Important:** Follow the instructions in [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md) before you start your web application.
   		  
 Launch the local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:
 
