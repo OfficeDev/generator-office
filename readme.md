@@ -107,11 +107,6 @@ Launch the local HTTPS site on `https://localhost:3000` by simply typing the fol
 $ npm start
 ```
 
-<<<<<<< HEAD
-=======
-Browsersync will start an HTTPS server, which includes a self-signed SSL cert that your development environment must trust. Refer to our doc, [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md), for instructions on how to do this.
-
->>>>>>> d3df4da921cb9b17ec47f6bf189f41dc0fddb3c7
 Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
 
 ![](src/docs/assets/browsersync.gif)
