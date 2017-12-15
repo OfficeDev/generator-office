@@ -51,7 +51,7 @@ Office Add-ins must be hosted in a HTTPS site. Yo Office generates a [Browsersyn
 
 > **Important:** Before you continue with this Readme, take the following steps (Windows):
 >
->    1.	Go to {project root}\cert.
+>    1.	Go to {project root}\certs.
 >    2.	Double-click ca.crt, and select **Install Certificate**.
 >    3.	Select **Local Machine** and select **Next** to continue.
 >    4.	Select **Place all certificates in the following store** and then select **Browse**.
