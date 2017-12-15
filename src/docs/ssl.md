@@ -17,16 +17,13 @@ To fix this, you need to configure your developer workstation to trust the self-
   * [Get certificate file from project directory](#get-certificate-file-from-project-directory)
   * [Add certification file to Key Chain Access](#add-certification-file-to-key-chain-access)
 * [Windows](#windows)
-  * [Get certificate file from project directory](#get-certificate-file-from-project-directory-1)
-  * [Add certification file through IE](#add-certification-file-through-ie)
-  * [Add certification file through Management Console](#add-certification-file-through-management-console)
 
 ## [OS X](https://support.apple.com/kb/PH18677)
 
 #### Get certificate in Chrome
 
 1. Start Chrome and do the following:
-   1. Open Developer Tools window by using keybaord shortcuts: Cmd + Opt + I.
+   1. Open Developer Tools window by using keyboard shortcuts: Cmd + Opt + I.
    1. Click to go to 'security' panel and 'overview' screen.
 	 1. Click 'View certificate'. 
 
@@ -37,7 +34,7 @@ To fix this, you need to configure your developer workstation to trust the self-
 
 #### Get certificate file from project directory
 
-You can locate the server.crt file at **~/your_yo_office_project/node_modules/browser-sync/lib/server/certs/server.crt**
+You can locate the server.crt file at **~/your_yo_office_project/certs/server.crt**
 
 #### Add certification file to Key Chain Access
 
@@ -59,58 +56,20 @@ At this point everything has been configured. Quit all browsers, then reopen and
 
 ## [Windows](https://technet.microsoft.com/en-us/library/cc754841.aspx)
 
-#### Get certificate file from project directory
+Take the following steps to setup the certificate authority cert for localhost:
 
-You can locate the server.crt file at **~/your_yo_office_project/node_modules/browser-sync/lib/server/certs/server.crt**
-
-#### Add certification file through IE
-
-1. Start IE with your local host url.
-1. Select **Continue to this website (not recommended).**
-![](assets/ssl-ie-01.png)
-1. Click **Certificate Error** at the end of the address bar.
-![](assets/ssl-ie-02.png)
-1. In the drop down window, click **View certificates** at the bottom.
-![](assets/ssl-ie-03.png)
-1. In the Certificate window, click **Install Certificate...** button then click **OK**.
+1.	Go to {project root}\certs.
+2.	Double-click ca.crt, and select **Install Certificate**.
+       
 ![](assets/ssl-ie-04.png)
-1. This will take you to Certificate Import Wizard. Select **Local Machine** for store location then click **Next**.
+
+3.	Select **Local Machine** and select **Next** to continue.
+
 ![](assets/ssl-ie-05.png)
-1. System now will prompt you security information. Click **Yes** to allow changes.
-![](assets/ssl-ie-06.png)
-1. In the Wizard, select **Place all certificates in the following store** and then click **Browse...** button.
-![](assets/ssl-ie-07.png)
-1. Select **Trusted Root Certification Authorities** folder and click **OK**.
-![](assets/ssl-ie-08.png)
-1. Now make sure **Trusted Root Certification Authorities** is in place for **Certificate store** and click **Next**.
-![](assets/ssl-ie-09.png)
-1. Your cert is now ready to be imported. Click **Finish**.
-![](assets/ssl-ie-10.png)
 
-You now have a self-signed certificate installed on your machine.
-
-#### Add certification file through Management Console
-
-1. Click **Start**, go to **Search box**, type **run**, then type **mmc** in the input field, and then press **ENTER**.
-2. On the **File** menu, click **Add/Remove Snap-in**.
-
-![](assets/ssl-windows-01.png)
-
-3. Under **Available snap-ins**, click **Certificates**, and then click **Add**.
-![](assets/ssl-windows-02.png)
-
-4. Under **This snap-in will always manage certificates for**, click **Computer account**, and then click **Next**.
-![](assets/ssl-windows-03.png)
-
-5. Click **Local computer**, and click **Finish**.
-![](assets/ssl-windows-04.png)
-6. If you have no more snap-ins to add to the console, click **OK**.
-7. In the console tree, double-click **Certificates**.
-8. Right-click the **Trusted Root Certification Authorities** store.
-9. Click **All Tasks** then **Import** to import the certificates and follow the steps in the Certificate Import Wizard.
-![](assets/ssl-windows-05.png)
-10. Find server.crt file and click **Open**.
-11. Follow the rest of the steps to finish Certificate import.
+4.	Select **Place all certificates in the following store** and then select **Browse**.
+5.	Select **Trusted Root Certification Authorities** and then select **OK**.
+6.	Select **Next** and then **Finish**.
 
 You now have a self-signed certificate installed on your machine.
 
