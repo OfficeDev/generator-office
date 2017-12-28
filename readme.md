@@ -115,3 +115,6 @@ $ npm run validate your_manifest.xml
 For more information on manifest validation, refer to our [add-in manifests documentation](https://docs.microsoft.com/en-us/office/dev/add-ins/develop/add-in-manifests).
 
 Copyright (c) 2017 Microsoft Corporation. All rights reserved.
+
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information, see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
