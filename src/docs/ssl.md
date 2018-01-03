@@ -1,6 +1,6 @@
 # Adding Self-Signed Certificates as Trusted Root Certificate
 
-Office clients require add-ins and webpages to come from a trusted and secure location. This generator leverages [Browsersync](https://browsersync.io/) to start a web server, which requires a self-signed certificate. Your workstation will not trust this certificate and thus, the Office client, in which you are running your Office Add-in, will not load your add-in.
+Office clients require add-ins and webpages to come from a trusted and secure location. This generator leverages openssl to start a web server, which requires a self-signed certificate. Your workstation will not trust this certificate and thus, the Office client, in which you are running your Office Add-in, will not load your add-in.
 
 When you browse to a site that has an untrusted certificate, the browser will display an error with the certificate:
   		  
