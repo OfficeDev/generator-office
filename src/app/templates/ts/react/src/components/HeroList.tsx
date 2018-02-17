@@ -10,13 +10,15 @@ export interface HeroListProps {
     items: HeroListItem[]
 }
 
-export class HeroList extends React.Component<HeroListProps, any> {
-    constructor(props, context) {
-        super(props, context);
-    }
-
+export default class HeroList extends React.Component<HeroListProps> {
     render() {
-        const listItems = this.props.items.map((item, index) => (
+        const {
+            children,
+            items,
+            message,
+        } = this.props;
+
+        const listItems = items.map((item, index) => (
             <li className='ms-ListItem' key={index}>
                 <i className={`ms-Icon ms-Icon--${item.icon}`}></i>
                 <span className='ms-font-m ms-fontColor-neutralPrimary'>{item.primaryText}</span>
@@ -24,11 +26,11 @@ export class HeroList extends React.Component<HeroListProps, any> {
         ));
         return (
             <main className='ms-welcome__main'>
-                <h2 className='ms-font-xl ms-fontWeight-semilight ms-fontColor-neutralPrimary ms-u-slideUpIn20'>{this.props.message}</h2>
+                <h2 className='ms-font-xl ms-fontWeight-semilight ms-fontColor-neutralPrimary ms-u-slideUpIn20'>{message}</h2>
                 <ul className='ms-List ms-welcome__features ms-u-slideUpIn10'>
                     {listItems}
                 </ul>
-                {this.props.children}
+                {children}
             </main>
         );
     };

@@ -1,4 +1,19 @@
-@import 'flex.scss';
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.flex-align(@mainAxis: center; @crossAxis: center) {
+    justify-content: @mainAxis;
+    align-items: @crossAxis;
+}
 
 * {
     margin: 0;
@@ -16,7 +31,8 @@ body {
 #container {
     height: 100%;
     width: 100%;
-    @include flex-column();
+
+    .flex-column;
 
     &>div {
         height: 100%;
@@ -26,7 +42,9 @@ body {
 
 .ms-welcome {
     position: relative;
-    @include flex-column();
+
+    .flex-column;
+
     min-height: 500px;
     min-width: 320px;
     overflow: auto;
@@ -34,12 +52,11 @@ body {
 
     &__progress,
     &__header {
-        min-height: 250px;
         padding: 20px;
         padding-bottom: 30px;
-        @include flex-column() {
-            @include flex-align(flex-end, center);
-        }
+
+        .flex-column;
+        .flex-align(flex-end, center);
 
         h1 {
             margin-top: 30px;
@@ -49,9 +66,9 @@ body {
 
     &__progress {
         height: 100vh;
-        @include flex-column() {
-            @include flex-align(center, center);
-        }
+        
+        .flex-column;
+        .flex-align(center, center);
 
         h1 {
             margin-bottom: 80px;
@@ -71,9 +88,9 @@ body {
     }
 
     &__main {
-        @include flex-column() {
-            @include flex-align(flex-start, center);
-        }
+        .flex-column;
+        .flex-align(flex-start, center);
+
         flex: 1 0 0;
         padding: 30px 20px;
 
@@ -91,9 +108,8 @@ body {
         &.ms-List .ms-ListItem {
             padding: 0px;
             padding-bottom: 20px;
-            @include flex-row() {
-                @include flex-align(flex-start, center);
-            }
+            .flex-row;
+            .flex-align(flex-start, center);
 
             & > .ms-Icon {
                 font-size: 14pt;
