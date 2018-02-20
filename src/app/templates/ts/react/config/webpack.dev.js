@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
@@ -9,7 +10,11 @@ module.exports = webpackMerge(commonConfig, {
         publicPath: '/',
         contentBase: path.resolve('dist'),
         hot: true,
-        https: true,
+        https: {
+            key: fs.readFileSync('./certs/server.key'),
+            cert: fs.readFileSync('./certs/server.crt'),
+            cacert: fs.readFileSync('./certs/ca.crt')
+        },
         compress: true,
         overlay: {
             warnings: false,
