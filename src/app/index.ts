@@ -14,6 +14,12 @@ import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 let insight = appInsights.getClient('68a8ef35-112c-4d33-a118-3c346947f2fe');
 
+// Remove unwanted tags
+delete insight.context.tags['ai.cloud.roleInstance'];
+delete insight.context.tags['ai.device.osVersion'];
+delete insight.context.tags['ai.device.osArchitecture'];
+delete insight.context.tags['ai.device.osPlatform'];
+
 module.exports = yo.extend({
   /**
    * Setup the generator
@@ -174,7 +180,7 @@ module.exports = yo.extend({
           name: 'framework',
           message: 'Choose a framework:',
           type: 'list',
-          default: 'jquery',
+          default: 'react',
           choices: tsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
           when: (this.project.framework == null) && this.project.ts && !this.options.js && !answerForManifestOnly.isManifestOnly
         },
