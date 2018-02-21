@@ -33,5 +33,5 @@ export default class HeroList extends React.Component<HeroListProps> {
                 {children}
             </main>
         );
-    };
-};
+    }
+}

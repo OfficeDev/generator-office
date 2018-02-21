@@ -22,5 +22,5 @@ export default class Progress extends React.Component<ProgressProps> {
                 <Spinner type={SpinnerType.large} label={message} />
             </section>
         );
-    };
-};
+    }
+}

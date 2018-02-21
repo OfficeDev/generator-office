@@ -20,5 +20,5 @@ export default class Header extends React.Component<HeaderProps> {
                 <h1 className='ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary'>{message}</h1>
             </section>
         );
-    };
-};
+    }
+}

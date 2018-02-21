@@ -68,7 +68,7 @@ export default class App extends React.Component<AppProps, AppState> {
                     title={title}
                     logo='assets/logo-filled.png'
                     message='Please sideload your addin to see app body.'
-                />                
+                />
             );
         }
 
@@ -81,5 +81,5 @@ export default class App extends React.Component<AppProps, AppState> {
                 </HeroList>
             </div>
         );
-    };
-};
+    }
+}

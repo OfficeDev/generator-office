@@ -21,7 +21,7 @@ const render = (Component) => {
         </AppContainer>,
         document.getElementById('container')
     );
-}
+};
 
 /* Render application after Office initializes */
 Office.initialize = () => {
