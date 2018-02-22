@@ -41,19 +41,18 @@ export default class App extends React.Component<AppProps, AppState> {
     }
 
     click = async () => {
-        <% if (host === 'Outlook') { %>
-        <%# Outlook doesn't expose Outlook.run(), so don't put that in %>
+<% if (host === 'Outlook') { %><%# Outlook doesn't expose Outlook.run() %>
         /**
          * Insert your <%= host %> code here
          */
-        <% } else { %>
+<% } else { %>
         await <%= host %>.run(async (context) => {
             /**
              * Insert your <%= host %> code here
              */
             await context.sync();
         });
-        <% } %>
+<% } %>
     }
 
     render() {
