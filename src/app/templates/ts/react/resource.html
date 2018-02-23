@@ -36,11 +36,11 @@
                 <p>You can host your add-in locally or use any web server. Make sure that the add-in is served using HTTPS and
                     also update the add-in’s source location in the manifest. </p>
 
-                <p>To help you get started, we have included <b>browser-sync</b> for your convenience. To learn more about it, see
-                    <a target="_blank" href="https://www.browsersync.io/" onclick="appInsights.trackEvent('linkClick_browsersync');return true;">browsersync.io.</a></p>
+                <p>To help you get started, we have included <b>webpack-dev-server</b> for your convenience. To learn more about it, see the documentation
+                    <a target="_blank" href="https://webpack.js.org/configuration/dev-server/" onclick="appInsights.trackEvent('linkClick_webpackdevserver');return true;">here.</a></p>
 
                 <pre>
-                        <span class="comment"># To host the add-in using browser-sync, use the following command:</span>
+                        <span class="comment"># To host the add-in using webpack-dev-server, use the following command:</span>
 npm start</pre>
 
                 <p>You will need to add the self-signed security certificate that npm creates as a trusted root certificate,
