@@ -8,7 +8,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "removeComments": false,
-    "noImplicitAny": false,
     "noEmitOnError": true,
     "rootDir": "src",
     "outDir": "dist",
@@ -21,7 +20,6 @@
       "dom"
     ],
     "pretty": true,
-    "strictNullChecks": false,
     "typeRoots": [
       "node_modules/@types"
     ]
