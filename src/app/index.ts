@@ -12,7 +12,7 @@ import * as opn from 'opn';
 import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
-let insight = appInsights.getClient('68a8ef35-112c-4d33-a118-3c346947f2fe');
+let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 
 // Remove unwanted tags
 delete insight.context.tags['ai.cloud.roleInstance'];
