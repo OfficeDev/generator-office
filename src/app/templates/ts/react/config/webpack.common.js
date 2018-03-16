@@ -83,6 +83,11 @@ const WEBPACK_PLUGINS = [
                 minimize: true
             }
         }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'vendor',
+        minChunks: Infinity,
+        chunks: ['app']
     })
 ];
 
