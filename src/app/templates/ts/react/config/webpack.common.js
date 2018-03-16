@@ -111,7 +111,7 @@ module.exports = {
             chunks: ['app', 'vendor', 'polyfills']
         }),
         new HtmlWebpackPlugin({
-            title: 'plsgod',
+            title: '<%= projectDisplayName %>',
             filename: 'function-file/function-file.html',
             template: './function-file/function-file.html',
             chunks: ['function-file']
