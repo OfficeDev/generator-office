@@ -26,7 +26,8 @@ const entry = {
     app: [
         'react-hot-loader/patch',
         './index.tsx',
-    ]
+    ],
+    'function-file': './function-file/function-file.ts'
 };
 
 const rules = [
@@ -82,10 +83,6 @@ const WEBPACK_PLUGINS = [
                 minimize: true
             }
         }
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-        name: ['vendor', 'app'],
-        minChunks: 2
     })
 ];
 
@@ -107,6 +104,12 @@ module.exports = {
             filename: 'index.html',
             template: './index.html',
             chunks: ['app', 'vendor', 'polyfills']
+        }),
+        new HtmlWebpackPlugin({
+            title: 'plsgod',
+            filename: 'function-file/function-file.html',
+            template: './function-file/function-file.html',
+            chunks: ['function-file']
         }),
         new CopyWebpackPlugin([
             {
