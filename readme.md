@@ -22,8 +22,6 @@ Like other Yeoman generators, this simply creates the scaffolding of files for y
 
 Choose to create Office Add-in projects using plain HTML, CSS & JavaScript (*mirroring the same projects that Visual Studio creates*) or create Angular-based projects.
 
-If you are interested in contributing, read the [Contributing Guidelines](CONTRIBUTING.md). 
-
 ## YO Office Demo
 ![](src/docs/assets/gettingstarted-slow.gif)
 
@@ -113,6 +111,49 @@ $ npm run validate your_manifest.xml
 ![](src/docs/assets/validator.gif)
 
 For more information on manifest validation, refer to our [add-in manifests documentation](https://docs.microsoft.com/en-us/office/dev/add-ins/develop/add-in-manifests).
+
+## Contributing
+
+### [Contributing Guidelines](CONTRIBUTING.md)
+
+If you are interested in contributing, please start by reading the [Contributing Guidelines](CONTRIBUTING.md).
+
+### Development
+
+#### Prerequisites
+
+Ensure you have [Node.js](https://nodejs.org/en/) installed.
+
+Install [Yeoman](http://yeoman.io/).
+```bash
+$ npm install -g yo
+```
+
+#### Initialize the repo
+
+```bash
+$ git clone https://github.com/OfficeDev/generator-office.git
+$ cd generator-office
+$ npm install
+```
+
+#### Make your desired changes
+
+  - Project templates can be found under [src/app/templates](src/app/templates/)
+  - Generator script can be found at [src/app/index.ts](src/app/index.ts)
+
+#### Build and link your changes
+
+```bash
+$ npm run build
+$ npm link
+$ cd ..
+$ yo office
+```
+
+At this point, `yo office` will be running with your custom built `office-generator` changes.
+
+---
 
 Copyright (c) 2017 Microsoft Corporation. All rights reserved.
 
