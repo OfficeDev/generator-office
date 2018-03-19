@@ -1,9 +1,9 @@
 const base = (host: string) =>
-        `await ${host}.run(async context => {
+        `return ${host}.run(async context => {
             /**
              * Insert your ${host} code here
              */
-            await context.sync();
+            return context.sync();
         });`;
 
 export default (host: string) => {

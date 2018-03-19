@@ -12,18 +12,6 @@
   };
 
   async function run() {
-    <% if (host === 'Outlook') { %>
-    <%# Outlook doesn't expose Outlook.run(), so don't put that in %>
-    /**
-     * Insert your <%= host %> code here
-     */
-    <% } else { %>
-    await <%= host %>.run(async (context) => {
-      /**
-       * Insert your <%= host %> code here
-       */
-      await context.sync();
-    });
-    <% } %>
+    <%- starterCode %>
   }
 })();
