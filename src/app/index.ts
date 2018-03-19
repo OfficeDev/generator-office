@@ -12,6 +12,9 @@ import * as opn from 'opn';
 import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
+
+import starterCode from './config/starterCode';
+
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 
 // Remove unwanted tags
@@ -279,18 +282,20 @@ module.exports = yo.extend({
           this.log('----------------------------------------------------------------------------------\n\n');
         }
 
+        const templateFills = Object.assign({}, this.project, { starterCode: starterCode(this.project.host) });
+
         /** Copy the manifest */
-        this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), this.project);
+        this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
 
         if (this.project.framework === 'manifest-only') {
-          this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), this.project);
+          this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
         }
         else {
           /** Copy the base template */
           this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath());
 
           /** Copy the framework specific overrides */
-          this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), this.project);
+          this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), templateFills);
         }
       } catch (err) {
         insight.trackException(new Error('File Copy Error: ' + err));
