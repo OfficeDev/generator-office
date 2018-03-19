@@ -1,15 +1,25 @@
+const defaultContents = 'return context.sync();';
+
 /**
  * Generates an empty RichAPI-based starter template for the provided host
  * 
  * @param host The host name
  */
-const base = (host: string) =>
+const base = (host: string, contents?: string) =>
         `return ${host}.run(context => {
             /**
              * Insert your ${host} code here
              */
-            return context.sync();
+            ${contents || defaultContents}
+        }).catch(error => {
+            OfficeHelpers.UI.notify(error);
+            OfficeHelpers.Utilities.log(error);
         });`;
+
+/**
+ * Generates any required import statements.
+ */
+const imports = () => `import * as OfficeHelpers from '@microsoft/office-js-helpers';`;
 
 /**
  * Generates a starter code snippet for the provided host.
@@ -18,16 +28,11 @@ const base = (host: string) =>
  * 
  * @param host The host name
  */
-export default (host: string) => {
+const snippet = (host: string) => {
     switch (host) {
         case 'Excel':
-            return (
-        `return ${host}.run(context => {
-            /**
-             * Insert your ${host} code here
-             */
-            const range = context.workbook.getSelectedRange();
-            
+            return base(host, `const range = context.workbook.getSelectedRange();
+
             // Read the range address
             range.load('address');
 
@@ -35,10 +40,8 @@ export default (host: string) => {
             range.format.fill.color = 'yellow';
 
             return context.sync().then(() => 
-                console.log(\`The range address was \${range.address}.\`);
-            );
-        });`
-            );
+                console.log(\`The range address was \${range.address}.\`)
+            );`);
         case 'Word':
             return (
         `return ${host}.run(context => {
@@ -54,7 +57,7 @@ export default (host: string) => {
             range.font.color = 'red';
 
             return context.sync().then(() => 
-                console.log(\`The selected text was \${range.text}.\`);
+                console.log(\`The selected text was \${range.text}.\`)
             );
         });`
             );
@@ -83,3 +86,8 @@ export default (host: string) => {
             return base(host);
     }
 };
+
+export default (host: string) => ({
+    imports: imports(),
+    snippet: snippet(host),
+});

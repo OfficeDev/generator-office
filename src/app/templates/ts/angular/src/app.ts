@@ -24,7 +24,7 @@
     console.log(`${this.title} is ready!`);
 
     this.run = async () => {
-      <%- starterCode %>
+      <%- snippet %>
     }
   }
 

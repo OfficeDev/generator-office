@@ -26,7 +26,7 @@
     console.log(this.title + ' is ready!');
 
     this.run = function () {
-      <%- starterCode %>
+      <%- snippet %>
     }
   }
 

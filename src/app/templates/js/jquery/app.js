@@ -15,7 +15,7 @@
   };
 
   function run() {
-    <%- starterCode %>
+    <%- snippet %>
   }
 
 })();

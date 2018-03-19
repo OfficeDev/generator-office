@@ -12,6 +12,6 @@
   };
 
   async function run() {
-    <%- starterCode %>
+    <%- snippet %>
   }
 })();

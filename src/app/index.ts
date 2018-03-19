@@ -13,7 +13,7 @@ import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 
-import starterCode from './config/starterCode';
+import generateStarterCode from './config/starterCode';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 
@@ -282,7 +282,8 @@ module.exports = yo.extend({
           this.log('----------------------------------------------------------------------------------\n\n');
         }
 
-        const templateFills = Object.assign({}, this.project, { starterCode: starterCode(this.project.host) });
+        const starterCode = generateStarterCode(this.project.host);
+        const templateFills = Object.assign({}, this.project, starterCode);
 
         /** Copy the manifest */
         this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);

@@ -4,6 +4,8 @@ import Header from './Header';
 import HeroList, { HeroListItem } from './HeroList';
 import Progress from './Progress';
 
+<%- imports %>
+
 export interface AppProps {
     title: string;
     isOfficeInitialized: boolean;
@@ -41,7 +43,7 @@ export default class App extends React.Component<AppProps, AppState> {
     }
 
     click = async () => {
-        <%- starterCode %>
+        <%- snippet %>
     }
 
     render() {
