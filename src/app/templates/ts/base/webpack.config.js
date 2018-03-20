@@ -5,6 +5,9 @@ module.exports = {
         app: './src/index.ts',
         'function-file': './function-file/function-file.ts'
     },
+    resolve: {
+        extensions: ['.ts', '.tsx', '.html', '.js']
+    },
     module: {
         rules: [
             {
