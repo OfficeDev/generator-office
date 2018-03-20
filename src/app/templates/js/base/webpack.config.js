@@ -1,7 +1,10 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: {
+        app: './src/index.js',
+        'function-file': './function-file/function-file.js'
+    },
     module: {
         rules: [
             {
@@ -22,7 +25,13 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './index.html'
+            template: './index.html',
+            chunks: ['app']
+        }),
+        new HtmlWebpackPlugin({
+            template: './function-file/function-file.html',
+            filename: 'function-file/function-file.html',
+            chunks: ['function-file']
         })
     ]
 };
