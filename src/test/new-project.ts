@@ -7,6 +7,29 @@ import * as helpers from 'yeoman-test';
 import * as assert from 'yeoman-assert';
 import * as path from 'path';
 
+const expectedAssets = [
+  'assets/icon-16.png',
+  'assets/icon-32.png',
+  'assets/icon-80.png',
+  'assets/logo-filled.png',
+];
+
+const expectedFunctionFilesJs = [
+  'function-file/function-file.html',
+  'function-file/function-file.js',
+];
+
+const expectedFunctionFilesTs = [
+  'function-file/function-file.html',
+  'function-file/function-file.ts',
+];
+
+const commonExpectedFiles = [
+  '.gitignore',
+  'package.json',
+  'webpack.config.js',
+];
+
 /**
  * Test addin from user answers
  * new project, default folder, defaul host.
@@ -38,18 +61,13 @@ describe('new project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
+        'src/index.ts',
+        'index.html',
         'resource.html'
       ];
 
@@ -71,20 +89,14 @@ describe('new project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
+        ...expectedAssets,
+        ...expectedFunctionFilesJs,
+        ...commonExpectedFiles,
         '.babelrc',
-        '.gitignore',
-        'package.json',
         'app.css',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png',
-        'function-file/function-file.html',
-        'function-file/function-file.js',
         'src/index.js',
         'index.html',
         'resource.html',
-        'webpack.config.js'
       ];
 
       assert.file(expected);
@@ -105,18 +117,13 @@ describe('new project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
+        'src/index.ts',
+        'index.html',
         'resource.html'
       ];
 
@@ -138,20 +145,14 @@ describe('new project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
+        ...expectedAssets,
+        ...expectedFunctionFilesJs,
+        ...commonExpectedFiles,
         '.babelrc',
-        '.gitignore',
-        'package.json',
         'app.css',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png',
-        'function-file/function-file.html',
-        'function-file/function-file.js',
         'jsconfig.json',
         'index.html',
         'resource.html',
-        'webpack.config.js',
         'src/index.js',
         'src/app/app.component.html',
         'src/app/app.component.js',
@@ -176,18 +177,14 @@ describe('new project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
         'tsconfig.json',
         'config/webpack.common.js',
         'config/webpack.dev.js',
         'config/webpack.prod.js',
-        'src/assets/styles/global.less',
+        'src/styles.less',
         'src/components/App.tsx',
         'src/components/Header.tsx',
         'src/components/HeroList.tsx',
@@ -245,18 +242,13 @@ describe('new project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
+        'src/index.ts',
+        'index.html',
         'resource.html'
       ];
 
@@ -288,18 +280,13 @@ describe('new project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
+        'src/index.ts',
+        'index.html',
         'resource.html'
       ];
 
@@ -331,18 +318,13 @@ describe('new project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
+        'src/index.ts',
+        'index.html',
         'resource.html'
       ];
 
@@ -383,20 +365,14 @@ describe('new project - answers & opts - jquery & typescript', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
+        ...expectedAssets,
+        ...expectedFunctionFilesJs,
+        ...commonExpectedFiles,
         '.babelrc',
-        '.gitignore',
-        'package.json',
         'app.css',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png',
-        'function-file/function-file.html',
-        'function-file/function-file.js',
         'src/index.js',
         'index.html',
         'resource.html',
-        'webpack.config.js'
       ];
 
       assert.file(expected);
@@ -417,18 +393,13 @@ describe('new project - answers & opts - jquery & typescript', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
+        'src/index.ts',
+        'index.html',
         'resource.html'
       ];
 
