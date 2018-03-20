@@ -27,7 +27,7 @@ const entry = {
         'react-hot-loader/patch',
         './index.tsx',
     ],
-    'function-file': './function-file/function-file.ts'
+    'function-file': '../function-file/function-file.ts'
 };
 
 const rules = [
@@ -113,12 +113,12 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: '<%= projectDisplayName %>',
             filename: 'function-file/function-file.html',
-            template: './function-file/function-file.html',
+            template: '../function-file/function-file.html',
             chunks: ['function-file']
         }),
         new CopyWebpackPlugin([
             {
-                from: './assets',
+                from: '../assets',
                 ignore: ['*.scss'],
                 to: 'assets',
             }
