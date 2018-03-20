@@ -136,6 +136,8 @@ describe('new project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
+        '.babelrc',
+        '.gitignore',
         'package.json',
         'app.css',
         'assets/icon-16.png',
@@ -144,10 +146,14 @@ describe('new project - answers', () => {
         'assets/logo-filled.png',
         'function-file/function-file.html',
         'function-file/function-file.js',
-        'bsconfig.json',
-        'app.js',
+        'jsconfig.json',
         'index.html',
-        'resource.html'
+        'resource.html',
+        'webpack.config.js',
+        'src/index.js',
+        'src/app/app.component.html',
+        'src/app/app.component.js',
+        'src/app/app.module.js',
       ];
 
       assert.file(expected);

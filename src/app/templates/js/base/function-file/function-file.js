@@ -3,15 +3,9 @@
  * See LICENSE in the project root for license information.
  */
 
-'use strict';
+// The initialize function must be run each time a new page is loaded
+Office.initialize = reason => {
 
-(function () {
+};
 
-  // The initialize function must be run each time a new page is loaded
-  Office.initialize = function (reason) {
-    
-  };
-
-  // Add any ui-less function here
-
-})();
+// Add any ui-less function here

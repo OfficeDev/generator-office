@@ -293,10 +293,24 @@ module.exports = yo.extend({
         }
         else {
           /** Copy the base template */
-          this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath());
+          this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
 
           /** Copy the framework specific overrides */
-          this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), templateFills);
+          this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+          
+          /** Manually copy any dot files as yoeman can't handle them */
+
+          /** .babelrc */
+          const babelrcPath = this.templatePath(`${language}/${this.project.framework}/babelrc.placeholder`);
+          if (this.fs.exists(babelrcPath)) {
+              this.fs.copy(babelrcPath, this.destinationPath('.babelrc'));
+          }
+
+          /** .gitignore */
+          const gitignorePath = this.templatePath(`${language}/base/gitignore.placeholder`);
+          if (this.fs.exists(gitignorePath)) {
+              this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
+          }
         }
       } catch (err) {
         insight.trackException(new Error('File Copy Error: ' + err));

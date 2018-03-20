@@ -14,7 +14,6 @@
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.debug.js"></script>
 
     <!-- LOCAL -->
-    <link rel="stylesheet" href="node_modules/angular/angular-csp.css" />
     <link rel="stylesheet" href="node_modules/office-ui-fabric-js/dist/css/fabric.min.css" />
     <link rel="stylesheet" href="node_modules/office-ui-fabric-js/dist/css/fabric.components.css" />
 
@@ -28,41 +27,7 @@
 </head>
 
 <body class="ms-font-m ms-welcome">
-    <header class="ms-welcome__header ms-bgColor-neutralLighter ms-u-fadeIn500">
-        <img width="90" height="90" src="assets/logo-filled.png" alt="<%= projectDisplayName %>" title="<%= projectDisplayName %>" />
-        <h1 class="ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary">Welcome</h1>
-    </header>
-    <main class="ms-welcome__main" ng-controller="HomeController as home">
-        <h2 class="ms-font-xl ms-fontWeight-semilight ms-fontColor-neutralPrimary ms-u-slideUpIn20"> Discover what <%= projectDisplayName %> can do for you today! </h2>
-        <ul class="ms-List ms-welcome__features ms-u-slideUpIn10">
-            <li class="ms-ListItem">
-                <i class="ms-Icon ms-Icon--Ribbon"></i>
-                <span class="ms-font-m ms-fontColor-neutralPrimary">Achieve more with Office integration</span>
-            </li>
-            <li class="ms-ListItem">
-                <i class="ms-Icon ms-Icon--Unlock"></i>
-                <span class="ms-font-m ms-fontColor-neutralPrimary">Unlock features and functionality</span>
-            </li>
-            <li class="ms-ListItem">
-                <i class="ms-Icon ms-Icon--Design"></i>
-                <span class="ms-font-m ms-fontColor-neutralPrimary">Create and visualize like a pro</span>
-            </li>
-        </ul>
-        <br />
-        <br />
-        <p class="ms-font-l">Modify the source files, then click <b>Run</b>.</p>
-        <button class="ms-welcome__action ms-Button ms-Button--hero ms-u-slideUpIn20" ng-click="home.run()">
-            <span class="ms-Button-label">Run</span>
-            <span class="ms-Button-icon"><i class="ms-Icon ms-Icon--ChevronRight"></i></span>
-        </button>
-    </main>
-
-    <script type="text/javascript" src="node_modules/core-js/client/core.js"></script>
-    <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
-    <script type="text/javascript" src="node_modules/angular/angular.js"></script>
-    <script type="text/javascript" src="node_modules/office-ui-fabric-js/dist/js/fabric.js"></script>
-
-    <script type="text/javascript" src="app.js"></script>
+    <app-home></app-home>
 </body>
 
 </html>
