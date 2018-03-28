@@ -28,6 +28,7 @@ const commonExpectedFiles = [
   '.gitignore',
   'package.json',
   'webpack.config.js',
+  'resource.html',
 ];
 
 /**
@@ -68,7 +69,6 @@ describe('new project - answers', () => {
         'tsconfig.json',
         'src/index.ts',
         'index.html',
-        'resource.html'
       ];
 
       assert.file(expected);
@@ -96,7 +96,6 @@ describe('new project - answers', () => {
         'app.css',
         'src/index.js',
         'index.html',
-        'resource.html',
       ];
 
       assert.file(expected);
@@ -124,7 +123,6 @@ describe('new project - answers', () => {
         'tsconfig.json',
         'src/index.ts',
         'index.html',
-        'resource.html'
       ];
 
       assert.file(expected);
@@ -152,7 +150,6 @@ describe('new project - answers', () => {
         'app.css',
         'jsconfig.json',
         'index.html',
-        'resource.html',
         'src/index.js',
         'src/app/app.component.html',
         'src/app/app.component.js',
@@ -192,7 +189,6 @@ describe('new project - answers', () => {
         'src/index.html',
         'src/index.tsx',
         'tslint.json',
-        'resource.html'
       ];
 
       assert.file(expected);
@@ -249,7 +245,6 @@ describe('new project - answers & args - jquery & typescript', () => {
         'tsconfig.json',
         'src/index.ts',
         'index.html',
-        'resource.html'
       ];
 
       assert.file(expected);
@@ -287,7 +282,6 @@ describe('new project - answers & args - jquery & typescript', () => {
         'tsconfig.json',
         'src/index.ts',
         'index.html',
-        'resource.html'
       ];
 
       assert.file(expected);
@@ -325,7 +319,6 @@ describe('new project - answers & args - jquery & typescript', () => {
         'tsconfig.json',
         'src/index.ts',
         'index.html',
-        'resource.html'
       ];
 
       assert.file(expected);
@@ -372,7 +365,6 @@ describe('new project - answers & opts - jquery & typescript', () => {
         'app.css',
         'src/index.js',
         'index.html',
-        'resource.html',
       ];
 
       assert.file(expected);
@@ -400,7 +392,6 @@ describe('new project - answers & opts - jquery & typescript', () => {
         'tsconfig.json',
         'src/index.ts',
         'index.html',
-        'resource.html'
       ];
 
       assert.file(expected);
