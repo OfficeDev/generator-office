@@ -35,7 +35,7 @@ const commonExpectedFiles = [
  * Test addin from user answers
  * new project, default folder, defaul host.
  */
-describe('new project - answers', () => {
+describe('Create new project from prompts only', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
@@ -201,7 +201,7 @@ describe('new project - answers', () => {
  * Test addin from user answers and arguments
  * new project, default folder, typescript, jquery.
  */
-describe('new project - answers & args - jquery & typescript', () => {
+describe('Create new project from prompts and command line overrides', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
@@ -331,7 +331,7 @@ describe('new project - answers & args - jquery & typescript', () => {
  * Test addin from user answers and options
  * new project, default folder, typescript, jquery.
  */
-describe('new project - answers & opts - jquery & typescript', () => {
+describe('Create new project from prompts with command line options', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
