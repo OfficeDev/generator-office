@@ -20,7 +20,18 @@
     /**
      * Insert your <%= host %> code here
      */
-    <% } else { %>
+    <% } else if (host === 'PowerPoint') { %><%# PowerPoint doesn't use RichAPI %>
+    /**
+     * Insert your <%= host %> code here
+     */
+    Office.context.document.setSelectedDataAsync('Hello World!', {
+        coercionType: Office.CoercionType.Text
+    }, result => {
+        if (result.status === Office.AsyncResultStatus.Failed) {
+            console.error(result.error.message);
+        }
+    });
+<% } else { %>
     return <%= host %>.run(function (context) {
       /**
        * Insert your <%= host %> code here
