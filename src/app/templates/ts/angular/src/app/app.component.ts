@@ -10,7 +10,7 @@ const template = require('./app.component.html');
 export default class AppComponent {
     welcomeMessage = 'Welcome';
 
-    run() {
+    async run() {
         <%- snippet %>
     }
 }

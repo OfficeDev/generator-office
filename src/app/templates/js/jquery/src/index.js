@@ -12,6 +12,6 @@ Office.initialize = reason => {
     });
 };
 
-function run() {
+async function run() {
     <%- snippet %>
 }

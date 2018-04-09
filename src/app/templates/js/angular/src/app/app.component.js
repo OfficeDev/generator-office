@@ -10,7 +10,7 @@ import template from './app.component.html';
 export default class AppComponent {
     welcomeMessage = 'Welcome';
 
-    run() {
+    async run() {
         <%- snippet %>
     }
 }

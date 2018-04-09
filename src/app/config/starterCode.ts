@@ -6,15 +6,17 @@ const defaultContents = 'return context.sync();';
  * @param host The host name
  */
 const base = (host: string, contents?: string) =>
-        `return ${host}.run(context => {
-            /**
-             * Insert your ${host} code here
-             */
-            ${contents || defaultContents}
-        }).catch(error => {
+        `try {
+            await ${host}.run(async context => {
+                /**
+                 * Insert your ${host} code here
+                 */
+                ${contents || defaultContents}
+            });
+        } catch(error) {
             OfficeHelpers.UI.notify(error);
             OfficeHelpers.Utilities.log(error);
-        });`;
+        };`;
 
 /**
  * Generates any required import statements.
@@ -39,12 +41,11 @@ const snippet = (host: string) => {
             // Update the fill color
             range.format.fill.color = 'yellow';
 
-            return context.sync().then(() => 
-                console.log(\`The range address was \${range.address}.\`)
-            );`);
+            await context.sync();
+            console.log(\`The range address was \${range.address}.\`);`);
         case 'Word':
             return (
-        `return ${host}.run(context => {
+        `return ${host}.run(async context => {
             /**
              * Insert your ${host} code here
              */
@@ -56,9 +57,8 @@ const snippet = (host: string) => {
             // Update font color
             range.font.color = 'red';
 
-            return context.sync().then(() => 
-                console.log(\`The selected text was \${range.text}.\`)
-            );
+            await context.sync();
+            console.log(\`The selected text was \${range.text}.\`);
         });`
             );
         case 'Outlook':
