@@ -4,17 +4,26 @@
   "author": "",
   "version": "0.1.0",
   "scripts": {
-    "start": "browser-sync start --config bsconfig.json",
+    "start": "webpack-dev-server --mode development --https --key ./certs/server.key --cert ./certs/server.crt --cacert ./certs/ca.crt --port 3000",
+    "build": "webpack --mode production",
     "validate": "./node_modules/.bin/validate-office-addin"
   },
   "dependencies": {
-    "core-js": "^2.4.1",
+    "@microsoft/office-js-helpers": "^1.0.1",
     "office-ui-fabric-js": "^1.3.0",
-    "jquery": "^3.1.1",
-    "office-addin-validator": "^1.0.1"
+    "jquery": "^3.1.1"
   },
   "devDependencies": {
-    "browser-sync": "^2.18.5",
-    "@types/office-js": "^0.0.37"
+    "@types/office-js": "^0.0.37",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "file-loader": "^1.1.11",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.0.7",
+    "office-addin-validator": "^1.0.1",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12",
+    "webpack-dev-server": "^3.1.1"
   }
 }

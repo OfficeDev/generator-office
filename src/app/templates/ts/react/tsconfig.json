@@ -8,8 +8,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "removeComments": false,
-    "noEmitOnError": true,
-    "rootDir": "src",
     "outDir": "dist",
     "allowUnusedLabels": false,
     "noImplicitReturns": true,

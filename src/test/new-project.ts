@@ -7,11 +7,35 @@ import * as helpers from 'yeoman-test';
 import * as assert from 'yeoman-assert';
 import * as path from 'path';
 
+const expectedAssets = [
+  'assets/icon-16.png',
+  'assets/icon-32.png',
+  'assets/icon-80.png',
+  'assets/logo-filled.png',
+];
+
+const expectedFunctionFilesJs = [
+  'function-file/function-file.html',
+  'function-file/function-file.js',
+];
+
+const expectedFunctionFilesTs = [
+  'function-file/function-file.html',
+  'function-file/function-file.ts',
+];
+
+const commonExpectedFiles = [
+  '.gitignore',
+  'package.json',
+  'webpack.config.js',
+  'resource.html',
+];
+
 /**
  * Test addin from user answers
  * new project, default folder, defaul host.
  */
-describe('new project - answers', () => {
+describe('Create new project from prompts only', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
@@ -38,19 +62,13 @@ describe('new project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
-        'resource.html'
+        'src/index.ts',
+        'index.html',
       ];
 
       assert.file(expected);
@@ -71,18 +89,13 @@ describe('new project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
+        ...expectedAssets,
+        ...expectedFunctionFilesJs,
+        ...commonExpectedFiles,
+        '.babelrc',
         'app.css',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png',
-        'function-file/function-file.html',
-        'function-file/function-file.js',
-        'bsconfig.json',
-        'app.js',
+        'src/index.js',
         'index.html',
-        'resource.html'
       ];
 
       assert.file(expected);
@@ -103,19 +116,13 @@ describe('new project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
-        'resource.html'
+        'src/index.ts',
+        'index.html',
       ];
 
       assert.file(expected);
@@ -136,18 +143,17 @@ describe('new project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
+        ...expectedAssets,
+        ...expectedFunctionFilesJs,
+        ...commonExpectedFiles,
+        '.babelrc',
         'app.css',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png',
-        'function-file/function-file.html',
-        'function-file/function-file.js',
-        'bsconfig.json',
-        'app.js',
+        'jsconfig.json',
         'index.html',
-        'resource.html'
+        'src/index.js',
+        'src/app/app.component.html',
+        'src/app/app.component.js',
+        'src/app/app.module.js',
       ];
 
       assert.file(expected);
@@ -168,18 +174,14 @@ describe('new project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
         'tsconfig.json',
         'config/webpack.common.js',
         'config/webpack.dev.js',
         'config/webpack.prod.js',
-        'src/assets/styles/global.less',
+        'src/styles.less',
         'src/components/App.tsx',
         'src/components/Header.tsx',
         'src/components/HeroList.tsx',
@@ -187,7 +189,6 @@ describe('new project - answers', () => {
         'src/index.html',
         'src/index.tsx',
         'tslint.json',
-        'resource.html'
       ];
 
       assert.file(expected);
@@ -200,7 +201,7 @@ describe('new project - answers', () => {
  * Test addin from user answers and arguments
  * new project, default folder, typescript, jquery.
  */
-describe('new project - answers & args - jquery & typescript', () => {
+describe('Create new project from prompts and command line overrides', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
@@ -237,19 +238,13 @@ describe('new project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
-        'resource.html'
+        'src/index.ts',
+        'index.html',
       ];
 
       assert.file(expected);
@@ -280,19 +275,13 @@ describe('new project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
-        'resource.html'
+        'src/index.ts',
+        'index.html',
       ];
 
       assert.file(expected);
@@ -323,19 +312,13 @@ describe('new project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
-        'resource.html'
+        'src/index.ts',
+        'index.html',
       ];
 
       assert.file(expected);
@@ -348,7 +331,7 @@ describe('new project - answers & args - jquery & typescript', () => {
  * Test addin from user answers and options
  * new project, default folder, typescript, jquery.
  */
-describe('new project - answers & opts - jquery & typescript', () => {
+describe('Create new project from prompts with command line options', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
@@ -375,18 +358,13 @@ describe('new project - answers & opts - jquery & typescript', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
+        ...expectedAssets,
+        ...expectedFunctionFilesJs,
+        ...commonExpectedFiles,
+        '.babelrc',
         'app.css',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png',
-        'function-file/function-file.html',
-        'function-file/function-file.js',
-        'app.js',
+        'src/index.js',
         'index.html',
-        'resource.html'
       ];
 
       assert.file(expected);
@@ -407,19 +385,13 @@ describe('new project - answers & opts - jquery & typescript', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
-        'bsconfig.json',
-        'src/app.css',
-        'src/assets/icon-16.png',
-        'src/assets/icon-32.png',
-        'src/assets/icon-80.png',
-        'src/assets/logo-filled.png',
-        'src/function-file/function-file.html',
-        'src/function-file/function-file.ts',
+        ...expectedAssets,
+        ...expectedFunctionFilesTs,
+        ...commonExpectedFiles,
+        'app.css',
         'tsconfig.json',
-        'src/app.ts',
-        'src/index.html',
-        'resource.html'
+        'src/index.ts',
+        'index.html',
       ];
 
       assert.file(expected);
