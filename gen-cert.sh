@@ -1,4 +1,4 @@
-if [[ $(uname) == *"MINGW"* ]]
+if [[ $(uname) == *"MINGW64"* ]]
 then
     # This script is intended to run in that Git Bash environment. Note the form for -subj
     echo "Generating RSA key for the root CA and store it in ca.key:"
@@ -7,7 +7,7 @@ then
     echo ""
     echo "Create the self-signed root CA certificate in ca.crt:"
 
-    openssl req -new -x509 -days 1826 -key ca.key -out ca.crt -subj "//C=US\ST=WA\L=Redmond\O=Office\OU=OfficeExtensibility\CN=localhost-ca"
+    openssl req -new -x509 -nodes -days 1826 -key ca.key -sha256 -out ca.crt -subj "//C=US\ST=WA\L=Redmond\O=Office\OU=OfficeExtensibility\CN=localhost-ca"
 
     echo ""
     echo "Create private key for subordinate CA:"
@@ -16,7 +16,7 @@ then
     echo ""
     echo "Request a certificate for the subordinate CA:"
 
-    openssl req -new -key server.key -out server.csr -subj "//C=US\ST=WA\L=Redmond\O=Office\OU=OfficeExtensibility\CN=localhost"
+    openssl req -new -key server.key -config san.conf -out server.csr -subj "//C=US\ST=WA\L=Redmond\O=Office\OU=OfficeExtensibility\CN=localhost"
 
     echo ""
     echo "Process the subordinate CA cert request and sign it with the root CA:"
