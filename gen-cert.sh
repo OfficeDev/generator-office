@@ -1,4 +1,4 @@
-if [[ $(uname) == *"MINGW64"* ]]
+if [[ $(uname) == *"MINGW"* ]]
 then
     # This script is intended to run in that Git Bash environment. Note the form for -subj
     echo "Generating RSA key for the root CA and store it in ca.key:"
