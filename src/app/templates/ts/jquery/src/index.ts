@@ -5,11 +5,14 @@
 
 <%- imports %>
 
+$(document).ready(() => {
+  $('#run').click(run);
+});
+
 // The initialize function must be run each time a new page is loaded
 Office.initialize = (reason) => {
-  $(document).ready(() => {
-    $('#run').click(run);
-  });
+  $('#sideload-msg').hide();
+  $('#app-body').show();
 };
 
 async function run() {
