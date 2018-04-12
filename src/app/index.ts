@@ -72,7 +72,7 @@ module.exports = yo.extend({
       let startForFolder = (new Date()).getTime();
       let askForFolder = [{
         name: 'folder',
-        message: 'Would you like to create a new subfolder for your project?',
+        message: 'Hello sucka, Would you like to create a new subfolder for your project?',
         type: 'confirm',
         default: false
       }];
@@ -154,15 +154,23 @@ module.exports = yo.extend({
       /** askForTs and askForFramework will only be triggered if it's not a manifest-only project */
       /** use TypeScript for the project */
       let startForTs = (new Date()).getTime();
-      let askForTs = [
-        {
-          name: 'ts',
-          type: 'confirm',
-          message: 'Would you like to use TypeScript?',
-          default: true,
-          when: (this.options.js == null) && (!this.project.isManifestOnly) && (this.options.framework !== 'react')
-        }
-      ];
+      let askForTs = [{
+        name: 'ts',
+        message: 'Which would you prefer to use?',
+        type: 'list',
+        default: true,
+        choices: [
+		              {
+		                name: 'Typescript',
+		                value: true
+		              },
+		              {
+		                name: 'Javascript',
+		                value: false
+		              }
+		              ],
+        when: (this.options.js == null) && (!this.project.isManifestOnly) && (this.options.framework !== 'react')
+      }];
       let answerForTs = await this.prompt(askForTs);
       let endForTs = (new Date()).getTime();
       let durationForTs = (endForTs - startForTs) / 1000;
