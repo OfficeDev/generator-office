@@ -10,17 +10,14 @@ then
     openssl req -new -x509 -days 1826 -key ca.key -out ca.crt -subj "//C=US\ST=WA\L=Redmond\O=Office\OU=OfficeExtensibility\CN=localhost-ca"
 
     echo ""
-    echo "Create private key for subordinate CA:"
-    openssl genrsa -out server.key 4096
-
-    echo ""
     echo "Request a certificate for the subordinate CA:"
 
-    openssl req -new -key server.key -out server.csr -subj "//C=US\ST=WA\L=Redmond\O=Office\OU=OfficeExtensibility\CN=localhost"
+    openssl req -newkey rsa:2048 -nodes -keyout server.key -subj "//C=US\ST=WA\L=Redmond\O=Office\OU=OfficeExtensibility\CN=localhost" -out server.csr
 
     echo ""
     echo "Process the subordinate CA cert request and sign it with the root CA:"
-    openssl x509 -req -days 36500 -in server.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out server.crt
+
+    openssl x509 -req -extfile cert.conf -extensions v3_req -days 36500 -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt
 
     echo ""
     echo "NEXT STEP (required): install the root CA (ca.crt) in your Trusted Root Certification Authorities store."
