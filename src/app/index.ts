@@ -45,6 +45,18 @@ module.exports = yo.extend({
       required: false,
       desc: 'Use JavaScript templates instead of TypeScript.'
     });
+
+    this.option('manifestonly', {
+      type: Boolean,
+      required: false,
+      desc: 'Only create a manifest.'
+    });
+    
+    this.option('output', {
+      type: String,
+      required: false,
+      desc: 'project folder name if different from project name'
+    });
   },
 
   /**
@@ -67,19 +79,6 @@ module.exports = yo.extend({
       updateHostNames(manifests, 'Onenote', 'OneNote');
       updateHostNames(manifests, 'Powerpoint', 'PowerPoint');
 
-      /** begin prompting */
-      /** whether to create a new folder for the project */
-      let startForFolder = (new Date()).getTime();
-      let askForFolder = [{
-        name: 'folder',
-        message: 'Hello sucka, Would you like to create a new subfolder for your project?',
-        type: 'confirm',
-        default: false
-      }];
-      let answerForFolder = await this.prompt(askForFolder);
-      let endForFolder = (new Date()).getTime();
-      let durationForFolder = (endForFolder - startForFolder) / 1000;
-
       /** name for the project */
       let startForName = (new Date()).getTime();
       let askForName = [{
@@ -92,6 +91,20 @@ module.exports = yo.extend({
       let answerForName = await this.prompt(askForName);
       let endForName = (new Date()).getTime();
       let durationForName = (endForName - startForName) / 1000;
+
+      /** begin prompting */
+      /** whether to create a new folder for the project */
+      let startForFolder = (new Date()).getTime();
+      let askForFolder = [{
+        name: 'folder',
+        message: 'Provide a name for the add-in project folder if you want it to be different than the add-in name?',
+        type: 'input',
+        default: answerForName.name || this.options.name,
+        when: this.options.output == null
+      }];
+      let answerForFolder = await this.prompt(askForFolder);
+      let endForFolder = (new Date()).getTime();
+      let durationForFolder = (endForFolder - startForFolder) / 1000;
 
       /** office client application that can host the addin */
       let startForHost = (new Date()).getTime();
@@ -124,7 +137,7 @@ module.exports = yo.extend({
             value: true
           }
         ],
-        when: this.options.framework == null
+        when: this.options.framework == null && !this.options.manifestonly
       }];
       let answerForManifestOnly = await this.prompt(askForManifestOnly); // trigger prompts and store user input
       let endForManifestOnly = (new Date()).getTime();
@@ -138,11 +151,16 @@ module.exports = yo.extend({
         name: this.options.name || answerForName.name,
         host: this.options.host || answerForHost.host,
         framework: this.options.framework || null,
-        isManifestOnly: answerForManifestOnly.isManifestOnly
+        isManifestOnly: this.options.manifestonly || answerForManifestOnly.isManifestOnly
       };
-      if (answerForManifestOnly.isManifestOnly) {
+      if (answerForManifestOnly.isManifestOnly || this.options.manifestonly) {
         this.project.framework = 'manifest-only';
       }
+
+      if (this.options.output != null) {
+        this.project.folder = this.options.output;
+      }
+
       if (this.options.framework != null) {
         if (this.options.framework === 'manifest-only') {
           this.project.isManifestOnly = true;
@@ -226,7 +244,8 @@ module.exports = yo.extend({
           name: 'open',
           type: 'confirm',
           message: 'Would you like to open it now while we finish creating your project?',
-          default: true
+          default: true,
+          when: this.args.length == 0
         }
       ];
       let answerForOpenResourcePage = await this.prompt(askForOpenResourcePage);
@@ -263,7 +282,7 @@ module.exports = yo.extend({
       this.project.hostInternalName = _.toLower(this.project.host);
 
       if (this.project.folder) {
-        this.destinationRoot(this.project.projectInternalName);
+        this.destinationRoot(this.project.folder);
       }
 
       let duration = this.project.duration;
