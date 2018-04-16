@@ -45,17 +45,17 @@ module.exports = yo.extend({
       required: false,
       desc: 'Use JavaScript templates instead of TypeScript.'
     });
-
-    this.option('manifestonly', {
-      type: Boolean,
-      required: false,
-      desc: 'Only create a manifest.'
-    });
-    
+  
     this.option('output', {
       type: String,
       required: false,
-      desc: 'project folder name if different from project name'
+      desc: 'Project folder name if different from project name'
+    });
+
+    this.option('show-webpage', {
+      type: Boolean,
+      required: false,
+      desc: 'Show generated resource web page'
     });
   },
 
@@ -114,7 +114,7 @@ module.exports = yo.extend({
         type: 'list',
         default: 'Excel',
         choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
-        when: this.options.host == null
+        when: this.options.host == null || (this.options.host != null && !this._isValidInput(manifests, this.options.host))
       }];
       let answerForHost = await this.prompt(askForHost);
       let endForHost = (new Date()).getTime();
@@ -137,7 +137,7 @@ module.exports = yo.extend({
             value: true
           }
         ],
-        when: this.options.framework == null && !this.options.manifestonly
+        when: this.options.framework == null
       }];
       let answerForManifestOnly = await this.prompt(askForManifestOnly); // trigger prompts and store user input
       let endForManifestOnly = (new Date()).getTime();
@@ -151,7 +151,7 @@ module.exports = yo.extend({
         name: this.options.name || answerForName.name,
         host: this.options.host || answerForHost.host,
         framework: this.options.framework || null,
-        isManifestOnly: this.options.manifestonly || answerForManifestOnly.isManifestOnly
+        isManifestOnly: answerForManifestOnly.isManifestOnly
       };
       if (answerForManifestOnly.isManifestOnly || this.options.manifestonly) {
         this.project.framework = 'manifest-only';
@@ -211,7 +211,8 @@ module.exports = yo.extend({
           type: 'list',
           default: 'react',
           choices: tsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
-          when: (this.project.framework == null) && this.project.ts && !this.options.js && !answerForManifestOnly.isManifestOnly
+          when: (this.project.framework != null && !this._isValidInput(tsTemplates, this.options.framework))
+          || (this.project.framework == null) && this.project.ts && !this.options.js && !answerForManifestOnly.isManifestOnly
         },
         {
           name: 'framework',
@@ -219,7 +220,8 @@ module.exports = yo.extend({
           type: 'list',
           default: 'jquery',
           choices: jsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
-          when: (this.project.framework == null) && !this.project.ts && this.options.js && !answerForManifestOnly.isManifestOnly
+          when: (this.framework != null && !this._isValidInput(jsTemplates, this.options.framework))
+           || (this.project.framework == null) && !this.project.ts && this.options.js && !answerForManifestOnly.isManifestOnly
         }
       ];
       let answerForFramework = await this.prompt(askForFramework);
@@ -251,7 +253,7 @@ module.exports = yo.extend({
       let answerForOpenResourcePage = await this.prompt(askForOpenResourcePage);
       let endForResourcePage = (new Date()).getTime();
       let durationForResourcePage = (endForResourcePage - startForResourcePage) / 1000;
-      this.project.isResourcePageOpened = answerForOpenResourcePage.open;
+      this.project.isResourcePageOpened = answerForOpenResourcePage.open || this.options['show-webpage']
       this.project.duration = (endForResourcePage - startForFolder) / 1000;
 
       /** appInsights logging */
@@ -381,6 +383,19 @@ module.exports = yo.extend({
     this.log(`      Or visit our repo at: https://github.com/officeDev/generator-office \n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
+  },
+
+  _isValidInput: function(inputType, input) {
+
+    for (var i = 0; i < inputType.length; i++)
+    {
+      var hostName = inputType[i];
+      if (hostName.toLowerCase() == input.toLowerCase())
+      {
+        return true;
+      }
+    }
+    return false;
   },
 
   _exitProcess: function () {

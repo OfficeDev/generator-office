@@ -398,4 +398,42 @@ describe('Create new project from prompts with command line options', () => {
       done();
     });
   });
+
+  /** Test addin when user passes in --show-webpage. */
+  describe('options: --show-webpage', () => {
+    before((done) => {
+      helpers.run(path.join(__dirname, '../app'))
+        .withOptions({ 'show-webpage': true })
+        .withPrompts(answers)
+        .on('end', done);
+   });
+  });
+
+    /** Test addin when user passes in --output. */
+    let folderName = 'testFolder';
+    describe('options: --output', () => {
+      before((done) => {
+        answers.folder = true;
+        helpers.run(path.join(__dirname, '../app'))
+          .withOptions({ 'output': folderName })
+          .withPrompts(answers)
+          .on('end', done);
+      });
+  
+      it('creates expected files', (done) => {
+        let expected = [
+           manifestFileName,
+          ...expectedAssets,
+          ...expectedFunctionFilesTs,
+          ...commonExpectedFiles,
+          'app.css',
+          'tsconfig.json',
+          'src/index.ts',
+          'index.html',
+        ];  
+
+        assert.file(expected);
+        done();
+      });
+    });    
 });
