@@ -86,20 +86,6 @@ module.exports = yo.extend({
       let endForName = (new Date()).getTime();
       let durationForName = (endForName - startForName) / 1000;
 
-      /** begin prompting */
-      /** whether to create a new folder for the project */
-      let startForFolder = (new Date()).getTime();
-      let askForFolder = [{
-        name: 'folder',
-        message: 'Provide a name for the add-in project folder if you want it to be different than the add-in name?',
-        type: 'input',
-        default: answerForName.name || this.options.name,
-        when: this.options.name == null && this.options.output == null
-      }];
-      let answerForFolder = await this.prompt(askForFolder);
-      let endForFolder = (new Date()).getTime();
-      let durationForFolder = (endForFolder - startForFolder) / 1000;
-
       /** office client application that can host the addin */
       let startForHost = (new Date()).getTime();
       let askForHost = [{
@@ -141,7 +127,7 @@ module.exports = yo.extend({
        * Configure user input to have correct values
        */
       this.project = {
-        folder: this.options.name || answerForFolder.folder,
+        folder: this.options.name,
         name: this.options.name || answerForName.name,
         host: this.options.host || answerForHost.host,
         framework: this.options.framework || null,
@@ -233,7 +219,6 @@ module.exports = yo.extend({
       }
 
       /** appInsights logging */
-      insight.trackEvent('Folder', { CreatedSubFolder: this.project.folder.toString() }, { durationForFolder });
       insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
       insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });
       insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { durationForManifestOnly });
