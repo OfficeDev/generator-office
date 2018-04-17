@@ -88,12 +88,6 @@ Specifying `--js` tells the generator to use JavaScript.
   - Default: Add-in Name
   - Optional
 
-  Specifying `--show-webpage` tells the launch the generated resource webpage.
-
-  - Type: Boolean
-  - Default: False
-  - Optional
-
 >**Note:** Do not use this flag when you pass `react` as framework argument.
 
 ## Running the Generated Site

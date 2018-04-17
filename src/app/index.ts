@@ -51,12 +51,6 @@ module.exports = yo.extend({
       required: false,
       desc: 'Project folder name if different from project name'
     });
-
-    this.option('show-webpage', {
-      type: Boolean,
-      required: false,
-      desc: 'Show generated resource web page'
-    });
   },
 
   /**
@@ -100,7 +94,7 @@ module.exports = yo.extend({
         message: 'Provide a name for the add-in project folder if you want it to be different than the add-in name?',
         type: 'input',
         default: answerForName.name || this.options.name,
-        when: this.options.output == null
+        when: this.options.name == null && this.options.output == null
       }];
       let answerForFolder = await this.prompt(askForFolder);
       let endForFolder = (new Date()).getTime();
@@ -147,13 +141,13 @@ module.exports = yo.extend({
        * Configure user input to have correct values
        */
       this.project = {
-        folder: answerForFolder.folder,
+        folder: this.options.name || answerForFolder.folder,
         name: this.options.name || answerForName.name,
         host: this.options.host || answerForHost.host,
         framework: this.options.framework || null,
         isManifestOnly: answerForManifestOnly.isManifestOnly
       };
-      if (answerForManifestOnly.isManifestOnly || this.options.manifestonly) {
+      if (answerForManifestOnly.isManifestOnly) {
         this.project.framework = 'manifest-only';
       }
 
@@ -211,7 +205,7 @@ module.exports = yo.extend({
           type: 'list',
           default: 'react',
           choices: tsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
-          when: (this.project.framework != null && !this._isValidInput(tsTemplates, this.options.framework))
+          when: (this.framework != null && (!this._isValidInput(jsTemplates, this.options.framework || this.options.framework != 'manifest-only' )))
           || (this.project.framework == null) && this.project.ts && !this.options.js && !answerForManifestOnly.isManifestOnly
         },
         {
@@ -220,7 +214,7 @@ module.exports = yo.extend({
           type: 'list',
           default: 'jquery',
           choices: jsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
-          when: (this.framework != null && !this._isValidInput(jsTemplates, this.options.framework))
+          when: (this.framework != null && (!this._isValidInput(jsTemplates, this.options.framework || this.options.framework != 'manifest-only' )))
            || (this.project.framework == null) && !this.project.ts && this.options.js && !answerForManifestOnly.isManifestOnly
         }
       ];
@@ -238,31 +232,12 @@ module.exports = yo.extend({
         this.project.framework = answerForFramework.framework;
       }
 
-      let startForResourcePage = (new Date()).getTime();
-      this.log('\nFor more information and resources on your next steps, we have created a resource.html file in your project.');
-      let askForOpenResourcePage = [
-        /** ask to open resource page */
-        {
-          name: 'open',
-          type: 'confirm',
-          message: 'Would you like to open it now while we finish creating your project?',
-          default: true,
-          when: this.args.length == 0
-        }
-      ];
-      let answerForOpenResourcePage = await this.prompt(askForOpenResourcePage);
-      let endForResourcePage = (new Date()).getTime();
-      let durationForResourcePage = (endForResourcePage - startForResourcePage) / 1000;
-      this.project.isResourcePageOpened = answerForOpenResourcePage.open || this.options['show-webpage']
-      this.project.duration = (endForResourcePage - startForFolder) / 1000;
-
       /** appInsights logging */
       insight.trackEvent('Folder', { CreatedSubFolder: this.project.folder.toString() }, { durationForFolder });
       insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
       insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });
       insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { durationForManifestOnly });
-      insight.trackEvent('IsResourcePageOpened', { IsResourcePageOpened: this.project.isResourcePageOpened.toString() }, { durationForResourcePage });
-
+      
       if (this.project.isManifestOnly === false) {
         insight.trackEvent('IsTs', { IsTs: this.project.ts.toString() }, { durationForTs });
         insight.trackEvent('Framework', { Framework: this.project.framework }, { durationForFramework });
@@ -270,7 +245,6 @@ module.exports = yo.extend({
     } catch (err) {
       insight.trackException(new Error('Prompting Error: ' + err));
     }
-
   },
 
   /**
@@ -348,10 +322,7 @@ module.exports = yo.extend({
   },
 
   install: function () {
-    try {
-      if (this.project.isResourcePageOpened) {
-        opn(`resource.html`);
-      }
+    try {      
       if (this.options['skip-install']) {
         this.installDependencies({
           npm: false,
@@ -363,8 +334,8 @@ module.exports = yo.extend({
         this.installDependencies({
           npm: true,
           bower: false,
-          callback: this._exitProcess.bind(this)
-        });
+          callback: this._postInstallHints.bind(this)
+        });    
       }
     } catch (err) {
       insight.trackException(new Error('Installation Error: ' + err));
