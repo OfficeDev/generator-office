@@ -167,7 +167,7 @@ module.exports = yo.extend({
 		                value: false
 		              }
 		              ],
-        when: (this.options.js == null) && (!this.project.isManifestOnly) && (this.options.framework !== 'react')
+        when: this.options.framework == null
       }];
       let answerForTs = await this.prompt(askForTs);
       let endForTs = (new Date()).getTime();
@@ -176,7 +176,7 @@ module.exports = yo.extend({
         this.project.ts = !this.options.js;
       }
       else {
-        this.project.ts = answerForTs.ts || false;
+        this.project.ts = answerForTs.ts || true;
       }
       if (this.options.framework === 'react') {
         this.project.ts = true;
@@ -261,7 +261,7 @@ module.exports = yo.extend({
         /** Show type of project creating in progress */
         if (this.project.framework !== 'manifest-only') {
           this.log('\n----------------------------------------------------------------------------------\n');
-          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
+          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.yellow(this.project.host)} using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
           this.log('----------------------------------------------------------------------------------\n\n');
         }
         else {
