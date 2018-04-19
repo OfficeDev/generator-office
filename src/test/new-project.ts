@@ -91,9 +91,9 @@ describe('Create new project from prompts only', () => {
   /** Test addin when user chooses jquery and javascript. */
   describe('jquery & javascript', () => {
     before((done) => {
-      answers.ts = false;
       answers.framework = 'jquery';
       helpers.run(path.join(__dirname, '../app'))
+        .withOptions({ js: true })
         .withPrompts(answers)
         .on('end', done);
     });
@@ -148,6 +148,7 @@ describe('Create new project from prompts only', () => {
       answers.ts = false;
       answers.framework = 'angular';
       helpers.run(path.join(__dirname, '../app'))
+        .withOptions({ js: true })
         .withPrompts(answers)
         .on('end', done);
     });
