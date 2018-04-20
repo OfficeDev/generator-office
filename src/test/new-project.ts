@@ -148,7 +148,7 @@ describe('Create new project from prompts only', () => {
       answers.ts = false;
       answers.framework = 'angular';
       helpers.run(path.join(__dirname, '../app'))
-        .withOptions({ js: true })
+        // .withOptions({ js: true })
         .withPrompts(answers)
         .on('end', done);
     });
