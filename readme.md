@@ -82,6 +82,12 @@ Specifying `--js` tells the generator to use JavaScript.
   - Default: False
   - Optional
 
+  Specifying `--output` tells the generator to create a project folder that differs from the add-in name.
+
+  - Type: String
+  - Default: Add-in Name
+  - Optional
+
 >**Note:** Do not use this flag when you pass `react` as framework argument.
 
 ## Running the Generated Site

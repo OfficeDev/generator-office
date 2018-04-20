@@ -24,6 +24,18 @@ const expectedFunctionFilesTs = [
   'function-file/function-file.ts',
 ];
 
+const certificateFiles = [
+  'certs/ca.crt',
+  'certs/server.crt',
+  'certs/server.key'
+]
+
+const configFiles = [
+  'config/webpack.common.js',
+  'config/webpack.dev.js',
+  'config/webpack.prod.js'
+]
+
 const commonExpectedFiles = [
   '.gitignore',
   'package.json',
@@ -79,9 +91,9 @@ describe('Create new project from prompts only', () => {
   /** Test addin when user chooses jquery and javascript. */
   describe('jquery & javascript', () => {
     before((done) => {
-      answers.ts = false;
       answers.framework = 'jquery';
       helpers.run(path.join(__dirname, '../app'))
+        .withOptions({ js: true })
         .withPrompts(answers)
         .on('end', done);
     });
@@ -136,6 +148,7 @@ describe('Create new project from prompts only', () => {
       answers.ts = false;
       answers.framework = 'angular';
       helpers.run(path.join(__dirname, '../app'))
+        // .withOptions({ js: true })
         .withPrompts(answers)
         .on('end', done);
     });
@@ -287,7 +300,7 @@ describe('Create new project from prompts and command line overrides', () => {
       assert.file(expected);
       done();
     });
-  });
+  });  
 
 	/**
 	 * Test addin when user pass in argument
@@ -322,6 +335,47 @@ describe('Create new project from prompts and command line overrides', () => {
       ];
 
       assert.file(expected);
+      done();
+    });
+  });
+
+  	/**
+	 * Test addin when user pass in arguments
+	 * "my-office-add-in; excel; manifest-only"
+	 */
+  describe('arguments: name host', () => {
+    before((done) => {
+      argument[0] = projectEscapedName;
+      argument[1] = 'excel';
+      argument[2] = 'manifest-only';
+
+      helpers.run(path.join(__dirname, '../app'))
+        .withArguments(argument)
+        .withPrompts(answers)
+        .on('end', done);
+    });
+
+    it('creates expected files', (done) => {
+      let host = argument[1] ? argument[1] : answers.host;
+      let name = argument[0] ? argument[0] : answers.name;
+      let manifestFileName = name + '-manifest.xml';
+
+      let expected = [
+        manifestFileName,
+        ...expectedAssets,
+        'package.json',
+        'resource.html'
+      ];
+
+      let notExpected = [
+        expectedFunctionFilesJs,
+        expectedFunctionFilesTs,
+        certificateFiles,
+        configFiles
+      ]
+
+      assert.file(expected);
+      assert.noFile(notExpected);
       done();
     });
   });
@@ -397,5 +451,38 @@ describe('Create new project from prompts with command line options', () => {
       assert.file(expected);
       done();
     });
-  });
+  }); 
+
+    /** Test addin when user passes in --output. */
+    let folderName = 'testFolder';
+    describe('options: --output', () => {
+      before((done) => {
+        answers.folder = true;
+        helpers.run(path.join(__dirname, '../app'))
+          .withOptions({ 'output': folderName })
+          .withPrompts(answers)
+          .on('end', done);
+      });
+  
+      it('creates expected files', (done) => {
+        let expected = [
+           manifestFileName,
+          ...expectedAssets,
+          ...expectedFunctionFilesTs,
+          ...commonExpectedFiles,
+          'app.css',
+          'tsconfig.json',
+          'src/index.ts',
+          'index.html',
+        ];  
+
+        // Ensure manifest is found in expected output folder
+        assert.ok(path.win32.resolve(manifestFileName).toString().indexOf(folderName) >=0,
+        'manifest file not found in specified output folder');
+
+        // Verify expected files were created
+        assert.file(expected);
+        done();
+      });
+    });    
 });
