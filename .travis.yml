@@ -10,4 +10,9 @@ node_js:
   - 'stable'
   - '6.9.1'
 before_script: "npm run build"
-script: "npm run test"
+script: "npm run test"notifications:
+email:
+   recipients:
+     - cowen@microsoft.com
+   on_success: always # default: change
+   on_failure: always # default: always
