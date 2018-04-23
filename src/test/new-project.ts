@@ -338,47 +338,6 @@ describe('Create new project from prompts and command line overrides', () => {
       done();
     });
   });
-
-  	/**
-	 * Test addin when user pass in arguments
-	 * "my-office-add-in; excel; manifest-only"
-	 */
-  describe('arguments: name host', () => {
-    before((done) => {
-      argument[0] = projectEscapedName;
-      argument[1] = 'excel';
-      argument[2] = 'manifest-only';
-
-      helpers.run(path.join(__dirname, '../app'))
-        .withArguments(argument)
-        .withPrompts(answers)
-        .on('end', done);
-    });
-
-    it('creates expected files', (done) => {
-      let host = argument[1] ? argument[1] : answers.host;
-      let name = argument[0] ? argument[0] : answers.name;
-      let manifestFileName = name + '-manifest.xml';
-
-      let expected = [
-        manifestFileName,
-        ...expectedAssets,
-        'package.json',
-        'resource.html'
-      ];
-
-      let notExpected = [
-        expectedFunctionFilesJs,
-        expectedFunctionFilesTs,
-        certificateFiles,
-        configFiles
-      ]
-
-      assert.file(expected);
-      assert.noFile(notExpected);
-      done();
-    });
-  });
 });
 
 /**
