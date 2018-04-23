@@ -51,12 +51,6 @@ module.exports = yo.extend({
       required: false,
       desc: 'Project folder name if different from project name'
     });
-
-    this.option('manifest-only', {
-      type: String,
-      required: false,
-      desc: 'Only create a manifest for the add-in'
-    });
   },
 
   /**
@@ -114,24 +108,21 @@ module.exports = yo.extend({
         name: this.options.name || answerForName.name,
         host: answerForHost.host || this.options.host,
         framework: this.options.framework || null,
-        isManifestOnly: this.options['manifest-only']
+        isManifestOnly: false
       };
 
+      // Set folder to specified name if 'output' option is passed as an argument
       if (this.options.output != null) {
         this.project.folder = this.options.output;
       }
-
-      // Set isManifestOnly flag to true if 'manifest-only' option is passed as an argument
-      let startForManifestOnly = (new Date()).getTime();
-      if (this.options['manifest-only'] != null ) {
+  
+      // Set isManifestOnly flag to true if framework argument is 'manifest-only'
+      if (this.options.framework === 'manifest-only') {
           this.project.isManifestOnly = true;
       }
-      let endForManifestOnly = (new Date()).getTime(); 
-      let durationForManifestOnly = (endForManifestOnly - startForManifestOnly) / 1000;
 
       // Set js flag to true if 'js' option is passed as an argument
-      let startForTs = (new Date()).getTime(); 
-      if (!(this.options.js == null)) {
+      if (this.options.js != null) {
         this.project.ts = !this.options.js;
       }
       else {
@@ -140,9 +131,6 @@ module.exports = yo.extend({
       if (this.options.framework === 'react') {
         this.project.ts = true;
       }
-      let endForTs = (new Date()).getTime(); 
-      let durationForTs = (endForTs - startForTs) / 1000; 
-
 
       /** technology used to create the addin (jquery / angular / etc) */
       let startForFramework = (new Date()).getTime();
@@ -181,14 +169,13 @@ module.exports = yo.extend({
       }
 
       /** appInsights logging */
+      const noElapsedTime = 0;
       insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
-      insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });
-      insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { durationForManifestOnly });
-      
-      if (this.project.isManifestOnly === false) {
-        insight.trackEvent('IsTs', { IsTs: this.project.ts.toString() }, { durationForTs });
-        insight.trackEvent('Framework', { Framework: this.project.framework }, { durationForFramework });
-      }
+      insight.trackEvent('Folder', { CreatedSubFolder: this.project.folder.toString() }, { noElapsedTime }); 
+      insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });    
+      insight.trackEvent('IsTs', { IsTs: this.project.ts.toString() }, { noElapsedTime });      
+      insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { noElapsedTime });
+      insight.trackEvent('Framework', { Framework: this.project.framework }, { durationForFramework }); 
     } catch (err) {
       insight.trackException(new Error('Prompting Error: ' + err));
     }

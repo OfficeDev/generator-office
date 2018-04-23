@@ -40,7 +40,7 @@ describe('manifest-only project - answers', () => {
     name: projectDisplayName,
     host: 'excel',
     ts: null,
-    framework: null,
+    framework: 'manifest-only',
     open: false
   };
   let manifestFileName = projectEscapedName + '-manifest.xml';
@@ -49,7 +49,6 @@ describe('manifest-only project - answers', () => {
   describe('manifest-only', () => {
     before((done) => {
       helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done)
-      .withOptions({ 'manifest-only': true })
     });
 
     it('creates expected files', (done) => {
@@ -77,7 +76,7 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
     name: null,
     host: null,
     ts: null,
-    framework: null,
+    framework: 'manifest-only',
     open: false
   };
   let argument = [];
@@ -92,7 +91,6 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
       argument[0] = projectEscapedName;
 
       helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done)
-      .withOptions({ 'manifest-only': true });
     });
 
     it('creates expected files', (done) => {
@@ -121,7 +119,6 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
       argument[1] = 'excel';
 
       helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done)
-      .withOptions({ 'manifest-only': true });
     });
 
     it('creates expected files', (done) => {
