@@ -45,6 +45,12 @@ module.exports = yo.extend({
       required: false,
       desc: 'Use JavaScript templates instead of TypeScript.'
     });
+  
+    this.option('output', {
+      type: String,
+      required: false,
+      desc: 'Project folder name if different from project name'
+    });
   },
 
   /**
@@ -67,19 +73,6 @@ module.exports = yo.extend({
       updateHostNames(manifests, 'Onenote', 'OneNote');
       updateHostNames(manifests, 'Powerpoint', 'PowerPoint');
 
-      /** begin prompting */
-      /** whether to create a new folder for the project */
-      let startForFolder = (new Date()).getTime();
-      let askForFolder = [{
-        name: 'folder',
-        message: 'Would you like to create a new subfolder for your project?',
-        type: 'confirm',
-        default: false
-      }];
-      let answerForFolder = await this.prompt(askForFolder);
-      let endForFolder = (new Date()).getTime();
-      let durationForFolder = (endForFolder - startForFolder) / 1000;
-
       /** name for the project */
       let startForName = (new Date()).getTime();
       let askForName = [{
@@ -101,82 +94,45 @@ module.exports = yo.extend({
         type: 'list',
         default: 'Excel',
         choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
-        when: this.options.host == null
+        when: this.options.host == null || (this.options.host != null && !this._isValidInput(this.options.host, manifests, true /* isHostParam */))
       }];
       let answerForHost = await this.prompt(askForHost);
       let endForHost = (new Date()).getTime();
       let durationForHost = (endForHost - startForHost) / 1000;
 
-      /** set flag for manifest-only to prompt accordingly later */
-      let startForManifestOnly = (new Date()).getTime();
-      let askForManifestOnly = [{
-        name: 'isManifestOnly',
-        message: 'Would you like to create a new add-in?',
-        type: 'list',
-        default: false,
-        choices: [
-          {
-            name: 'Yes, I need to create a new web app and manifest file for my add-in.',
-            value: false
-          },
-          {
-            name: 'No, I already have a web app and only need a manifest file for my add-in.',
-            value: true
-          }
-        ],
-        when: this.options.framework == null
-      }];
-      let answerForManifestOnly = await this.prompt(askForManifestOnly); // trigger prompts and store user input
-      let endForManifestOnly = (new Date()).getTime();
-      let durationForManifestOnly = (endForManifestOnly - startForManifestOnly) / 1000;
-
       /**
        * Configure user input to have correct values
        */
       this.project = {
-        folder: answerForFolder.folder,
+        folder: this.options.name,
         name: this.options.name || answerForName.name,
-        host: this.options.host || answerForHost.host,
+        host: answerForHost.host || this.options.host,
         framework: this.options.framework || null,
-        isManifestOnly: answerForManifestOnly.isManifestOnly
+        isManifestOnly: false
       };
-      if (answerForManifestOnly.isManifestOnly) {
-        this.project.framework = 'manifest-only';
+
+      // Set folder to specified name if 'output' option is passed as an argument
+      if (this.options.output != null) {
+        this.project.folder = this.options.output;
       }
-      if (this.options.framework != null) {
-        if (this.options.framework === 'manifest-only') {
+  
+      // Set isManifestOnly flag to true if framework argument is 'manifest-only'
+      if (this.options.framework === 'manifest-only') {
           this.project.isManifestOnly = true;
-        } else {
-          this.project.isManifestOnly = false;
-        }
       }
 
-      /** askForTs and askForFramework will only be triggered if it's not a manifest-only project */
-      /** use TypeScript for the project */
-      let startForTs = (new Date()).getTime();
-      let askForTs = [
-        {
-          name: 'ts',
-          type: 'confirm',
-          message: 'Would you like to use TypeScript?',
-          default: true,
-          when: (this.options.js == null) && (!this.project.isManifestOnly) && (this.options.framework !== 'react')
-        }
-      ];
-      let answerForTs = await this.prompt(askForTs);
-      let endForTs = (new Date()).getTime();
-      let durationForTs = (endForTs - startForTs) / 1000;
-      if (!(this.options.js == null)) {
+      // Set js flag to true if 'js' option is passed as an argument
+      if (this.options.js != null) {
         this.project.ts = !this.options.js;
       }
       else {
-        this.project.ts = answerForTs.ts || false;
+        this.project.ts = true;
       }
       if (this.options.framework === 'react') {
         this.project.ts = true;
       }
 
-      /** technology used to create the addin (html / angular / etc) */
+      /** technology used to create the addin (jquery / angular / etc) */
       let startForFramework = (new Date()).getTime();
       let askForFramework = [
         {
@@ -185,7 +141,8 @@ module.exports = yo.extend({
           type: 'list',
           default: 'react',
           choices: tsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
-          when: (this.project.framework == null) && this.project.ts && !this.options.js && !answerForManifestOnly.isManifestOnly
+          when: (this.project.framework == null || !this._isValidInput(this.options.framework, tsTemplates, false /* isHostParam */)) && this.project.ts && !this.options.js
+                && !this.project.isManifestOnly
         },
         {
           name: 'framework',
@@ -193,7 +150,8 @@ module.exports = yo.extend({
           type: 'list',
           default: 'jquery',
           choices: jsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
-          when: (this.project.framework == null) && !this.project.ts && this.options.js && !answerForManifestOnly.isManifestOnly
+          when: (this.project.framework == null || !this._isValidInput(this.options.framework, jsTemplates, false /* isHostParam */)) && !this.project.ts && this.options.js
+                && !this.project.isManifestOnly
         }
       ];
       let answerForFramework = await this.prompt(askForFramework);
@@ -201,7 +159,7 @@ module.exports = yo.extend({
       let durationForFramework = (endForFramework - startForFramework) / 1000;
 
       if (!(this.options.framework == null)) {
-        this.project.framework = this.options.framework;
+        this.project.framework = answerForFramework.framework || this.options.framework;
       }
       else if (this.project.isManifestOnly === true) {
         this.project.framework = 'manifest-only';
@@ -210,38 +168,17 @@ module.exports = yo.extend({
         this.project.framework = answerForFramework.framework;
       }
 
-      let startForResourcePage = (new Date()).getTime();
-      this.log('\nFor more information and resources on your next steps, we have created a resource.html file in your project.');
-      let askForOpenResourcePage = [
-        /** ask to open resource page */
-        {
-          name: 'open',
-          type: 'confirm',
-          message: 'Would you like to open it now while we finish creating your project?',
-          default: true
-        }
-      ];
-      let answerForOpenResourcePage = await this.prompt(askForOpenResourcePage);
-      let endForResourcePage = (new Date()).getTime();
-      let durationForResourcePage = (endForResourcePage - startForResourcePage) / 1000;
-      this.project.isResourcePageOpened = answerForOpenResourcePage.open;
-      this.project.duration = (endForResourcePage - startForFolder) / 1000;
-
       /** appInsights logging */
-      insight.trackEvent('Folder', { CreatedSubFolder: this.project.folder.toString() }, { durationForFolder });
+      const noElapsedTime = 0;
       insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
-      insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });
-      insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { durationForManifestOnly });
-      insight.trackEvent('IsResourcePageOpened', { IsResourcePageOpened: this.project.isResourcePageOpened.toString() }, { durationForResourcePage });
-
-      if (this.project.isManifestOnly === false) {
-        insight.trackEvent('IsTs', { IsTs: this.project.ts.toString() }, { durationForTs });
-        insight.trackEvent('Framework', { Framework: this.project.framework }, { durationForFramework });
-      }
+      insight.trackEvent('Folder', { CreatedSubFolder: this.project.folder.toString() }, { noElapsedTime }); 
+      insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });    
+      insight.trackEvent('IsTs', { IsTs: this.project.ts.toString() }, { noElapsedTime });      
+      insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { noElapsedTime });
+      insight.trackEvent('Framework', { Framework: this.project.framework }, { durationForFramework }); 
     } catch (err) {
       insight.trackException(new Error('Prompting Error: ' + err));
     }
-
   },
 
   /**
@@ -255,7 +192,7 @@ module.exports = yo.extend({
       this.project.hostInternalName = _.toLower(this.project.host);
 
       if (this.project.folder) {
-        this.destinationRoot(this.project.projectInternalName);
+        this.destinationRoot(this.project.folder);
       }
 
       let duration = this.project.duration;
@@ -273,7 +210,7 @@ module.exports = yo.extend({
         /** Show type of project creating in progress */
         if (this.project.framework !== 'manifest-only') {
           this.log('\n----------------------------------------------------------------------------------\n');
-          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
+          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.yellow(this.project.host)} using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
           this.log('----------------------------------------------------------------------------------\n\n');
         }
         else {
@@ -319,10 +256,7 @@ module.exports = yo.extend({
   },
 
   install: function () {
-    try {
-      if (this.project.isResourcePageOpened) {
-        opn(`resource.html`);
-      }
+    try {      
       if (this.options['skip-install']) {
         this.installDependencies({
           npm: false,
@@ -334,8 +268,8 @@ module.exports = yo.extend({
         this.installDependencies({
           npm: true,
           bower: false,
-          callback: this._exitProcess.bind(this)
-        });
+          callback: this._postInstallHints.bind(this)
+        });    
       }
     } catch (err) {
       insight.trackException(new Error('Installation Error: ' + err));
@@ -354,6 +288,28 @@ module.exports = yo.extend({
     this.log(`      Or visit our repo at: https://github.com/officeDev/generator-office \n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
+  },
+
+  _isValidInput: function(input, inputArray, isHostParam) 
+  {
+    // validate host and framework inputs
+    for (var i = 0; i < inputArray.length; i++)
+    {
+      var element = inputArray[i];
+      if (input.toLowerCase() == element.toLowerCase())
+      {
+        if (isHostParam)
+        {
+          this.options.host = element;
+        }
+        else
+        {
+          this.options.framework = element;
+        }
+        return true;
+      }
+    }
+    return false;
   },
 
   _exitProcess: function () {

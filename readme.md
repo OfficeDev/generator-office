@@ -84,6 +84,12 @@ Specifying `--js` tells the generator to use JavaScript.
 
 >**Note:** Do not use this flag when you pass `react` as framework argument.
 
+Specifying `--output` tells the generator to create a project folder that differs from the add-in name.
+
+  - Type: String
+  - Default: Add-in Name
+  - Optional
+
 ## Running the Generated Site
 
 Office Add-ins must be hosted in an HTTPS site. Yo Office generates a self-signed certificate for use with the development environment. Your computer will need to trust the certificate before you can use the generated add-in.
@@ -159,3 +165,4 @@ Copyright (c) 2017 Microsoft Corporation. All rights reserved.
 
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information, see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
