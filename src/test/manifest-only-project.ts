@@ -7,6 +7,27 @@ import * as helpers from 'yeoman-test';
 import * as assert from 'yeoman-assert';
 import * as path from 'path';
 
+const expectedFiles = [
+  'package.json',
+  'assets/icon-16.png',
+  'assets/icon-32.png',
+  'assets/icon-80.png',
+  'assets/logo-filled.png'
+]
+
+const unexpectedFiles = [
+  'function-file/function-file.html',
+  'function-file/function-file.js',
+  'function-file/function-file.html',
+  'function-file/function-file.ts',
+  'certs/ca.crt',
+  'certs/server.crt',
+  'certs/server.key',
+  'config/webpack.common.js',
+  'config/webpack.dev.js',
+  'config/webpack.prod.js'
+]
+
 /**
  * Test addin from user answers
  * manifest-only project, default folder, defaul host.
@@ -15,13 +36,9 @@ describe('manifest-only project - answers', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
-    folder: false,
     name: projectDisplayName,
     host: 'excel',
-    isManifestOnly: true,
-    ts: null,
-    framework: null,
-    open: false
+    projectType: 'manifest-only',
   };
   let manifestFileName = projectEscapedName + '-manifest.xml';
 
@@ -34,14 +51,11 @@ describe('manifest-only project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png'
+        ...expectedFiles
       ];
 
       assert.file(expected);
+      assert.noFile(unexpectedFiles);
       done();
     });
   });
@@ -55,13 +69,9 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
-    folder: null,
     name: null,
     host: null,
-    isManifestOnly: null,
-    ts: null,
-    framework: null,
-    open: false
+    projectType: 'manifest-only',
   };
   let argument = [];
 
@@ -72,10 +82,9 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
   describe('argument: name', () => {
     before((done) => {
       answers.host = 'excel';
-      answers.isManifestOnly = true;
       argument[0] = projectEscapedName;
 
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
+      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done)
     });
 
     it('creates expected files', (done) => {
@@ -85,14 +94,11 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png'
+        ...expectedFiles
       ];
 
       assert.file(expected);
+      assert.noFile(unexpectedFiles);
       done();
     });
   });
@@ -106,7 +112,7 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
       argument[0] = projectEscapedName;
       argument[1] = 'excel';
 
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
+      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done)
     });
 
     it('creates expected files', (done) => {
@@ -116,14 +122,11 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png'
+        ...expectedFiles
       ];
 
       assert.file(expected);
+      assert.noFile(unexpectedFiles);
       done();
     });
   });
@@ -148,14 +151,11 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png'
+        ...expectedFiles
       ];
 
       assert.file(expected);
+      assert.noFile(unexpectedFiles);
       done();
     });
   });

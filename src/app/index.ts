@@ -23,6 +23,8 @@ delete insight.context.tags['ai.device.osVersion'];
 delete insight.context.tags['ai.device.osArchitecture'];
 delete insight.context.tags['ai.device.osPlatform'];
 
+const manifestOnly = 'manifest-only';
+
 module.exports = yo.extend({
   /**
    * Setup the generator
@@ -32,7 +34,7 @@ module.exports = yo.extend({
 
     this.argument('name', { type: String, required: false });
     this.argument('host', { type: String, required: false });
-    this.argument('framework', { type: String, required: false });
+    this.argument('projectType', { type: String, required: false });
 
     this.option('skip-install', {
       type: Boolean,
@@ -44,6 +46,12 @@ module.exports = yo.extend({
       type: Boolean,
       required: false,
       desc: 'Use JavaScript templates instead of TypeScript.'
+    });
+  
+    this.option('output', {
+      type: String,
+      required: false,
+      desc: 'Project folder name if different from project name'
     });
   },
 
@@ -62,23 +70,12 @@ module.exports = yo.extend({
   prompting: async function () {
     try {
       let jsTemplates = getDirectories(this.templatePath('js'));
+      jsTemplates.push(manifestOnly);
       let tsTemplates = getDirectories(this.templatePath('ts'));
+      tsTemplates.push(manifestOnly);
       let manifests = getFiles(this.templatePath('manifest')).map(manifest => _.capitalize(manifest.replace('.xml', '')));
       updateHostNames(manifests, 'Onenote', 'OneNote');
       updateHostNames(manifests, 'Powerpoint', 'PowerPoint');
-
-      /** begin prompting */
-      /** whether to create a new folder for the project */
-      let startForFolder = (new Date()).getTime();
-      let askForFolder = [{
-        name: 'folder',
-        message: 'Would you like to create a new subfolder for your project?',
-        type: 'confirm',
-        default: false
-      }];
-      let answerForFolder = await this.prompt(askForFolder);
-      let endForFolder = (new Date()).getTime();
-      let durationForFolder = (endForFolder - startForFolder) / 1000;
 
       /** name for the project */
       let startForName = (new Date()).getTime();
@@ -101,147 +98,89 @@ module.exports = yo.extend({
         type: 'list',
         default: 'Excel',
         choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
-        when: this.options.host == null
+        when: this.options.host == null || (this.options.host != null && !this._isValidInput(this.options.host, manifests, true /* isHostParam */))
       }];
       let answerForHost = await this.prompt(askForHost);
       let endForHost = (new Date()).getTime();
       let durationForHost = (endForHost - startForHost) / 1000;
 
-      /** set flag for manifest-only to prompt accordingly later */
-      let startForManifestOnly = (new Date()).getTime();
-      let askForManifestOnly = [{
-        name: 'isManifestOnly',
-        message: 'Would you like to create a new add-in?',
-        type: 'list',
-        default: false,
-        choices: [
-          {
-            name: 'Yes, I need to create a new web app and manifest file for my add-in.',
-            value: false
-          },
-          {
-            name: 'No, I already have a web app and only need a manifest file for my add-in.',
-            value: true
-          }
-        ],
-        when: this.options.framework == null
-      }];
-      let answerForManifestOnly = await this.prompt(askForManifestOnly); // trigger prompts and store user input
-      let endForManifestOnly = (new Date()).getTime();
-      let durationForManifestOnly = (endForManifestOnly - startForManifestOnly) / 1000;
-
       /**
        * Configure user input to have correct values
        */
       this.project = {
-        folder: answerForFolder.folder,
+        folder: null,
         name: this.options.name || answerForName.name,
-        host: this.options.host || answerForHost.host,
-        framework: this.options.framework || null,
-        isManifestOnly: answerForManifestOnly.isManifestOnly
+        host: answerForHost.host || this.options.host,
+        projectType: this.options.projectType || null,
+        isManifestOnly: false
       };
-      if (answerForManifestOnly.isManifestOnly) {
-        this.project.framework = 'manifest-only';
+
+      // Set folder to specified name if 'output' option is passed as an argument
+      if (this.options.output != null) {
+        this.project.folder = this.options.output;
       }
-      if (this.options.framework != null) {
-        if (this.options.framework === 'manifest-only') {
+      else{
+        this.project.folder = this.project.name;
+      }
+  
+      // Set isManifestOnly flag to true if project-type argument is 'manifest-only'
+      if (this.options.projectType === manifestOnly) {
           this.project.isManifestOnly = true;
-        } else {
-          this.project.isManifestOnly = false;
-        }
       }
 
-      /** askForTs and askForFramework will only be triggered if it's not a manifest-only project */
-      /** use TypeScript for the project */
-      let startForTs = (new Date()).getTime();
-      let askForTs = [
-        {
-          name: 'ts',
-          type: 'confirm',
-          message: 'Would you like to use TypeScript?',
-          default: true,
-          when: (this.options.js == null) && (!this.project.isManifestOnly) && (this.options.framework !== 'react')
-        }
-      ];
-      let answerForTs = await this.prompt(askForTs);
-      let endForTs = (new Date()).getTime();
-      let durationForTs = (endForTs - startForTs) / 1000;
-      if (!(this.options.js == null)) {
+      // Set js flag to true if 'js' option is passed as an argument
+      if (this.options.js != null) {
         this.project.ts = !this.options.js;
       }
       else {
-        this.project.ts = answerForTs.ts || false;
+        this.project.ts = true;
       }
-      if (this.options.framework === 'react') {
+      if (this.options.projectType === 'react') {
         this.project.ts = true;
       }
 
-      /** technology used to create the addin (html / angular / etc) */
-      let startForFramework = (new Date()).getTime();
-      let askForFramework = [
+      /** technology used to create the addin (jquery / angular / etc) */
+      let startForProjectType = (new Date()).getTime();
+      let askForProjectType = [
         {
-          name: 'framework',
-          message: 'Choose a framework:',
+          name: 'projectType',
+          message: 'Choose a project-type:',
           type: 'list',
           default: 'react',
           choices: tsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
-          when: (this.project.framework == null) && this.project.ts && !this.options.js && !answerForManifestOnly.isManifestOnly
+          when: (this.project.projectType == null || !this._isValidInput(this.options.projectType, tsTemplates, false /* isHostParam */)) && this.project.ts && !this.options.js
+                && !this.project.isManifestOnly
         },
         {
-          name: 'framework',
-          message: 'Choose a framework:',
+          name: 'projectType',
+          message: 'Choose a project-type:',
           type: 'list',
           default: 'jquery',
           choices: jsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
-          when: (this.project.framework == null) && !this.project.ts && this.options.js && !answerForManifestOnly.isManifestOnly
+          when: (this.project.projectType == null || !this._isValidInput(this.options.projectType, jsTemplates, false /* isHostParam */)) && !this.project.ts && this.options.js
+                && !this.project.isManifestOnly
         }
       ];
-      let answerForFramework = await this.prompt(askForFramework);
-      let endForFramework = (new Date()).getTime();
-      let durationForFramework = (endForFramework - startForFramework) / 1000;
+      let answerForProjectType = await this.prompt(askForProjectType);
+      let endForProjectType = (new Date()).getTime();
+      let durationForProjectType = (endForProjectType - startForProjectType) / 1000;
+      this.project.projectType = answerForProjectType.projectType || this.options.projectType;
 
-      if (!(this.options.framework == null)) {
-        this.project.framework = this.options.framework;
+      if (this.project.projectType == manifestOnly){
+        this.project.isManifestOnly = true;
       }
-      else if (this.project.isManifestOnly === true) {
-        this.project.framework = 'manifest-only';
-      }
-      else {
-        this.project.framework = answerForFramework.framework;
-      }
-
-      let startForResourcePage = (new Date()).getTime();
-      this.log('\nFor more information and resources on your next steps, we have created a resource.html file in your project.');
-      let askForOpenResourcePage = [
-        /** ask to open resource page */
-        {
-          name: 'open',
-          type: 'confirm',
-          message: 'Would you like to open it now while we finish creating your project?',
-          default: true
-        }
-      ];
-      let answerForOpenResourcePage = await this.prompt(askForOpenResourcePage);
-      let endForResourcePage = (new Date()).getTime();
-      let durationForResourcePage = (endForResourcePage - startForResourcePage) / 1000;
-      this.project.isResourcePageOpened = answerForOpenResourcePage.open;
-      this.project.duration = (endForResourcePage - startForFolder) / 1000;
 
       /** appInsights logging */
-      insight.trackEvent('Folder', { CreatedSubFolder: this.project.folder.toString() }, { durationForFolder });
+      const noElapsedTime = 0;
       insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
-      insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });
-      insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { durationForManifestOnly });
-      insight.trackEvent('IsResourcePageOpened', { IsResourcePageOpened: this.project.isResourcePageOpened.toString() }, { durationForResourcePage });
-
-      if (this.project.isManifestOnly === false) {
-        insight.trackEvent('IsTs', { IsTs: this.project.ts.toString() }, { durationForTs });
-        insight.trackEvent('Framework', { Framework: this.project.framework }, { durationForFramework });
-      }
+      insight.trackEvent('Folder', { CreatedSubFolder: this.project.folder.toString() }, { noElapsedTime }); 
+      insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });    
+      insight.trackEvent('IsTs', { IsTs: this.project.ts.toString() }, { noElapsedTime });      
+      insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { noElapsedTime });
+      insight.trackEvent('ProjectType', { ProjectType: this.project.projectType }, { durationForProjectType }); 
     } catch (err) {
       insight.trackException(new Error('Prompting Error: ' + err));
     }
-
   },
 
   /**
@@ -253,13 +192,10 @@ module.exports = yo.extend({
       this.project.projectDisplayName = this.project.name;
       this.project.projectId = uuid();
       this.project.hostInternalName = _.toLower(this.project.host);
-
-      if (this.project.folder) {
-        this.destinationRoot(this.project.projectInternalName);
-      }
+      this.destinationRoot(this.project.folder);
 
       let duration = this.project.duration;
-      insight.trackEvent('App_Data', { AppID: this.project.projectId, Host: this.project.host, Framework: this.project.framework, isTypeScript: this.project.ts.toString() }, { duration });
+      insight.trackEvent('App_Data', { AppID: this.project.projectId, Host: this.project.host, ProjectType: this.project.projectType, isTypeScript: this.project.ts.toString() }, { duration });
     } catch (err) {
       insight.trackException(new Error('Configuration Error: ' + err));
     }
@@ -271,14 +207,14 @@ module.exports = yo.extend({
         let language = this.project.ts ? 'ts' : 'js';
 
         /** Show type of project creating in progress */
-        if (this.project.framework !== 'manifest-only') {
+        if (this.project.projectType !== manifestOnly) {
           this.log('\n----------------------------------------------------------------------------------\n');
-          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.framework)}\n`);
+          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.yellow(this.project.host)} using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.projectType)} in folder:${chalk.bold.green(this.project.folder)}\n`);
           this.log('----------------------------------------------------------------------------------\n\n');
         }
         else {
           this.log('----------------------------------------------------------------------------------\n');
-          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} add-in\n`);
+          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} add-in in folder: ${chalk.bold.magenta(this.project.folder)} \n`);
           this.log('----------------------------------------------------------------------------------\n\n');
         }
 
@@ -288,20 +224,20 @@ module.exports = yo.extend({
         /** Copy the manifest */
         this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
 
-        if (this.project.framework === 'manifest-only') {
-          this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
+        if (this.project.projectType === manifestOnly) {
+          this.fs.copyTpl(this.templatePath(manifestOnly.concat(`/**`)), this.destinationPath(), templateFills);
         }
         else {
           /** Copy the base template */
           this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
 
-          /** Copy the framework specific overrides */
-          this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+          /** Copy the project-type specific overrides */
+          this.fs.copyTpl(this.templatePath(`${language}/${this.project.projectType}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
           
           /** Manually copy any dot files as yoeman can't handle them */
 
           /** .babelrc */
-          const babelrcPath = this.templatePath(`${language}/${this.project.framework}/babelrc.placeholder`);
+          const babelrcPath = this.templatePath(`${language}/${this.project.projectType}/babelrc.placeholder`);
           if (this.fs.exists(babelrcPath)) {
               this.fs.copy(babelrcPath, this.destinationPath('.babelrc'));
           }
@@ -319,10 +255,7 @@ module.exports = yo.extend({
   },
 
   install: function () {
-    try {
-      if (this.project.isResourcePageOpened) {
-        opn(`resource.html`);
-      }
+    try {      
       if (this.options['skip-install']) {
         this.installDependencies({
           npm: false,
@@ -334,8 +267,8 @@ module.exports = yo.extend({
         this.installDependencies({
           npm: true,
           bower: false,
-          callback: this._exitProcess.bind(this)
-        });
+          callback: this._postInstallHints.bind(this)
+        });    
       }
     } catch (err) {
       insight.trackException(new Error('Installation Error: ' + err));
@@ -354,6 +287,28 @@ module.exports = yo.extend({
     this.log(`      Or visit our repo at: https://github.com/officeDev/generator-office \n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
+  },
+
+  _isValidInput: function(input, inputArray, isHostParam) 
+  {
+    // validate host and project-type inputs
+    for (var i = 0; i < inputArray.length; i++)
+    {
+      var element = inputArray[i];
+      if (input.toLowerCase() == element.toLowerCase())
+      {
+        if (isHostParam)
+        {
+          this.options.host = element;
+        }
+        else
+        {
+          this.options['project-type'] = element;
+        }
+        return true;
+      }
+    }
+    return false;
   },
 
   _exitProcess: function () {

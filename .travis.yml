@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 # See LICENSE in the project root for license information.
 
-sudo: false
+# sudo: false
 language: node_js
 cache:
   directories:
@@ -11,3 +11,6 @@ node_js:
   - '6.9.1'
 before_script: "npm run build"
 script: "npm run test"
+os:
+  - linux
+  - osx
