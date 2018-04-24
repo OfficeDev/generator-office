@@ -124,7 +124,7 @@ module.exports = yo.extend({
       }
   
       // Set isManifestOnly flag to true if project-type argument is 'manifest-only'
-      if (this.options.projectType === 'manifest-only') {
+      if (this.options.projectType === manifestOnly) {
           this.project.isManifestOnly = true;
       }
 
@@ -166,6 +166,10 @@ module.exports = yo.extend({
       let durationForProjectType = (endForProjectType - startForProjectType) / 1000;
       this.project.projectType = answerForProjectType.projectType || this.options.projectType;
 
+      if (this.project.projectType == manifestOnly){
+        this.project.isManifestOnly = true;
+      }
+
       /** appInsights logging */
       const noElapsedTime = 0;
       insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
@@ -203,14 +207,14 @@ module.exports = yo.extend({
         let language = this.project.ts ? 'ts' : 'js';
 
         /** Show type of project creating in progress */
-        if (this.project.projectType !== 'manifest-only') {
+        if (this.project.projectType !== manifestOnly) {
           this.log('\n----------------------------------------------------------------------------------\n');
-          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.yellow(this.project.host)} using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.projectType)}\n`);
+          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.yellow(this.project.host)} using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.projectType)} in folder:${chalk.bold.green(this.project.folder)}\n`);
           this.log('----------------------------------------------------------------------------------\n\n');
         }
         else {
           this.log('----------------------------------------------------------------------------------\n');
-          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} add-in\n`);
+          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} add-in in folder: ${chalk.bold.magenta(this.project.folder)} \n`);
           this.log('----------------------------------------------------------------------------------\n\n');
         }
 
@@ -220,8 +224,8 @@ module.exports = yo.extend({
         /** Copy the manifest */
         this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
 
-        if (this.project.projectType === 'manifest-only') {
-          this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
+        if (this.project.projectType === manifestOnly) {
+          this.fs.copyTpl(this.templatePath(manifestOnly.concat(`/**`)), this.destinationPath(), templateFills);
         }
         else {
           /** Copy the base template */

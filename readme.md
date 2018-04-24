@@ -58,8 +58,8 @@ The Microsoft Office client application that can host the add-in. The supported 
   - Type: String
   - Optional
 
-#### `project-type`
-Framework to use for the project. The supported arguments include JQuery (`jquery`), Angular (`angular`), and React (`react`). You can also use Manifest Only (`manifest-only`) which will create only the `manifest.xml` for an Office Add-in.
+#### `projectType`
+Framework to use for the project. The supported arguments include JQuery (`jquery`), Angular (`angular`), and React (`react`). You can also use Manifest-Only (`manifest-only`) which will create only the `manifest.xml` for an Office Add-in.
   - Type: String
   - Optional
 
@@ -84,7 +84,7 @@ Specifying `--js` tells the generator to use JavaScript.
 
 >**Note:** Do not use this flag when you pass `react` as framework argument.
 
-Specifying `--output` tells the generator to create a project folder that differs from the add-in name.
+Specifying `--output` tells the generator to create a project folder with a different name than the add-in name.
 
   - Type: String
   - Default: Add-in Name
