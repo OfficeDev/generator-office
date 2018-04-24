@@ -11,4 +11,6 @@ node_js:
   - '6.9.1'
 before_script: "npm run build"
 script: "npm run test"
-os: osx
+os:
+  - linux
+  - osx
