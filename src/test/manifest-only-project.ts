@@ -84,7 +84,7 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
       answers.host = 'excel';
       argument[0] = projectEscapedName;
 
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done)
+      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -112,7 +112,7 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
       argument[0] = projectEscapedName;
       argument[1] = 'excel';
 
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done)
+      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {

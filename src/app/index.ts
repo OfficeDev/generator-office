@@ -144,7 +144,7 @@ module.exports = yo.extend({
       let askForProjectType = [
         {
           name: 'projectType',
-          message: 'Choose a project-type:',
+          message: 'Choose a project type:',
           type: 'list',
           default: 'react',
           choices: tsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
@@ -153,7 +153,7 @@ module.exports = yo.extend({
         },
         {
           name: 'projectType',
-          message: 'Choose a project-type:',
+          message: 'Choose a project type:',
           type: 'list',
           default: 'jquery',
           choices: jsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
@@ -225,7 +225,7 @@ module.exports = yo.extend({
         this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
 
         if (this.project.projectType === manifestOnly) {
-          this.fs.copyTpl(this.templatePath(manifestOnly.concat(`/**`)), this.destinationPath(), templateFills);
+          this.fs.copyTpl(this.templatePath(`${manifestOnly}/**`), this.destinationPath(), templateFills);
         }
         else {
           /** Copy the base template */
@@ -268,7 +268,7 @@ module.exports = yo.extend({
           npm: true,
           bower: false,
           callback: this._postInstallHints.bind(this)
-        });    
+        });
       }
     } catch (err) {
       insight.trackException(new Error('Installation Error: ' + err));
