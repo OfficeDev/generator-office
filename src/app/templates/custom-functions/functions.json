@@ -1,0 +1,138 @@
+{
+	"functions": [
+		{
+			"name": "test", 
+			"description":  "Test function",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "number",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "str",
+					"description": "String",
+					"type": "string",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": true
+			}
+		},
+		{
+			"name": "add10", 
+			"description":  "Adds 10 to the input number",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "number",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "num",
+					"description": "Number",
+					"type": "number",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": true
+			}
+		},
+		{
+			"name": "add20", 
+			"description":  "Sync function marked as async",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "number",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "num",
+					"description": "Number",
+					"type": "number",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": false
+			}
+		},
+		{
+			"name": "add30", 
+			"description":  "Async function",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "number",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "num",
+					"description": "Number",
+					"type": "number",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": false
+			}
+		},
+		{
+			"name": "isEven", 
+			"description":  "Determines whether a number is even",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "boolean",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "num",
+					"description": "First",
+					"type": "number",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": true
+			}
+		},
+		{
+			"name": "getDay",
+			"description": "Gets the day of the week",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "string"
+			},
+			"parameters": [],
+			"options": {
+				"sync": true,
+				"stream": false,
+				"volatile": true
+			}
+		},
+		{
+			"name": "getDummyString", 
+			"description": "Returns a string of the given length",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "string",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "len",
+					"description": "Length",
+					"type": "number",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": true
+			}
+		}
+	]
+}

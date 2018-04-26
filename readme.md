@@ -54,12 +54,12 @@ Title of the project - this is the display name that is written the manifest.xml
 >**Note:** The Windows command prompt requires this argument to be in quotes (e.g. "My Office Add-in")
 
 #### `host`
-The Microsoft Office client application that can host the add-in. The supported arguments include Excel (`excel`), OneNote (`onenote`), Outlook (`outlook`), PowerPoint (`powerpoint`), Project (`project`), and Word (`word`).
+The Microsoft Office client application that can host the add-in. The supported arguments include Excel (`excel`), OneNote (`onenote`), Outlook (`outlook`), PowerPoint (`powerpoint`), Project (`project`), Word (`word`) and CustomFunctions (`customfunctions`).
   - Type: String
   - Optional
 
 #### `projectType`
-Framework to use for the project. The supported arguments include JQuery (`jquery`), Angular (`angular`), and React (`react`). You can also use Manifest-Only (`manifest-only`) which will create only the `manifest.xml` for an Office Add-in.
+Specifies the type of project to create. The supported arguments include JQuery (`jquery`), Angular (`angular`), and React (`react`). You can also use Manifest (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
   - Type: String
   - Optional
 
@@ -69,6 +69,14 @@ The following command line options are supported. If these are not specified, th
 #### `--skip-install`
 
 After scaffolding the project, the generator (and all sub generators) run all package management install commands such as `npm install` & `typings install`. Specifying `--skip-install` tells the generator to skip this step.
+
+  - Type: Boolean
+  - Default: False
+  - Optional
+
+#### `--ts`
+
+Specifying `--js` tells the generator to use TypeScript.
 
   - Type: Boolean
   - Default: False

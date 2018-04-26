@@ -1,0 +1,24 @@
+{
+  "name": "excel-custom-functions",
+  "version": "1.0.0",
+  "description": "Create Excel functions using JavaScript.",
+  "main": "functions.js",
+  "scripts": {
+    "start": "",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OfficeDev/Excel-Custom-Functions.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OfficeDev/Excel-Custom-Functions/issues"
+  },
+  "homepage": "https://github.com/OfficeDev/Excel-Custom-Functions#readme",
+  "devDependencies": {
+    "http-server": "^0.11.1",
+    "typescript": "^2.8.1"
+  }
+}
