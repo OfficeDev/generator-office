@@ -4,8 +4,8 @@
   "description": "Create Excel functions using JavaScript.",
   "main": "functions.js",
   "scripts": {
-    "start": "",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node startserver.js",
+     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",

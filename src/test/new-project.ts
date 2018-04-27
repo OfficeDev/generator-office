@@ -43,6 +43,17 @@ const commonExpectedFiles = [
   'resource.html',
 ];
 
+const expectExcelCustomFunctionFiles = [
+  '.gitignore',
+  'Excel-Custom-Functions.yml',
+  'functions.html',
+  'functions.js',
+  'functions.js.map',
+  'functions.json',
+  'package.json',
+  'startserver.js'
+]
+
 /**
  * Test addin from user answers
  * new project, default folder, defaul host.
@@ -302,7 +313,7 @@ describe('Create new project from prompts and command line overrides', () => {
 	 * Test addin when user pass in argument
 	 * "my-office-add-in excel jquery"
 	 */
-  describe('arguments: name host project-type', () => {
+  describe('arguments: project name host', () => {
     before((done) => {
       argument[0] = 'Jquery';
       argument[1] = projectEscapedName;
@@ -328,6 +339,34 @@ describe('Create new project from prompts and command line overrides', () => {
         'tsconfig.json',
         'src/index.ts',
         'index.html',
+      ];
+
+      assert.file(expected);
+      done();
+    });
+  });
+
+  /** Test addin when user passes in projectType: ExcelCustomFunctions. */
+  describe('arguments: project:ExcelCustomFunctions', () => {
+    before((done) => {
+      answers.scriptType = 'Typescript';
+      answers.name = projectEscapedName;
+      answers.host = null;
+      argument[0] = 'ExcelCustomFunctions';   
+
+      helpers.run(path.join(__dirname, '../app'))
+        .withArguments(argument)
+        .withPrompts(answers)
+        .on('end', done);
+    });
+
+    it('creates expected files', (done) => {
+      let name = argument[1] ? argument[1] : answers.name;
+      let manifestFileName = name + '-manifest.xml';      
+
+      let expected = [
+        manifestFileName,
+        ...expectExcelCustomFunctionFiles       
       ];
 
       assert.file(expected);

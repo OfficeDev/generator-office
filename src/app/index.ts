@@ -25,7 +25,7 @@ delete insight.context.tags['ai.device.osArchitecture'];
 delete insight.context.tags['ai.device.osPlatform'];
 
 const manifest = 'manifest';
-const customFunctions = 'customfunctions'
+const customFunctions = 'excelcustomfunctions'
 
 module.exports = yo.extend({
   /**
@@ -82,15 +82,21 @@ module.exports = yo.extend({
       jsTemplates.push(`Manifest`);
       let tsTemplates = getDirectories(this.templatePath('ts'));
       tsTemplates.push(`Manifest`);
-      tsTemplates.push(`CustomFunctions`);
+      tsTemplates.push(`ExcelCustomFunctions`);
       let manifests = getFiles(this.templatePath('manifest')).map(manifest => (manifest.replace('.xml', '')));
       let isManifestProject = false;
+      let isCustomFunctionsProject = false;
       updateHostNames(manifests, 'Onenote', 'OneNote');
       updateHostNames(manifests, 'Powerpoint', 'PowerPoint');
 
       // Set isManifestProject to true if manifest project type passed as argument
-      if (this.options.project != null && _.toLower(this.options.project) == manifest){
+      if (this.options.projectType != null && _.toLower(this.options.projectType) == manifest){
         isManifestProject = true;
+      }
+
+      // Set isCustomFunctionsProject to true if manifest project type passed as argument
+      if (this.options.projectType != null && _.toLower(this.options.projectType) == customFunctions){
+        isCustomFunctionsProject = true;
       }
 
       /** askForTs and askForProjectType will only be triggered if it's not a manifest-only project */
@@ -102,7 +108,7 @@ module.exports = yo.extend({
           message: 'Choose a script type',
           choices: ['Typescript', 'Javascript'],
           default: 'Typescript',
-          when: this.options.js == null && this.options.ts == null && this.options.projectType != manifest && !isManifestProject
+          when: this.options.js == null && this.options.ts == null && !isManifestProject && !isCustomFunctionsProject
         }
       ];
       let answerForScriptType = await this.prompt(askForScriptType);
@@ -135,9 +141,13 @@ module.exports = yo.extend({
       let endForProjectType = (new Date()).getTime();
       let durationForProjectType = (endForProjectType - startForProjectType) / 1000;
       
-      if ((this.options.projectType != null && this.options.projectType.toLowerCase() == manifest) || (answerForProjectType.projectType != null
+      if ((this.options.projectType != null && _.toLower(this.options.projectType) == manifest) || (answerForProjectType.projectType != null
         && _.toLower(answerForProjectType.projectType) == manifest)){ 
           isManifestProject = true; }
+
+      if ((this.options.projectType != null && _.toLower(this.options.projectType) == customFunctions) || (answerForProjectType.projectType != null
+        && _.toLower(answerForProjectType.projectType) == customFunctions)){ 
+          isCustomFunctionsProject = true; }
 
       /** name for the project */
       let startForName = (new Date()).getTime();
@@ -160,7 +170,8 @@ module.exports = yo.extend({
         type: 'list',
         default: 'Excel',
         choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
-        when: this.options.host == null || this.options.host != null && !this._isValidInput(this.options.host, manifests, true /* isHostParam */)
+        when: (this.options.host == null || this.options.host != null && !this._isValidInput(this.options.host, manifests, true /* isHostParam */))
+        && !isCustomFunctionsProject
       }];
       let answerForHost = await this.prompt(askForHost);
       let endForHost = (new Date()).getTime();
@@ -175,6 +186,7 @@ module.exports = yo.extend({
         host: this.options.host || answerForHost.host,
         projectType: this.options.projectType || answerForProjectType.projectType,
         isManifestOnly: isManifestProject,
+        isCustomFunctionsProject: isCustomFunctionsProject,
         scriptType: answerForScriptType.scriptType
       };
 
@@ -221,14 +233,13 @@ module.exports = yo.extend({
         this.project.hostInternalName = _.toLower(this.project.host);
       }
       else {
-        this.project.hostInternalName = customFunctions;
-      }
-      
+        this.project.hostInternalName = `customFunctions`;
+      }      
       this.destinationRoot(this.project.folder);
 
       // Check to to see if destination folder already exists. If so, we will exit and prompt the user to provide
       // a different project name or output folder
-      // this._projectFolderExists();
+      this._projectFolderExists();
 
       let duration = this.project.duration;
       insight.trackEvent('App_Data', { AppID: this.project.projectId, Host: this.project.host, ProjectType: this.project.projectType/* , isTypeScript: this.project.scriptType = 'Typescript' */ }, { duration });
@@ -243,16 +254,21 @@ module.exports = yo.extend({
         let language = this.project.scriptType === 'Typescript' || this.options.ts ? 'ts' : 'js';
 
         /** Show type of project creating in progress */
-        if (_.toLower(this.project.projectType) !== manifest) {
+        if (!this.project.isManifestOnly && !this.project.isCustomFunctionsProject) {
           this.log('\n----------------------------------------------------------------------------------\n');
-          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.yellow(this.project.host)} using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.projectType)} in folder:${chalk.bold.green(this.project.folder)}\n`);
+          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in at ${chalk.bold.magenta(this._destinationRoot)} for ${chalk.bold.yellow(this.project.host)} using ${chalk.bold.magenta(language)}\n`);
           this.log('----------------------------------------------------------------------------------\n\n');
         }
-        else {
-          this.log('----------------------------------------------------------------------------------\n');
-          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} add-in in folder: ${chalk.bold.magenta(this.project.folder)} \n`);
+        else if (this.project.isCustomFunctionsProject) {
+          this.log('\n----------------------------------------------------------------------------------\n');
+          this.log(`      Creating Excel Custom Functions ${chalk.bold.green(this.project.projectDisplayName)} add-in at ${chalk.bold.magenta(this._destinationRoot)} using ${chalk.bold.magenta(language)}\n`);
           this.log('----------------------------------------------------------------------------------\n\n');
         }
+        else {  
+          this.log('----------------------------------------------------------------------------------\n');  
+          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)}\n`);  
+          this.log('----------------------------------------------------------------------------------\n\n');  
+          }          
 
         const starterCode = generateStarterCode(this.project.host);
         const templateFills = Object.assign({}, this.project, starterCode);
@@ -260,17 +276,17 @@ module.exports = yo.extend({
         /** Copy the manifest */
         this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
 
-        if (_.toLower(this.project.projectType) === manifest) {
+        if (this.project.isManifestOnly) {
           this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
         }
         else {
           /** Copy the base template */
-          if (_.toLower(this.project.projectType) !== customFunctions){
+          if (!this.project.isCustomFunctionsProject){
             this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
           }
 
           /** Copy the project-type specific overrides */
-          if (_.toLower(this.project.projectType) !== customFunctions){
+          if (!this.project.isCustomFunctionsProject){
             this.fs.copyTpl(this.templatePath(`${language}/${this.project.projectType}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
           }
           else{
@@ -355,21 +371,16 @@ module.exports = yo.extend({
   },
 
   _projectFolderExists()
-  {
-    try
-    {
-      if (fs.existsSync(this._destinationRoot))
+  {      
+    if (fs.existsSync(this._destinationRoot))
       {
-        throw new Error('Folder already exists');
+        if (fs.readdirSync(this._destinationRoot).length > 0)
+        {
+          this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder`)}\n`); 
+          this._exitProcess(); 
+        }
       }
-    }
-    catch(err)
-    {
-      this.log(`${chalk.bold.red(`\nFolder already exists at `) + this._destinationRoot + `. Please start over and choose a different project name or destination folder`}\n`); 
-      insight.trackException(new Error('Installation Error: ' + err));
-      this._exitProcess();
-    }
-    return false;
+      return false;
   },
 
   _exitProcess: function () {
