@@ -25,6 +25,7 @@ delete insight.context.tags['ai.device.osArchitecture'];
 delete insight.context.tags['ai.device.osPlatform'];
 
 const manifest = 'manifest';
+const customFunctions = 'customfunctions'
 
 module.exports = yo.extend({
   /**
@@ -81,13 +82,14 @@ module.exports = yo.extend({
       jsTemplates.push(`Manifest`);
       let tsTemplates = getDirectories(this.templatePath('ts'));
       tsTemplates.push(`Manifest`);
+      tsTemplates.push(`CustomFunctions`);
       let manifests = getFiles(this.templatePath('manifest')).map(manifest => (manifest.replace('.xml', '')));
       let isManifestProject = false;
       updateHostNames(manifests, 'Onenote', 'OneNote');
       updateHostNames(manifests, 'Powerpoint', 'PowerPoint');
 
       // Set isManifestProject to true if manifest project type passed as argument
-      if (this.options.project != null && this.options.project.toLowerCase() == manifest){
+      if (this.options.project != null && _.toLower(this.options.project) == manifest){
         isManifestProject = true;
       }
 
@@ -134,7 +136,7 @@ module.exports = yo.extend({
       let durationForProjectType = (endForProjectType - startForProjectType) / 1000;
       
       if ((this.options.projectType != null && this.options.projectType.toLowerCase() == manifest) || (answerForProjectType.projectType != null
-        && answerForProjectType.projectType.toLowerCase() == manifest)){ 
+        && _.toLower(answerForProjectType.projectType) == manifest)){ 
           isManifestProject = true; }
 
       /** name for the project */
@@ -186,7 +188,7 @@ module.exports = yo.extend({
       }
 
       // Ensure script type is set to Typescript if the project type is react
-      if (this.project.projectType.toLowerCase() === 'react') {
+      if (_.toLower(this.project.projectType) === 'react') {
         this.project.scriptType = 'Typescript';
       }
 
@@ -215,7 +217,13 @@ module.exports = yo.extend({
       this.project.projectInternalName = _.kebabCase(this.project.name);
       this.project.projectDisplayName = this.project.name;
       this.project.projectId = uuid();
-      this.project.hostInternalName = _.toLower(this.project.host);
+      if (_.toLower(this.project.projectType) !== customFunctions){
+        this.project.hostInternalName = _.toLower(this.project.host);
+      }
+      else {
+        this.project.hostInternalName = customFunctions;
+      }
+      
       this.destinationRoot(this.project.folder);
 
       // Check to to see if destination folder already exists. If so, we will exit and prompt the user to provide
@@ -235,7 +243,7 @@ module.exports = yo.extend({
         let language = this.project.scriptType === 'Typescript' || this.options.ts ? 'ts' : 'js';
 
         /** Show type of project creating in progress */
-        if (this.project.projectType.toLowerCase() !== manifest) {
+        if (_.toLower(this.project.projectType) !== manifest) {
           this.log('\n----------------------------------------------------------------------------------\n');
           this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.yellow(this.project.host)} using ${chalk.bold.magenta(language)} and ${chalk.bold.cyan(this.project.projectType)} in folder:${chalk.bold.green(this.project.folder)}\n`);
           this.log('----------------------------------------------------------------------------------\n\n');
@@ -252,15 +260,22 @@ module.exports = yo.extend({
         /** Copy the manifest */
         this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
 
-        if (this.project.projectType.toLowerCase() === manifest) {
+        if (_.toLower(this.project.projectType) === manifest) {
           this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
         }
         else {
           /** Copy the base template */
-          this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
+          if (_.toLower(this.project.projectType) !== customFunctions){
+            this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
+          }
 
           /** Copy the project-type specific overrides */
-          this.fs.copyTpl(this.templatePath(`${language}/${this.project.projectType}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+          if (_.toLower(this.project.projectType) !== customFunctions){
+            this.fs.copyTpl(this.templatePath(`${language}/${this.project.projectType}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+          }
+          else{
+            this.fs.copyTpl(this.templatePath(`custom-functions/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+          }          
           
           /** Manually copy any dot files as yoeman can't handle them */
 
