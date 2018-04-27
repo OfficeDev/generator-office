@@ -347,7 +347,7 @@ describe('Create new project from prompts and command line overrides', () => {
   });
 
   /** Test addin when user passes in projectType: ExcelCustomFunctions. */
-  describe('arguments: project:ExcelCustomFunctions', () => {
+  describe('arguments: project: ExcelCustomFunctions', () => {
     before((done) => {
       answers.scriptType = 'Typescript';
       answers.name = projectEscapedName;
