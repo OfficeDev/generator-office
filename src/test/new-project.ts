@@ -62,8 +62,8 @@ describe('Create new project from prompts only', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
-    scriptType: null,
     projectType: null,
+    scriptType: null,    
     name: projectDisplayName,
     host: 'Excel'    
   };
@@ -71,9 +71,9 @@ describe('Create new project from prompts only', () => {
 
   /** Test addin when user chooses jquery and typescript. */
   describe('jquery & typescript', () => {
-    before((done) => {
-      answers.scriptType = 'Typescript';
+    before((done) => {      
       answers.projectType = 'Jquery';
+      answers.scriptType = 'Typescript';
       helpers.run(path.join(__dirname, '../app'))
         .withPrompts(answers)
         .on('end', done);
@@ -349,7 +349,7 @@ describe('Create new project from prompts and command line overrides', () => {
   /** Test addin when user passes in projectType: ExcelCustomFunctions. */
   describe('arguments: project: ExcelCustomFunctions', () => {
     before((done) => {
-      answers.scriptType = 'Typescript';
+      answers.scriptType = null;
       answers.name = projectEscapedName;
       answers.host = null;
       argument[0] = 'ExcelCustomFunctions';   

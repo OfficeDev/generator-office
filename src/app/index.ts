@@ -49,12 +49,6 @@ module.exports = yo.extend({
       desc: 'Project uses JavaScript instead of TypeScript.'
     });
 
-    this.option('ts', {
-      type: Boolean,
-      required: false,
-      desc: 'Project uses TypeScript instead of JavaScript.'
-    });
-  
     this.option('output', {
       alias: 'o',
       type: String,
@@ -81,24 +75,43 @@ module.exports = yo.extend({
       jsTemplates.push(`Manifest`);
       let tsTemplates = getDirectories(this.templatePath('ts'));
       tsTemplates.push(`Manifest`);
-      tsTemplates.push(`ExcelCustomFunctions`);
+      tsTemplates.push(`ExcelCustomFunctions`);    
+      let allTemplates = tsTemplates;
       let manifests = getFiles(this.templatePath('manifest')).map(manifest => (manifest.replace('.xml', '')));
       let isManifestProject = false;
       let isCustomFunctionsProject = false;
       updateHostNames(manifests, 'Onenote', 'OneNote');
       updateHostNames(manifests, 'Powerpoint', 'PowerPoint');
 
-      // Set isManifestProject to true if manifest project type passed as argument
-      if (this.options.projectType != null && _.toLower(this.options.projectType) == manifest){
-        isManifestProject = true;
-      }
+      /** askForProjectType will only be triggered if no project type was specified via command line projectType argument,
+       * and the projectType argument input was indeed valid */
+      let startForProjectType = (new Date()).getTime();
+      let askForProjectType = [
+        {
+          name: 'projectType',
+          message: 'Choose a project type:',
+          type: 'list',
+          default: 'React',
+          choices: allTemplates.map(template => ({ name: template, value: template })),
+          when: this.options.projectType == null || !this._isValidInput(this.options.projectType, tsTemplates, false /* isHostParam */)
+        }
+      ];
+      let answerForProjectType = await this.prompt(askForProjectType);
+      let endForProjectType = (new Date()).getTime();
+      let durationForProjectType = (endForProjectType - startForProjectType) / 1000;
+      
+      // Set isManifestProject to true if Manifest project type selected from prompt or Manifest was specified via the command prompt
+      if ((answerForProjectType.projectType != null && _.toLower(answerForProjectType.projectType) == manifest)
+      || (this.options.projectType != null && _.toLower(this.options.projectType) == manifest)) { 
+          isManifestProject = true; }
 
-      // Set isCustomFunctionsProject to true if manifest project type passed as argument
-      if (this.options.projectType != null && _.toLower(this.options.projectType) == customFunctions){
-        isCustomFunctionsProject = true;
-      }
+      // Set isCustomFunctionsProject to true if ExcelCustomFunctions project type selected from prompt or ExcelCustomFunctions was specified via the command prompt
+      if ((answerForProjectType.projectType != null  && _.toLower(answerForProjectType.projectType) == customFunctions)
+      || (this.options.projectType != null && _.toLower(this.options.projectType) == customFunctions)) { 
+          isCustomFunctionsProject = true; }
 
-      /** askForTs and askForProjectType will only be triggered if it's not a manifest-only project */
+      /** askForTs and askForProjectType will only be triggered if the js param is null, it's not a Manifest project,
+       * it's not an ExcelCustomFunctions project and the project type exists for both script types */      
       let startForScriptType = (new Date()).getTime();
       let askForScriptType = [
         {
@@ -107,48 +120,16 @@ module.exports = yo.extend({
           message: 'Choose a script type',
           choices: ['Typescript', 'Javascript'],
           default: 'Typescript',
-          when: this.options.js == null && this.options.ts == null && !isManifestProject && !isCustomFunctionsProject
+          when: this.options.js == null && !isManifestProject && !isCustomFunctionsProject
+          && (this.options.projectType != null && this._projectBothScriptTypes(this.options.projectType, jsTemplates)
+          || answerForProjectType.projectType != null && this._projectBothScriptTypes(answerForProjectType.projectType, jsTemplates))
         }
       ];
       let answerForScriptType = await this.prompt(askForScriptType);
       let endForScriptType = (new Date()).getTime();
       let durationForScriptType = (endForScriptType - startForScriptType) / 1000;
 
-      /** Project type for the add-in (jquery / angular / react / manifest) */
-      let startForProjectType = (new Date()).getTime();
-      let askForProjectType = [
-        {
-          name: 'projectType',
-          message: 'Choose a project type:',
-          type: 'list',
-          default: 'React',
-          choices: tsTemplates.map(template => ({ name: template, value: template })),
-          when: (this.options.projectType == null || !this._isValidInput(this.options.projectType, tsTemplates, false /* isHostParam */))
-          && (this.options.ts != null || answerForScriptType.scriptType == 'Typescript') && !isManifestProject
-        },
-        {
-          name: 'projectType',
-          message: 'Choose a project type:',
-          type: 'list',
-          default: 'Jquery',
-          choices: jsTemplates.map(template => ({ name: template, value: template })),
-          when: (this.options.projectType == null || !this._isValidInput(this.options.projectType, jsTemplates, false /* isHostParam */))
-          && (this.options.js != null || answerForScriptType.scriptType == 'Javascript') && !isManifestProject
-        }
-      ];
-      let answerForProjectType = await this.prompt(askForProjectType);
-      let endForProjectType = (new Date()).getTime();
-      let durationForProjectType = (endForProjectType - startForProjectType) / 1000;
-      
-      if ((this.options.projectType != null && _.toLower(this.options.projectType) == manifest) || (answerForProjectType.projectType != null
-        && _.toLower(answerForProjectType.projectType) == manifest)){ 
-          isManifestProject = true; }
-
-      if ((this.options.projectType != null && _.toLower(this.options.projectType) == customFunctions) || (answerForProjectType.projectType != null
-        && _.toLower(answerForProjectType.projectType) == customFunctions)){ 
-          isCustomFunctionsProject = true; }
-
-      /** name for the project */
+      /** askforName will be triggered if no project name was specified via command line Name argument */
       let startForName = (new Date()).getTime();
       let askForName = [{
         name: 'name',
@@ -159,9 +140,10 @@ module.exports = yo.extend({
       }];
       let answerForName = await this.prompt(askForName);
       let endForName = (new Date()).getTime();
-      let durationForName = (endForName - startForName) / 1000;
+      let durationForName = (endForName - startForName) / 1000; 
 
-      /** office client application that can host the addin */
+      /** askForHost will be triggered if no project name was specified via the command line Host argument, and the Host argument
+       * input was in fact valid, and the project type is not ExcelCustomFunctions */
       let startForHost = (new Date()).getTime();
       let askForHost = [{
         name: 'host',
@@ -189,17 +171,12 @@ module.exports = yo.extend({
         scriptType: answerForScriptType.scriptType
       };
 
-      // Configure project properties based on any user options specified
-      if (this.options.ts){
-        this.project.scriptType = 'Typescript'; 
-      }
-
       if (this.options.js){
         this.project.scriptType = 'Javascript';
       }
 
-      // Ensure script type is set to Typescript if the project type is react
-      if (_.toLower(this.project.projectType) === 'react') {
+      // Ensure script type is set to Typescript if the project type is React or ExcelCustomFunctions
+      if (_.toLower(this.project.projectType) === 'react' || _.toLower(this.project.projectType) === customFunctions) {
         this.project.scriptType = 'Typescript';
       }
 
@@ -236,8 +213,8 @@ module.exports = yo.extend({
       }      
       this.destinationRoot(this.project.folder);
 
-      // Check to to see if destination folder already exists. If so, we will exit and prompt the user to provide
-      // a different project name or output folder
+      /** Check to to see if destination folder already exists. If so, we will exit and prompt the user to provide
+      a different project name or output folder */
       this._projectFolderExists();
 
       let duration = this.project.duration;
@@ -260,12 +237,12 @@ module.exports = yo.extend({
         }
         else if (this.project.isCustomFunctionsProject) {
           this.log('\n----------------------------------------------------------------------------------\n');
-          this.log(`      Creating Excel Custom Functions ${chalk.bold.green(this.project.projectDisplayName)} add-in at ${chalk.bold.magenta(this._destinationRoot)} using ${chalk.bold.magenta(language)}\n`);
+          this.log(`      Creating Excel Custom Functions ${chalk.bold.green(this.project.projectDisplayName)} add-in at ${chalk.bold.magenta(this._destinationRoot)}\n`);
           this.log('----------------------------------------------------------------------------------\n\n');
         }
         else {  
           this.log('----------------------------------------------------------------------------------\n');  
-          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)}\n`);  
+          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);  
           this.log('----------------------------------------------------------------------------------\n\n');  
           }          
 
@@ -347,20 +324,30 @@ module.exports = yo.extend({
     this._exitProcess();
   },
 
-  _isValidInput: function(input, inputArray, isHostParam) 
+  _projectBothScriptTypes: function (input, jsTemplates)
+  {
+    // Loop through jsTemplates, which is a subset of tsTemplates, and see if the project type exists
+    for (var i = 0; i < jsTemplates.length; i++)
+    {
+      var element = jsTemplates[i];
+      if (_.toLower(input) == _.toLower(element)) {
+        return true;
+      } 
+    }
+    return false;
+  },
+
+  _isValidInput: function (input, inputArray, isHostParam) 
   {
     // validate host and project-type inputs
     for (var i = 0; i < inputArray.length; i++)
     {
       var element = inputArray[i];
-      if (input.toLowerCase() == element.toLowerCase())
-      {
-        if (isHostParam)
-        {
+      if (_.toLower(input) == _.toLower(element)) {
+        if (isHostParam){
           this.options.host = element;
         }
-        else
-        {
+        else {
           this.options['project-type'] = element;
         }
         return true;
@@ -369,19 +356,19 @@ module.exports = yo.extend({
     return false;
   },
 
-  _projectFolderExists()
+_projectFolderExists: function ()
   {      
     if (fs.existsSync(this._destinationRoot))
       {
         if (fs.readdirSync(this._destinationRoot).length > 0)
         {
-          this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder`)}\n`); 
+          this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`); 
           this._exitProcess(); 
         }
       }
       return false;
   },
-
+  
   _exitProcess: function () {
     process.exit();
   }
