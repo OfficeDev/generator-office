@@ -45,6 +45,13 @@ module.exports = yo.extend({
       required: false,
       desc: 'Use JavaScript templates instead of TypeScript.'
     });
+
+    this.option('output', {
+      alias: `o`,
+      type: String,
+      required: false,
+      desc: 'Output for project.'
+    });
   },
 
   /**
