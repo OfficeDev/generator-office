@@ -77,11 +77,9 @@ module.exports = yo.extend({
       tsTemplates.push(`Manifest`);
       tsTemplates.push(`ExcelCustomFunctions`);    
       let allTemplates = tsTemplates;
-      let manifests = getFiles(this.templatePath('manifest')).map(manifest => (manifest.replace('.xml', '')));
+      let hosts = getDirectories(this.templatePath('hosts'));
       let isManifestProject = false;
       let isCustomFunctionsProject = false;
-      updateHostNames(manifests, 'Onenote', 'OneNote');
-      updateHostNames(manifests, 'Powerpoint', 'PowerPoint');
 
       /** askForProjectType will only be triggered if no project type was specified via command line projectType argument,
        * and the projectType argument input was indeed valid */
@@ -150,8 +148,8 @@ module.exports = yo.extend({
         message: 'Which Office client application would you like to support?',
         type: 'list',
         default: 'Excel',
-        choices: manifests.map(manifest => ({ name: manifest, value: manifest })),
-        when: (this.options.host == null || this.options.host != null && !this._isValidInput(this.options.host, manifests, true /* isHostParam */))
+        choices: hosts.map(host => ({ name: host, value: host })),
+        when: (this.options.host == null || this.options.host != null && !this._isValidInput(this.options.host, hosts, true /* isHostParam */))
         && !isCustomFunctionsProject
       }];
       let answerForHost = await this.prompt(askForHost);
@@ -250,25 +248,27 @@ module.exports = yo.extend({
         const templateFills = Object.assign({}, this.project, starterCode);
 
         /** Copy the manifest */
-        this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
+        if (this.project.isCustomFunctionsProject) {
+          this.fs.copyTpl(this.templatePath(`custom-functions/manifest.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
+        }
+        else {
+          this.fs.copyTpl(this.templatePath(`hosts/${this.project.hostInternalName}/manifest.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
+        }        
 
         if (this.project.isManifestOnly) {
           this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
         }
-        else {
-          /** Copy the base template */
-          if (!this.project.isCustomFunctionsProject){
-            this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
+        else {          
+          if (this.project.isCustomFunctionsProject){
+            this.fs.copyTpl(this.templatePath(`custom-functions/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});            
           }
-
-          /** Copy the project-type specific overrides */
-          if (!this.project.isCustomFunctionsProject){
+          else {
+            /** Copy the base template */
+            this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
+            /** Copy the project-type specific overrides */
             this.fs.copyTpl(this.templatePath(`${language}/${this.project.projectType}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
           }
-          else{
-            this.fs.copyTpl(this.templatePath(`custom-functions/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
-          }          
-          
+
           /** Manually copy any dot files as yoeman can't handle them */
 
           /** .babelrc */
