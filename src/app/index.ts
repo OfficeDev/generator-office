@@ -63,7 +63,7 @@ module.exports = yo.extend({
     try {
       let jsTemplates = getDirectories(this.templatePath('js'));
       let tsTemplates = getDirectories(this.templatePath('ts'));
-      let manifests = getFiles(this.templatePath('manifest')).map(manifest => _.capitalize(manifest.replace('.xml', '')));
+      let manifests = getFiles(this.templatePath('manifest')).map(manifest => manifest.replace('.xml', ''));
       updateHostNames(manifests, 'Onenote', 'OneNote');
       updateHostNames(manifests, 'Powerpoint', 'PowerPoint');
 
