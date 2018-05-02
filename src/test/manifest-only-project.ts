@@ -84,7 +84,6 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
       let manifestFileName = name  + '-manifest.xml';
 
       let expected = [
-        manifestFileName,
         'package.json',
         'assets/icon-16.png',
         'assets/icon-32.png',
