@@ -64,7 +64,7 @@ module.exports = yo.extend({
     try {
       let jsTemplates = getDirectories(this.templatePath('js'));
       let tsTemplates = getDirectories(this.templatePath('ts'));
-      let manifests = getFiles(this.templatePath('manifest')).map(manifest => _.capitalize(manifest.replace('.xml', '')));
+      let manifests = getFiles(this.templatePath('manifest')).map(manifest => manifest.replace('.xml', ''));
 
       /** begin prompting */
       /** whether to create a new folder for the project */
@@ -189,7 +189,7 @@ module.exports = yo.extend({
           message: 'Choose a framework:',
           type: 'list',
           default: 'React',
-          choices: tsTemplates.map(template => ({ name: template, value: template })),
+          choices: tsTemplates.map(template => ({ name: _.capitalize(template),  value: template })),
           when: (this.project.framework == null) && this.project.ts && !this.options.js && !answerForManifestOnly.isManifestOnly
         },
         {
@@ -197,7 +197,7 @@ module.exports = yo.extend({
           message: 'Choose a framework:',
           type: 'list',
           default: 'Jquery',
-          choices: jsTemplates.map(template => ({ name: template, value: template })),
+          choices: jsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
           when: (this.project.framework == null) && !this.project.ts && this.options.js && !answerForManifestOnly.isManifestOnly
         }
       ];
