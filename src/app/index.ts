@@ -78,6 +78,7 @@ module.exports = yo.extend({
       tsTemplates.push(`ExcelCustomFunctions`);    
       let allTemplates = tsTemplates;
       let hosts = getDirectories(this.templatePath('hosts'));
+      hosts.map(host => _.capitalize(host));
       let isManifestProject = false;
       let isCustomFunctionsProject = false;
 
