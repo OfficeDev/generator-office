@@ -2,7 +2,7 @@
 	"functions": [
 		{
 			"name": "ADD42", 
-			"description":  "Adds 42 to the input number",
+			"description":  "adds 42 to the input numbers",
 			"helpUrl": "http://dev.office.com",
 			"result": {
 				"type": "number",
@@ -10,8 +10,14 @@
 			},
 			"parameters": [
 				{
-					"name": "num",
-					"description": "Number",
+					"name": "number 1",
+					"description": "first number to add",
+					"type": "number",
+					"dimensionality": "scalar"
+				},
+				{
+					"name": "number 2",
+					"description": "second number to add",
 					"type": "number",
 					"dimensionality": "scalar"
 				}
@@ -22,7 +28,7 @@
 		},
 		{
 			"name": "ADD42ASYNC", 
-			"description":  "asynchronously wait 250ms, then add 42",
+			"description":  "asynchronously wait 1 second, then add 42",
 			"helpUrl": "http://dev.office.com",
 			"result": {
 				"type": "number",
@@ -30,8 +36,14 @@
 			},
 			"parameters": [
 				{
-					"name": "num",
-					"description": "Number",
+					"name": "number 1",
+					"description": "first number to add",
+					"type": "number",
+					"dimensionality": "scalar"
+				},
+				{
+					"name": "number 2",
+					"description": "second number to add",
 					"type": "number",
 					"dimensionality": "scalar"
 				}
@@ -41,8 +53,8 @@
 			}
 		},
 		{
-			"name": "ISEVEN", 
-			"description":  "Determines whether a number is even",
+			"name": "ISPRIME", 
+			"description":  "determines whether a number is prime",
 			"helpUrl": "http://dev.office.com",
 			"result": {
 				"type": "boolean",
@@ -50,7 +62,7 @@
 			},
 			"parameters": [
 				{
-					"name": "num",
+					"name": "number",
 					"description": "the number to be evaluated",
 					"type": "number",
 					"dimensionality": "scalar"
@@ -61,8 +73,28 @@
 			}
 		},
 		{
+			"name": "NTHPRIME", 
+			"description":  "determines the Nth prime number",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "number",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "n",
+					"description": "the index of the prime to find",
+					"type": "number",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": true
+			}
+		},
+		{
 			"name": "GETDAY",
-			"description": "Gets the day of the week",
+			"description": "gets the current day of the week",
 			"helpUrl": "http://dev.office.com",
 			"result": {
 				"type": "string"
@@ -74,7 +106,7 @@
 		},
 		{
 			"name": "INCREMENTVALUE", 
-			"description":  "Counts up from zero",
+			"description":  "streams numbers, counting up from zero",
 			"helpUrl": "http://dev.office.com",
 			"result": {
 				"type": "number",
