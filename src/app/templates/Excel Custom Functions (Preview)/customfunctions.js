@@ -1,4 +1,4 @@
-function ADD42(num) {
+﻿function ADD42(num) {
 	return num + 42;
 }
 
@@ -47,3 +47,4 @@ function SECONDHIGHEST(range){
 	}
 	return secondHighest;
 }
+
