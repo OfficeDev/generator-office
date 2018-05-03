@@ -1,22 +1,23 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<!-- Any changes on this file should be updated on HomeCDN.html as well-->
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-		<meta http-equiv="Expires" content="0" />
-		<title></title>
-
-		<!-- To enable offline debugging using a local reference to Office.js, use: -->
-		<script src="../../Scripts/Office/MicrosoftAjax.js" type="text/javascript"></script>
-		<script src="../../Scripts/Office/1.1/office.debug.js" type="text/javascript"></script>
-
-		<script src="../Office.Runtime.js" type="text/javascript"></script>
-		<script src="../office.core.js" type="text/javascript"></script>
-		<script src="../Excel.js" type="text/javascript"></script>
-
-		<script src="customfunctions.js" type="text/javascript"></script>
-	</head>
-	<body>
-	</body>
-</html>
+<!DOCTYPE html> 
+ <html> 
+	<head> 
+		<meta charset="UTF-8" /> 
+ 		<meta http-equiv="X-UA-Compatible" content="IE=Edge" /> 
+ 		<meta http-equiv="Expires" content="0" /> 
+ 		<title></title> 
+ 		<script src="https://unpkg.com/@microsoft/office-js@1.1.5-adhoc.18/dist/office.js" type="text/javascript"></script> 
+ 
+ 
+ 		<script src="customfunctions.js" type="text/javascript"></script> 
+ 		<script type="text/javascript"> 
+ 			(function () { 
+ 				"use strict"; 
+ 				Office.initialize = function (reason) { 
+ 					return Excel.CustomFunctions.initialize(); 
+ 				}; 
+ 			})(); 
+ 		</script> 
+ 	</head> 
+ 	<body> 
+ 	</body> 
+ </html> 
