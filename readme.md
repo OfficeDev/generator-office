@@ -19,6 +19,7 @@ Like other Yeoman generators, this simply creates the scaffolding of files for y
 - PowerPoint
 - Project
 - Word
+- Excel Custom Functions (Preview: Requires the Insider channel for Excel)
 
 Choose to create Office Add-in projects using plain HTML, CSS & JavaScript (*mirroring the same projects that Visual Studio creates*) or create Angular-based projects.
 
