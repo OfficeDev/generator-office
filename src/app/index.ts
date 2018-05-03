@@ -190,7 +190,7 @@ module.exports = yo.extend({
           name: 'framework',
           message: 'Choose a framework:',
           type: 'list',
-          default: 'react',
+          default: 'React',
           choices: tsTemplates.map(template => ({ name: template, value: template })),
           when: (this.project.framework == null) && this.project.ts && !this.options.js && !answerForManifestOnly.isManifestOnly
         },
@@ -198,7 +198,7 @@ module.exports = yo.extend({
           name: 'framework',
           message: 'Choose a framework:',
           type: 'list',
-          default: 'jquery',
+          default: 'Jquery',
           choices: jsTemplates.map(template => ({ name: template, value: template })),
           when: (this.project.framework == null) && !this.project.ts && this.options.js && !answerForManifestOnly.isManifestOnly
         }
