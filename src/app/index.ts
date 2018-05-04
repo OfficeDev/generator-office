@@ -16,6 +16,7 @@ import * as yo from 'yeoman-generator';
 import generateStarterCode from './config/starterCode';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
+const excelCustomFunctions = `Excel Custom Functions (Preview: Requires the Insider channel for Excel)`;
 
 // Remove unwanted tags
 delete insight.context.tags['ai.cloud.roleInstance'];
@@ -61,8 +62,8 @@ module.exports = yo.extend({
    */
   prompting: async function () {
     try {
-      let jsTemplates = getDirectories(this.templatePath('js'));
-      let tsTemplates = getDirectories(this.templatePath('ts'));
+      let jsTemplates = getDirectories(this.templatePath('js')).map(template => _.capitalize(template));
+      let tsTemplates = getDirectories(this.templatePath('ts')).map(template => _.capitalize(template));
       let manifests = getFiles(this.templatePath('manifest')).map(manifest => _.capitalize(manifest.replace('.xml', '')));
       updateHostNames(manifests, 'Onenote', 'OneNote');
       updateHostNames(manifests, 'Powerpoint', 'PowerPoint');
@@ -176,6 +177,12 @@ module.exports = yo.extend({
         this.project.ts = true;
       }
 
+      // Add Excel Custom Functions (Preview) framework type if host type is Excel
+      if (this.project.host == `Excel`){
+        tsTemplates.push(excelCustomFunctions);
+        jsTemplates.push(excelCustomFunctions);
+      }
+
       /** technology used to create the addin (html / angular / etc) */
       let startForFramework = (new Date()).getTime();
       let askForFramework = [
@@ -183,16 +190,16 @@ module.exports = yo.extend({
           name: 'framework',
           message: 'Choose a framework:',
           type: 'list',
-          default: 'react',
-          choices: tsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
+          default: 'React',
+          choices: tsTemplates.map(template => ({ name: template, value: template })),
           when: (this.project.framework == null) && this.project.ts && !this.options.js && !answerForManifestOnly.isManifestOnly
         },
         {
           name: 'framework',
           message: 'Choose a framework:',
           type: 'list',
-          default: 'jquery',
-          choices: jsTemplates.map(template => ({ name: _.capitalize(template), value: template })),
+          default: 'Jquery',
+          choices: jsTemplates.map(template => ({ name: template, value: template })),
           when: (this.project.framework == null) && !this.project.ts && this.options.js && !answerForManifestOnly.isManifestOnly
         }
       ];
@@ -218,7 +225,8 @@ module.exports = yo.extend({
           name: 'open',
           type: 'confirm',
           message: 'Would you like to open it now while we finish creating your project?',
-          default: true
+          default: true,
+          when: this.project.framework != excelCustomFunctions
         }
       ];
       let answerForOpenResourcePage = await this.prompt(askForOpenResourcePage);
@@ -286,12 +294,14 @@ module.exports = yo.extend({
         const templateFills = Object.assign({}, this.project, starterCode);
 
         /** Copy the manifest */
-        this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
+        if (this.project.framework != excelCustomFunctions){
+          this.fs.copyTpl(this.templatePath(`manifest/${this.project.hostInternalName}.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
+        }        
 
         if (this.project.framework === 'manifest-only') {
           this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
         }
-        else {
+        else if (this.project.framework != excelCustomFunctions) {
           /** Copy the base template */
           this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
 
@@ -311,6 +321,9 @@ module.exports = yo.extend({
           if (this.fs.exists(gitignorePath)) {
               this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
           }
+        }
+        else {
+          this.fs.copyTpl(this.templatePath(`Excel Custom Functions (Preview)/**`), this.destinationPath(), templateFills);
         }
       } catch (err) {
         insight.trackException(new Error('File Copy Error: ' + err));

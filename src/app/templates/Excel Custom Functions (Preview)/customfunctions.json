@@ -1,0 +1,150 @@
+﻿{
+	"functions": [
+		{
+			"name": "ADD42", 
+			"description":  "adds 42 to the input numbers",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "number",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "number 1",
+					"description": "first number to add",
+					"type": "number",
+					"dimensionality": "scalar"
+				},
+				{
+					"name": "number 2",
+					"description": "second number to add",
+					"type": "number",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": true
+			}
+		},
+		{
+			"name": "ADD42ASYNC", 
+			"description":  "asynchronously wait 1 second, then add 42",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "number",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "number 1",
+					"description": "first number to add",
+					"type": "number",
+					"dimensionality": "scalar"
+				},
+				{
+					"name": "number 2",
+					"description": "second number to add",
+					"type": "number",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": false
+			}
+		},
+		{
+			"name": "ISPRIME", 
+			"description":  "determines whether a number is prime",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "boolean",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "number",
+					"description": "the number to be evaluated",
+					"type": "number",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": true
+			}
+		},
+		{
+			"name": "NTHPRIME", 
+			"description":  "determines the Nth prime number",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "number",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "n",
+					"description": "the index of the prime to find",
+					"type": "number",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": true
+			}
+		},
+		{
+			"name": "GETDAY",
+			"description": "gets the current day of the week",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "string"
+			},
+			"parameters": [],
+			"options": {
+				"sync": true
+			}
+		},
+		{
+			"name": "INCREMENTVALUE", 
+			"description":  "streams numbers, counting up from zero",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "number",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "increment",
+					"description": "the number to be added each time",
+					"type": "number",
+					"dimensionality": "scalar"
+				}
+			],
+			"options": {
+				"sync": false,
+				"stream": true,
+				"cancelable": true
+			}
+		},
+		{
+			"name": "SECONDHIGHEST", 
+			"description":  "gets the second highest number from a range",
+			"helpUrl": "http://dev.office.com",
+			"result": {
+				"type": "number",
+				"dimensionality": "scalar"
+			},
+			"parameters": [
+				{
+					"name": "range",
+					"description": "the input range",
+					"type": "number",
+					"dimensionality": "matrix"
+				}
+			],
+			"options": {
+				"sync": true
+			}
+		}
+	]
+}
