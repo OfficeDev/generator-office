@@ -25,6 +25,8 @@ delete insight.context.tags['ai.device.osPlatform'];
 
 const manifest = 'manifest';
 const customFunctions = 'excelcustomfunctions'
+const typescript = `Typescript`;
+const javascript = `Javascript`;
 
 module.exports = yo.extend({
   /**
@@ -116,8 +118,8 @@ module.exports = yo.extend({
           name: 'scriptType',
           type: 'list',
           message: 'Choose a script type',
-          choices: ['Typescript', 'Javascript'],
-          default: 'Typescript',
+          choices: [typescript, javascript],
+          default: typescript,
           when: this.options.js == null && !isManifestProject && !isCustomFunctionsProject
           && (this.options.projectType != null && this._projectBothScriptTypes(this.options.projectType, jsTemplates)
           || answerForProjectType.projectType != null && this._projectBothScriptTypes(answerForProjectType.projectType, jsTemplates))
@@ -170,12 +172,12 @@ module.exports = yo.extend({
       };
 
       if (this.options.js){
-        this.project.scriptType = 'Javascript';
+        this.project.scriptType = javascript;
       }
 
       // Ensure script type is set to Typescript if the project type is React or ExcelCustomFunctions
       if (_.toLower(this.project.projectType) === 'react' || _.toLower(this.project.projectType) === customFunctions) {
-        this.project.scriptType = 'Typescript';
+        this.project.scriptType = typescript;
       }
 
       if (this.options.output != null){
@@ -225,7 +227,7 @@ module.exports = yo.extend({
   writing: {
     copyFiles: function () {
       try {
-        let language = this.project.scriptType  === `Typescript` ? 'ts' : 'js';
+        let language = this.project.scriptType  === typescript ? 'ts' : 'js';
 
         /** Show type of project creating in progress */
         if (!this.project.isManifestOnly && !this.project.isCustomFunctionsProject) {
