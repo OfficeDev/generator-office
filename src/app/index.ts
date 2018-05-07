@@ -125,7 +125,7 @@ module.exports = yo.extend({
       ];
       let answerForScriptType = await this.prompt(askForScriptType);
       let endForScriptType = (new Date()).getTime();
-      let durationForScriptType = (endForScriptType - startForScriptType) / 1000;
+      let durationForScriptType = (endForScriptType - startForScriptType) / 1000;         
 
       /** askforName will be triggered if no project name was specified via command line Name argument */
       let startForName = (new Date()).getTime();
@@ -204,7 +204,7 @@ module.exports = yo.extend({
       this.project.projectDisplayName = this.project.name;
       this.project.projectId = uuid();
       if (_.toLower(this.project.projectType) !== customFunctions){
-        this.project.hostInternalName = _.toLower(this.project.host);
+        this.project.hostInternalName = this.project.host;
       }
       else {
         this.project.hostInternalName = `customFunctions`;
@@ -225,7 +225,7 @@ module.exports = yo.extend({
   writing: {
     copyFiles: function () {
       try {
-        let language = this.project.scriptType === 'Typescript' || this.options.ts ? 'ts' : 'js';
+        let language = this.project.scriptType  === `Typescript` ? 'ts' : 'js';
 
         /** Show type of project creating in progress */
         if (!this.project.isManifestOnly && !this.project.isCustomFunctionsProject) {

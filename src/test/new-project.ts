@@ -56,7 +56,7 @@ const expectExcelCustomFunctionFiles = [
 
 /**
  * Test addin from user answers
- * new project, default folder, defaul host.
+ * new project, default folder, default host.
  */
 describe('Create new project from prompts only', () => {
   let projectDisplayName = 'My Office Add-in';
