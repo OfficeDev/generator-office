@@ -21,6 +21,6 @@
   "devDependencies": {
     "http-server": "^0.11.1",
     "typescript": "^2.8.1",
-    "office-toolbox": "^0.0.6"
+    "office-toolbox": "^0.0.7"
   }
 }
