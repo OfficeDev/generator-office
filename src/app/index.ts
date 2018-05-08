@@ -57,12 +57,22 @@ module.exports = yo.extend({
       required: false,
       desc: 'Project folder name if different from project name.'
     });
+
+    this.option('details', {
+      alias: 'd',
+      type: Boolean,
+      required: false,
+      desc: 'Get more details on Yo Office arguments.'
+    });
   },
 
   /**
    * Generator initalization
    */
   initializing: function () {
+    if (this.options.details){
+     this._detailedHelp();
+    }
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
     this.project = {};
@@ -311,6 +321,26 @@ module.exports = yo.extend({
       insight.trackException(new Error('Installation Error: ' + err));
       process.exitCode = 1;
     }
+  },
+
+  _detailedHelp: function () {
+    /** Next steps and npm commands */
+    this.log(`\nYo Office ${chalk.bgGreen('Arguments')} and ${chalk.magenta('Values')} NOTE: Arguments must be specified in the below order.\n`);
+    this.log(`  ${chalk.bgGreen('projectType')}:if argument is not provided, Yo Office will prompt for project type`);
+    this.log(`    ${chalk.magenta('angular:')}  Creates Office add-in using Angular framework`);
+    this.log(`    ${chalk.magenta('excelcustomfunctions:')} Creates Office add-in for Excel custom functions`);
+    this.log(`    ${chalk.magenta('jquery:')} Creates Office add-in using Jquery framework`);
+    this.log(`    ${chalk.magenta('manifest:')} Creates only the manifest file for an Office add-in`);
+    this.log(`    ${chalk.magenta('react:')} Creates Office add-in using React framework\n`);
+    this.log(`  ${chalk.bgGreen('name')}:if argument is not provided, Yo Office will prompt for project name\n`);
+    this.log(`  ${chalk.bgGreen('host')}:if argument is not provided, Yo Office will prompt for host type`);
+    this.log(`    ${chalk.magenta('excel:')}  Creates Office add-in for Excel`);
+    this.log(`    ${chalk.magenta('onenote:')} Creates Office add-in for OneNote`);
+    this.log(`    ${chalk.magenta('outlook:')} Creates Office add-in for Outlook`);
+    this.log(`    ${chalk.magenta('powerpoint:')} Creates Office add-in for PowerPoint`);
+    this.log(`    ${chalk.magenta('project:')} Creates Office add-in for Project`);
+    this.log(`    ${chalk.magenta('word:')} Creates Office add-in for Word\n`);
+    this._exitProcess();
   },
 
   _postInstallHints: function () {
