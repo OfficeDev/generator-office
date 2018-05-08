@@ -252,10 +252,10 @@ module.exports = yo.extend({
         /** Copy the manifest */
         if (this.project.isCustomFunctionsProject) {
           this.fs.copyTpl(this.templatePath(`custom-functions/manifest.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
-        }
+          }
         else {
-          this.fs.copyTpl(this.templatePath(`hosts/${this.project.hostInternalName}/manifest.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
-        }        
+          this.fs.copyTpl(this.templatePath(`hosts/${_.capitalize(this.project.hostInternalName)}/manifest.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
+          } 
 
         if (this.project.isManifestOnly) {
           this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
@@ -268,7 +268,7 @@ module.exports = yo.extend({
             /** Copy the base template */
             this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
             /** Copy the project-type specific overrides */
-            this.fs.copyTpl(this.templatePath(`${language}/${this.project.projectType}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+            this.fs.copyTpl(this.templatePath(`${language}/${_.capitalize(this.project.projectType)}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
           }
 
           /** Manually copy any dot files as yoeman can't handle them */
@@ -350,7 +350,7 @@ module.exports = yo.extend({
           this.options.host = element;
         }
         else {
-          this.options['project-type'] = element;
+          this.options.projectType = element;
         }
         return true;
       }

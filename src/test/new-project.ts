@@ -46,10 +46,9 @@ const commonExpectedFiles = [
 const expectExcelCustomFunctionFiles = [
   '.gitignore',
   'Excel-Custom-Functions.yml',
-  'functions.html',
-  'functions.js',
-  'functions.js.map',
-  'functions.json',
+  'customfunctions.html',
+  'customfunctions.js',
+  'customfunctions.json',
   'package.json',
   'startserver.js'
 ]
@@ -351,8 +350,8 @@ describe('Create new project from prompts and command line overrides', () => {
     before((done) => {
       answers.scriptType = null;
       answers.name = projectEscapedName;
-      answers.host = null;
-      argument[0] = 'ExcelCustomFunctions';   
+      argument[0] = 'ExcelCustomFunctions';
+      argument.splice(1, 2);
 
       helpers.run(path.join(__dirname, '../app'))
         .withArguments(argument)
