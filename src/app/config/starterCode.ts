@@ -21,7 +21,19 @@ const base = (host: string, contents?: string) =>
 /**
  * Generates any required import statements.
  */
-const imports = () => `import * as OfficeHelpers from '@microsoft/office-js-helpers';`;
+const imports = (host: string) => { 
+    switch (host) {
+        case 'Outlook':
+            return;
+        case 'Project':
+            return;
+        case 'PowerPoint':
+            return;
+        case 'Word':
+            return;
+        default:
+            return `import * as OfficeHelpers from '@microsoft/office-js-helpers';`}
+    };
 
 /**
  * Generates a starter code snippet for the provided host.
@@ -82,12 +94,19 @@ const snippet = (host: string) => {
             }
         });`
             );
+        case 'Project':
+            // Project doesn't use RichAPI and has an empty sample
+            return (
+        `/**
+         * Insert your ${host} code here
+         */`
+            );
         default:
             return base(host);
     }
 };
 
 export default (host: string) => ({
-    imports: imports(),
+    imports: imports(host),
     snippet: snippet(host),
 });

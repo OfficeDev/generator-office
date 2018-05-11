@@ -51,6 +51,12 @@ module.exports = yo.extend({
       desc: 'Project uses JavaScript instead of TypeScript.'
     });
 
+    this.option('ts', {
+      type: Boolean,
+      required: false,
+      desc: 'Project uses JavaScript instead of TypeScript.'
+    });
+
     this.option('output', {
       alias: 'o',
       type: String,
@@ -130,7 +136,7 @@ module.exports = yo.extend({
           message: 'Choose a script type',
           choices: [typescript, javascript],
           default: typescript,
-          when: this.options.js == null && !isManifestProject && !isCustomFunctionsProject
+          when: this.options.js == null  && this.options.ts == null && !isManifestProject && !isCustomFunctionsProject
           && (this.options.projectType != null && this._projectBothScriptTypes(this.options.projectType, jsTemplates)
           || answerForProjectType.projectType != null && this._projectBothScriptTypes(answerForProjectType.projectType, jsTemplates))
         }
