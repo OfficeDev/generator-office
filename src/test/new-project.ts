@@ -126,7 +126,7 @@ describe('Create new project from prompts only', () => {
   describe('angular & typescript', () => {
     before((done) => {
       answers.scriptType = 'Typescript';
-      answers.projectType = 'angular';
+      answers.projectType = 'Angular';
       helpers.run(path.join(__dirname, '../app'))
         .withPrompts(answers)
         .on('end', done);

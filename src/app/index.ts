@@ -159,7 +159,7 @@ module.exports = yo.extend({
       let durationForName = (endForName - startForName) / 1000; 
 
       /** askForHost will be triggered if no project name was specified via the command line Host argument, and the Host argument
-       * input was in fact valid, and the project type is not ExcelexcelFunctions */
+       * input was in fact valid, and the project type is not Excel-Functions */
       let startForHost = (new Date()).getTime();
       let askForHost = [{
         name: 'host',
@@ -178,7 +178,7 @@ module.exports = yo.extend({
        * Configure project properties based on user input or answers to prompts
        */
       this.project = {
-        folder: this.options.name || answerForName.name || this.options.output,
+        folder: this.options.output || answerForName.name || this.options.name,
         name: this.options.name || answerForName.name,
         host: this.options.host || answerForHost.host,
         projectType: this.options.projectType || answerForProjectType.projectType,
@@ -187,7 +187,8 @@ module.exports = yo.extend({
         scriptType: answerForScriptType.scriptType
       };
 
-      if (this.options.js){
+      if (this.options.js)
+      {
         this.project.scriptType = javascript;
       }
 
@@ -196,7 +197,7 @@ module.exports = yo.extend({
         this.project.scriptType = typescript;
       }
 
-      if (this.options.output != null){
+      if (this.options.output != null) {
         this.project.folder = this.options.output;
       }
   
@@ -221,20 +222,20 @@ module.exports = yo.extend({
       this.project.projectInternalName = _.kebabCase(this.project.name);
       this.project.projectDisplayName = this.project.name;
       this.project.projectId = uuid();
-      if (this.project.projectType !== excelFunctions){
-        this.project.hostInternalName = this.project.host;
+      if (this.project.projectType === excelFunctions) {
+        this.project.hostInternalName = excelFunctions;
       }
       else {
-        this.project.hostInternalName = excelFunctions;
+        this.project.hostInternalName = this.project.host;
       }      
       this.destinationRoot(this.project.folder);
 
       /** Check to to see if destination folder already exists. If so, we will exit and prompt the user to provide
       a different project name or output folder */
-      this._projectFolderExists();
+      this._exitYoOfficeIfProjectFolderExists();
 
       let duration = this.project.duration;
-      insight.trackEvent('App_Data', { AppID: this.project.projectId, Host: this.project.host, ProjectType: this.project.projectType/* , isTypeScript: this.project.scriptType = 'Typescript' */ }, { duration });
+      insight.trackEvent('App_Data', { AppID: this.project.projectId, Host: this.project.host, ProjectType: this.project.projectType, isTypeScript: (this.project.scriptType === typescript).toString() }, { duration });
     } catch (err) {
       insight.trackException(new Error('Configuration Error: ' + err));
     }
@@ -246,20 +247,20 @@ module.exports = yo.extend({
         let language = this.project.scriptType  === typescript ? 'ts' : 'js';
 
         /** Show type of project creating in progress */
-        if (!this.project.isManifestOnly && !this.project.isExcelFunctionsProject) {
-          this.log('\n----------------------------------------------------------------------------------\n');
-          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in at ${chalk.bold.magenta(this._destinationRoot)} for ${chalk.bold.yellow(this.project.host)} using ${chalk.bold.magenta(language)}\n`);
-          this.log('----------------------------------------------------------------------------------\n\n');
+        if (this.project.isManifestOnly) {
+          this.log('----------------------------------------------------------------------------------\n');  
+          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);  
+          this.log('----------------------------------------------------------------------------------\n\n');  
         }
         else if (this.project.isExcelFunctionsProject) {
           this.log('\n----------------------------------------------------------------------------------\n');
           this.log(`      Creating Excel Custom Functions ${chalk.bold.green(this.project.projectDisplayName)} add-in at ${chalk.bold.magenta(this._destinationRoot)}\n`);
           this.log('----------------------------------------------------------------------------------\n\n');
         }
-        else {  
-          this.log('----------------------------------------------------------------------------------\n');  
-          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);  
-          this.log('----------------------------------------------------------------------------------\n\n');  
+        else {
+          this.log('\n----------------------------------------------------------------------------------\n');
+          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in at ${chalk.bold.magenta(this._destinationRoot)} for ${chalk.bold.yellow(this.project.host)} using ${chalk.bold.magenta(language)}\n`);
+          this.log('----------------------------------------------------------------------------------\n\n');
           }          
 
         const starterCode = generateStarterCode(this.project.host);
@@ -398,7 +399,7 @@ module.exports = yo.extend({
     return false;
   },
 
-_projectFolderExists: function ()
+_exitYoOfficeIfProjectFolderExists: function ()
   {      
     if (fs.existsSync(this._destinationRoot))
       {

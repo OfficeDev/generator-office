@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as yo from 'yeoman-generator';
+
 var shell = require('shelljs');
 var assert = require('assert');
 
@@ -13,9 +13,6 @@ const ts = '--ts';
 const javascript = 'Javascript';
 const typescript = 'Typescript';
 const space = ' ';
-const angular = 'Angular';
-const jquery = 'Jquery';
-const react = 'React';
 let jsTemplates = getDirectories('src/app/templates/js');
 let tsTemplates = getDirectories('src/app/templates/js');
 let hostsTemplates = getDirectories('src/app/templates/hosts');
@@ -83,7 +80,8 @@ function _setupTestEnvironment()
 function _generateProject(projectType, projectName, host, projectFolder, scriptType)
 {
     let language = scriptType == javascript ? js : ts;
-    shell.exec(yoOffice + space + projectType + space + projectName + space + host + space + output + space + projectFolder + space + language, {silent: true});
+    let cmdLine = yoOffice + space + projectType + space + projectName + space + host + space + output + space + projectFolder + space + language;
+    shell.exec(cmdLine, {silent: true});
 }
 
 function _buildProject(projectFolder, projectType)
