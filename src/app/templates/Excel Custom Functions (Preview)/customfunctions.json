@@ -1,7 +1,8 @@
 ﻿{
+	"$schema": "https://developer.microsoft.com/en-us/json-schemas/office-js/custom-functions.schema.json",
 	"functions": [
 		{
-			"name": "ADD42", 
+			"name": "ADD42",
 			"description":  "adds 42 to the input numbers",
 			"helpUrl": "http://dev.office.com",
 			"result": {
@@ -97,6 +98,7 @@
 			"description": "gets the current day of the week",
 			"helpUrl": "http://dev.office.com",
 			"result": {
+				"dimensionality": "scalar",
 				"type": "string"
 			},
 			"parameters": [],
