@@ -5,16 +5,10 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 		<meta http-equiv="Expires" content="0" />
 		<title></title>
-		<script src="https://unpkg.com/@microsoft/office-js@1.1.7-adhoc.3/dist/office.js" type="text/javascript"></script>
-
+		<script src="https://unpkg.com/@microsoft/office-js@custom-functions-preview/dist/office.js" type="text/javascript"></script>
 		<script src="customfunctions.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			(function () {
-				"use strict";
-				Office.initialize = function (reason) {
-					return Excel.CustomFunctions.initialize();
-				};
-			})();
+			Office.Preview.startCustomFunctions();
 		</script>
 	</head>
 	<body>
