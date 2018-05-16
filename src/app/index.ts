@@ -187,19 +187,15 @@ module.exports = yo.extend({
         scriptType: answerForScriptType.scriptType
       };
 
-      if (this.options.js)
-      {
-        this.project.scriptType = javascript;
-      }
+      if (this.options.js) {
+        this.project.scriptType = javascript; }
 
       // Ensure script type is set to Typescript if the project type is React or ExcelexcelFunctions
       if (this.project.projectType === 'React' || this.project.projectType === excelFunctions) {
-        this.project.scriptType = typescript;
-      }
+        this.project.scriptType = typescript; }
 
       if (this.options.output != null) {
-        this.project.folder = this.options.output;
-      }
+        this.project.folder = this.options.output; }
   
       /** appInsights logging */
       const noElapsedTime = 0;
@@ -223,6 +219,7 @@ module.exports = yo.extend({
       this.project.projectDisplayName = this.project.name;
       this.project.projectId = uuid();
       if (this.project.projectType === excelFunctions) {
+        this.project.host = 'Excel';
         this.project.hostInternalName = excelFunctions;
       }
       else {
@@ -252,14 +249,9 @@ module.exports = yo.extend({
           this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);  
           this.log('----------------------------------------------------------------------------------\n\n');  
         }
-        else if (this.project.isExcelFunctionsProject) {
-          this.log('\n----------------------------------------------------------------------------------\n');
-          this.log(`      Creating Excel Custom Functions ${chalk.bold.green(this.project.projectDisplayName)} add-in at ${chalk.bold.magenta(this._destinationRoot)}\n`);
-          this.log('----------------------------------------------------------------------------------\n\n');
-        }
         else {
           this.log('\n----------------------------------------------------------------------------------\n');
-          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in at ${chalk.bold.magenta(this._destinationRoot)} for ${chalk.bold.yellow(this.project.host)} using ${chalk.bold.magenta(language)}\n`);
+          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(this.project.host)} using ${chalk.bold.yellow(this.project.scriptType)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
           this.log('----------------------------------------------------------------------------------\n\n');
           }          
 
