@@ -276,7 +276,7 @@ module.exports = yo.extend({
   writing: {
     copyFiles: function () {
       try {
-        let language = this.project.ts ? 'ts' : 'js';
+        let language = this.project.ts || this.project.framework === excelCustomFunctions ? 'ts' : 'js';
 
         /** Show type of project creating in progress */
         if (this.project.framework !== 'manifest-only') {
@@ -301,19 +301,28 @@ module.exports = yo.extend({
         if (this.project.framework === 'manifest-only') {
           this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
         }
-        else if (this.project.framework != excelCustomFunctions) {
-          /** Copy the base template */
-          this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
+        else 
+        {
+          if (this.project.framework === excelCustomFunctions)
+          {
+            /* Copy custom function project template and only the essential files needed from the base directory  */
+            this.fs.copyTpl(this.templatePath(`excel-custom-functions-preview/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+            this.fs.copy(this.templatePath(`${language}/base/certs`), this.destinationPath('certs'), { globOptions: { ignore: `**/*.placeholder` }});
+          }
+          else
+          {
+            /** Copy the base template */
+            this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
 
-          /** Copy the framework specific overrides */
-          this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+            /** Copy the framework specific overrides */
+            this.fs.copyTpl(this.templatePath(`${language}/${this.project.framework}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
           
-          /** Manually copy any dot files as yoeman can't handle them */
-
-          /** .babelrc */
-          const babelrcPath = this.templatePath(`${language}/${this.project.framework}/babelrc.placeholder`);
-          if (this.fs.exists(babelrcPath)) {
+            /** Manually copy any dot files as yoeman can't handle them */
+            /** .babelrc */
+            const babelrcPath = this.templatePath(`${language}/${this.project.framework}/babelrc.placeholder`);
+            if (this.fs.exists(babelrcPath)) {
               this.fs.copy(babelrcPath, this.destinationPath('.babelrc'));
+            }      
           }
 
           /** .gitignore */
@@ -321,9 +330,6 @@ module.exports = yo.extend({
           if (this.fs.exists(gitignorePath)) {
               this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
           }
-        }
-        else {
-          this.fs.copyTpl(this.templatePath(`Excel Custom Functions (Preview)/**`), this.destinationPath(), templateFills);
         }
       } catch (err) {
         insight.trackException(new Error('File Copy Error: ' + err));
