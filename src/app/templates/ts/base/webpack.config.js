@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+    devtool: 'source-map',
     entry: {
         app: './src/index.ts',
         'function-file': './function-file/function-file.ts'
