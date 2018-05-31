@@ -29,5 +29,13 @@ module.exports = {
         new HtmlWebpackPlugin({
             chunks: ['customfunctions']
         })
-    ]
+    ],
+    devServer: {
+        port: 3000,
+        hot: true,
+        inline: true,
+        headers: {
+            "Access-Control-Allow-Origin": "*"
+        }
+    }
 };
