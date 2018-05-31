@@ -14,7 +14,7 @@
 		<Host Name="Workbook" />
 	</Hosts>
 	<DefaultSettings>
-		<SourceLocation DefaultValue="http://127.0.0.1:8080/customfunctions.html"/>
+		<SourceLocation DefaultValue="https://localhost:3000/src/customfunctions.html"/>
 	</DefaultSettings>
 	<Permissions>ReadWriteDocument</Permissions>
 	<VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
@@ -38,9 +38,9 @@
 		</Hosts>
 		<Resources>
 			<bt:Urls>
-				<bt:Url id="JSON-URL" DefaultValue="http://127.0.0.1:8080/customfunctions.json" />
-				<bt:Url id="JS-URL" DefaultValue="http://127.0.0.1:8080/customfunctions.js" />
-				<bt:Url id="HTML-URL" DefaultValue="http://127.0.0.1:8080/customfunctions.html" />
+				<bt:Url id="JSON-URL" DefaultValue="https://localhost:3000/src/customfunctions.json" />
+				<bt:Url id="JS-URL" DefaultValue="https://localhost:3000/src/customfunctions.js" />
+				<bt:Url id="HTML-URL" DefaultValue="https://localhost:3000/src/customfunctions.html" />
 			</bt:Urls>
 			<bt:ShortStrings>
 				<bt:String id="namespace" DefaultValue="CONTOSO" />

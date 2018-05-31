@@ -14,6 +14,12 @@ const expectedAssets = [
   'assets/logo-filled.png',
 ];
 
+const certificateFiles = [
+  'certs/ca.crt',
+  'certs/server.crt',
+  'certs/server.key'
+]
+
 const expectedFunctionFilesJs = [
   'function-file/function-file.html',
   'function-file/function-file.js',
@@ -29,6 +35,18 @@ const commonExpectedFiles = [
   'package.json',
   'webpack.config.js',
   'resource.html',
+];
+
+const expectExcelCustomFunctionFiles = [
+  ...certificateFiles,
+  '.gitignore',
+  'package.json',
+  'webpack.config.js',
+  'excel-custom-functions.yml',
+  'config/web.config',
+  'src/customfunctions.html',
+  'src/customfunctions.js',
+  'src/customfunctions.json',
 ];
 
 /**
@@ -325,6 +343,36 @@ describe('Create new project from prompts and command line overrides', () => {
       done();
     });
   });
+
+    /** Test addin when user passes in projectType: excel-functions. */
+    describe('arguments: project: custom-functions', () => {
+      before((done) => {
+        const excelCustomFunctions = `Excel Custom Functions (Preview: Requires the Insider channel for Excel)`;
+        argument[0] = projectEscapedName;
+        argument[1] = 'excel';
+        argument.splice(2, 1);
+        answers.framework = excelCustomFunctions;
+  
+        helpers.run(path.join(__dirname, '../app'))
+          .withArguments(argument)
+          .withPrompts(answers)
+          .on('end', done);
+      });
+  
+      it('creates expected files', (done) => {
+        let host = argument[1] ? argument[1] : answers.host;
+        let name = argument[0] ? argument[0] : answers.name;
+        let manifestFileName = 'config/customfunctions-manifest.xml';      
+  
+        let expected = [
+          manifestFileName,
+          ...expectExcelCustomFunctionFiles       
+        ];
+  
+        assert.file(expected);
+        done();
+      });
+    });
 });
 
 /**
