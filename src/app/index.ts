@@ -52,7 +52,7 @@ module.exports = yo.extend({
     this.option('ts', {
       type: Boolean,
       required: false,
-      desc: 'Project uses JavaScript instead of TypeScript.'
+      desc: 'Project uses Typescript instead of JavaScript.'
     });
 
     this.option('output', {
@@ -385,19 +385,19 @@ module.exports = yo.extend({
   _detailedHelp: function () {
     this.log(`\nYo Office ${chalk.bgGreen('Arguments')} and ${chalk.magenta('Values')} NOTE: Arguments must be specified in the below order.\n`);
     this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create.`);
-    this.log(`    ${chalk.yellow('angular:')}  Creates Office add-in using Angular framework`);
-    this.log(`    ${chalk.yellow('excel-functions:')} Creates Office add-in for Excel custom functions`);
-    this.log(`    ${chalk.yellow('jquery:')} Creates Office add-in using Jquery framework`);
-    this.log(`    ${chalk.yellow('manifest:')} Creates only the manifest file for an Office add-in`);
-    this.log(`    ${chalk.yellow('react:')} Creates Office add-in using React framework\n`);
+    this.log(`    ${chalk.yellow('angular:')}  Creates Office add-in using Angular framework.`);
+    this.log(`    ${chalk.yellow('excel-functions:')} Creates Office add-in for Excel custom functions.  Must specify 'Excel' as host parameter.`);
+    this.log(`    ${chalk.yellow('jquery:')} Creates Office add-in using Jquery framework.`);
+    this.log(`    ${chalk.yellow('manifest:')} Creates only the manifest file for an Office add-in.`);
+    this.log(`    ${chalk.yellow('react:')} Creates Office add-in using React framework.\n`);
     this.log(`  ${chalk.bgGreen('name')}:Specifies the name for the project that will be created.\n`);
     this.log(`  ${chalk.bgGreen('host')}:Specifies the host app in the add-in manifest.`);
-    this.log(`    ${chalk.yellow('excel:')}  Creates Office add-in for Excel`);
-    this.log(`    ${chalk.yellow('onenote:')} Creates Office add-in for OneNote`);
-    this.log(`    ${chalk.yellow('outlook:')} Creates Office add-in for Outlook`);
-    this.log(`    ${chalk.yellow('powerpoint:')} Creates Office add-in for PowerPoint`);
-    this.log(`    ${chalk.yellow('project:')} Creates Office add-in for Project`);
-    this.log(`    ${chalk.yellow('word:')} Creates Office add-in for Word\n`);
+    this.log(`    ${chalk.yellow('excel:')}  Creates Office add-in for Excel.`);
+    this.log(`    ${chalk.yellow('onenote:')} Creates Office add-in for OneNote.`);
+    this.log(`    ${chalk.yellow('outlook:')} Creates Office add-in for Outlook.`);
+    this.log(`    ${chalk.yellow('powerpoint:')} Creates Office add-in for PowerPoint.`);
+    this.log(`    ${chalk.yellow('project:')} Creates Office add-in for Project.`);
+    this.log(`    ${chalk.yellow('word:')} Creates Office add-in for Word.\n`);
     this._exitProcess();
   },
 

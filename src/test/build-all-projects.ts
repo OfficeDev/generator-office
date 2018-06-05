@@ -14,7 +14,7 @@ const javascript = 'javascript';
 const typescript = 'typescript';
 const space = ' ';
 let jsTemplates = getDirectories('src/app/templates/js');
-let tsTemplates = getDirectories('src/app/templates/js');
+let tsTemplates = getDirectories('src/app/templates/ts');
 let hostsTemplates = getDirectories('src/app/templates/hosts');
 
 describe('Setup test environment for Yo Office build tests', () => {
