@@ -173,9 +173,6 @@ module.exports = yo.extend({
       /* Configure project properties based on user input or answers to prompts */
       this._configureProject(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject);
 
-      var ref = new Object();
-      byRef(ref);
-
       /* Gnerate Insights logging */
       const noElapsedTime = 0;
       insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
@@ -298,7 +295,7 @@ module.exports = yo.extend({
                       
                 /* Manually copy any dot files as yoeman can't handle them */
                 /* .babelrc */
-                const babelrcPath = this.templatePath(`${language}/${this.project.projectType}/babelrc.placeholder`);
+                const babelrcPath = this.templatePath(`${language}/${_.toLower(this.project.projectType)}/babelrc.placeholder`);
                 if (this.fs.exists(babelrcPath)) {
                   this.fs.copy(babelrcPath, this.destinationPath('.babelrc'));
                 }
@@ -440,9 +437,4 @@ function updateHostNames(arr, key, newval) {
     let index = _.indexOf(arr, key);
     arr.splice(index, 1, newval);
   }
-}
-
-function byRef (ref)
-{
-  ref.string = 'foo';
 }
