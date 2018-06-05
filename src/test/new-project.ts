@@ -363,7 +363,7 @@ describe('Create new project from prompts and command line overrides', () => {
 
     it('creates expected files', (done) => {
       let name = argument[1] ? argument[1] : answers.name;
-      let manifestFileName = name + '-manifest.xml';      
+      let manifestFileName = 'config/customfunctions-manifest.xml';       
 
       let expected = [
         manifestFileName,

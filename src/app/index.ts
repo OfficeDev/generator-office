@@ -18,7 +18,7 @@ import { log } from 'util';
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 const excelFunctions = `Excel Custom Functions (Preview: Requires the Insider channel for Excel)`;
 
-// Remove unwanted tags
+/* Remove unwanted tags */
 delete insight.context.tags['ai.cloud.roleInstance'];
 delete insight.context.tags['ai.device.osVersion'];
 delete insight.context.tags['ai.device.osArchitecture'];
@@ -29,9 +29,7 @@ const typescript = `Typescript`;
 const javascript = `Javascript`;
 
 module.exports = yo.extend({
-  /**
-   * Setup the generator
-   */
+ /*  Setup the generator */
   constructor: function () {
     yo.apply(this, arguments);
 
@@ -72,9 +70,7 @@ module.exports = yo.extend({
     });
   },
 
-  /**
-   * Generator initalization
-   */
+  /* Generator initalization */
   initializing: function () {
     if (this.options.details){
      this._detailedHelp();
@@ -84,24 +80,22 @@ module.exports = yo.extend({
     this.project = {};
   },
 
-  /**
-   * Prompt users for options
-   */
+  /* Prompt user for project options */
   prompting: async function () {
     try {
       let jsTemplates = getDirectories(this.templatePath('js')).map(template => _.capitalize(template));
       let tsTemplates = getDirectories(this.templatePath('ts')).map(template => _.capitalize(template));
       jsTemplates.push(`Manifest`);
-      tsTemplates.push(`Manifest`);
-      tsTemplates.push(excelFunctions);    
+      tsTemplates.push(`Manifest`);       
       let allTemplates = tsTemplates;
+      allTemplates.push(excelFunctions); 
       let hosts = getDirectories(this.templatePath('hosts')).map(host=> _.capitalize(host));;
       updateHostNames(hosts, 'Onenote', 'OneNote');
       updateHostNames(hosts, 'Powerpoint', 'PowerPoint');
       let isManifestProject = false;
       let isExcelFunctionsProject = false;
 
-      /** askForProjectType will only be triggered if no project type was specified via command line projectType argument,
+      /* askForProjectType will only be triggered if no project type was specified via command line projectType argument,
        * and the projectType argument input was indeed valid */
       let startForProjectType = (new Date()).getTime();
       let askForProjectType = [
@@ -111,24 +105,24 @@ module.exports = yo.extend({
           type: 'list',
           default: 'React',
           choices: allTemplates.map(template => ({ name: template, value: template })),
-          when: this.options.projectType == null || !this._isValidInput(this.options.projectType, tsTemplates, false /* isHostParam */)
+          when: this.options.projectType == null || !this._isValidInput(this.options.projectType, allTemplates, false /* isHostParam */)
         }
       ];
       let answerForProjectType = await this.prompt(askForProjectType);
       let endForProjectType = (new Date()).getTime();
       let durationForProjectType = (endForProjectType - startForProjectType) / 1000;
       
-      // Set isManifestProject to true if Manifest project type selected from prompt or Manifest was specified via the command prompt
+      /* Set isManifestProject to true if Manifest project type selected from prompt or Manifest was specified via the command prompt */
       if ((answerForProjectType.projectType != null && answerForProjectType.projectType == manifest)
       || (this.options.projectType != null && this.options.projectType) == manifest) { 
           isManifestProject = true; }
 
-      // Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or ExcelexcelFunctions was specified via the command prompt
+      /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or ExcelexcelFunctions was specified via the command prompt */
       if ((answerForProjectType.projectType != null  && answerForProjectType.projectType) == excelFunctions
       || (this.options.projectType != null && this.options.projectType == excelFunctions)) { 
         isExcelFunctionsProject = true; }
 
-      /** askForTs and askForProjectType will only be triggered if the js param is null, it's not a Manifest project,
+      /* askForTs and askForProjectType will only be triggered if the js param is null, it's not a Manifest project,
        * it's not an ExcelexcelFunctions project and the project type exists for both script types */      
       let startForScriptType = (new Date()).getTime();
       let askForScriptType = [
@@ -147,7 +141,7 @@ module.exports = yo.extend({
       let endForScriptType = (new Date()).getTime();
       let durationForScriptType = (endForScriptType - startForScriptType) / 1000;         
 
-      /** askforName will be triggered if no project name was specified via command line Name argument */
+      /* askforName will be triggered if no project name was specified via command line Name argument */
       let startForName = (new Date()).getTime();
       let askForName = [{
         name: 'name',
@@ -160,7 +154,7 @@ module.exports = yo.extend({
       let endForName = (new Date()).getTime();
       let durationForName = (endForName - startForName) / 1000; 
 
-      /** askForHost will be triggered if no project name was specified via the command line Host argument, and the Host argument
+      /* askForHost will be triggered if no project name was specified via the command line Host argument, and the Host argument
        * input was in fact valid, and the project type is not Excel-Functions */
       let startForHost = (new Date()).getTime();
       let askForHost = [{
@@ -176,30 +170,13 @@ module.exports = yo.extend({
       let endForHost = (new Date()).getTime();
       let durationForHost = (endForHost - startForHost) / 1000;
 
-       /**
-       * Configure project properties based on user input or answers to prompts
-       */
-      this.project = {
-        folder: this.options.output || answerForName.name || this.options.name,
-        name: this.options.name || answerForName.name,
-        host: this.options.host || answerForHost.host,
-        projectType: this.options.projectType || answerForProjectType.projectType,
-        isManifestOnly: isManifestProject,
-        isExcelFunctionsProject: isExcelFunctionsProject,
-        scriptType: answerForScriptType.scriptType
-      };
+      /* Configure project properties based on user input or answers to prompts */
+      this._configureProject(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject);
 
-      if (this.options.js) {
-        this.project.scriptType = javascript; }
+      var ref = new Object();
+      byRef(ref);
 
-      // Ensure script type is set to Typescript if the project type is React or ExcelexcelFunctions
-      if (this.project.projectType === 'React' || this.project.projectType === excelFunctions) {
-        this.project.scriptType = typescript; }
-
-      if (this.options.output != null) {
-        this.project.folder = this.options.output; }
-  
-      /** appInsights logging */
+      /* Gnerate Insights logging */
       const noElapsedTime = 0;
       insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
       insight.trackEvent('Folder', { CreatedSubFolder: this.project.folder.toString() }, { noElapsedTime }); 
@@ -209,34 +186,6 @@ module.exports = yo.extend({
       insight.trackEvent('ProjectType', { ProjectType: this.project.projectType }, { durationForProjectType });
     } catch (err) {
       insight.trackException(new Error('Prompting Error: ' + err));
-    }
-  },
-
-  /**
-   * save configs & config project
-   */
-  configuring: function () {
-    try {
-      this.project.projectInternalName = _.kebabCase(this.project.name);
-      this.project.projectDisplayName = this.project.name;
-      this.project.projectId = uuid();
-      if (this.project.projectType === excelFunctions) {
-        this.project.host = 'Excel';
-        this.project.hostInternalName = 'Excel';
-      }
-      else {
-        this.project.hostInternalName = this.project.host;
-      }      
-      this.destinationRoot(this.project.folder);
-
-      /** Check to to see if destination folder already exists. If so, we will exit and prompt the user to provide
-      a different project name or output folder */
-      this._exitYoOfficeIfProjectFolderExists();
-
-      let duration = this.project.duration;
-      insight.trackEvent('App_Data', { AppID: this.project.projectId, Host: this.project.host, ProjectType: this.project.projectType, isTypeScript: (this.project.scriptType === typescript).toString() }, { duration });
-    } catch (err) {
-      insight.trackException(new Error('Configuration Error: ' + err));
     }
   },
 
@@ -266,6 +215,173 @@ module.exports = yo.extend({
     }
   },
 
+  _configureProject: function(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject)
+  {
+    try 
+    {
+      this.project = {
+        folder: this.options.output || answerForName.name || this.options.name,
+        name: this.options.name || answerForName.name,
+        host: this.options.host || answerForHost.host,
+        projectType: this.options.projectType || answerForProjectType.projectType,
+        isManifestOnly: isManifestProject,
+        isExcelFunctionsProject: isExcelFunctionsProject,
+        scriptType: answerForScriptType.scriptType
+      };
+
+      if (this.options.js) {
+        this.project.scriptType = javascript; }
+
+      /* Ensure script type is set properly if the project type is React or ExcelFunctions */
+      if (this.project.projectType === 'React') {
+        this.project.scriptType = typescript; }
+
+      if (this.project.projectType === excelFunctions) {
+        this.project.scriptType = javascript; }
+
+      /* Set folder if to output param  if specified */
+      if (this.options.output != null) {
+        this.project.folder = this.options.output; }
+
+      this.project.projectInternalName = _.kebabCase(this.project.name);
+      this.project.projectDisplayName = this.project.name;
+      this.project.projectId = uuid();
+      if (this.project.projectType === excelFunctions) {
+        this.project.host = 'Excel';
+        this.project.hostInternalName = 'Excel';
+      }
+      else {
+        this.project.hostInternalName = this.project.host;
+      }      
+      this.destinationRoot(this.project.folder);
+
+      /* Check to to see if destination folder already exists. If so, we will exit and prompt the user to provide
+      a different project name or output folder */
+      this._exitYoOfficeIfProjectFolderExists();
+
+      let duration = this.project.duration;
+      insight.trackEvent('App_Data', { AppID: this.project.projectId, Host: this.project.host, ProjectType: this.project.projectType, isTypeScript: (this.project.scriptType === typescript).toString() }, { duration });
+    } 
+    catch (err) {
+      insight.trackException(new Error('Configuration Error: ' + err));
+    }
+  },
+
+  _copyProjectFiles()
+  {
+      try {
+        let language = this.project.scriptType === typescript && !this.project.isExcelFunctionsProject  ? 'ts' : 'js';
+        const starterCode = generateStarterCode(this.project.host);
+        const templateFills = Object.assign({}, this.project, starterCode);
+
+        this._projectCreationMessage();
+        
+        if (this.project.isExcelFunctionsProject)
+        {
+          this.fs.copyTpl(this.templatePath(`excel-custom-functions-preview/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+          this.fs.copy(this.templatePath(`${language}/base/certs`), this.destinationPath('certs'), { globOptions: { ignore: `**/*.placeholder` }});         
+        }
+        else
+        {
+          /* Copy the manifest */
+          this.fs.copyTpl(this.templatePath(`hosts/${_.toLower(this.project.hostInternalName)}/manifest.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
+
+          if (this.project.isManifestOnly) {
+            this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
+          }
+          else{
+                /* Copy the base template */
+                this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
+
+                /* Copy the project type specific overrides */
+                this.fs.copyTpl(this.templatePath(`${language}/${_.toLower(this.project.projectType)}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+                      
+                /* Manually copy any dot files as yoeman can't handle them */
+                /* .babelrc */
+                const babelrcPath = this.templatePath(`${language}/${this.project.projectType}/babelrc.placeholder`);
+                if (this.fs.exists(babelrcPath)) {
+                  this.fs.copy(babelrcPath, this.destinationPath('.babelrc'));
+                }
+              }
+          }
+          /* Copy .gitignore */
+          const gitignorePath = this.templatePath(`${language}/base/gitignore.placeholder`);
+          if (this.fs.exists(gitignorePath)) {
+              this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
+          }
+        }
+    catch (err) {
+        insight.trackException(new Error('File Copy Error: ' + err));
+      }
+  },
+
+  _postInstallHints: function () {
+    /* Next steps and npm commands */
+    this.log('----------------------------------------------------------------------------------------------------------\n');
+    this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
+    this.log(`      1. Launch your local web server via ${chalk.inverse(' npm start ')} (you may also need to`);
+    this.log(`         trust the Self-Signed Certificate for the site if you haven't done that)`);
+    this.log(`      2. Sideload the add-in into your Office application.\n`);
+    this.log(`      Please refer to resource.html in your project for more information.`);
+    this.log(`      Or visit our repo at: https://github.com/officeDev/generator-office \n`);
+    this.log('----------------------------------------------------------------------------------------------------------\n');
+    this._exitProcess();
+  },
+
+  _projectBothScriptTypes: function (input, jsTemplates)
+  {
+    /* Loop through jsTemplates, which is a subset of tsTemplates, and see if the project type exists */
+    for (var i = 0; i < jsTemplates.length; i++)
+    {
+      var element = jsTemplates[i];
+      if (_.toLower(input) == _.toLower(element)) {
+        return true;
+      } 
+    }
+    return false;
+  },
+
+  _projectCreationMessage: function()
+  {
+    /* Log to console the type of project being created */
+    if (this.project.isManifestOnly)
+      {
+        this.log('----------------------------------------------------------------------------------\n');  
+        this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);  
+        this.log('----------------------------------------------------------------------------------\n\n');  
+      }
+    else 
+      {
+        this.log('\n----------------------------------------------------------------------------------\n');
+        this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(this.project.host)} using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(this.project.projectType)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
+        this.log('----------------------------------------------------------------------------------\n\n');
+      }
+  },
+
+  _isValidInput: function (input, inputArray, isHostParam) 
+  {
+    if (!isHostParam && _.toLower(input) == 'excel-functions')
+    {
+      input = excelFunctions;
+    }
+
+    /* Validate host and project-type inputs */
+    for (var i = 0; i < inputArray.length; i++)
+    {
+      var element = inputArray[i];
+      if (_.toLower(input) == _.toLower(element)) {
+        if (isHostParam){
+          this.options.host = element;
+        }
+        else {
+          this.options.projectType = element;
+        }
+        return true;
+      }
+    }
+    return false;
+  },
+
   _detailedHelp: function () {
     this.log(`\nYo Office ${chalk.bgGreen('Arguments')} and ${chalk.magenta('Values')} NOTE: Arguments must be specified in the below order.\n`);
     this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create.`);
@@ -283,117 +399,6 @@ module.exports = yo.extend({
     this.log(`    ${chalk.yellow('project:')} Creates Office add-in for Project`);
     this.log(`    ${chalk.yellow('word:')} Creates Office add-in for Word\n`);
     this._exitProcess();
-  },
-
-  _postInstallHints: function () {
-    /** Next steps and npm commands */
-    this.log('----------------------------------------------------------------------------------------------------------\n');
-    this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
-    this.log(`      1. Launch your local web server via ${chalk.inverse(' npm start ')} (you may also need to`);
-    this.log(`         trust the Self-Signed Certificate for the site if you haven't done that)`);
-    this.log(`      2. Sideload the add-in into your Office application.\n`);
-    this.log(`      Please refer to resource.html in your project for more information.`);
-    this.log(`      Or visit our repo at: https://github.com/officeDev/generator-office \n`);
-    this.log('----------------------------------------------------------------------------------------------------------\n');
-    this._exitProcess();
-  },
-
-  _projectBothScriptTypes: function (input, jsTemplates)
-  {
-    // Loop through jsTemplates, which is a subset of tsTemplates, and see if the project type exists
-    for (var i = 0; i < jsTemplates.length; i++)
-    {
-      var element = jsTemplates[i];
-      if (_.toLower(input) == _.toLower(element)) {
-        return true;
-      } 
-    }
-    return false;
-  },
-
-  _copyProjectFiles()
-  {
-      try {
-        let language = this.project.scriptType  === typescript ? 'ts' : 'js';
-
-        /** Show type of project creating in progress */
-        if (this.project.isManifestOnly) {
-          this.log('----------------------------------------------------------------------------------\n');  
-          this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);  
-          this.log('----------------------------------------------------------------------------------\n\n');  
-        }
-        else {
-          this.log('\n----------------------------------------------------------------------------------\n');
-          this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(this.project.host)} using ${chalk.bold.yellow(this.project.scriptType)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
-          this.log('----------------------------------------------------------------------------------\n\n');
-          }          
-
-        const starterCode = generateStarterCode(this.project.host);
-        const templateFills = Object.assign({}, this.project, starterCode);
-
-        /** Copy the manifest */
-        if (!this.project.isExcelFunctionsProject) {
-          this.fs.copyTpl(this.templatePath(`hosts/${_.toLower(this.project.hostInternalName)}/manifest.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
-          }
-
-        if (this.project.isManifestOnly) {
-          this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
-        }
-        else 
-        {          
-          if (this.project.isExcelFunctionsProject){
-            this.fs.copyTpl(this.templatePath(`excel-custom-functions-preview/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
-            this.fs.copy(this.templatePath(`${language}/base/certs`), this.destinationPath('certs'), { globOptions: { ignore: `**/*.placeholder` }});         
-          }
-          else 
-          {
-            /** Copy the base template */
-            this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
-
-            /** Copy the project type specific overrides */
-            this.fs.copyTpl(this.templatePath(`${language}/${_.toLower(this.project.projectType)}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
-          
-            /** Manually copy any dot files as yoeman can't handle them */
-            /** .babelrc */
-            const babelrcPath = this.templatePath(`${language}/${this.project.projectType}/babelrc.placeholder`);
-            if (this.fs.exists(babelrcPath)) {
-              this.fs.copy(babelrcPath, this.destinationPath('.babelrc'));
-          }
-        
-          /** .gitignore */
-          const gitignorePath = this.templatePath(`${language}/base/gitignore.placeholder`);
-          if (this.fs.exists(gitignorePath)) {
-              this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
-          }
-        }
-      }        
-      } catch (err) {
-        insight.trackException(new Error('File Copy Error: ' + err));
-      }
-  },
-
-  _isValidInput: function (input, inputArray, isHostParam) 
-  {
-    if (!isHostParam && _.toLower(input) == 'excel-functions')
-    {
-      input = excelFunctions;
-    }
-
-    // validate host and project-type inputs
-    for (var i = 0; i < inputArray.length; i++)
-    {
-      var element = inputArray[i];
-      if (_.toLower(input) == _.toLower(element)) {
-        if (isHostParam){
-          this.options.host = element;
-        }
-        else {
-          this.options.projectType = element;
-        }
-        return true;
-      }
-    }
-    return false;
   },
 
 _exitYoOfficeIfProjectFolderExists: function ()
@@ -435,4 +440,9 @@ function updateHostNames(arr, key, newval) {
     let index = _.indexOf(arr, key);
     arr.splice(index, 1, newval);
   }
+}
+
+function byRef (ref)
+{
+  ref.string = 'foo';
 }
