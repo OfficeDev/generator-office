@@ -52,7 +52,7 @@ module.exports = yo.extend({
     this.option('ts', {
       type: Boolean,
       required: false,
-      desc: 'Project uses Typescript instead of JavaScript.'
+      desc: 'Project uses TypeScript instead of JavaScript.'
     });
 
     this.option('output', {
@@ -380,21 +380,28 @@ module.exports = yo.extend({
   },
 
   _detailedHelp: function () {
-    this.log(`\nYo Office ${chalk.bgGreen('Arguments')} and ${chalk.magenta('Values')} NOTE: Arguments must be specified in the below order.\n`);
-    this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create.`);
-    this.log(`    ${chalk.yellow('angular:')}  Creates Office add-in using Angular framework.`);
-    this.log(`    ${chalk.yellow('excel-functions:')} Creates Office add-in for Excel custom functions.  Must specify 'Excel' as host parameter.`);
-    this.log(`    ${chalk.yellow('jquery:')} Creates Office add-in using Jquery framework.`);
-    this.log(`    ${chalk.yellow('manifest:')} Creates only the manifest file for an Office add-in.`);
-    this.log(`    ${chalk.yellow('react:')} Creates Office add-in using React framework.\n`);
+    this.log(`\nYo Office ${chalk.bgGreen('Arguments')} and ${chalk.bgMagenta('Options.')}\n`);
+    this.log(`NOTE: ${chalk.bgGreen('Arguments')} must be specified in the order below, and ${chalk.bgMagenta('Options')} must follow ${chalk.bgGreen('Arguments')}.\n`);
+    this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create. Valid project types include:`);
+    this.log(`    ${chalk.yellow('angular:')}  Creates an Office add-in using Angular framework.`);
+    this.log(`    ${chalk.yellow('excel-functions:')} Creates an Office add-in for Excel custom functions.  Must specify 'Excel' as host parameter.`);
+    this.log(`    ${chalk.yellow('jquery:')} Creates an Office add-in using Jquery framework.`);
+    this.log(`    ${chalk.yellow('manifest:')} Creates an only the manifest file for an Office add-in.`);
+    this.log(`    ${chalk.yellow('react:')} Creates an Office add-in using React framework.\n`);
     this.log(`  ${chalk.bgGreen('name')}:Specifies the name for the project that will be created.\n`);
     this.log(`  ${chalk.bgGreen('host')}:Specifies the host app in the add-in manifest.`);
-    this.log(`    ${chalk.yellow('excel:')}  Creates Office add-in for Excel.`);
-    this.log(`    ${chalk.yellow('onenote:')} Creates Office add-in for OneNote.`);
-    this.log(`    ${chalk.yellow('outlook:')} Creates Office add-in for Outlook.`);
-    this.log(`    ${chalk.yellow('powerpoint:')} Creates Office add-in for PowerPoint.`);
-    this.log(`    ${chalk.yellow('project:')} Creates Office add-in for Project.`);
-    this.log(`    ${chalk.yellow('word:')} Creates Office add-in for Word.\n`);
+    this.log(`    ${chalk.yellow('excel:')}  Creates an Office add-in for Excel. Valid hosts include:`);
+    this.log(`    ${chalk.yellow('onenote:')} Creates an Office add-in for OneNote.`);
+    this.log(`    ${chalk.yellow('outlook:')} Creates an Office add-in for Outlook.`);
+    this.log(`    ${chalk.yellow('powerpoint:')} Creates an Office add-in for PowerPoint.`);
+    this.log(`    ${chalk.yellow('project:')} Creates an Office add-in for Project.`);
+    this.log(`    ${chalk.yellow('word:')} Creates an Office add-in for Word.\n`);
+    this.log(`  ${chalk.bgMagenta('--output')}:Specifies the location in the file system where the project will be created.`);
+    this.log(`    ${chalk.yellow('If the option is not specified, the project will be created in the current folder')}\n`);
+    this.log(`  ${chalk.bgMagenta('--js')}:Specifies that the project will use JavaScript instead of TypeScript.`);
+    this.log(`    ${chalk.yellow('If the option is not specified, Yo Office will prompt for TypeScript or JavaScript')}\n`);
+    this.log(`  ${chalk.bgMagenta('--ts')}:Specifies that the project will use TypeScript instead of JavaScript.`);
+    this.log(`    ${chalk.yellow('If the option is not specified, Yo Office will prompt for TypeScript or JavaScript')}\n`);
     this._exitProcess();
   },
 
