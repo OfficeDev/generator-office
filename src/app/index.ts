@@ -176,7 +176,6 @@ module.exports = yo.extend({
       /* Gnerate Insights logging */
       const noElapsedTime = 0;
       insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
-      insight.trackEvent('Folder', { CreatedSubFolder: this.project.folder.toString() }, { noElapsedTime }); 
       insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });    
       insight.trackEvent('ScriptType', { ScriptType: this.project.scriptType }, { noElapsedTime });      
       insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { noElapsedTime });
