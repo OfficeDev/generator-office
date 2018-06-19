@@ -7,6 +7,7 @@
         "clean": "rimraf dist && rimraf .awcache",
         "lint": "tslint --project tsconfig.json",
         "start": "webpack-dev-server --inline --config config/webpack.dev.js --progress",
+        "sideload": "node node_modules/office-toolbox/app/office-toolbox.js sideload -m <%= projectInternalName %>-manifest.xml -a <%= hostInternalName %>",
         "build": "npm run clean && webpack --config config/webpack.prod.js --colors --progress --bail",
         "validate": "./node_modules/.bin/validate-office-addin"
     },
@@ -18,6 +19,7 @@
         "react-dom": "^16.2.0"
     },
     "devDependencies": {
+        "office-toolbox": "^0.0.7",
         "@types/office-js": "^0.0.51",
         "@types/react": "^16.0.38",
         "@types/react-dom": "^16.0.4",
