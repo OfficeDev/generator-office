@@ -13,6 +13,7 @@ Learn how to use custom functions in Excel (similar to user-defined functions, o
 
 * Oct 27, 2017: Initial version.
 * April 23, 2018: Revised and expanded.
+* June 1, 2018: Bug fixes.
 
 ## Prerequisites
 
@@ -20,15 +21,18 @@ Learn how to use custom functions in Excel (similar to user-defined functions, o
 
 ## To use the project
 
-Follow these instructions to use this custom function sample add-in:
+On a machine with a valid instance of an Excel Insider build installed, follow these instructions to use this custom function sample add-in:
 
-1. Publish the code files (HTML, JavaScript) in the same folder on a website.
-2. Replace `https://<INSERT-URL-HERE>` in the manifest file (there should be 3 occurrences) with the URL of your website. 
-3. Sideload the manifest using the instructions found at <https://aka.ms/sideload-addins>.
-4. Test a custom function by entering `=CONTOSO.ADD42(3)` in a cell.
-5. Try the other functions in the sample: `CONTOSO.ISEVEN(num)`, `CONTOSO.GETDAY()`, `CONTOSO.INCREMENTVALUE(increment, caller)`, and `CONTOSO.SECONDHIGHEST(range)`.
-6. If you make changes to the sample add-in, copy the updated files to your website, and then close and reopen Excel. If your functions are not available in Excel, re-insert the add-in using **Insert** > **My Add-ins**.
-7. Follow @OfficeDev on Twitter for updates and send feedback to <excelcustomfunctions@microsoft.com>.
+1. On the machine where your custom functions project is installed, follow the instructions to install the self-signed certificates (https://github.com/OfficeDev/generator-office/blob/master/src/docs/ssl.md) . 
+2. From a command prompt from within your custom functions project directory, run `npm run start` to start a localhost server instance. 
+3. Run `npm run sideload` to launch Excel and load the custom functions add-in. Additonal information on sideloading can be found at <https://aka.ms/sideload-addins>.
+4. After Excel launches, you will need to register the custom-functions add-in to work around a bug:
+    a. On the upper-left-hand side of Excel, there is a small hexagon icon with a dropdown arrow. The icon is to right of the Save icon.
+    b. Click on this dropdown arrow and then click on the Custom Functions Sample add-in to register it.
+5. Test a custom function by entering `=CONTOSO.ADD42(num)` in a cell.
+6. Try the other functions in the sample: `=CONTOSO.ADD42ASYNC(num, num)`, `CONTOSO.ISPRIME(num)`, `CONTOSO.NTHPRIME(num)`, `CONTOSO.GETDAY()`, `CONTOSO.INCREMENTVALUE(increment)`, and `CONTOSO.SECONDHIGHEST(range)`.
+7. If you make changes to the sample add-in, copy the updated files to your website, and then close and reopen Excel. If your functions are not available in Excel, re-insert the add-in using **Insert** > **My Add-ins**.
+8. Follow @OfficeDev on Twitter for updates and send feedback to <excelcustomfunctions@microsoft.com>.
 
 ## Questions and comments
 
