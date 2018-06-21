@@ -48,11 +48,10 @@ const expectExcelCustomFunctionFiles = [
   '.gitignore',
   'package.json',
   'webpack.config.js',
-  'excel-custom-functions.yml',
   'config/web.config',
-  'src/customfunctions.html',
+  'index.html',
   'src/customfunctions.js',
-  'src/customfunctions.json',
+  'config/customfunctions.json',
 ];
 
 /**
@@ -363,7 +362,7 @@ describe('Create new project from prompts and command line overrides', () => {
 
     it('creates expected files', (done) => {
       let name = argument[1] ? argument[1] : answers.name;
-      let manifestFileName = 'config/customfunctions-manifest.xml';       
+      let manifestFileName = 'config/' + projectEscapedName + '-manifest.xml';     
 
       let expected = [
         manifestFileName,

@@ -275,7 +275,9 @@ module.exports = yo.extend({
         if (this.project.isExcelFunctionsProject)
         {
           this.fs.copyTpl(this.templatePath(`excel-custom-functions-preview/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
-          this.fs.copy(this.templatePath(`${language}/base/certs`), this.destinationPath('certs'), { globOptions: { ignore: `**/*.placeholder` }});         
+          this.fs.copy(this.templatePath(`${language}/base/certs`), this.destinationPath('certs'), { globOptions: { ignore: `**/*.placeholder` }});
+          this.fs.copyTpl(this.destinationPath(`config/manifest.xml`), this.destinationPath(`config/${this.project.projectInternalName}-manifest.xml`), templateFills);
+          this.fs.delete(this.destinationPath(`config/manifest.xml`));
         }
         else
         {

@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
-        customfunctions: './src/customfunctions.js',
+        customfunctions: ["./src/customfunctions.js"],
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.html', '.js']
@@ -27,6 +27,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
+            template: './index.html',
             chunks: ['customfunctions']
         })
     ],
