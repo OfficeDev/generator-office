@@ -4,8 +4,8 @@
   "description": "Create Excel functions using JavaScript.",
   "main": "customfunctions.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --https --key ./certs/server.key --cert ./certs/server.crt --cacert ./certs/ca.crt --port 3000",
-    "sideload": "node node_modules/office-toolbox/app/office-toolbox.js sideload -m ./config/customfunctions-manifest.xml -a Excel",
+    "start": "webpack-dev-server --mode development --https --key ./certs/server.key --cert ./certs/server.crt --cacert ./certs/ca.crt --port 3000 --hot --inline",
+    "sideload": "node node_modules/office-toolbox/app/office-toolbox.js sideload -m ./config/<%= projectDisplayName %>-manifest.xml -a Excel",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

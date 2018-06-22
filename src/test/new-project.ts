@@ -30,6 +30,12 @@ const expectedFunctionFilesTs = [
   'function-file/function-file.ts',
 ];
 
+const configFiles = [
+  'config/webpack.common.js',
+  'config/webpack.dev.js',
+  'config/webpack.prod.js'
+]
+
 const commonExpectedFiles = [
   '.gitignore',
   'package.json',
@@ -42,36 +48,32 @@ const expectExcelCustomFunctionFiles = [
   '.gitignore',
   'package.json',
   'webpack.config.js',
-  'excel-custom-functions.yml',
   'config/web.config',
-  'src/customfunctions.html',
+  'index.html',
   'src/customfunctions.js',
-  'src/customfunctions.json',
+  'config/customfunctions.json',
 ];
 
 /**
  * Test addin from user answers
- * new project, default folder, defaul host.
+ * new project, default folder, default host.
  */
 describe('Create new project from prompts only', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
-    folder: false,
+    projectType: null,
+    scriptType: null,    
     name: projectDisplayName,
-    host: 'excel',
-    isManifestOnly: false,
-    ts: null,
-    framework: null,
-    open: false
+    host: 'Excel'    
   };
   let manifestFileName = projectEscapedName + '-manifest.xml';
 
   /** Test addin when user chooses jquery and typescript. */
   describe('jquery & typescript', () => {
-    before((done) => {
-      answers.ts = true;
-      answers.framework = 'jquery';
+    before((done) => {      
+      answers.projectType = 'Jquery';
+      answers.scriptType = 'Typescript';
       helpers.run(path.join(__dirname, '../app'))
         .withPrompts(answers)
         .on('end', done);
@@ -97,8 +99,8 @@ describe('Create new project from prompts only', () => {
   /** Test addin when user chooses jquery and javascript. */
   describe('jquery & javascript', () => {
     before((done) => {
-      answers.ts = false;
-      answers.framework = 'jquery';
+      answers.scriptType = 'Javascript';
+      answers.projectType = 'Jquery';
       helpers.run(path.join(__dirname, '../app'))
         .withPrompts(answers)
         .on('end', done);
@@ -124,8 +126,8 @@ describe('Create new project from prompts only', () => {
   /** Test addin when user chooses angular and typescript. */
   describe('angular & typescript', () => {
     before((done) => {
-      answers.ts = true;
-      answers.framework = 'angular';
+      answers.scriptType = 'Typescript';
+      answers.projectType = 'Angular';
       helpers.run(path.join(__dirname, '../app'))
         .withPrompts(answers)
         .on('end', done);
@@ -151,8 +153,8 @@ describe('Create new project from prompts only', () => {
   /** Test addin when user chooses angular and javascript. */
   describe('angular & javascript', () => {
     before((done) => {
-      answers.ts = false;
-      answers.framework = 'angular';
+      answers.scriptType = 'Javascript';
+      answers.projectType = 'Angular';
       helpers.run(path.join(__dirname, '../app'))
         .withPrompts(answers)
         .on('end', done);
@@ -182,8 +184,8 @@ describe('Create new project from prompts only', () => {
   /** Test addin when user chooses react and typescript. */
   describe('react & typescript', () => {
     before((done) => {
-      answers.ts = true;
-      answers.framework = 'react';
+      answers.scriptType = 'Typescript';
+      answers.projectType = 'React';
       helpers.run(path.join(__dirname, '../app'))
         .withPrompts(answers)
         .on('end', done);
@@ -223,13 +225,10 @@ describe('Create new project from prompts and command line overrides', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
-    folder: false,
+    scriptType: null,
+    projectType: null,
     name: null,
-    host: null,
-    isManifestOnly: false,
-    ts: true,
-    framework: null,
-    open: false
+    host: null  
   };
   let argument = [];
 
@@ -237,11 +236,12 @@ describe('Create new project from prompts and command line overrides', () => {
 	 * Test addin when user pass in argument
 	 * "my-office-add-in"
 	 */
-  describe('argument: name', () => {
+  describe('argument: project', () => {
     before((done) => {
-      answers.host = 'excel';
-      answers.framework = 'jquery';
-      argument[0] = projectEscapedName;
+      answers.name = projectEscapedName;
+      answers.scriptType = 'Typescript';
+      answers.host = 'Excel';      
+      argument[0] = 'Jquery';
 
       helpers.run(path.join(__dirname, '../app'))
         .withArguments(argument)
@@ -250,8 +250,8 @@ describe('Create new project from prompts and command line overrides', () => {
     });
 
     it('creates expected files', (done) => {
-      let host = argument[1] ? argument[1] : answers.host;
-      let name = argument[0] ? argument[0] : answers.name;
+      let host = argument[2] ? argument[2] : answers.host;
+      let name = argument[1] ? argument[1] : answers.name;
       let manifestFileName = name + '-manifest.xml';
 
       let expected = [
@@ -274,11 +274,13 @@ describe('Create new project from prompts and command line overrides', () => {
 	 * Test addin when user pass in argument
 	 * "my-office-add-in excel"
 	 */
-  describe('arguments: name host', () => {
+  describe('arguments: project, name', () => {
     before((done) => {
-      answers.framework = 'jquery';
-      argument[0] = projectEscapedName;
-      argument[1] = 'excel';
+      answers.scriptType = 'Typescript';
+      answers.name = null;
+      answers.host = 'Excel'
+      argument[0] = 'Jquery';
+      argument[1] = projectEscapedName;
 
       helpers.run(path.join(__dirname, '../app'))
         .withArguments(argument)
@@ -287,8 +289,8 @@ describe('Create new project from prompts and command line overrides', () => {
     });
 
     it('creates expected files', (done) => {
-      let host = argument[1] ? argument[1] : answers.host;
-      let name = argument[0] ? argument[0] : answers.name;
+      let host = argument[2] ? argument[2] : answers.host;
+      let name = argument[1] ? argument[1] : answers.name;
       let manifestFileName = name + '-manifest.xml';
 
       let expected = [
@@ -311,11 +313,11 @@ describe('Create new project from prompts and command line overrides', () => {
 	 * Test addin when user pass in argument
 	 * "my-office-add-in excel jquery"
 	 */
-  describe('arguments: name host framework', () => {
+  describe('arguments: project name host', () => {
     before((done) => {
-      argument[0] = projectEscapedName;
-      argument[1] = 'excel';
-      argument[2] = 'jquery';
+      argument[0] = 'Jquery';
+      argument[1] = projectEscapedName;
+      argument[2] = 'Excel';      
 
       helpers.run(path.join(__dirname, '../app'))
         .withArguments(argument)
@@ -324,8 +326,8 @@ describe('Create new project from prompts and command line overrides', () => {
     });
 
     it('creates expected files', (done) => {
-      let host = argument[1] ? argument[1] : answers.host;
-      let name = argument[0] ? argument[0] : answers.name;
+      let host = argument[2] ? argument[2] : answers.host;
+      let name = argument[1] ? argument[1] : answers.name;
       let manifestFileName = name + '-manifest.xml';
 
       let expected = [
@@ -344,35 +346,33 @@ describe('Create new project from prompts and command line overrides', () => {
     });
   });
 
-    /** Test addin when user passes in projectType: excel-functions. */
-    describe('arguments: project: custom-functions', () => {
-      before((done) => {
-        const excelCustomFunctions = `Excel Custom Functions (Preview: Requires the Insider channel for Excel)`;
-        argument[0] = projectEscapedName;
-        argument[1] = 'excel';
-        argument.splice(2, 1);
-        answers.framework = excelCustomFunctions;
-  
-        helpers.run(path.join(__dirname, '../app'))
-          .withArguments(argument)
-          .withPrompts(answers)
-          .on('end', done);
-      });
-  
-      it('creates expected files', (done) => {
-        let host = argument[1] ? argument[1] : answers.host;
-        let name = argument[0] ? argument[0] : answers.name;
-        let manifestFileName = 'config/customfunctions-manifest.xml';      
-  
-        let expected = [
-          manifestFileName,
-          ...expectExcelCustomFunctionFiles       
-        ];
-  
-        assert.file(expected);
-        done();
-      });
+  /** Test addin when user passes in projectType: excel-functions. */
+  describe('arguments: project: custom-functions', () => {
+    before((done) => {
+      answers.scriptType = null;
+      answers.name = projectEscapedName;
+      argument[0] = 'excel-functions';
+      argument.splice(1, 2);
+
+      helpers.run(path.join(__dirname, '../app'))
+        .withArguments(argument)
+        .withPrompts(answers)
+        .on('end', done);
     });
+
+    it('creates expected files', (done) => {
+      let name = argument[1] ? argument[1] : answers.name;
+      let manifestFileName = 'config/' + projectEscapedName + '-manifest.xml';     
+
+      let expected = [
+        manifestFileName,
+        ...expectExcelCustomFunctionFiles       
+      ];
+
+      assert.file(expected);
+      done();
+    });
+  });
 });
 
 /**
@@ -383,22 +383,19 @@ describe('Create new project from prompts with command line options', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
-    folder: false,
+    scriptType: null,
+    projectType: 'Jquery',    
     name: projectDisplayName,
-    host: 'excel',
-    isManifestOnly: false,
-    ts: null,
-    framework: 'jquery',
-    open: false
+    host: 'Excel'   
   };
 
   let manifestFileName = projectEscapedName + '-manifest.xml';
 
   /** Test addin when user pass in --js. */
-  describe('options: --js', () => {
+  describe(' --js', () => {
     before((done) => {
       helpers.run(path.join(__dirname, '../app'))
-        .withOptions({ js: true })
+      .withOptions({ js: true })
         .withPrompts(answers)
         .on('end', done);
     });
@@ -423,7 +420,7 @@ describe('Create new project from prompts with command line options', () => {
   /** Test addin when user pass in --skip-install. */
   describe('options: --skip-install', () => {
     before((done) => {
-      answers.ts = true;
+      answers.scriptType = 'Typescript';
       helpers.run(path.join(__dirname, '../app'))
         .withOptions({ 'skip-install': true })
         .withPrompts(answers)
@@ -445,5 +442,38 @@ describe('Create new project from prompts with command line options', () => {
       assert.file(expected);
       done();
     });
-  });
+  }); 
+
+    /** Test addin when user passes in --output. */
+    let folderName = 'testFolder';
+    describe('options: --output', () => {
+      let answers = {
+        scriptType: 'Typescript',
+        projectType: 'Manifest',
+        name: projectDisplayName,
+        host: 'Excel'   
+      };
+      before((done) => {
+        helpers.run(path.join(__dirname, '../app'))
+           .withOptions({ 'output': folderName })
+          .withPrompts(answers)
+          .on('end', done);
+      });
+  
+      it('creates expected files', (done) => {
+        let expected = [
+           manifestFileName,
+          ...expectedAssets,
+          'package.json',
+          'resource.html'
+        ];  
+
+        // Ensure manifest is found in expected output folder
+        assert.ok(path.win32.resolve(manifestFileName).toString().indexOf(folderName) >=0, 'manifest file not found in specified output folder');
+
+        // Verify expected files were created
+        assert.file(expected);
+        done();
+      });
+    });    
 });
