@@ -19,7 +19,7 @@
         "react-dom": "^16.2.0"
     },
     "devDependencies": {
-        "office-toolbox": "^0.0.7",
+        "office-toolbox": "^0.0.8",
         "@types/office-js": "^0.0.51",
         "@types/react": "^16.0.38",
         "@types/react-dom": "^16.0.4",

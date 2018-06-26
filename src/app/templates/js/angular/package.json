@@ -21,7 +21,7 @@
     "zone.js": "^0.8.20"
   },
   "devDependencies": {
-    "office-toolbox": "^0.0.7",
+    "office-toolbox": "^0.0.8",
     "@types/office-js": "^0.0.37",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",

@@ -20,7 +20,7 @@
   "homepage": "https://github.com/OfficeDev/Excel-Custom-Functions#readme",
   "devDependencies": {
     "typescript": "^2.8.1",
-    "office-toolbox": "^0.0.7",
+    "office-toolbox": "^0.0.8",
     "@types/office-js": "^0.0.37",
     "@types/jquery": "^2.0.39",
     "file-loader": "^1.1.11",
