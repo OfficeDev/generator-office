@@ -7,13 +7,10 @@ import * as path from 'path';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as _ from 'lodash';
-import * as opn from 'opn';
 import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
-
 import generateStarterCode from './config/starterCode';
-import { log } from 'util';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 const excelFunctions = `Excel Custom Functions (Preview: Requires the Insider channel for Excel)`;
@@ -104,7 +101,7 @@ module.exports = yo.extend({
           message: 'Choose a project type:',
           type: 'list',
           default: 'React',
-          choices: allTemplates.map(template => ({ name: template, value: template })),
+          choices: allTemplates.map(template => ({ name: updateProjectNames(template), value: template })),
           when: this.options.projectType == null || !this._isValidInput(this.options.projectType, allTemplates, false /* isHostParam */)
         }
       ];
@@ -433,16 +430,21 @@ function getDirectories(root) {
   });
 }
 
-function getFiles(root) {
-  return fs.readdirSync(root).filter(file => {
-    return !(fs.statSync(path.join(root, file)).isDirectory());
-  });
-}
-
 function updateHostNames(arr, key, newval) {
   let match = _.some(arr, _.method('match', key));
   if (match) {
     let index = _.indexOf(arr, key);
     arr.splice(index, 1, newval);
   }
+}
+
+function updateProjectNames(projectTemplate)
+{
+  if (projectTemplate == 'Manifest'){
+    projectTemplate = 'Office Add-in ' + projectTemplate + ' only';
+  }
+  else{
+    projectTemplate = 'Office Add-in using ' + projectTemplate + ' framework';
+  }
+  return projectTemplate;
 }
