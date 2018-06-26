@@ -7,26 +7,45 @@ import * as helpers from 'yeoman-test';
 import * as assert from 'yeoman-assert';
 import * as path from 'path';
 
+const manifestProject = 'Manifest';
+
+const expectedFiles = [
+  'package.json',
+  'assets/icon-16.png',
+  'assets/icon-32.png',
+  'assets/icon-80.png',
+  'assets/logo-filled.png'
+]
+
+const unexpectedFiles = [
+  'function-file/function-file.html',
+  'function-file/function-file.js',
+  'function-file/function-file.html',
+  'function-file/function-file.ts',
+  'certs/ca.crt',
+  'certs/server.crt',
+  'certs/server.key',
+  'config/webpack.common.js',
+  'config/webpack.dev.js',
+  'config/webpack.prod.js'
+]
+
 /**
  * Test addin from user answers
- * manifest-only project, default folder, defaul host.
+ * manifest project, default folder, defaul host.
  */
-describe('manifest-only project - answers', () => {
+describe('manifest project - answers', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
-    folder: false,
+    projectType: manifestProject,
     name: projectDisplayName,
-    host: 'excel',
-    isManifestOnly: true,
-    ts: null,
-    framework: null,
-    open: false
+    host: 'Excel',    
   };
   let manifestFileName = projectEscapedName + '-manifest.xml';
 
 	/** Test addin when user chooses jquery and typescript. */
-  describe('manifest-only', () => {
+  describe('manifest', () => {
     before((done) => {
       helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
     });
@@ -34,14 +53,11 @@ describe('manifest-only project - answers', () => {
     it('creates expected files', (done) => {
       let expected = [
         manifestFileName,
-        'package.json',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png'
+        ...expectedFiles
       ];
 
       assert.file(expected);
+      assert.noFile(unexpectedFiles);
       done();
     });
   });
@@ -49,19 +65,14 @@ describe('manifest-only project - answers', () => {
 
 /**
  * Test addin from user answers and arguments
- * manifest-only project, default folder, typescript, jquery.
+ * manifest project, default folder, typescript, jquery.
  */
-describe('manifest-only project - answers & args - jquery & typescript', () => {
+describe('manifest project - answers & args - jquery & typescript', () => {
   let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
-    folder: null,
-    name: null,
-    host: null,
-    isManifestOnly: null,
-    ts: null,
-    framework: null,
-    open: false
+    name: projectEscapedName,
+    host: 'Excel',
   };
   let argument = [];
 
@@ -69,30 +80,24 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
 	 * Test addin when user pass in argument
 	 * "my-office-add-in"
 	 */
-  describe('argument: name', () => {
+  describe('argument: project', () => {
     before((done) => {
-      answers.host = 'excel';
-      answers.isManifestOnly = true;
-      argument[0] = projectEscapedName;
-
+      argument[0] = manifestProject;
       helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
-      let host = argument[1] ? argument[1] : answers.host;
-      let name = argument[0] ? argument[0] : answers.name;
+      let name = argument[1] ? argument[1] : answers.name;
+      let host = argument[2] ? argument[2] : answers.host;      
       let manifestFileName = name  + '-manifest.xml';
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png'
+        ...expectedFiles
       ];
 
       assert.file(expected);
+      assert.noFile(unexpectedFiles);
       done();
     });
   });
@@ -101,61 +106,58 @@ describe('manifest-only project - answers & args - jquery & typescript', () => {
 	 * Test addin when user pass in argument
 	 * "my-office-add-in excel"
 	 */
-  describe('arguments: name host', () => {
+  describe('arguments: project name', () => {
     before((done) => {
-      argument[0] = projectEscapedName;
-      argument[1] = 'excel';
+      let answers = {
+        name: projectEscapedName,       
+        host: 'Excel'
+      };
+      argument[0] = manifestProject;
+      argument[1] = projectEscapedName;
 
       helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
-      let host = argument[1] ? argument[1] : answers.host;
-      let name = argument[0] ? argument[0] : answers.name;
+      let name = argument[1] ? argument[1] : answers.name;
+      let host = argument[2] ? argument[2] : answers.host;      
       let manifestFileName = name  + '-manifest.xml';
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png'
+        ...expectedFiles
       ];
 
       assert.file(expected);
+      assert.noFile(unexpectedFiles);
       done();
     });
   });
 
 	/**
 	 * Test addin when user pass in argument
-	 * "my-office-add-in excel manifest-only"
+	 * "my-office-add-in excel manifest"
 	 */
-  describe('arguments: name host framework', () => {
+  describe('arguments: project name host', () => {
     before((done) => {
-      argument[0] = projectEscapedName;
-      argument[1] = 'excel';
-      argument[2] = 'manifest-only';
-
+      argument[0] = manifestProject;
+      argument[1] = projectEscapedName;
+      argument[2] = 'excel';
       helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
-      let host = argument[1] ? argument[1] : answers.host;
-      let name = argument[0] ? argument[0] : answers.name;
+      let name = argument[1] ? argument[1] : answers.name;
+      let host = argument[2] ? argument[2] : answers.host;      
       let manifestFileName = name  + '-manifest.xml';
 
       let expected = [
         manifestFileName,
-        'package.json',
-        'assets/icon-16.png',
-        'assets/icon-32.png',
-        'assets/icon-80.png',
-        'assets/logo-filled.png'
+        ...expectedFiles
       ];
 
       assert.file(expected);
+      assert.noFile(unexpectedFiles);
       done();
     });
   });

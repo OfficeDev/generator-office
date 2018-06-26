@@ -42,10 +42,13 @@ $ npm install -g yo generator-office
 $ yo office [arguments] [options]
 ```
 
-The generator is intended to be run from within a folder where you want the project scaffolding created. This can be in the root of the current folder or within a subfolder.
-
 ### Command Line Arguments
-The following command line arguments are supported. The generator will prompt you accordingly based upon the arguments that you specify.
+The following command line arguments are supported. If using the command line arguments, you must use them in the order cited below, or the generator will prompt you for the values.
+
+#### `projectType`
+Framework to use for the project. The supported project types include JQuery (`jquery`), Angular (`angular`), React (`react`) and Excel Custom Functions (`excel-functions`). You can also use Manifest Only (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
+  - Type: String
+  - Optional
 
 #### `name`
 Title of the project - this is the display name that is written the manifest.xml file.
@@ -59,25 +62,36 @@ The Microsoft Office client application that can host the add-in. The supported 
   - Type: String
   - Optional
 
-#### `framework`
-Framework to use for the project. The supported arguments include JQuery (`jquery`), Angular (`angular`), and React (`react`). You can also use Manifest Only (`manifest-only`) which will create only the `manifest.xml` for an Office Add-in.
+### Command Line Options
+The following command line options are supported. If these are not specified, the generator will prompt you for the values before scaffolding the project.  The options should be specified after the projectType, name and host arguments.
+
+Specifying `--output` tells the generator to create the project in a specific location.  If the output parameter is not specified, the project will be created in the current directory. If the output option specifies a non-empty folder,
+the generator will inform you so you don't accidentally overwrite existing files.
+
   - Type: String
   - Optional
 
-### Command Line Options
-The following command line options are supported. If these are not specified, the generator will prompt you for the values before scaffolding the project.
-
-#### `--skip-install`
-
-After scaffolding the project, the generator (and all sub generators) run all package management install commands such as `npm install` & `typings install`. Specifying `--skip-install` tells the generator to skip this step.
+Specifying `--js` tells the generator to use JavaScript.
 
   - Type: Boolean
   - Default: False
   - Optional
 
-#### `--js`
+  Specifying `--ts` tells the generator to use TypeScript.
 
-Specifying `--js` tells the generator to use JavaScript.
+  - Type: Boolean
+  - Default: False
+  - Optional
+
+    Specifying `--details` tells the generator to provide detailed help, including all the accepted values for each project type and host,
+
+  - Type: Boolean
+  - Default: False
+  - Optional
+
+#### `--skip-install`
+
+After scaffolding the project, the generator (and all sub generators) run all package management install commands such as `npm install` & `typings install`. Specifying `--skip-install` tells the generator to skip this step.
 
   - Type: Boolean
   - Default: False
