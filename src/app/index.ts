@@ -13,7 +13,7 @@ import * as yo from 'yeoman-generator';
 import generateStarterCode from './config/starterCode';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
-const excelFunctions = `Excel Custom Functions (Preview: Requires the Insider channel for Excel)`;
+const excelCustomFunctions = `ExcelCustomFunctions`;
 
 /* Remove unwanted tags */
 delete insight.context.tags['ai.cloud.roleInstance'];
@@ -85,7 +85,7 @@ module.exports = yo.extend({
       jsTemplates.push(`Manifest`);
       tsTemplates.push(`Manifest`);       
       let allTemplates = tsTemplates;
-      allTemplates.push(excelFunctions); 
+      allTemplates.push(excelCustomFunctions); 
       let hosts = getDirectories(this.templatePath('hosts')).map(host=> _.capitalize(host));;
       updateHostNames(hosts, 'Onenote', 'OneNote');
       updateHostNames(hosts, 'Powerpoint', 'PowerPoint');
@@ -101,7 +101,7 @@ module.exports = yo.extend({
           message: 'Choose a project type:',
           type: 'list',
           default: 'React',
-          choices: allTemplates.map(template => ({ name: updateProjectNames(template), value: template })),
+          choices: allTemplates.map(template => ({ name:  getProjectDisplayName(template), value: template })),
           when: this.options.projectType == null || !this._isValidInput(this.options.projectType, allTemplates, false /* isHostParam */)
         }
       ];
@@ -115,8 +115,8 @@ module.exports = yo.extend({
           isManifestProject = true; }
 
       /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or ExcelexcelFunctions was specified via the command prompt */
-      if ((answerForProjectType.projectType != null  && answerForProjectType.projectType) == excelFunctions
-      || (this.options.projectType != null && this.options.projectType == excelFunctions)) { 
+      if ((answerForProjectType.projectType != null  && answerForProjectType.projectType) == excelCustomFunctions
+      || (this.options.projectType != null && this.options.projectType == excelCustomFunctions)) { 
         isExcelFunctionsProject = true; }
 
       /* askForTs and askForProjectType will only be triggered if the js param is null, it's not a Manifest project,
@@ -229,7 +229,7 @@ module.exports = yo.extend({
       if (this.project.projectType === 'React') {
         this.project.scriptType = typescript; }
 
-      if (this.project.projectType === excelFunctions) {
+      if (this.project.projectType === excelCustomFunctions) {
         this.project.scriptType = javascript; }
 
       /* Set folder if to output param  if specified */
@@ -239,7 +239,7 @@ module.exports = yo.extend({
       this.project.projectInternalName = _.kebabCase(this.project.name);
       this.project.projectDisplayName = this.project.name;
       this.project.projectId = uuid();
-      if (this.project.projectType === excelFunctions) {
+      if (this.project.projectType === excelCustomFunctions) {
         this.project.host = 'Excel';
         this.project.hostInternalName = 'Excel';
       }
@@ -357,7 +357,7 @@ module.exports = yo.extend({
   {
     if (!isHostParam && _.toLower(input) == 'excel-functions')
     {
-      input = excelFunctions;
+      input = excelCustomFunctions;
     }
 
     /* Validate host and project-type inputs */
@@ -438,13 +438,26 @@ function updateHostNames(arr, key, newval) {
   }
 }
 
-function updateProjectNames(projectTemplate)
+function  getProjectDisplayName(projectTemplate)
 {
-  if (projectTemplate == 'Manifest'){
-    projectTemplate = 'Office Add-in ' + projectTemplate + ' only';
+  switch(projectTemplate){
+    case 'Angular':{
+      return 'Office Add-in project using Angular framework';
+    }
+    case 'ExcelCustomFunctions':{
+      return 'Excel Custom Functions Add-in project (Preview: Requires the Insider channel for Excel)';
+    }
+    case 'Jquery':{
+      return 'Office Add-in project using Jquery framework';
+    }
+    case 'Manifest':{
+      return 'Office Add-in containing the manifest only';
+    }
+    case 'React':{
+      return 'Office Add-in using React framework';
+    }
+    default:{
+      insight.trackException(new Error(projectTemplate + ' project template not found'));
+    }
   }
-  else{
-    projectTemplate = 'Office Add-in using ' + projectTemplate + ' framework';
-  }
-  return projectTemplate;
 }
