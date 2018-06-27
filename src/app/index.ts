@@ -457,7 +457,7 @@ function  getProjectDisplayName(projectTemplate)
       return 'Office Add-in using React framework';
     }
     default:{
-      insight.trackException(new Error(projectTemplate + ' project template not found'));
+      insight.trackException(new Error(projectTemplate + ' project template not found during call to getProjectDisplayName'));
     }
   }
 }
