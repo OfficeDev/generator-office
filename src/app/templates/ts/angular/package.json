@@ -20,7 +20,7 @@
     "zone.js": "^0.8.20"
   },
   "devDependencies": {
-    "office-toolbox": "^0.0.8",
+    "office-toolbox": "^0.1.0",
     "@types/node": "^9.4.7",
     "@types/office-js": "^0.0.37",
     "typescript": "^2.7.2",
