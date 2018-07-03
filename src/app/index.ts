@@ -3,7 +3,6 @@
  * See LICENSE in the project root for license information.
  */
 import * as fs from 'fs';
-import * as path from 'path';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as _ from 'lodash';
@@ -11,9 +10,10 @@ import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 import generateStarterCode from './config/starterCode';
+import projectsJsonData from './config/projectsJsonData';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
-const excelCustomFunctions = `ExcelCustomFunctions`;
+const excelCustomFunctions = `excel-functions`;
 
 /* Remove unwanted tags */
 delete insight.context.tags['ai.cloud.roleInstance'];
@@ -80,15 +80,7 @@ module.exports = yo.extend({
   /* Prompt user for project options */
   prompting: async function () {
     try {
-      let jsTemplates = getDirectories(this.templatePath('js')).map(template => _.capitalize(template));
-      let tsTemplates = getDirectories(this.templatePath('ts')).map(template => _.capitalize(template));
-      jsTemplates.push(`Manifest`);
-      tsTemplates.push(`Manifest`);       
-      let allTemplates = tsTemplates;
-      allTemplates.push(excelCustomFunctions); 
-      let hosts = getDirectories(this.templatePath('hosts')).map(host=> _.capitalize(host));;
-      updateHostNames(hosts, 'Onenote', 'OneNote');
-      updateHostNames(hosts, 'Powerpoint', 'PowerPoint');
+      let jsonData = new projectsJsonData(this.templatePath()); 
       let isManifestProject = false;
       let isExcelFunctionsProject = false;
 
@@ -101,8 +93,8 @@ module.exports = yo.extend({
           message: 'Choose a project type:',
           type: 'list',
           default: 'React',
-          choices: allTemplates.map(template => ({ name:  getProjectDisplayName(template), value: template })),
-          when: this.options.projectType == null || !this._isValidInput(this.options.projectType, allTemplates, false /* isHostParam */)
+          choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayNames(template), value: template })),
+          when: this.options.projectType == null || !jsonData.isValidInput(this.options.projectType, false /* isHostParam */)
         }
       ];
       let answerForProjectType = await this.prompt(askForProjectType);
@@ -130,8 +122,8 @@ module.exports = yo.extend({
           choices: [typescript, javascript],
           default: typescript,
           when: this.options.js == null  && this.options.ts == null && !isManifestProject && !isExcelFunctionsProject
-          && (this.options.projectType != null && this._projectBothScriptTypes(this.options.projectType, jsTemplates)
-          || answerForProjectType.projectType != null && this._projectBothScriptTypes(answerForProjectType.projectType, jsTemplates))
+          && (this.options.projectType != null && jsonData.projectBothScriptTypes(this.options.projectType)
+          || answerForProjectType.projectType != null && jsonData.projectBothScriptTypes(answerForProjectType.projectType))
         }
       ];
       let answerForScriptType = await this.prompt(askForScriptType);
@@ -159,8 +151,8 @@ module.exports = yo.extend({
         message: 'Which Office client application would you like to support?',
         type: 'list',
         default: 'Excel',
-        choices: hosts.map(host => ({ name: host, value: host })),
-        when: (this.options.host == null || this.options.host != null && !this._isValidInput(this.options.host, hosts, true /* isHostParam */))
+        choices: jsonData.getHostTemplateNames().map(host => ({ name: host, value: host })),
+        when: (this.options.host == null || this.options.host != null && !jsonData.isValidInput(this.options.host, true /* isHostParam */))
         && !isExcelFunctionsProject
       }];
       let answerForHost = await this.prompt(askForHost);
@@ -216,7 +208,7 @@ module.exports = yo.extend({
         folder: this.options.output || answerForName.name || this.options.name,
         name: this.options.name || answerForName.name,
         host: this.options.host || answerForHost.host,
-        projectType: this.options.projectType || answerForProjectType.projectType,
+        projectType: this.options.projectType ||  answerForProjectType.projectType || answerForProjectType.projectType.template,
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
         scriptType: answerForScriptType.scriptType
@@ -323,19 +315,6 @@ module.exports = yo.extend({
     this._exitProcess();
   },
 
-  _projectBothScriptTypes: function (input, jsTemplates)
-  {
-    /* Loop through jsTemplates, which is a subset of tsTemplates, and see if the project type exists */
-    for (var i = 0; i < jsTemplates.length; i++)
-    {
-      var element = jsTemplates[i];
-      if (_.toLower(input) == _.toLower(element)) {
-        return true;
-      } 
-    }
-    return false;
-  },
-
   _projectCreationMessage: function()
   {
     /* Log to console the type of project being created */
@@ -348,33 +327,9 @@ module.exports = yo.extend({
     else 
       {
         this.log('\n----------------------------------------------------------------------------------\n');
-        this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(this.project.host)} using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(this.project.projectType)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
+        this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(this.project.host)} using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
         this.log('----------------------------------------------------------------------------------\n\n');
       }
-  },
-
-  _isValidInput: function (input, inputArray, isHostParam) 
-  {
-    if (!isHostParam && _.toLower(input) == 'excel-functions')
-    {
-      input = excelCustomFunctions;
-    }
-
-    /* Validate host and project-type inputs */
-    for (var i = 0; i < inputArray.length; i++)
-    {
-      var element = inputArray[i];
-      if (_.toLower(input) == _.toLower(element)) {
-        if (isHostParam){
-          this.options.host = element;
-        }
-        else {
-          this.options.projectType = element;
-        }
-        return true;
-      }
-    }
-    return false;
   },
 
   _detailedHelp: function () {
@@ -420,44 +375,3 @@ _exitYoOfficeIfProjectFolderExists: function ()
     process.exit();
   }
 } as any);
-
-function getDirectories(root) {
-  return fs.readdirSync(root).filter(file => {
-    if (file === 'base') {
-      return false;
-    }
-    return fs.statSync(path.join(root, file)).isDirectory();
-  });
-}
-
-function updateHostNames(arr, key, newval) {
-  let match = _.some(arr, _.method('match', key));
-  if (match) {
-    let index = _.indexOf(arr, key);
-    arr.splice(index, 1, newval);
-  }
-}
-
-function  getProjectDisplayName(projectTemplate)
-{
-  switch(projectTemplate){
-    case 'Angular':{
-      return 'Office Add-in project using Angular framework';
-    }
-    case 'ExcelCustomFunctions':{
-      return 'Excel Custom Functions Add-in project (Preview: Requires the Insider channel for Excel)';
-    }
-    case 'Jquery':{
-      return 'Office Add-in project using Jquery framework';
-    }
-    case 'Manifest':{
-      return 'Office Add-in containing the manifest only';
-    }
-    case 'React':{
-      return 'Office Add-in using React framework';
-    }
-    default:{
-      insight.trackException(new Error(projectTemplate + ' project template not found during call to getProjectDisplayName'));
-    }
-  }
-}

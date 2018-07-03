@@ -1,8 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import projectsJsonData from './../app/config/projectsJsonData'
 
-var shell = require('shelljs');
-var assert = require('assert');
+let shell = require('shelljs');
+let assert = require('assert');
+let jsonData = new projectsJsonData(process.cwd() + '/generators/test');
 
 const stringBuildStart = 'Generate and build ';
 const stringBuildSucceeds = 'Install and build succeeds';
@@ -13,9 +15,9 @@ const ts = '--ts';
 const javascript = 'javascript';
 const typescript = 'typescript';
 const space = ' ';
-let jsTemplates = getDirectories('src/app/templates/js');
-let tsTemplates = getDirectories('src/app/templates/ts');
-let hostsTemplates = getDirectories('src/app/templates/hosts');
+let parsedProjectJsonData = jsonData.getParsedProjectJsonData();
+let projectTemplates = jsonData.getProjectTemplateNames();
+let hostsTemplates = jsonData.getHostTemplateNames();
 
 describe('Setup test environment for Yo Office build tests', () => {
     it ('Install Yeoman Generator and Install local install of Yo Office and link', function(done){
@@ -27,49 +29,55 @@ describe('Setup test environment for Yo Office build tests', () => {
 // Build Typescript project types for all supported hosts
 for (var i = 0; i < hostsTemplates.length; i++)
 {
-    for (var j = 0; j < tsTemplates.length; j++)
+    for (var j = 0; j < projectTemplates.length; j++)
     {
-        describe('Install and build projects', () => {
-            let projectType = tsTemplates[j];        
-            let host = hostsTemplates[i];
-            let scriptType = typescript;
-            let projectName = projectType + host + typescript;
-            let projectFolder = path.join(__dirname, '/', projectName);          
-        
-            describe(stringBuildStart +  host + space + projectType + space + typescript, () => {
-                it(stringBuildSucceeds,function(done){  
-                    _generateProject(projectType, projectName, host, projectFolder, scriptType);
-                    _buildProject(projectFolder, projectType);
-                    done();                    
-                  });
-              }); 
-            });
+        if (parsedProjectJsonData.projectTypes[projectTemplates[j]].typescript)
+        {
+            describe('Install and build projects', () => {
+                let projectType = projectTemplates[j];        
+                let host = hostsTemplates[i];
+                let scriptType = typescript;
+                let projectName = projectType + host + typescript;
+                let projectFolder = path.join(__dirname, '/', projectName);          
+            
+                describe(stringBuildStart +  host + space + projectType + space + typescript, () => {
+                    it(stringBuildSucceeds,function(done){  
+                        _generateProject(projectType, projectName, host, projectFolder, scriptType);
+                        _buildProject(projectFolder, projectType);
+                        done();                    
+                      });
+                  }); 
+                });
+            }
         }
     }
-
+    
 // Build Javascript project types for all supported hosts
 for (var i = 0; i < hostsTemplates.length; i++)
 {
-    for (var j = 0; j < jsTemplates.length; j++)
+    for (var j = 0; j < projectTemplates.length; j++)
     {
-        describe('Install and build projects', () => {
-            let projectType = jsTemplates[j];        
-            let host = hostsTemplates[i];
-            let scriptType = javascript;
-            let projectName = projectType + host + javascript;
-            let projectFolder = path.join(__dirname, '/', projectName);  
-        
-            describe(stringBuildStart +  host + space + projectType + space + javascript, () => {
-                it(stringBuildSucceeds,function(done){         
-                    _generateProject(projectType, projectName, host, projectFolder, scriptType);
-                    _buildProject(projectFolder, projectType);
-                    done();
-                  });
-              }); 
-            });
+        if (parsedProjectJsonData.projectTypes[projectTemplates[j]].javascript)
+        {
+            describe('Install and build projects', () => {
+                let projectType = projectTemplates[j];        
+                let host = hostsTemplates[i];
+                let scriptType = javascript;
+                let projectName = projectType + host + javascript;
+                let projectFolder = path.join(__dirname, '/', projectName);          
+            
+                describe(stringBuildStart +  host + space + projectType + space + typescript, () => {
+                    it(stringBuildSucceeds,function(done){  
+                        _generateProject(projectType, projectName, host, projectFolder, scriptType);
+                        _buildProject(projectFolder, projectType);
+                        done();                    
+                      });
+                  }); 
+                });
+            }
         }
-    }    
-    
+    }
+
 function _setupTestEnvironment()
 {
     shell.exec('npm install -g yo', {silent: true}); 
@@ -114,16 +122,6 @@ function _projectFolderExists (projectFolder)
      }
      return false;
  }
-
- function getDirectories(root)
- {
-  return fs.readdirSync(root).filter(file => {
-    if (file === 'base') {
-      return false;
-    }
-    return fs.statSync(path.join(root, file)).isDirectory();
-  });
-}
 
 function _deleteFolderRecursively(projectFolder) 
 {

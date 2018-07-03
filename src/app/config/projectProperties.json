@@ -1,0 +1,68 @@
+{
+    "projectTypes": {
+        "angular": {
+            "name": "angular",
+            "displayname": "Office Add-in project using Angular framework",
+            "repolocation": "",
+            "typescript": true,
+            "javascript": true
+        },
+        "excel-functions": {
+            "name": "excel-functions",
+            "displayname": "Excel Custom Functions Add-in project (Preview: Requires the Insider channel for Excel)",
+            "repolocation": "",
+            "typescript": true,
+            "javascript": true
+        },
+        "jquery": {
+            "name": "jquery",
+            "displayname": "Office Add-in project using Jquery framework",
+            "repolocation": "",
+            "typescript": true,
+            "javascript": true
+        },
+        "manifest": {
+            "name": "manifest",
+            "displayname": "Office Add-in containing the manifest only",
+            "repolocation": "",
+            "typescript": true,
+            "javascript": true
+        },
+        "react": {
+            "name": "react",
+            "displayname": "Office Add-in project using React framework",
+            "repolocation": "",
+            "typescript": true,
+             "javascript": false
+            }
+        },
+    "hostTypes": {
+        "excel": {
+            "name": "excel",
+            "displayname": "Excel",
+            "repolocation": ""
+        },
+        "onenote": {
+            "name": "onenote",
+            "displayname": "OneNote",
+            "repolocation": ""
+        },
+        "outlook": {
+            "name": "outlook",
+            "displayname": "Outlook",
+            "repolocation": ""},
+        "powerpoint": {
+            "name": "powerpoint",
+            "displayname": "PowerPoint",
+            "repolocation": ""
+        },
+        "project": {
+            "name": "project",
+            "displayname": "Project",
+            "repolocation": ""},
+        "word": {
+            "name": "word",
+            "displayname": "Word",
+            "repolocation": ""}
+    }
+}
