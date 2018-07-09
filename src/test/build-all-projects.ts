@@ -95,7 +95,7 @@ function _buildProject(projectFolder, projectType)
         shell.cd(__dirname);
         
         // do clean-up after test runs
-        _deleteFolderRecursively(projectFolder);
+        // _deleteFolderRecursively(projectFolder);
     }
     else
     {
