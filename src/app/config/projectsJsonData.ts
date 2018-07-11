@@ -33,7 +33,7 @@ export default class projectsJsonData{
         }
     }
 
-    getProjectDisplayNames(projectType: string){
+    getProjectDisplayName(projectType: string){
       return this.m_projectJsonData.projectTypes[_.toLower(projectType)].displayname;
     }
     
@@ -54,7 +54,7 @@ export default class projectsJsonData{
     
     projectBothScriptTypes (projectType: string)
     {
-      return this.m_projectJsonData.projectTypes[_.toLower(projectType)].javascript && this.m_projectJsonData.projectTypes[_.toLower(projectType)].typescript;
+      return this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.javascript != undefined && this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.typescript != undefined;
     }
 
     getHostTemplateNames()
@@ -67,11 +67,11 @@ export default class projectsJsonData{
       return hosts;
     }
 
-    normalizeHostNameFromInput(input: string)
+    getHostDisplayName(hostKey: string)
     {
       for (let key in this.m_projectJsonData.hostTypes)
       {
-        if (_.toLower(input) == key){
+        if (_.toLower(hostKey) == key){
           return this.m_projectJsonData.hostTypes[key].displayname;
         }
       }

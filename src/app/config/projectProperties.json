@@ -7,20 +7,14 @@
                     "repository": ""},
                 "javascript": {
                     "repository": ""}
-                },
-            "typescript": true,
-            "javascript": true
+                }        
         },
         "excel-functions": {
             "displayname": "Excel Custom Functions Add-in project (Preview: Requires the Insider channel for Excel)",
             "templates": {
-                "typescript": {
-                    "repository": ""},
                 "javascript": {
                     "repository": ""}
-                },
-            "typescript": false,
-            "javascript": true
+                }
         },
         "jquery": {
             "displayname": "Office Add-in project using Jquery framework",
@@ -29,31 +23,21 @@
                     "repository": ""},
                 "javascript": {
                     "repository": ""}
-                },
-            "typescript": true,
-            "javascript": true
+                }
         },
         "manifest": {
             "displayname": "Office Add-in containing the manifest only",
             "templates": {
-                "typescript": {
-                    "repository": ""},
-                "javascript": {
+                "manifest-only": {
                     "repository": ""}
-                },
-            "typescript": false,
-            "javascript": false
+                }
         },
         "react": {
             "displayname": "Office Add-in project using React framework",
             "templates": {
                 "typescript": {
-                    "repository": ""},
-                "javascript": {
                     "repository": ""}
-                },
-            "typescript": true,
-             "javascript": false
+                }
             }
         },
         "hostTypes": {
@@ -78,5 +62,6 @@
         "word": {
             "displayname": "Word",
             "repository": ""}
-    }
-}
+        }
+ }
+

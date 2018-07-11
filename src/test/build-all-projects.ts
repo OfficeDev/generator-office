@@ -57,7 +57,7 @@ for (var i = 0; i < hostsTemplates.length; i++)
         }
         else
         {
-            if (parsedProjectJsonData.projectTypes[projectTemplates[j]].typescript)
+            if (parsedProjectJsonData.projectTypes[projectTemplates[j]].templates.typescript != undefined)
             {
                 describe(stringBuildStart +  host + space + projectType + space + typescript, () => {
                     it(stringBuildSucceeds,function(done){
@@ -66,7 +66,7 @@ for (var i = 0; i < hostsTemplates.length; i++)
                     });
                 });
             }
-            if (parsedProjectJsonData.projectTypes[projectTemplates[j]].javascript)
+            if (parsedProjectJsonData.projectTypes[projectTemplates[j]].templates.javascript != undefined)
             {
                 describe(stringBuildStart +  host + space + projectType + space + javascript, () => {
                     it(stringBuildSucceeds,function(done){

@@ -85,7 +85,7 @@ module.exports = yo.extend({
 
       // Normalize host name if passed as a command line argument
       if (this.options.host != null) {
-        this.options.host = jsonData.normalizeHostNameFromInput(this.options.host);
+        this.options.host = jsonData.getHostDisplayName(this.options.host);
       }
 
       /* askForProjectType will only be triggered if no project type was specified via command line projectType argument,
@@ -97,7 +97,7 @@ module.exports = yo.extend({
           message: 'Choose a project type:',
           type: 'list',
           default: 'React',
-          choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayNames(template), value: template })),
+          choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayName(template), value: template })),
           when: this.options.projectType == null || !jsonData.isValidInput(this.options.projectType, false /* isHostParam */)
         }
       ];
@@ -124,7 +124,7 @@ module.exports = yo.extend({
           message: 'Choose a script type',
           choices: [typescript, javascript],
           default: typescript,
-          when: this.options.js == null  && this.options.ts == null && !isManifestProject && !isExcelFunctionsProject
+          when: this.options.js == null  && this.options.ts == null
           && (this.options.projectType != null && jsonData.projectBothScriptTypes(this.options.projectType)
           || answerForProjectType.projectType != null && jsonData.projectBothScriptTypes(answerForProjectType.projectType))
         }
