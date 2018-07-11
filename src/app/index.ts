@@ -14,16 +14,15 @@ import projectsJsonData from './config/projectsJsonData';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 const excelCustomFunctions = `excel-functions`;
+const manifest = 'manifest';
+const typescript = `Typescript`;
+const javascript = `Javascript`;
 
 /* Remove unwanted tags */
 delete insight.context.tags['ai.cloud.roleInstance'];
 delete insight.context.tags['ai.device.osVersion'];
 delete insight.context.tags['ai.device.osArchitecture'];
 delete insight.context.tags['ai.device.osPlatform'];
-
-const manifest = 'Manifest';
-const typescript = `Typescript`;
-const javascript = `Javascript`;
 
 module.exports = yo.extend({
  /*  Setup the generator */
@@ -84,6 +83,11 @@ module.exports = yo.extend({
       let isManifestProject = false;
       let isExcelFunctionsProject = false;
 
+      // Normalize host name if passed as a command line argument
+      if (this.options.host != null) {
+        this.options.host = jsonData.normalizeHostNameFromInput(this.options.host);
+      }
+
       /* askForProjectType will only be triggered if no project type was specified via command line projectType argument,
        * and the projectType argument input was indeed valid */
       let startForProjectType = (new Date()).getTime();
@@ -102,18 +106,17 @@ module.exports = yo.extend({
       let durationForProjectType = (endForProjectType - startForProjectType) / 1000;
       
       /* Set isManifestProject to true if Manifest project type selected from prompt or Manifest was specified via the command prompt */
-      if ((answerForProjectType.projectType != null && answerForProjectType.projectType == manifest)
-      || (this.options.projectType != null && this.options.projectType) == manifest) { 
+      if ((answerForProjectType.projectType != null && _.toLower(answerForProjectType.projectType) == manifest)
+      || (this.options.projectType != null && _.toLower(this.options.projectType)) == manifest) { 
           isManifestProject = true; }
 
       /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or ExcelexcelFunctions was specified via the command prompt */
       if ((answerForProjectType.projectType != null  && answerForProjectType.projectType) == excelCustomFunctions
-      || (this.options.projectType != null && this.options.projectType == excelCustomFunctions)) { 
+      || (this.options.projectType != null && _.toLower(this.options.projectType) == excelCustomFunctions)) { 
         isExcelFunctionsProject = true; }
 
       /* askForTs and askForProjectType will only be triggered if the js param is null, it's not a Manifest project,
        * it's not an ExcelexcelFunctions project and the project type exists for both script types */      
-      let startForScriptType = (new Date()).getTime();
       let askForScriptType = [
         {
           name: 'scriptType',
@@ -127,8 +130,6 @@ module.exports = yo.extend({
         }
       ];
       let answerForScriptType = await this.prompt(askForScriptType);
-      let endForScriptType = (new Date()).getTime();
-      let durationForScriptType = (endForScriptType - startForScriptType) / 1000;         
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
       let startForName = (new Date()).getTime();
@@ -208,21 +209,16 @@ module.exports = yo.extend({
         folder: this.options.output || answerForName.name || this.options.name,
         name: this.options.name || answerForName.name,
         host: this.options.host || answerForHost.host,
-        projectType: this.options.projectType ||  answerForProjectType.projectType || answerForProjectType.projectType.template,
+        projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
         scriptType: answerForScriptType.scriptType
       };
 
-      if (this.options.js) {
+      if (this.options.js || this.project.projectType === excelCustomFunctions) {
         this.project.scriptType = javascript; }
-
-      /* Ensure script type is set properly if the project type is React or ExcelFunctions */
-      if (this.project.projectType === 'React') {
+      if (this.options.ts || this.project.projectType === 'react') {
         this.project.scriptType = typescript; }
-
-      if (this.project.projectType === excelCustomFunctions) {
-        this.project.scriptType = javascript; }
 
       /* Set folder if to output param  if specified */
       if (this.options.output != null) {
@@ -327,7 +323,7 @@ module.exports = yo.extend({
     else 
       {
         this.log('\n----------------------------------------------------------------------------------\n');
-        this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(this.project.host)} using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
+        this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(_.capitalize(this.project.host))} using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
         this.log('----------------------------------------------------------------------------------\n\n');
       }
   },

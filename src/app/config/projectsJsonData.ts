@@ -9,17 +9,14 @@ export default class projectsJsonData{
         let jsonData = fs.readFileSync(templatePath + this.m_projectJsonDataFile);
         this.m_projectJsonData = JSON.parse(jsonData.toString());
     }
-    
-    isValidInput(input, isHostParam)
+
+    isValidInput(input: string, isHostParam: boolean)
     {
       if (isHostParam)
       {
         for (let key in this.m_projectJsonData.hostTypes)
         {
-          let hostType = this.m_projectJsonData.hostTypes[key].name;
-           if (_.toLower(input) == _.toLower(hostType))
-           {
-             input = hostType;
+           if (_.toLower(input) == key){
              return true;
            }
           }
@@ -28,10 +25,7 @@ export default class projectsJsonData{
         else{
           for (let key in this.m_projectJsonData.projectTypes)
           {
-            let projectType = this.m_projectJsonData.projectTypes[key].name;
-            if (_.toLower(input) == _.toLower(projectType))
-            {
-              input= projectType;
+            if (_.toLower(input) == key){
               return true;
             }
           }
@@ -39,8 +33,8 @@ export default class projectsJsonData{
         }
     }
 
-    getProjectDisplayNames(projectTemplate){
-      return this.m_projectJsonData.projectTypes[_.toLower(projectTemplate)].displayname;
+    getProjectDisplayNames(projectType: string){
+      return this.m_projectJsonData.projectTypes[_.toLower(projectType)].displayname;
     }
     
     getParsedProjectJsonData()
@@ -53,16 +47,16 @@ export default class projectsJsonData{
       let projectTemplates : string[] = [];
       for (let key in this.m_projectJsonData.projectTypes)
       {
-        projectTemplates.push(this.m_projectJsonData.projectTypes[key].name);
+        projectTemplates.push(key);
       }
       return projectTemplates;
     }
     
-    projectBothScriptTypes (projectTemplate)
+    projectBothScriptTypes (projectType: string)
     {
-      return this.m_projectJsonData.projectTypes[_.toLower(projectTemplate)].javascript && this.m_projectJsonData.projectTypes[_.toLower(projectTemplate)].typescript;
+      return this.m_projectJsonData.projectTypes[_.toLower(projectType)].javascript && this.m_projectJsonData.projectTypes[_.toLower(projectType)].typescript;
     }
-    
+
     getHostTemplateNames()
     {
       let hosts : string[] = [];
@@ -71,5 +65,16 @@ export default class projectsJsonData{
         hosts.push(this.m_projectJsonData.hostTypes[key].displayname);
       }
       return hosts;
+    }
+
+    normalizeHostNameFromInput(input: string)
+    {
+      for (let key in this.m_projectJsonData.hostTypes)
+      {
+        if (_.toLower(input) == key){
+          return this.m_projectJsonData.hostTypes[key].displayname;
+        }
+      }
+      return undefined;
     }
   }

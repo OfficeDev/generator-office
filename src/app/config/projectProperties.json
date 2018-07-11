@@ -1,68 +1,82 @@
 {
     "projectTypes": {
         "angular": {
-            "name": "angular",
             "displayname": "Office Add-in project using Angular framework",
-            "repolocation": "",
+            "templates": {
+                "typescript": {
+                    "repository": ""},
+                "javascript": {
+                    "repository": ""}
+                },
             "typescript": true,
             "javascript": true
         },
         "excel-functions": {
-            "name": "excel-functions",
             "displayname": "Excel Custom Functions Add-in project (Preview: Requires the Insider channel for Excel)",
-            "repolocation": "",
-            "typescript": true,
+            "templates": {
+                "typescript": {
+                    "repository": ""},
+                "javascript": {
+                    "repository": ""}
+                },
+            "typescript": false,
             "javascript": true
         },
         "jquery": {
-            "name": "jquery",
             "displayname": "Office Add-in project using Jquery framework",
-            "repolocation": "",
+            "templates": {
+                "typescript": {
+                    "repository": ""},
+                "javascript": {
+                    "repository": ""}
+                },
             "typescript": true,
             "javascript": true
         },
         "manifest": {
-            "name": "manifest",
             "displayname": "Office Add-in containing the manifest only",
-            "repolocation": "",
-            "typescript": true,
-            "javascript": true
+            "templates": {
+                "typescript": {
+                    "repository": ""},
+                "javascript": {
+                    "repository": ""}
+                },
+            "typescript": false,
+            "javascript": false
         },
         "react": {
-            "name": "react",
             "displayname": "Office Add-in project using React framework",
-            "repolocation": "",
+            "templates": {
+                "typescript": {
+                    "repository": ""},
+                "javascript": {
+                    "repository": ""}
+                },
             "typescript": true,
              "javascript": false
             }
         },
-    "hostTypes": {
+        "hostTypes": {
         "excel": {
-            "name": "excel",
             "displayname": "Excel",
-            "repolocation": ""
+            "repository": ""
         },
         "onenote": {
-            "name": "onenote",
             "displayname": "OneNote",
-            "repolocation": ""
+            "repository": ""
         },
         "outlook": {
-            "name": "outlook",
             "displayname": "Outlook",
-            "repolocation": ""},
+            "repository": ""},
         "powerpoint": {
-            "name": "powerpoint",
             "displayname": "PowerPoint",
-            "repolocation": ""
+            "repository": ""
         },
         "project": {
-            "name": "project",
             "displayname": "Project",
-            "repolocation": ""},
+            "repository": ""},
         "word": {
-            "name": "word",
             "displayname": "Word",
-            "repolocation": ""}
+            "repository": ""}
     }
 }
