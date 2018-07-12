@@ -33,9 +33,10 @@ describe('Install and build projects', () => {
 // Build Typescript project types for all supported hosts
 for (var i = 0; i < hostsTemplates.length; i++)
 {
+    let host = hostsTemplates[i].toLowerCase();
+    
     for (var j = 0; j < projectTemplates.length; j++)
-    {
-        let host = hostsTemplates[i].toLowerCase();
+    {        
         let projectType = projectTemplates[j].toLowerCase();
 
         // The excel-functions project is only relevant if the host is Excel
