@@ -1,10 +1,13 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import projectsJsonData from './../app/config/projectsJsonData'
+import * as _ from 'lodash';
 
-var shell = require('shelljs');
-var assert = require('assert');
+let shell = require('shelljs');
+let assert = require('assert');
+let jsonData = new projectsJsonData(process.cwd() + '/generators/test');
 
-const stringBuildStart = 'Generate and build ';
+const stringBuildStart = 'Install and build ';
 const stringBuildSucceeds = 'Install and build succeeds';
 const yoOffice = 'yo office';
 const output = '--output';
@@ -13,63 +16,78 @@ const ts = '--ts';
 const javascript = 'javascript';
 const typescript = 'typescript';
 const space = ' ';
-let jsTemplates = getDirectories('src/app/templates/js');
-let tsTemplates = getDirectories('src/app/templates/ts');
-let hostsTemplates = getDirectories('src/app/templates/hosts');
+let parsedProjectJsonData = jsonData.getParsedProjectJsonData();
+let projectTemplates = jsonData.getProjectTemplateNames();
+let hostsTemplates = jsonData.getHostTemplateNames();
 
 describe('Setup test environment for Yo Office build tests', () => {
-    it ('Install Yeoman Generator and Install local install of Yo Office and link', function(done){
+    it ('Install Yeoman Generator, install local instance of Yo Office and link', function(done){
         _setupTestEnvironment();
         done();
     });
-}); 
+});
+
+describe('Install and build projects', () => {        
+});
 
 // Build Typescript project types for all supported hosts
 for (var i = 0; i < hostsTemplates.length; i++)
 {
-    for (var j = 0; j < tsTemplates.length; j++)
-    {
-        describe('Install and build projects', () => {
-            let projectType = tsTemplates[j];        
-            let host = hostsTemplates[i];
-            let scriptType = typescript;
-            let projectName = projectType + host + typescript;
-            let projectFolder = path.join(__dirname, '/', projectName);          
-        
-            describe(stringBuildStart +  host + space + projectType + space + typescript, () => {
-                it(stringBuildSucceeds,function(done){  
-                    _generateProject(projectType, projectName, host, projectFolder, scriptType);
-                    _buildProject(projectFolder, projectType);
+    let host = hostsTemplates[i].toLowerCase();
+    
+    for (var j = 0; j < projectTemplates.length; j++)
+    {        
+        let projectType = projectTemplates[j].toLowerCase();
+
+        // The excel-functions project is only relevant if the host is Excel
+        if (projectType == 'excel-functions' && host != 'excel'){
+            continue;
+        }
+
+        // If projectType is manifest, only install the project.  Building the project is not applicable
+        if (projectType == 'manifest')
+        {
+            describe('Install ' +  host + space + projectType, () => {
+                it(stringBuildSucceeds,function(done){
+                    let projectName = projectType + host;
+                    let projectFolder = path.join(__dirname, '/', projectName);
+                    _installProject(projectType, projectName, host, projectFolder, undefined);
                     done();                    
-                  });
-              }); 
+                });
             });
+        }
+        else
+        {
+            if (parsedProjectJsonData.projectTypes[projectTemplates[j]].templates.typescript != undefined)
+            {
+                describe(stringBuildStart +  host + space + projectType + space + typescript, () => {
+                    it(stringBuildSucceeds,function(done){
+                        _installBuildProject(host, projectType, typescript);
+                        done();                    
+                    });
+                });
+            }
+            if (parsedProjectJsonData.projectTypes[projectTemplates[j]].templates.javascript != undefined)
+            {
+                describe(stringBuildStart +  host + space + projectType + space + javascript, () => {
+                    it(stringBuildSucceeds,function(done){
+                        _installBuildProject(host, projectType, javascript);
+                        done();                    
+                    });
+                });
+            }
         }
     }
+}
 
-// Build Javascript project types for all supported hosts
-for (var i = 0; i < hostsTemplates.length; i++)
+function _installBuildProject(host: string, projectType: string, scriptType: string)
 {
-    for (var j = 0; j < jsTemplates.length; j++)
-    {
-        describe('Install and build projects', () => {
-            let projectType = jsTemplates[j];        
-            let host = hostsTemplates[i];
-            let scriptType = javascript;
-            let projectName = projectType + host + javascript;
-            let projectFolder = path.join(__dirname, '/', projectName);  
-        
-            describe(stringBuildStart +  host + space + projectType + space + javascript, () => {
-                it(stringBuildSucceeds,function(done){         
-                    _generateProject(projectType, projectName, host, projectFolder, scriptType);
-                    _buildProject(projectFolder, projectType);
-                    done();
-                  });
-              }); 
-            });
-        }
-    }    
-    
+    let projectName = projectType + host + scriptType;
+    let projectFolder = path.join(__dirname, '/', projectName);
+    _installProject(projectType, projectName, host, projectFolder, scriptType);
+    _buildProject(projectFolder);
+}
+
 function _setupTestEnvironment()
 {
     shell.exec('npm install -g yo', {silent: true}); 
@@ -77,14 +95,14 @@ function _setupTestEnvironment()
     shell.exec('npm link', {silent: true});
 }
 
-function _generateProject(projectType, projectName, host, projectFolder, scriptType)
+function _installProject(projectType: string, projectName: string, host: string, projectFolder: string, scriptType: string)
 {
     let language = scriptType == javascript ? js : ts;
     let cmdLine = yoOffice + space + projectType + space + projectName + space + host + space + output + space + projectFolder + space + language;
     shell.exec(cmdLine, {silent: true});
 }
 
-function _buildProject(projectFolder, projectType)
+function _buildProject(projectFolder: string)
 {
     if (_projectFolderExists(projectFolder))
     {
@@ -103,7 +121,7 @@ function _buildProject(projectFolder, projectType)
     }
 }
 
-function _projectFolderExists (projectFolder)
+function _projectFolderExists (projectFolder: string)
  {      
    if (fs.existsSync(projectFolder))
      {
@@ -115,17 +133,7 @@ function _projectFolderExists (projectFolder)
      return false;
  }
 
- function getDirectories(root)
- {
-  return fs.readdirSync(root).filter(file => {
-    if (file === 'base') {
-      return false;
-    }
-    return fs.statSync(path.join(root, file)).isDirectory();
-  });
-}
-
-function _deleteFolderRecursively(projectFolder) 
+function _deleteFolderRecursively(projectFolder: string) 
 {
     if(fs.existsSync(projectFolder))
     {

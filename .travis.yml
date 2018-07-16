@@ -8,7 +8,6 @@ cache:
   - node_modules
 node_js:
   - 'stable'
-  - '6.9.1'
 before_script: "npm run build"
 script: "npm run test"
 os:
