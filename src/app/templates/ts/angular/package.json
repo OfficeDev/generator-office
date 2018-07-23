@@ -10,6 +10,7 @@
     "validate": "./node_modules/.bin/validate-office-addin"
   },
   "dependencies": {
+    "office-toolbox": "^0.1.0",
     "@angular/common": "^5.2.9",
     "@angular/compiler": "^5.2.9",
     "@angular/core": "^5.2.9",
