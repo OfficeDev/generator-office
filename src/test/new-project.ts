@@ -139,6 +139,7 @@ describe('Create new project from prompts only', () => {
         ...expectedAssets,
         ...expectedFunctionFilesTs,
         ...commonExpectedFiles,
+        '.babelrc',
         'app.css',
         'tsconfig.json',
         'src/index.ts',
