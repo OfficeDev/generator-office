@@ -121,7 +121,7 @@ module.exports = yo.extend({
         {
           name: 'scriptType',
           type: 'list',
-          message: 'Choose a script type',
+          message: 'Choose a script type:',
           choices: [typescript, javascript],
           default: typescript,
           when: this.options.js == null  && this.options.ts == null
