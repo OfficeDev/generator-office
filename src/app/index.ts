@@ -13,6 +13,7 @@ import generateStarterCode from './config/starterCode';
 import projectsJsonData from './config/projectsJsonData';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
+let git = require("nodegit");
 const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
 const typescript = `Typescript`;
@@ -259,10 +260,11 @@ module.exports = yo.extend({
         
         if (this.project.isExcelFunctionsProject)
         {
-          this.fs.copyTpl(this.templatePath(`excel-custom-functions-preview/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+          // copy over custom functions files from Excel Custom Functions repo (this is the model we would like to have for all projects).
+          git.Clone("https://github.com/OfficeDev/Excel-Custom-Functions", this.destinationPath());
+
+          // we can ultimatey create a repo with basefiles as well such as certs
           this.fs.copy(this.templatePath(`${language}/base/certs`), this.destinationPath('certs'), { globOptions: { ignore: `**/*.placeholder` }});
-          this.fs.copyTpl(this.destinationPath(`config/manifest.xml`), this.destinationPath(`config/${this.project.projectInternalName}-manifest.xml`), templateFills);
-          this.fs.delete(this.destinationPath(`config/manifest.xml`));
         }
         else
         {
