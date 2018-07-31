@@ -262,7 +262,7 @@ module.exports = yo.extend({
         if (this.project.isExcelFunctionsProject)
         {
           // copy over custom functions files from Excel Custom Functions repo (this is the model we would like to have for all projects).
-          git.Clone(jsonData.getProjectTemplateRepository('excel-functions', language == 'ts' ? _.toLower(typescript) : _.toLower(javascript)), this.destinationPath());
+          git.Clone(jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript)), this.destinationPath());
           // we can ultimatey create a repo with basefiles as well such as certs
           this.fs.copy(this.templatePath(`${language}/base/certs`), this.destinationPath('certs'), { globOptions: { ignore: `**/*.placeholder` }});
         }
