@@ -77,4 +77,20 @@ export default class projectsJsonData{
       }
       return undefined;
     }
+
+    getProjectTemplateRepository(projectTypeKey: string, scriptType: string)
+    {
+      for (let key in this.m_projectJsonData.projectTypes)
+      {
+        if (_.toLower(projectTypeKey) == key){
+          if (scriptType == 'javascript'){
+           return this.m_projectJsonData.projectTypes[key].templates.javascript.repository;
+          }
+          else{
+            return this.m_projectJsonData.projectTypes[key].templates.typescript.repository;
+          }          
+        }
+      }
+      return undefined;
+    }
   }

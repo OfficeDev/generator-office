@@ -74,7 +74,7 @@ module.exports = yo.extend({
     }
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
-    this.project = {};
+    this.project = {};    
   },
 
   /* Prompt user for project options */
@@ -255,14 +255,14 @@ module.exports = yo.extend({
         let language = this.project.scriptType === typescript && !this.project.isExcelFunctionsProject  ? 'ts' : 'js';
         const starterCode = generateStarterCode(this.project.host);
         const templateFills = Object.assign({}, this.project, starterCode);
+        let jsonData = new projectsJsonData(this.templatePath()); 
 
         this._projectCreationMessage();
         
         if (this.project.isExcelFunctionsProject)
         {
           // copy over custom functions files from Excel Custom Functions repo (this is the model we would like to have for all projects).
-          git.Clone("https://github.com/OfficeDev/Excel-Custom-Functions", this.destinationPath());
-
+          git.Clone(jsonData.getProjectTemplateRepository('excel-functions', language == 'ts' ? _.toLower(typescript) : _.toLower(javascript)), this.destinationPath());
           // we can ultimatey create a repo with basefiles as well such as certs
           this.fs.copy(this.templatePath(`${language}/base/certs`), this.destinationPath('certs'), { globOptions: { ignore: `**/*.placeholder` }});
         }
