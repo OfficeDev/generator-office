@@ -83,11 +83,11 @@ export default class projectsJsonData{
       for (let key in this.m_projectJsonData.projectTypes)
       {
         if (_.toLower(projectTypeKey) == key){
-          if (scriptType == 'javascript'){
-           return this.m_projectJsonData.projectTypes[key].templates.javascript.repository;
+          if (projectTypeKey == 'manifest'){
+           return this.m_projectJsonData.projectTypes[key].templates.manifestonly.repository;
           }
           else{
-            return this.m_projectJsonData.projectTypes[key].templates.typescript.repository;
+            return this.m_projectJsonData.projectTypes[key].templates[scriptType].repository;
           }          
         }
       }

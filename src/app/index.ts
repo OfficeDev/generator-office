@@ -259,12 +259,10 @@ module.exports = yo.extend({
 
         this._projectCreationMessage();
         
-        if (this.project.isExcelFunctionsProject)
+        // Copy project template files from project repository (currently only custom functions has its own separate repo)
+        if (jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript)) != "")
         {
-          // copy over custom functions files from Excel Custom Functions repo (this is the model we would like to have for all projects).
           git.Clone(jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript)), this.destinationPath());
-          // we can ultimatey create a repo with basefiles as well such as certs
-          this.fs.copy(this.templatePath(`${language}/base/certs`), this.destinationPath('certs'), { globOptions: { ignore: `**/*.placeholder` }});
         }
         else
         {
@@ -287,12 +285,13 @@ module.exports = yo.extend({
                 if (this.fs.exists(babelrcPath)) {
                   this.fs.copy(babelrcPath, this.destinationPath('.babelrc'));
                 }
+
+                /* Copy .gitignore */
+                const gitignorePath = this.templatePath(`${language}/base/gitignore.placeholder`);
+                if (this.fs.exists(gitignorePath)) {
+                this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
+                }
               }
-          }
-          /* Copy .gitignore */
-          const gitignorePath = this.templatePath(`${language}/base/gitignore.placeholder`);
-          if (this.fs.exists(gitignorePath)) {
-              this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
           }
         }
     catch (err) {
