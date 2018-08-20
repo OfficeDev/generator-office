@@ -317,11 +317,11 @@ module.exports = yo.extend({
   {
     // Customiza manifest file using templateFills and delete original manifest
     this.fs.copyTpl(this.destinationPath(`manifest.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
-    this.fs.delete(this.destinationPath(`manifest.xml`));
+    fs.unlinkSync(this.destinationPath(`manifest.xml`));
 
     // Customize package.json using templateFills and delete original package.json
     this.fs.copy(this.destinationPath(`package.json`), this.destinationPath(`package_orig.json`));
-    this.fs.delete(this.destinationPath(`package.json`));
+    fs.unlinkSync(this.destinationPath(`package.json`));
     this.fs.copyTpl(this.destinationPath(`package_orig.json`), this.destinationPath(`package.json`), templateFills);
     this.fs.delete(this.destinationPath(`package_orig.json`));
   },
