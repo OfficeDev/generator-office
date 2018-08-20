@@ -3,9 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     entry: {
         customfunctions: ["./src/customfunctions.js"],
+        customfunctionsjson: ["./config/customfunctions.json"],
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.html', '.js']
+        extensions: ['.ts', '.tsx', '.html', '.js', 'json']
     },
     module: {
         rules: [
@@ -29,6 +30,10 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './index.html',
             chunks: ['customfunctions']
+        }),
+        new HtmlWebpackPlugin({
+            template: './index.html',
+            chunks: ['customfunctionsjson']
         })
     ],
     devServer: {
