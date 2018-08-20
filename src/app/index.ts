@@ -259,10 +259,11 @@ module.exports = yo.extend({
 
         this._projectCreationMessage();
         
-        // Copy project template files from project repository (currently only custom functions has its own separate repo)
+        // Copy project template files from project repository (currently only custom functions has its own separate repo) and customize files based on user input
         if (jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript)) != "")
         {
           git.Clone(jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript)), this.destinationPath());
+          this._customizeRepoFiles(templateFills);
         }
         else
         {
@@ -310,6 +311,19 @@ module.exports = yo.extend({
     this.log(`      Or visit our repo at: https://github.com/officeDev/generator-office \n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
+  },
+
+  _customizeRepoFiles: function (templateFills: Object)
+  {
+    // Customiza manifest file using templateFills and delete original manifest
+    this.fs.copyTpl(this.destinationPath(`manifest.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
+    this.fs.delete(this.destinationPath(`manifest.xml`));
+
+    // Customize package.json using templateFills and delete original package.json
+    this.fs.copy(this.destinationPath(`package.json`), this.destinationPath(`package_orig.json`));
+    this.fs.delete(this.destinationPath(`package.json`));
+    this.fs.copyTpl(this.destinationPath(`package_orig.json`), this.destinationPath(`package.json`), templateFills);
+    this.fs.delete(this.destinationPath(`package_orig.json`));
   },
 
   _projectCreationMessage: function()

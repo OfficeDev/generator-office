@@ -12,8 +12,6 @@
         "excel-functions": {
             "displayname": "Excel Custom Functions Add-in project (Preview: Requires the Insider channel for Excel)",
             "templates": {
-                "typescript": {
-                    "repository": ""},
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions"}
                 }
