@@ -7,9 +7,8 @@ cache:
   directories:
   - node_modules
 node_js:
-  - '7.0.0'
+  - '8.11.2'
 before_script: "npm run build"
 script: "npm run test"
 os:
-  - linux
   - osx
