@@ -259,10 +259,9 @@ module.exports = yo.extend({
 
         this._projectCreationMessage();
         
-        // Copy project template files from project repository (currently only custom functions has its own separate repo) and customize files based on user input
+        // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript)) != "")
         {
-          console.log("path is " + this.destinationPath());
           git.Clone(jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript)), this.destinationPath());
         }
         else
