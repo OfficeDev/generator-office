@@ -13,7 +13,7 @@
             "displayname": "Excel Custom Functions Add-in project (Preview: Requires the Insider channel for Excel)",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions"}
+                    "repository": ""}
                 }
         },
         "jquery": {
@@ -28,7 +28,7 @@
         "manifest": {
             "displayname": "Office Add-in containing the manifest only",
             "templates": {
-                "manifestonly": {
+                "manifest-only": {
                     "repository": ""}
                 }
         },

@@ -13,7 +13,6 @@ import generateStarterCode from './config/starterCode';
 import projectsJsonData from './config/projectsJsonData';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
-let git = require("nodegit");
 const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
 const typescript = `Typescript`;
@@ -74,7 +73,7 @@ module.exports = yo.extend({
     }
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
-    this.project = {};    
+    this.project = {};
   },
 
   /* Prompt user for project options */
@@ -255,14 +254,15 @@ module.exports = yo.extend({
         let language = this.project.scriptType === typescript && !this.project.isExcelFunctionsProject  ? 'ts' : 'js';
         const starterCode = generateStarterCode(this.project.host);
         const templateFills = Object.assign({}, this.project, starterCode);
-        let jsonData = new projectsJsonData(this.templatePath()); 
 
         this._projectCreationMessage();
         
-        // Copy project template files from project repository (currently only custom functions has its own separate repo)
-        if (jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript)) != "")
+        if (this.project.isExcelFunctionsProject)
         {
-          git.Clone(jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript)), this.destinationPath());
+          this.fs.copyTpl(this.templatePath(`excel-custom-functions-preview/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
+          this.fs.copy(this.templatePath(`${language}/base/certs`), this.destinationPath('certs'), { globOptions: { ignore: `**/*.placeholder` }});
+          this.fs.copyTpl(this.destinationPath(`config/manifest.xml`), this.destinationPath(`config/${this.project.projectInternalName}-manifest.xml`), templateFills);
+          this.fs.delete(this.destinationPath(`config/manifest.xml`));
         }
         else
         {
@@ -285,13 +285,12 @@ module.exports = yo.extend({
                 if (this.fs.exists(babelrcPath)) {
                   this.fs.copy(babelrcPath, this.destinationPath('.babelrc'));
                 }
-
-                /* Copy .gitignore */
-                const gitignorePath = this.templatePath(`${language}/base/gitignore.placeholder`);
-                if (this.fs.exists(gitignorePath)) {
-                this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
-                }
               }
+          }
+          /* Copy .gitignore */
+          const gitignorePath = this.templatePath(`${language}/base/gitignore.placeholder`);
+          if (this.fs.exists(gitignorePath)) {
+              this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
           }
         }
     catch (err) {

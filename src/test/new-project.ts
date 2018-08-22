@@ -348,32 +348,32 @@ describe('Create new project from prompts and command line overrides', () => {
   });
 
   /** Test addin when user passes in projectType: excel-functions. */
-  // describe('arguments: project: custom-functions', () => {
-  //   before((done) => {
-  //     answers.scriptType = null;
-  //     answers.name = projectEscapedName;
-  //     argument[0] = 'excel-functions';
-  //     argument.splice(1, 2);
+  describe('arguments: project: custom-functions', () => {
+    before((done) => {
+      answers.scriptType = null;
+      answers.name = projectEscapedName;
+      argument[0] = 'excel-functions';
+      argument.splice(1, 2);
 
-  //     helpers.run(path.join(__dirname, '../app'))
-  //       .withArguments(argument)
-  //       .withPrompts(answers)
-  //       .on('end', done);
-  //   });
+      helpers.run(path.join(__dirname, '../app'))
+        .withArguments(argument)
+        .withPrompts(answers)
+        .on('end', done);
+    });
 
-  //   it('creates expected files', (done) => {
-  //     let name = argument[1] ? argument[1] : answers.name;
-  //     let manifestFileName = projectEscapedName + '-manifest.xml';   
+    it('creates expected files', (done) => {
+      let name = argument[1] ? argument[1] : answers.name;
+      let manifestFileName = 'config/' + projectEscapedName + '-manifest.xml';     
 
-  //     let expected = [
-  //       manifestFileName,
-  //       ...expectExcelCustomFunctionFiles       
-  //     ];
+      let expected = [
+        manifestFileName,
+        ...expectExcelCustomFunctionFiles       
+      ];
 
-  //     assert.file(expected);
-  //     done();
-  //   });
-  // });
+      assert.file(expected);
+      done();
+    });
+  });
 });
 
 /**
