@@ -56,6 +56,7 @@
     "concurrently": "^3.4.0",
     "cpx": "^1.5.0",
     "mocha": "^5.2.0",
+    "nodegit": "^0.22.2",
     "ts-node": "^3.0.2",
     "typescript": "^2.8.3",
     "yeoman-assert": "^3.1.1",
