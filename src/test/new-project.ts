@@ -363,14 +363,14 @@ describe('Create new project from prompts and command line overrides', () => {
 
     it('creates expected files', (done) => {
       let name = argument[1] ? argument[1] : answers.name;
-      let manifestFileName = 'manifest.xml';     
+      let manifestFileName = 'config/' + projectEscapedName + '-manifest.xml';     
 
       let expected = [
         manifestFileName,
         ...expectExcelCustomFunctionFiles       
       ];
 
-      // assert.file(expected);
+      assert.file(expected);
       done();
     });
   });

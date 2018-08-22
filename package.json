@@ -43,7 +43,6 @@
     "lodash": "^4.17.10",
     "opn": "^4.0.2",
     "rimraf": "^2.6.1",
-    "simple-git": "^1.96.0",
     "uuid": "^3.0.1",
     "yeoman-generator": "^1.1.1",
     "yosay": "^2.0.2"
