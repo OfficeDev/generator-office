@@ -93,4 +93,20 @@ export default class projectsJsonData{
       }
       return undefined;
     }
+
+    getProjectTemplateBranch(projectTypeKey: string, scriptType: string)
+    {
+      for (let key in this.m_projectJsonData.projectTypes)
+      {
+        if (_.toLower(projectTypeKey) == key){
+          if (projectTypeKey == 'manifest'){
+           return this.m_projectJsonData.projectTypes[key].templates.manifestonly.branch;
+          }
+          else{
+            return this.m_projectJsonData.projectTypes[key].templates[scriptType].branch;
+          }          
+        }
+      }
+      return undefined;
+    }
   }

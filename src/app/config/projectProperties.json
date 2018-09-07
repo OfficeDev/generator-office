@@ -4,39 +4,54 @@
             "displayname": "Office Add-in project using Angular framework",
             "templates": {
                 "typescript": {
-                    "repository": ""},
+                     "repository": "",
+                    "branch": "master"},
                 "javascript": {
-                    "repository": ""}
-                }        
+                    "repository": "",
+                    "branch": "master"}
+                }       
         },
         "excel-functions": {
-            "displayname": "Excel Custom Functions Add-in project (Preview: Requires the Insider channel for Excel)",
+            "displayname": "Excel Custom Functions Add-in project (May 2018 Preview: Requires the Insider channel for Excel)",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions"}
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
+                    "branch": "Preview_May_2018"}
+                }
+        },
+        "excel-functions-preview-refresh": {
+            "displayname": "Excel Custom Functions Add-in project (September 2018 Preview Refresh: Requires the Insider channel for Excel)",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
+                    "branch": "Preview_Refresh_Sept_2018"}
                 }
         },
         "jquery": {
             "displayname": "Office Add-in project using Jquery framework",
             "templates": {
                 "typescript": {
-                    "repository": ""},
+                     "repository": "",
+                    "branch": "master"},
                 "javascript": {
-                    "repository": ""}
-                }
+                    "repository": "",
+                    "branch": "master"}
+                }  
         },
         "manifest": {
             "displayname": "Office Add-in containing the manifest only",
             "templates": {
                 "manifestonly": {
-                    "repository": ""}
+                    "repository": "",
+                    "branch": "master"}
                 }
         },
         "react": {
             "displayname": "Office Add-in project using React framework",
             "templates": {
                 "typescript": {
-                    "repository": ""}
+                    "repository": "",
+                    "branch": "master"}
                 }
             }
         },

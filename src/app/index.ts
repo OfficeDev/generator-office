@@ -15,6 +15,7 @@ import projectsJsonData from './config/projectsJsonData';
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 let git = require("simple-git");
 const excelCustomFunctions = `excel-functions`;
+const excelCustomFunctionsPreviewRefresh = "excel-functions-preview-refresh";
 const manifest = 'manifest';
 const typescript = `Typescript`;
 const javascript = `Javascript`;
@@ -112,7 +113,7 @@ module.exports = yo.extend({
           isManifestProject = true; }
 
       /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or ExcelexcelFunctions was specified via the command prompt */
-      if ((answerForProjectType.projectType != null  && answerForProjectType.projectType) == excelCustomFunctions
+      if ((answerForProjectType.projectType != null  && (answerForProjectType.projectType) == excelCustomFunctions || answerForProjectType.projectType == excelCustomFunctionsPreviewRefresh)
       || (this.options.projectType != null && _.toLower(this.options.projectType) == excelCustomFunctions)) { 
         isExcelFunctionsProject = true; }
 
@@ -263,7 +264,8 @@ module.exports = yo.extend({
         let projectRepo = jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript));
         if (projectRepo != "")
         {
-          git().clone(projectRepo, this.destinationPath());
+          let projectBranch = jsonData.getProjectTemplateBranch(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript));
+          git().clone(projectRepo, this.destinationPath(), ['--branch', projectBranch]);
         }
         else
         {
