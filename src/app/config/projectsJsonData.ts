@@ -84,10 +84,42 @@ export default class projectsJsonData{
       {
         if (_.toLower(projectTypeKey) == key){
           if (projectTypeKey == 'manifest'){
-           return this.m_projectJsonData.projectTypes[key].templates.manifestonly.repository;
+           return this.m_projectJsonData.manifest.templates.manifestonly.repository;
           }
           else{
             return this.m_projectJsonData.projectTypes[key].templates[scriptType].repository;
+          }          
+        }
+      }
+      return undefined;
+    }
+
+    getProjectTemplateBranchName(projectTypeKey: string, scriptType: string, branchIndex: number)
+    {
+      // Check to see if repository is defined. If not, then a branch won't be defined, so just return.
+      if (this.getProjectTemplateRepository(projectTypeKey, scriptType) == ""){
+        return undefined;
+      }
+
+      for (let key in this.m_projectJsonData.projectTypes)
+      {
+        if (_.toLower(projectTypeKey) == key){
+          if (projectTypeKey == 'manifest')
+          {
+            if (this.m_projectJsonData.manifest.templates.manifestonly.branches == undefined){
+              return undefined;
+            }
+            else{
+              return this.m_projectJsonData.manifest.templates.manifestonly.branches[branchIndex].name;
+            }
+          }
+          else{
+            if (this.m_projectJsonData.projectTypes[key].templates[scriptType].branches == undefined){
+              return undefined;
+            }
+            else{
+              return this.m_projectJsonData.projectTypes[key].templates[scriptType].branches[branchIndex].name;
+            }
           }          
         }
       }

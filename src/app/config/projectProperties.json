@@ -9,11 +9,22 @@
                     "repository": ""}
                 }        
         },
-        "excel-functions": {
-            "displayname": "Excel Custom Functions Add-in project (Preview: Requires the Insider channel for Excel)",
+        "excel-functions-preview-refresh": {
+            "displayname": "Excel Custom Functions Add-in project (September 2018 Preview Refresh: Requires the Insider channel for Excel)",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions"}
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
+                    "branches": [
+                        {"name": "Preview_Refresh_Sept_2018"}]}
+                }
+        },
+        "excel-functions": {
+            "displayname": "Excel Custom Functions Add-in project (May 2018 Preview: Requires the Insider channel for Excel)",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
+                    "branches": [
+                        {"name": "Preview_May_2018"}]}
                 }
         },
         "jquery": {
@@ -64,4 +75,3 @@
             "repository": ""}
         }
  }
-
