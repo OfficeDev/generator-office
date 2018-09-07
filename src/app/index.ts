@@ -265,7 +265,7 @@ module.exports = yo.extend({
         if (projectRepo != "")
         {
           let projectBranch = jsonData.getProjectTemplateBranch(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript));
-          git().clone(projectRepo, this.destinationPath(), ['--branch', projectBranch]);
+          git().clone(projectRepo, this.destinationPath(), ['--branch', projectBranch == undefined ? 'master' : projectBranch.name]);
         }
         else
         {
