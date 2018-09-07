@@ -94,7 +94,7 @@ export default class projectsJsonData{
       return undefined;
     }
 
-    getProjectTemplateBranch(projectTypeKey: string, scriptType: string)
+    getProjectTemplateBranchName(projectTypeKey: string, scriptType: string, branchIndex: number)
     {
       // Check to see if repository is defined. If not, then a branch won't be defined, so just return.
       if (this.getProjectTemplateRepository(projectTypeKey, scriptType) == ""){
@@ -110,7 +110,7 @@ export default class projectsJsonData{
               return undefined;
             }
             else{
-              return this.m_projectJsonData.manifest.templates.manifestonly.branches[0];
+              return this.m_projectJsonData.manifest.templates.manifestonly.branches[branchIndex].name;
             }
           }
           else{
@@ -118,7 +118,7 @@ export default class projectsJsonData{
               return undefined;
             }
             else{
-              return this.m_projectJsonData.projectTypes[key].templates[scriptType].branches[0];
+              return this.m_projectJsonData.projectTypes[key].templates[scriptType].branches[branchIndex].name;
             }
           }          
         }

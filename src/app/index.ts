@@ -264,8 +264,8 @@ module.exports = yo.extend({
         let projectRepo = jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript));
         if (projectRepo != "")
         {
-          let projectBranch = jsonData.getProjectTemplateBranch(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript));
-          git().clone(projectRepo, this.destinationPath(), ['--branch', projectBranch == undefined ? 'master' : projectBranch.name]);
+          let projectBranchName = jsonData.getProjectTemplateBranchName(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript), 0 /* branchIndex */);
+          git().clone(projectRepo, this.destinationPath(), ['--branch', projectBranchName == undefined ? 'master' : projectBranchName]);
         }
         else
         {
