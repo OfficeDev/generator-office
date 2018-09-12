@@ -23,15 +23,13 @@
     <br />
     <br />
     <p class="ms-font-l">Modify the source files, then click <b>Run</b>.</p>
-    <div role="button" class="ms-welcome__action ms-Button ms-Button--hero ms-u-slideUpIn20"  v-on:click="onClickRun">
-        <span class="ms-Button-label">Run</span>
-        <span class="ms-Button-icon"><i class="ms-Icon ms-Icon--ChevronRight"></i></span>
-    </div>
+    <button v-on:click="onClickRun">Run</button>
   </main>
 </div>
 </template>
 
 <script>
+/* eslint-disable indent,semi,no-extra-semi,no-trailing-spaces,no-multiple-empty-lines */
 export default {
   name: 'App',
   data: function () {
@@ -45,6 +43,7 @@ export default {
     }
   }
 }
+/* eslint-enable indent,semi,no-extra-semi,no-trailing-spaces,no-multiple-empty-lines */
 </script>
 
 <style>
