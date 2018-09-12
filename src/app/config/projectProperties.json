@@ -38,13 +38,12 @@
                 "typescript": {
                     "repository": ""}
                 }
-            }
         },
         "vue": {
             "displayname": "Office Add-in project using Vue framework",
             "templates":{
                 "javascript":{
-                    "repository":""
+                    "repository":""}
                 }
             }            
         },
