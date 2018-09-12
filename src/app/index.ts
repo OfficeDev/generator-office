@@ -292,6 +292,26 @@ module.exports = yo.extend({
                 if (this.fs.exists(gitignorePath)) {
                 this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
                 }
+
+                /* Copy .eslintignore */
+                const eslintignorePath = this.templatePath(`${language}/${_.toLower(this.project.projectType)}/eslintignore.placeholder`);
+                if (this.fs.exists(eslintignorePath)) {
+                this.fs.copy(eslintignorePath, this.destinationPath('.eslintignore'));
+                }
+
+                /* Copy .eslintrc.js */
+                const eslintrcPath = this.templatePath(`${language}/${_.toLower(this.project.projectType)}/eslintrc.js.placeholder`);
+                if (this.fs.exists(eslintrcPath)) {
+                this.fs.copy(eslintrcPath, this.destinationPath('.eslintrc.js'));
+                }
+
+                /* Copy .eslintrc.js */
+                const possrcjsPath = this.templatePath(`${language}/${_.toLower(this.project.projectType)}/postcssrc.js.placeholder`);
+                if (this.fs.exists(possrcjsPath)) {
+                this.fs.copy(possrcjsPath, this.destinationPath('.postcssrc.js'));
+                }
+
+                
               }
           }
         }
