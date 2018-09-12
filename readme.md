@@ -46,7 +46,7 @@ $ yo office [arguments] [options]
 The following command line arguments are supported. If using the command line arguments, you must use them in the order cited below, or the generator will prompt you for the values.
 
 #### `projectType`
-Framework to use for the project. The supported project types include JQuery (`jquery`), Angular (`angular`), React (`react`) and Excel Custom Functions (`excel-functions`). You can also use Manifest Only (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
+Framework to use for the project. The supported project types include JQuery (`jquery`), Angular (`angular`), React (`react`), Vue(`vue`) and Excel Custom Functions (`excel-functions`). You can also use Manifest Only (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
   - Type: String
   - Optional
 
