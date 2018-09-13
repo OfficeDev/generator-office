@@ -29,7 +29,7 @@
 </template>
 
 <script>
-/* eslint-disable indent,semi,no-extra-semi,no-trailing-spaces,no-multiple-empty-lines */
+/* eslint-disable indent,semi,no-extra-semi,no-trailing-spaces,no-multiple-empty-lines,no-unreachable,keyword-spacing,padded-blocks,no-return-await */
 export default {
   name: 'App',
   data: function () {
@@ -38,12 +38,12 @@ export default {
     }
   },
   methods: {
-    onClickRun () {
+    onClickRun: async () => {
       <%- snippet %>
     }
   }
 }
-/* eslint-enable indent,semi,no-extra-semi,no-trailing-spaces,no-multiple-empty-lines */
+/* eslint-enable indent,semi,no-extra-semi,no-trailing-spaces,no-multiple-empty-lines,no-unreachable,keyword-spacing,padded-blocks,no-return-await */
 </script>
 
 <style>
