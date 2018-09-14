@@ -84,7 +84,7 @@ export default class projectsJsonData{
       {
         if (_.toLower(projectTypeKey) == key){
           if (projectTypeKey == 'manifest'){
-           return this.m_projectJsonData.manifest.templates.manifestonly.repository;
+           return this.m_projectJsonData.projectTypes[key].templates.manifestonly.repository;
           }
           else{
             return this.m_projectJsonData.projectTypes[key].templates[scriptType].repository;
@@ -106,7 +106,7 @@ export default class projectsJsonData{
         if (_.toLower(projectTypeKey) == key){
           if (projectTypeKey == 'manifest')
           {
-            if (this.m_projectJsonData.manifest.templates.manifestonly.branches == undefined){
+            if (this.m_projectJsonData.projectTypes[key].templates.manifestonly.branches == undefined){
               return undefined;
             }
             else{
