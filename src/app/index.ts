@@ -15,7 +15,6 @@ import projectsJsonData from './config/projectsJsonData';
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 let git = require("simple-git");
 const excelCustomFunctions = `excel-functions`;
-const excelCustomFunctionsPreviewRefresh = "excel-functions-preview-refresh";
 const manifest = 'manifest';
 const typescript = `Typescript`;
 const javascript = `Javascript`;
@@ -113,7 +112,7 @@ module.exports = yo.extend({
           isManifestProject = true; }
 
       /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or ExcelexcelFunctions was specified via the command prompt */
-      if ((answerForProjectType.projectType != null  && (answerForProjectType.projectType) == excelCustomFunctions || answerForProjectType.projectType == excelCustomFunctionsPreviewRefresh)
+      if ((answerForProjectType.projectType != null  && answerForProjectType.projectType) == excelCustomFunctions
       || (this.options.projectType != null && _.toLower(this.options.projectType) == excelCustomFunctions)) { 
         isExcelFunctionsProject = true; }
 
@@ -217,8 +216,6 @@ module.exports = yo.extend({
         scriptType: answerForScriptType.scriptType
       };
 
-      if (this.options.js || this.project.projectType === excelCustomFunctions) {
-        this.project.scriptType = javascript; }
       if (this.options.ts || this.project.projectType === 'react') {
         this.project.scriptType = typescript; }
 
@@ -253,7 +250,7 @@ module.exports = yo.extend({
   _copyProjectFiles()
   {
       try {
-        let language = this.project.scriptType === typescript && !this.project.isExcelFunctionsProject  ? 'ts' : 'js';
+        let language = this.project.scriptType === typescript ? 'ts' : 'js';
         const starterCode = generateStarterCode(this.project.host);
         const templateFills = Object.assign({}, this.project, starterCode);
         let jsonData = new projectsJsonData(this.templatePath()); 
