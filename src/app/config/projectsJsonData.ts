@@ -94,35 +94,41 @@ export default class projectsJsonData{
       return undefined;
     }
 
-    getProjectTemplateBranchName(projectTypeKey: string, scriptType: string, branchIndex: number)
+    getProjectTemplateBranchName(projectTypeKey: string, scriptType: string)
     {
-      // Check to see if repository is defined. If not, then a branch won't be defined, so just return.
-      if (this.getProjectTemplateRepository(projectTypeKey, scriptType) == ""){
-        return undefined;
-      }
-
       for (let key in this.m_projectJsonData.projectTypes)
       {
         if (_.toLower(projectTypeKey) == key){
           if (projectTypeKey == 'manifest')
           {
-            if (this.m_projectJsonData.projectTypes[key].templates.manifestonly.branches == undefined){
+            if (this.m_projectJsonData.projectTypes[key].templates.manifestonly.branch == undefined){
               return undefined;
             }
             else{
-              return this.m_projectJsonData.manifest.templates.manifestonly.branches[branchIndex].name;
+              return this.m_projectJsonData.manifest.templates.manifestonly.branch;
             }
           }
           else{
-            if (this.m_projectJsonData.projectTypes[key].templates[scriptType].branches == undefined){
+            if (this.m_projectJsonData.projectTypes[key].templates[scriptType].branch == undefined){
               return undefined;
             }
             else{
-              return this.m_projectJsonData.projectTypes[key].templates[scriptType].branches[branchIndex].name;
+              return this.m_projectJsonData.projectTypes[key].templates[scriptType].branch;
             }
           }          
         }
       }
       return undefined;
+    }
+
+    getProjectRepoAndBranch(projectTypeKey: string, scriptType: string)
+    {
+      scriptType =  scriptType === 'ts' ? 'typescript' : 'javascript';
+
+      let repoBranchInfo = { repo: <string> null, branch: <string> null };
+      repoBranchInfo.repo = this.getProjectTemplateRepository(projectTypeKey, scriptType);
+      (repoBranchInfo.repo != undefined ) ? repoBranchInfo.branch = this.getProjectTemplateBranchName(projectTypeKey, scriptType) : repoBranchInfo.branch = undefined;
+      
+      return repoBranchInfo;
     }
   }

@@ -256,16 +256,15 @@ module.exports = yo.extend({
         let language = this.project.scriptType === typescript ? 'ts' : 'js';
         const starterCode = generateStarterCode(this.project.host);
         const templateFills = Object.assign({}, this.project, starterCode);
-        let jsonData = new projectsJsonData(this.templatePath()); 
+        let jsonData = new projectsJsonData(this.templatePath());
+        let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language);
 
         this._projectCreationMessage();
         
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
-        let projectRepo = jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript));
-        if (projectRepo != "")
+        if (projectRepoBranchInfo.repo != "")
         {
-          let projectBranchName = jsonData.getProjectTemplateBranchName(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript), 0 /* branchIndex */);
-          git().clone(projectRepo, this.destinationPath(), ['--branch', projectBranchName == undefined ? 'master' : projectBranchName]);
+          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', projectRepoBranchInfo.branch == undefined ? 'master' : projectRepoBranchInfo.branch]);
         }
         else
         {

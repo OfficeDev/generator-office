@@ -14,12 +14,10 @@
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branches": [
-                        {"name": "preview-sept-2018-javascript"}]},
+                    "branch": "preview-sept-2018-javascript"},
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branches": [
-                        {"name": "preview-sept-2018-typescript"}]}
+                    "branch": "preview-sept-2018-typescript"}
                 }
         },
         "jquery": {
