@@ -116,8 +116,12 @@ module.exports = yo.extend({
       || (this.options.projectType != null && _.toLower(this.options.projectType) == excelCustomFunctions)) { 
         isExcelFunctionsProject = true; }
 
-      /* askForTs and askForProjectType will only be triggered if the js param is null, it's not a Manifest project,
-       * it's not an ExcelexcelFunctions project and the project type exists for both script types */      
+      // Determine if we should prompt for script type. This is to address a bug that is causing Yo Office to crash in Node v10.10.0 - Issue #354
+      // This is a temportary fix - we need to clean up the code in the next major version of the generator
+      let promptForScriptType = !isManifestProject && this.options.js == null  && this.options.ts == null && (this.options.projectType != null && jsonData.projectBothScriptTypes(this.options.projectType)
+      || answerForProjectType.projectType != null && jsonData.projectBothScriptTypes(answerForProjectType.projectType))
+      
+      let answerForScriptType;
       let askForScriptType = [
         {
           name: 'scriptType',
@@ -125,12 +129,11 @@ module.exports = yo.extend({
           message: 'Choose a script type',
           choices: [typescript, javascript],
           default: typescript,
-          when: this.options.js == null  && this.options.ts == null
-          && (this.options.projectType != null && jsonData.projectBothScriptTypes(this.options.projectType)
-          || answerForProjectType.projectType != null && jsonData.projectBothScriptTypes(answerForProjectType.projectType))
         }
       ];
-      let answerForScriptType = await this.prompt(askForScriptType);
+      if (promptForScriptType){
+        answerForScriptType = await this.prompt(askForScriptType);
+      }
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
       let startForName = (new Date()).getTime();
@@ -213,7 +216,7 @@ module.exports = yo.extend({
         projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
-        scriptType: answerForScriptType.scriptType
+        scriptType: (answerForScriptType !== undefined) ? answerForScriptType.scriptType : undefined
       };
 
       if (this.options.ts || this.project.projectType === 'react') {
