@@ -262,9 +262,9 @@ module.exports = yo.extend({
         this._projectCreationMessage();
         
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
-        if (projectRepoBranchInfo.repo != "")
+        if (projectRepoBranchInfo.repo)
         {
-          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', projectRepoBranchInfo.branch == undefined ? 'master' : projectRepoBranchInfo.branch]);
+          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', (projectRepoBranchInfo.branch) ? projectRepoBranchInfo.branch : 'master']);
         }
         else
         {

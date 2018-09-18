@@ -101,20 +101,10 @@ export default class projectsJsonData{
         if (_.toLower(projectTypeKey) == key){
           if (projectTypeKey == 'manifest')
           {
-            if (this.m_projectJsonData.projectTypes[key].templates.manifestonly.branch == undefined){
-              return undefined;
-            }
-            else{
-              return this.m_projectJsonData.manifest.templates.manifestonly.branch;
-            }
+            return this.m_projectJsonData.projectTypes.manifest.templates.branch;
           }
           else{
-            if (this.m_projectJsonData.projectTypes[key].templates[scriptType].branch == undefined){
-              return undefined;
-            }
-            else{
-              return this.m_projectJsonData.projectTypes[key].templates[scriptType].branch;
-            }
+             return this.m_projectJsonData.projectTypes[key].templates[scriptType].branch;
           }          
         }
       }
@@ -124,10 +114,10 @@ export default class projectsJsonData{
     getProjectRepoAndBranch(projectTypeKey: string, scriptType: string)
     {
       scriptType =  scriptType === 'ts' ? 'typescript' : 'javascript';
-
       let repoBranchInfo = { repo: <string> null, branch: <string> null };
+
       repoBranchInfo.repo = this.getProjectTemplateRepository(projectTypeKey, scriptType);
-      (repoBranchInfo.repo != undefined ) ? repoBranchInfo.branch = this.getProjectTemplateBranchName(projectTypeKey, scriptType) : repoBranchInfo.branch = undefined;
+      repoBranchInfo.branch = (repoBranchInfo.repo) ? this.getProjectTemplateBranchName(projectTypeKey, scriptType) : undefined;
       
       return repoBranchInfo;
     }
