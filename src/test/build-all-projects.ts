@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import projectsJsonData from './../app/config/projectsJsonData'
+import { helperMethods } from './../app/helpers/helperMethods';
 import * as _ from 'lodash';
 
 let shell = require('shelljs');
@@ -104,7 +105,7 @@ function _installProject(projectType: string, projectName: string, host: string,
 
 function _buildProject(projectFolder: string)
 {
-    if (_projectFolderExists(projectFolder))
+    if (helperMethods.doesProjectFolderExists(projectFolder))
     {
         const failure = 'error';
         shell.cd(projectFolder);
@@ -113,7 +114,7 @@ function _buildProject(projectFolder: string)
         shell.cd(__dirname);
         
         // do clean-up after test runs
-        _deleteFolderRecursively(projectFolder);
+        helperMethods.deleteFolderRecursively(projectFolder);
     }
     else
     {
@@ -131,24 +132,4 @@ function _projectFolderExists (projectFolder: string)
        }
      }
      return false;
- }
-
-function _deleteFolderRecursively(projectFolder: string) 
-{
-    if(fs.existsSync(projectFolder))
-    {
-        fs.readdirSync(projectFolder).forEach(function(file,index){ 
-        var curPath = projectFolder + "/" + file; 
-        
-        if(fs.lstatSync(curPath).isDirectory())
-        {
-            _deleteFolderRecursively(curPath);
-        }
-        else
-        {
-            fs.unlinkSync(curPath);
-        }
-    }); 
-    fs.rmdirSync(projectFolder); 
-    }
-};
+ };

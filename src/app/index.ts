@@ -11,6 +11,7 @@ import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 import generateStarterCode from './config/starterCode';
 import projectsJsonData from './config/projectsJsonData';
+import { helperMethods } from './helpers/helperMethods';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 let git = require("simple-git");
@@ -295,6 +296,11 @@ module.exports = yo.extend({
                 }
               }
           }
+          // Delete .git folder if it was copied over as part of clone
+          let gitFolder = this.destinationPath() + '/.git';
+          if (fs.existsSync(gitFolder)){
+             helperMethods.deleteFolderRecursively(gitFolder);
+          }
         }
     catch (err) {
         insight.trackException(new Error('File Copy Error: ' + err));
@@ -359,13 +365,10 @@ module.exports = yo.extend({
 
 _exitYoOfficeIfProjectFolderExists: function ()
   {      
-    if (fs.existsSync(this._destinationRoot))
+    if (helperMethods.doesProjectFolderExists(this._destinationRoot))
       {
-        if (fs.readdirSync(this._destinationRoot).length > 0)
-        {
           this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`); 
           this._exitProcess(); 
-        }
       }
       return false;
   },
