@@ -93,4 +93,32 @@ export default class projectsJsonData{
       }
       return undefined;
     }
+
+    getProjectTemplateBranchName(projectTypeKey: string, scriptType: string)
+    {
+      for (let key in this.m_projectJsonData.projectTypes)
+      {
+        if (_.toLower(projectTypeKey) == key){
+          if (projectTypeKey == 'manifest')
+          {
+            return this.m_projectJsonData.projectTypes.manifest.templates.branch;
+          }
+          else{
+             return this.m_projectJsonData.projectTypes[key].templates[scriptType].branch;
+          }          
+        }
+      }
+      return undefined;
+    }
+
+    getProjectRepoAndBranch(projectTypeKey: string, scriptType: string)
+    {
+      scriptType =  scriptType === 'ts' ? 'typescript' : 'javascript';
+      let repoBranchInfo = { repo: <string> null, branch: <string> null };
+
+      repoBranchInfo.repo = this.getProjectTemplateRepository(projectTypeKey, scriptType);
+      repoBranchInfo.branch = (repoBranchInfo.repo) ? this.getProjectTemplateBranchName(projectTypeKey, scriptType) : undefined;
+      
+      return repoBranchInfo;
+    }
   }

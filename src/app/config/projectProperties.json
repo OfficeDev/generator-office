@@ -3,17 +3,21 @@
         "angular": {
             "displayname": "Office Add-in project using Angular framework",
             "templates": {
-                "typescript": {
-                    "repository": ""},
                 "javascript": {
+                    "repository": ""},
+                "typescript": {
                     "repository": ""}
-                }        
+                }     
         },
         "excel-functions": {
-            "displayname": "Excel Custom Functions Add-in project (Preview: Requires the Insider channel for Excel)",
+            "displayname": "Excel Custom Functions Add-in project (September 2018 Preview Refresh: Requires the Insider channel for Excel)",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions"}
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
+                    "branch": "preview-sept-2018-javascript"},
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
+                    "branch": "preview-sept-2018-typescript"}
                 }
         },
         "jquery": {
@@ -64,4 +68,3 @@
             "repository": ""}
         }
  }
-

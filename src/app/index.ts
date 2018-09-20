@@ -11,6 +11,7 @@ import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 import generateStarterCode from './config/starterCode';
 import projectsJsonData from './config/projectsJsonData';
+import { helperMethods } from './helpers/helperMethods';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 let git = require("simple-git");
@@ -219,8 +220,6 @@ module.exports = yo.extend({
         scriptType: (answerForScriptType !== undefined) ? answerForScriptType.scriptType : undefined
       };
 
-      if (this.options.js || this.project.projectType === excelCustomFunctions) {
-        this.project.scriptType = javascript; }
       if (this.options.ts || this.project.projectType === 'react') {
         this.project.scriptType = typescript; }
 
@@ -255,18 +254,18 @@ module.exports = yo.extend({
   _copyProjectFiles()
   {
       try {
-        let language = this.project.scriptType === typescript && !this.project.isExcelFunctionsProject  ? 'ts' : 'js';
+        let language = this.project.scriptType === typescript ? 'ts' : 'js';
         const starterCode = generateStarterCode(this.project.host);
         const templateFills = Object.assign({}, this.project, starterCode);
-        let jsonData = new projectsJsonData(this.templatePath()); 
+        let jsonData = new projectsJsonData(this.templatePath());
+        let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language);
 
         this._projectCreationMessage();
         
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
-        let projectRepo = jsonData.getProjectTemplateRepository(this.project.projectType, language == 'ts' ? _.toLower(typescript) : _.toLower(javascript));
-        if (projectRepo != "")
+        if (projectRepoBranchInfo.repo)
         {
-          git().clone(projectRepo, this.destinationPath());
+          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', (projectRepoBranchInfo.branch) ? projectRepoBranchInfo.branch : 'master']);
         }
         else
         {
@@ -296,6 +295,11 @@ module.exports = yo.extend({
                 this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
                 }
               }
+          }
+          // Delete .git folder if it was copied over as part of clone
+          let gitFolder = this.destinationPath() + '/.git';
+          if (fs.existsSync(gitFolder)){
+             helperMethods.deleteFolderRecursively(gitFolder);
           }
         }
     catch (err) {
@@ -361,13 +365,10 @@ module.exports = yo.extend({
 
 _exitYoOfficeIfProjectFolderExists: function ()
   {      
-    if (fs.existsSync(this._destinationRoot))
+    if (helperMethods.doesProjectFolderExists(this._destinationRoot))
       {
-        if (fs.readdirSync(this._destinationRoot).length > 0)
-        {
           this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`); 
           this._exitProcess(); 
-        }
       }
       return false;
   },
