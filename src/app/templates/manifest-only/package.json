@@ -7,7 +7,7 @@
     "validate": "office-toolbox sideload -m <%= projectInternalName %>-manifest.xml"
   },
   "dependencies": {
-    "office-addin-validator": "^1.0.1"
+    "office-toolbox": "^0.1.0"
   },
   "devDependencies": {}
 }
