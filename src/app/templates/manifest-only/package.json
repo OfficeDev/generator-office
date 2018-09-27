@@ -4,7 +4,7 @@
   "author": "",
   "version": "0.1.0",
   "scripts": {
-    "validate": "office-toolbox sideload -m <%= projectInternalName %>-manifest.xml"
+    "validate": "office-toolbox validate -m <%= projectInternalName %>-manifest.xml"
   },
   "dependencies": {
     "office-toolbox": "^0.1.0"
