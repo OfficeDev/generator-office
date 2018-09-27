@@ -121,7 +121,7 @@ As you modify your `manifest.xml` file, use the included [Office Add-in Validato
 
 To run Office Add-in Validator, use the following command in your project directory:
 ```bash
-$ npm run validate your_manifest.xml
+$ npm run validate
 ```
 ![](src/docs/assets/validator.gif)
 
