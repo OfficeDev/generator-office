@@ -181,7 +181,15 @@ module.exports = yo.extend({
   },
 
   writing: function () {
-    this._copyProjectFiles();
+    const done = this.async();
+    this._copyProjectFiles()
+    .then(() => {
+      done();
+    })
+    .catch((err)=>{
+      insight.trackException(new Error('Installation Error: ' + err));
+      process.exitCode = 1;
+    });
   },
 
   install: function () {
@@ -253,6 +261,7 @@ module.exports = yo.extend({
 
   _copyProjectFiles()
   {
+    return new Promise((resolve, reject) => {
       try {
         let language = this.project.scriptType === typescript ? 'ts' : 'js';
         const starterCode = generateStarterCode(this.project.host);
@@ -265,7 +274,13 @@ module.exports = yo.extend({
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo)
         {
-          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', (projectRepoBranchInfo.branch) ? projectRepoBranchInfo.branch : 'master']);
+          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', (projectRepoBranchInfo.branch) ? projectRepoBranchInfo.branch : 'master'], (err) => {
+            const gitFolder = this.destinationPath() + '/.git';
+            if (fs.existsSync(gitFolder)){
+              helperMethods.deleteFolderRecursively(gitFolder);
+            }
+            return err? reject(err): resolve();
+          });
         }
         else
         {
@@ -275,7 +290,7 @@ module.exports = yo.extend({
           if (this.project.isManifestOnly) {
             this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
           }
-          else{
+          else {
                 /* Copy the base template */
                 this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
 
@@ -294,19 +309,16 @@ module.exports = yo.extend({
                 if (this.fs.exists(gitignorePath)) {
                 this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
                 }
-              }
           }
-          // Delete .git folder if it was copied over as part of clone
-          let gitFolder = this.destinationPath() + '/.git';
-          if (fs.existsSync(gitFolder)){
-             helperMethods.deleteFolderRecursively(gitFolder);
-          }
+          return resolve();
         }
-    catch (err) {
-        insight.trackException(new Error('File Copy Error: ' + err));
       }
+      catch (err) {
+          insight.trackException(new Error('File Copy Error: ' + err));
+          return reject(err);
+        }
+    });
   },
-
   _postInstallHints: function () {
     /* Next steps and npm commands */
     this.log('----------------------------------------------------------------------------------------------------------\n');
