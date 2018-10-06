@@ -54,22 +54,24 @@ export default class App extends React.Component<AppProps, AppState> {
 
         if (!isOfficeInitialized) {
             return (
-                <Progress
-                    title={title}
-                    logo='assets/logo-filled.png'
-                    message='Please sideload your addin to see app body.'
-                />
+                <Fabric>
+                    <Progress
+                        title={title}
+                        logo='assets/logo-filled.png'
+                        message='Please sideload your addin to see app body.'
+                    />
+                </Fabric>
             );
         }
 
         return (
-            <div className='ms-welcome'>
+            <Fabric>
                 <Header logo='assets/logo-filled.png' title={this.props.title} message='Welcome' />
                 <HeroList message='Discover what <%= projectDisplayName %> can do for you today!' items={this.state.listItems}>
                     <p className='ms-font-l'>Modify the source files, then click <b>Run</b>.</p>
                     <Button className='ms-welcome__action' buttonType={ButtonType.hero} iconProps={{ iconName: 'ChevronRight' }} onClick={this.click}>Run</Button>
                 </HeroList>
-            </div>
+            </Fabric>
         );
     }
 }
