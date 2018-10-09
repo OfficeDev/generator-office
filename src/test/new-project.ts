@@ -6,6 +6,7 @@
 import * as helpers from 'yeoman-test';
 import * as assert from 'yeoman-assert';
 import * as path from 'path';
+const manifestInfo = require('./../../node_modules/office-addin-manifest/lib/manifestInfo');
 
 const expectedAssets = [
   'assets/icon-16.png',
@@ -223,7 +224,6 @@ describe('Create new project from prompts only', () => {
  * new project, default folder, typescript, jquery.
  */
 describe('Create new project from prompts and command line overrides', () => {
-  let projectDisplayName = 'My Office Add-in';
   let projectEscapedName = 'my-office-add-in';
   let answers = {
     scriptType: null,
@@ -251,7 +251,6 @@ describe('Create new project from prompts and command line overrides', () => {
     });
 
     it('creates expected files', (done) => {
-      let host = argument[2] ? argument[2] : answers.host;
       let name = argument[1] ? argument[1] : answers.name;
       let manifestFileName = name + '-manifest.xml';
 
@@ -290,7 +289,6 @@ describe('Create new project from prompts and command line overrides', () => {
     });
 
     it('creates expected files', (done) => {
-      let host = argument[2] ? argument[2] : answers.host;
       let name = argument[1] ? argument[1] : answers.name;
       let manifestFileName = name + '-manifest.xml';
 
@@ -327,7 +325,6 @@ describe('Create new project from prompts and command line overrides', () => {
     });
 
     it('creates expected files', (done) => {
-      let host = argument[2] ? argument[2] : answers.host;
       let name = argument[1] ? argument[1] : answers.name;
       let manifestFileName = name + '-manifest.xml';
 
@@ -348,10 +345,11 @@ describe('Create new project from prompts and command line overrides', () => {
   });
 
   /** Test addin when user passes in projectType: excel-functions. */
-  describe('arguments: project: custom-functions', () => {
+  describe('arguments: project: custom-functions', async function() {
+    let customDislayName = 'Custom Display Name';
     before((done) => {
       answers.scriptType = null;
-      answers.name = projectEscapedName;
+      answers.name = customDislayName;
       argument[0] = 'excel-functions';
       argument.splice(1, 2);
 
@@ -361,8 +359,7 @@ describe('Create new project from prompts and command line overrides', () => {
         .on('end', done);
     });
 
-    it('creates expected files', (done) => {
-      let name = argument[1] ? argument[1] : answers.name;
+    it('creates expected files', async function() {
       let manifestFileName = 'manifest.xml';     
 
       let expected = [
@@ -370,8 +367,13 @@ describe('Create new project from prompts and command line overrides', () => {
         ...expectExcelCustomFunctionFiles       
       ];
 
-      // assert.file(expected);
-      done();
+      assert.file(expected);
+    });
+    
+    it('manifest display name set to customDislayName', async function() {
+      let manifestFilePath = path.win32.resolve('manifest.xml');
+      const info =  await manifestInfo.readManifestFile(manifestFilePath);
+      assert.textEqual(info.displayName, customDislayName);
     });
   });
 });

@@ -12,6 +12,7 @@ import * as yo from 'yeoman-generator';
 import generateStarterCode from './config/starterCode';
 import projectsJsonData from './config/projectsJsonData';
 import { helperMethods } from './helpers/helperMethods';
+import { modifyManifestFile } from './../../node_modules/office-addin-manifest/lib/manifestInfo'
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 let git = require("simple-git");
@@ -266,6 +267,9 @@ module.exports = yo.extend({
         if (projectRepoBranchInfo.repo)
         {
           git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', (projectRepoBranchInfo.branch) ? projectRepoBranchInfo.branch : 'master']);
+
+          //modify manifest guid and DisplayName
+          modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
         }
         else
         {
