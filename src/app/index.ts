@@ -186,7 +186,7 @@ module.exports = yo.extend({
     .then(() => {
       done();
     })
-    .catch((err)=>{
+    .catch((err) => {
       insight.trackException(new Error('Installation Error: ' + err));
       process.exitCode = 1;
     });
@@ -279,7 +279,7 @@ module.exports = yo.extend({
             if (fs.existsSync(gitFolder)){
               helperMethods.deleteFolderRecursively(gitFolder);
             }
-            return err? reject(err): resolve();
+            return err ? reject(err) : resolve();
           });
         }
         else
