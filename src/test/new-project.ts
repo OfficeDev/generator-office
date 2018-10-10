@@ -6,7 +6,7 @@
 import * as helpers from 'yeoman-test';
 import * as assert from 'yeoman-assert';
 import * as path from 'path';
-const manifestInfo = require('./../../node_modules/office-addin-manifest/lib/manifestInfo');
+import * as officeAddinManifest from 'office-addin-manifest';
 
 const expectedAssets = [
   'assets/icon-16.png',
@@ -372,7 +372,7 @@ describe('Create new project from prompts and command line overrides', () => {
     
     it('manifest display name set to customDislayName', async function() {
       let manifestFilePath = path.win32.resolve('manifest.xml');
-      const info =  await manifestInfo.readManifestFile(manifestFilePath);
+      const info =  await officeAddinManifest.readManifestFile(manifestFilePath);
       assert.textEqual(info.displayName, customDislayName);
     });
   });
