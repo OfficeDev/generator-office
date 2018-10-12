@@ -5,6 +5,7 @@
 
 import * as helpers from 'yeoman-test';
 import * as assert from 'yeoman-assert';
+import * as stringCompare from "assert";
 import * as path from 'path';
 import * as officeAddinManifest from 'office-addin-manifest';
 
@@ -348,7 +349,7 @@ describe('Create new project from prompts and command line overrides', () => {
   describe('arguments: project: custom-functions', async function() {
     let customDislayName = 'Custom Display Name';
     before((done) => {
-      answers.scriptType = null;
+      answers.scriptType = 'Typescript';
       answers.name = customDislayName;
       argument[0] = 'excel-functions';
       argument.splice(1, 2);
@@ -372,8 +373,10 @@ describe('Create new project from prompts and command line overrides', () => {
     
     it('manifest display name set to customDislayName', async function() {
       let manifestFilePath = path.win32.resolve('manifest.xml');
+      let originalManifestGuid = 'e0a8db79-1755-460e-9a8d-914174978505';
       const info =  await officeAddinManifest.readManifestFile(manifestFilePath);
       assert.textEqual(info.displayName, customDislayName);
+      stringCompare.notEqual(info.id, originalManifestGuid);
     });
   });
 });
