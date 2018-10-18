@@ -58,7 +58,7 @@ npm start</pre>
                 <% if (host === 'Outlook') { %>
                 <%# Outlook-specific steps go here %>
                 <p>Load the add-in into <%= host %>. The easiest way to do this is by sideloading the add-in using the in-client Office Store UI.</p>
-                
+
                 <pre>1. Open the Office Store, either in Outlook 2016 for Windows or Outlook on the web:
 
 &nbsp;&nbsp;&nbsp;&nbsp;- In Outlook 2016 for Windows, choose the <b>Store</b> button on the <b>Home</b> tab.
@@ -69,7 +69,7 @@ npm start</pre>
 
 3. Choose <b>Add from file...</b>.
 
-4. Browse to and select the <%= projectInternalName %>-manifest.xml file from the root of the project folder, and then choose <b>Open</b>.
+4. Browse to and select the manifest.xml file from the root of the project folder, and then choose <b>Open</b>.
 
 5. Review the warning prompt and choose <b>Install</b>.
 
@@ -88,7 +88,7 @@ npm start</pre>
 # you'll see a link in the upper-right corner of the dialog box to Upload My add-in or Manage My Add-ins.</span>
 3. Manage My Add-ins will open a menu where you can then choose <b>Upload My add-in</b>.
 
-4. Choose <b>Browse</b> and select the <%= projectInternalName %>-manifest.xml file from the root of the project folder, and then choose <b>Upload</b>.
+4. Choose <b>Browse</b> and select the manifest.xml file from the root of the project folder, and then choose <b>Upload</b>.
 
 5. Your add-in will load in <a target="_blank" href="https://office.live.com/start/<%= host %>.aspx?auth=2&nf=1" onclick="appInsights.trackEvent('linkClick_<%= host %>-sideload-step5');return true;"><%= host %></a>.</pre>
 
@@ -108,7 +108,7 @@ npm start</pre>
 
 <p>- Use the included <a target="_blank" href="https://github.com/officedev/office-addin-validator" onclick="appInsights.trackEvent('linkClick_office-addin-validator');return true;">Office Add-in Validator</a> to ensure your manifest.xml file is correct and complete. It will also give you information on against what platforms to test your add-in before submitting to the store.</p>
 <pre><span class="comment"># To validate your manifest, use the following command in your project directory:</span>
-$ npm run validate <%= projectInternalName %>-manifest.xml</pre>
+$ npm run validate manifest.xml</pre>
 <p>- Ensure your add-in works on all browsers and platforms that <a target="_blank" href="https://dev.office.com/add-in-availability">Office supports</a>.</p>
 
                     <p> For more information and resources to help you develop your add-in project, follow through the next steps

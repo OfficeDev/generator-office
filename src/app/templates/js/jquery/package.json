@@ -5,9 +5,9 @@
   "version": "0.1.0",
   "scripts": {
     "start": "webpack-dev-server --mode development --https --key ./certs/server.key --cert ./certs/server.crt --cacert ./certs/ca.crt --port 3000",
-    "sideload": "office-toolbox sideload -m <%= projectInternalName %>-manifest.xml -a <%= hostInternalName %>",
+    "sideload": "office-toolbox sideload -m manifest.xml -a <%= hostInternalName %>",
     "build": "webpack --mode production",
-    "validate": "./node_modules/.bin/validate-office-addin"
+    "validate": "office-toolbox validate -m manifest.xml"
   },
   "dependencies": {
     "@microsoft/office-js-helpers": "^1.0.1",
@@ -24,7 +24,6 @@
     "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.0.7",
-    "office-addin-validator": "^1.0.1",
     "webpack": "^4.1.1",
     "webpack-cli": "^3.1.1",
     "webpack-dev-server": "^3.1.1"
