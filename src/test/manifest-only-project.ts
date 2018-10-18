@@ -11,6 +11,7 @@ const manifestProject = 'Manifest';
 
 const expectedFiles = [
   'package.json',
+  'manifest.xml',
   'assets/icon-16.png',
   'assets/icon-32.png',
   'assets/icon-80.png',
@@ -36,13 +37,11 @@ const unexpectedFiles = [
  */
 describe('manifest project - answers', () => {
   let projectDisplayName = 'My Office Add-in';
-  let projectEscapedName = 'my-office-add-in';
   let answers = {
     projectType: manifestProject,
     name: projectDisplayName,
-    host: 'Excel',    
+    host: 'Excel',
   };
-  let manifestFileName = projectEscapedName + '-manifest.xml';
 
 	/** Test addin when user chooses jquery and typescript. */
   describe('manifest', () => {
@@ -51,12 +50,7 @@ describe('manifest project - answers', () => {
     });
 
     it('creates expected files', (done) => {
-      let expected = [
-        manifestFileName,
-        ...expectedFiles
-      ];
-
-      assert.file(expected);
+      assert.file(expectedFiles);
       assert.noFile(unexpectedFiles);
       done();
     });
@@ -87,16 +81,7 @@ describe('manifest project - answers & args - jquery & typescript', () => {
     });
 
     it('creates expected files', (done) => {
-      let name = argument[1] ? argument[1] : answers.name;
-      let host = argument[2] ? argument[2] : answers.host;      
-      let manifestFileName = name  + '-manifest.xml';
-
-      let expected = [
-        manifestFileName,
-        ...expectedFiles
-      ];
-
-      assert.file(expected);
+      assert.file(expectedFiles);
       assert.noFile(unexpectedFiles);
       done();
     });
@@ -109,7 +94,7 @@ describe('manifest project - answers & args - jquery & typescript', () => {
   describe('arguments: project name', () => {
     before((done) => {
       let answers = {
-        name: projectEscapedName,       
+        name: projectEscapedName,
         host: 'Excel'
       };
       argument[0] = manifestProject;
@@ -119,16 +104,7 @@ describe('manifest project - answers & args - jquery & typescript', () => {
     });
 
     it('creates expected files', (done) => {
-      let name = argument[1] ? argument[1] : answers.name;
-      let host = argument[2] ? argument[2] : answers.host;      
-      let manifestFileName = name  + '-manifest.xml';
-
-      let expected = [
-        manifestFileName,
-        ...expectedFiles
-      ];
-
-      assert.file(expected);
+      assert.file(expectedFiles);
       assert.noFile(unexpectedFiles);
       done();
     });
@@ -147,16 +123,7 @@ describe('manifest project - answers & args - jquery & typescript', () => {
     });
 
     it('creates expected files', (done) => {
-      let name = argument[1] ? argument[1] : answers.name;
-      let host = argument[2] ? argument[2] : answers.host;      
-      let manifestFileName = name  + '-manifest.xml';
-
-      let expected = [
-        manifestFileName,
-        ...expectedFiles
-      ];
-
-      assert.file(expected);
+      assert.file(expectedFiles);
       assert.noFile(unexpectedFiles);
       done();
     });
