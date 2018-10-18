@@ -7,9 +7,9 @@
         "clean": "rimraf dist && rimraf .awcache",
         "lint": "tslint --project tsconfig.json",
         "start": "webpack-dev-server --inline --config config/webpack.dev.js --progress",
-        "sideload": "office-toolbox sideload -m <%= projectInternalName %>-manifest.xml -a <%= hostInternalName %>",
+        "sideload": "office-toolbox sideload -m manifest.xml -a <%= hostInternalName %>",
         "build": "npm run clean && webpack --config config/webpack.prod.js --colors --progress --bail",
-        "validate": "office-toolbox validate -m <%= projectInternalName %>-manifest.xml"
+        "validate": "office-toolbox validate -m manifest.xml"
     },
     "dependencies": {
         "@microsoft/office-js-helpers": "^1.0.1",
