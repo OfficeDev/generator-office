@@ -12,7 +12,7 @@ import * as yo from 'yeoman-generator';
 import generateStarterCode from './config/starterCode';
 import projectsJsonData from './config/projectsJsonData';
 import { helperMethods } from './helpers/helperMethods';
-import * as officeAddinManifest from 'office-addin-manifest';
+import * as officeAddinManifest from 'office-addin-manifest/lib/manifestInfo';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 let git = require("simple-git");
@@ -32,8 +32,8 @@ module.exports = yo.extend({
   constructor: function () {
     yo.apply(this, arguments);
 
-    this.argument('projectType', { type: String, required: false }); 
-    this.argument('name', { type: String, required: false }); 
+    this.argument('projectType', { type: String, required: false });
+    this.argument('name', { type: String, required: false });
     this.argument('host', { type: String, required: false });
 
     this.option('skip-install', {
@@ -76,13 +76,13 @@ module.exports = yo.extend({
     }
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
-    this.project = {};    
+    this.project = {};
   },
 
   /* Prompt user for project options */
   prompting: async function () {
     try {
-      let jsonData = new projectsJsonData(this.templatePath()); 
+      let jsonData = new projectsJsonData(this.templatePath());
       let isManifestProject = false;
       let isExcelFunctionsProject = false;
 
@@ -107,28 +107,28 @@ module.exports = yo.extend({
       let answerForProjectType = await this.prompt(askForProjectType);
       let endForProjectType = (new Date()).getTime();
       let durationForProjectType = (endForProjectType - startForProjectType) / 1000;
-      
+
       /* Set isManifestProject to true if Manifest project type selected from prompt or Manifest was specified via the command prompt */
       if ((answerForProjectType.projectType != null && _.toLower(answerForProjectType.projectType) == manifest)
-      || (this.options.projectType != null && _.toLower(this.options.projectType)) == manifest) { 
+      || (this.options.projectType != null && _.toLower(this.options.projectType)) == manifest) {
           isManifestProject = true; }
 
       /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or ExcelexcelFunctions was specified via the command prompt */
       if ((answerForProjectType.projectType != null  && answerForProjectType.projectType) == excelCustomFunctions
-      || (this.options.projectType != null && _.toLower(this.options.projectType) == excelCustomFunctions)) { 
+      || (this.options.projectType != null && _.toLower(this.options.projectType) == excelCustomFunctions)) {
         isExcelFunctionsProject = true; }
 
       // Determine if we should prompt for script type. This is to address a bug that is causing Yo Office to crash in Node v10.10.0 - Issue #354
       // This is a temportary fix - we need to clean up the code in the next major version of the generator
       let promptForScriptType = !isManifestProject && this.options.js == null  && this.options.ts == null && (this.options.projectType != null && jsonData.projectBothScriptTypes(this.options.projectType)
       || answerForProjectType.projectType != null && jsonData.projectBothScriptTypes(answerForProjectType.projectType))
-      
+
       let answerForScriptType;
       let askForScriptType = [
         {
           name: 'scriptType',
           type: 'list',
-          message: 'Choose a script type',
+          message: 'Choose a script type:',
           choices: [typescript, javascript],
           default: typescript,
         }
@@ -148,7 +148,7 @@ module.exports = yo.extend({
       }];
       let answerForName = await this.prompt(askForName);
       let endForName = (new Date()).getTime();
-      let durationForName = (endForName - startForName) / 1000; 
+      let durationForName = (endForName - startForName) / 1000;
 
       /* askForHost will be triggered if no project name was specified via the command line Host argument, and the Host argument
        * input was in fact valid, and the project type is not Excel-Functions */
@@ -172,8 +172,8 @@ module.exports = yo.extend({
       /* Gnerate Insights logging */
       const noElapsedTime = 0;
       insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
-      insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });    
-      insight.trackEvent('ScriptType', { ScriptType: this.project.scriptType }, { noElapsedTime });      
+      insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });
+      insight.trackEvent('ScriptType', { ScriptType: this.project.scriptType }, { noElapsedTime });
       insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { noElapsedTime });
       insight.trackEvent('ProjectType', { ProjectType: this.project.projectType }, { durationForProjectType });
     } catch (err) {
@@ -194,7 +194,7 @@ module.exports = yo.extend({
   },
 
   install: function () {
-    try {      
+    try {
       if (this.options['skip-install']) {
         this.installDependencies({
           npm: false,
@@ -217,7 +217,7 @@ module.exports = yo.extend({
 
   _configureProject: function(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject)
   {
-    try 
+    try
     {
       this.project = {
         folder: this.options.output || answerForName.name || this.options.name,
@@ -245,7 +245,7 @@ module.exports = yo.extend({
       }
       else {
         this.project.hostInternalName = this.project.host;
-      }      
+      }
       this.destinationRoot(this.project.folder);
 
       /* Check to to see if destination folder already exists. If so, we will exit and prompt the user to provide
@@ -254,7 +254,7 @@ module.exports = yo.extend({
 
       let duration = this.project.duration;
       insight.trackEvent('App_Data', { AppID: this.project.projectId, Host: this.project.host, ProjectType: this.project.projectType, isTypeScript: (this.project.scriptType === typescript).toString() }, { duration });
-    } 
+    }
     catch (err) {
       insight.trackException(new Error('Configuration Error: ' + err));
     }
@@ -271,12 +271,12 @@ module.exports = yo.extend({
         let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language);
 
         this._projectCreationMessage();
-        
+
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo)
         {
-          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', (projectRepoBranchInfo.branch) ? projectRepoBranchInfo.branch : 'master'], (err) => {        
-            // //modify manifest guid and DisplayName
+          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', (projectRepoBranchInfo.branch) ? projectRepoBranchInfo.branch : 'master'], (err) => {
+            // modify manifest guid and DisplayName
             officeAddinManifest.modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
 
             // delete the .git folder after cloning over repo
@@ -290,7 +290,7 @@ module.exports = yo.extend({
         else
         {
           /* Copy the manifest */
-          this.fs.copyTpl(this.templatePath(`hosts/${_.toLower(this.project.hostInternalName)}/manifest.xml`), this.destinationPath(`${this.project.projectInternalName}-manifest.xml`), templateFills);
+          this.fs.copyTpl(this.templatePath(`hosts/${_.toLower(this.project.hostInternalName)}/manifest.xml`), this.destinationPath('manifest.xml'), templateFills);
 
           if (this.project.isManifestOnly) {
             this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
@@ -301,7 +301,7 @@ module.exports = yo.extend({
 
                 /* Copy the project type specific overrides */
                 this.fs.copyTpl(this.templatePath(`${language}/${_.toLower(this.project.projectType)}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
-                      
+
                 /* Manually copy any dot files as yoeman can't handle them */
                 /* .babelrc */
                 const babelrcPath = this.templatePath(`${language}/${_.toLower(this.project.projectType)}/babelrc.placeholder`);
@@ -342,11 +342,11 @@ module.exports = yo.extend({
     /* Log to console the type of project being created */
     if (this.project.isManifestOnly)
       {
-        this.log('----------------------------------------------------------------------------------\n');  
-        this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);  
-        this.log('----------------------------------------------------------------------------------\n\n');  
+        this.log('----------------------------------------------------------------------------------\n');
+        this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
+        this.log('----------------------------------------------------------------------------------\n\n');
       }
-    else 
+    else
       {
         this.log('\n----------------------------------------------------------------------------------\n');
         this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(_.capitalize(this.project.host))} using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
@@ -381,15 +381,15 @@ module.exports = yo.extend({
   },
 
 _exitYoOfficeIfProjectFolderExists: function ()
-  {      
+  {
     if (helperMethods.doesProjectFolderExists(this._destinationRoot))
       {
-          this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`); 
-          this._exitProcess(); 
+          this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`);
+          this._exitProcess();
       }
       return false;
   },
-  
+
   _exitProcess: function () {
     process.exit();
   }
