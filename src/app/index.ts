@@ -12,6 +12,7 @@ import * as yo from 'yeoman-generator';
 import generateStarterCode from './config/starterCode';
 import projectsJsonData from './config/projectsJsonData';
 import { helperMethods } from './helpers/helperMethods';
+import { modifyManifestFile } from 'office-addin-manifest/lib/manifestInfo';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 let git = require("simple-git");
@@ -274,7 +275,11 @@ module.exports = yo.extend({
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo)
         {
-          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', (projectRepoBranchInfo.branch) ? projectRepoBranchInfo.branch : 'master'], (err) => {
+          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', (projectRepoBranchInfo.branch) ? projectRepoBranchInfo.branch : 'master'], async (err) => {
+            // modify manifest guid and DisplayName
+            await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
+            
+            // delete the .git folder after cloning over repo
             const gitFolder = this.destinationPath() + '/.git';
             if (fs.existsSync(gitFolder)){
               helperMethods.deleteFolderRecursively(gitFolder);
