@@ -344,7 +344,7 @@ describe('Create new project from prompts and command line overrides', () => {
 
   /** Test addin when user passes in projectType: excel-functions. */
   describe('arguments: project: custom-functions', () => {
-    let customDislayName = 'Custom Display Name';
+    let customDislayName = 'CustomDisplayName';
     before((done) => {
       answers.scriptType = 'Typescript';
       answers.name = customDislayName;
@@ -364,7 +364,7 @@ describe('Create new project from prompts and command line overrides', () => {
     });
     
     it('manifest display name set to customDislayName', async function() {
-      let manifestFilePath = path.win32.resolve('manifest.xml');
+      let manifestFilePath = path.resolve(expectedManifestFile).toString();
       let originalManifestGuid = 'e0a8db79-1755-460e-9a8d-914174978505';
       const info =  await readManifestFile(manifestFilePath);
       assert.textEqual(info.displayName, customDislayName);
