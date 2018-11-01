@@ -1,0 +1,18 @@
+### YamlMime:Sample
+sample:
+- name: generator-office
+  path: ''
+  description: Yeoman generator for building Microsoft Office related projects.
+  readme: ''
+  generateZip: False
+  isLive: True
+  technologies: []
+  azureDeploy: ''
+  author: ''
+  platforms: []
+  languages:
+  - HTML
+  extensions:
+    type: tools
+    products: []
+    scenarios: []
