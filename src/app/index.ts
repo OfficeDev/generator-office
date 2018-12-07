@@ -2,17 +2,18 @@
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
-import * as fs from 'fs';
+import * as _ from 'lodash';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
-import * as _ from 'lodash';
+import * as fs from 'fs';
+import * as path from "path";
 import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 import generateStarterCode from './config/starterCode';
 import projectsJsonData from './config/projectsJsonData';
 import { helperMethods } from './helpers/helperMethods';
-import { modifyManifestFile } from 'office-addin-manifest/lib/manifestInfo';
+import { modifyManifestFile } from 'office-addin-manifest';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 let git = require("simple-git");
@@ -275,12 +276,12 @@ module.exports = yo.extend({
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo)
         {
-          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', (projectRepoBranchInfo.branch) ? projectRepoBranchInfo.branch : 'master'], async (err) => {
+          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', projectRepoBranchInfo.branch || 'master'], async (err) => {
             // modify manifest guid and DisplayName
             await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
             
             // delete the .git folder after cloning over repo
-            const gitFolder = this.destinationPath() + '/.git';
+            const gitFolder = path.join(this.destinationPath(), '.git');
             if (fs.existsSync(gitFolder)){
               helperMethods.deleteFolderRecursively(gitFolder);
             }
