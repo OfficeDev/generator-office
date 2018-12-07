@@ -10,14 +10,14 @@
                 }     
         },
         "excel-functions": {
-            "displayname": "Excel Custom Functions Add-in project (September 2018 Preview Refresh: Requires the Insider channel for Excel)",
+            "displayname": "Excel Custom Functions Add-in project (Requires the Insider channel for Excel)",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branch": "preview-sept-2018-javascript"},
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
+                    "branch": "yo-office"},
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branch": "preview-sept-2018-typescript"}
+                    "branch": "yo-office"}
                 }
         },
         "jquery": {
