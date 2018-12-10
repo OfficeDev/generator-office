@@ -5,7 +5,9 @@
 
 import * as helpers from 'yeoman-test';
 import * as assert from 'yeoman-assert';
+import * as stringCompare from "assert";
 import * as path from 'path';
+import { readManifestFile } from 'office-addin-manifest/lib/manifestInfo';
 
 const expectedManifestFile = 'manifest.xml';
 
@@ -51,10 +53,16 @@ const expectExcelCustomFunctionFiles = [
   '.gitignore',
   'package.json',
   'webpack.config.js',
-  'config/web.config',
-  'index.html',
-  'src/customfunctions.js',
-  'config/customfunctions.json',
+  'assets/icon-16.png',
+  'assets/icon-32.png',
+  'assets/icon-80.png',
+  'assets/logo-filled.png',
+  'src/functions/functions.html',
+  'src/functions/functions.ts',
+  'src/functions/functions.json',
+  'src/taskpane/taskpane.css',
+  'src/taskpane/taskpane.html',
+  'src/taskpane/taskpane.ts',
 ];
 
 
@@ -342,9 +350,10 @@ describe('Create new project from prompts and command line overrides', () => {
 
   /** Test addin when user passes in projectType: excel-functions. */
   describe('arguments: project: custom-functions', () => {
+    let customDislayName = 'CustomDisplayName';
     before((done) => {
-      answers.scriptType = null;
-      answers.name = projectEscapedName;
+      answers.scriptType = 'Typescript';
+      answers.name = customDislayName;
       argument[0] = 'excel-functions';
       argument.splice(1, 2);
 
@@ -355,12 +364,17 @@ describe('Create new project from prompts and command line overrides', () => {
     });
 
     it('creates expected files', (done) => {
-      let name = argument[1] ? argument[1] : answers.name;
-
       let expected = expectExcelCustomFunctionFiles;
-
-      // assert.file(expected);
+      assert.file(expected);
       done();
+    });
+    
+    it('manifest display name set to customDislayName', async function() {
+      let manifestFilePath = path.resolve(expectedManifestFile).toString();
+      let originalManifestGuid = 'e0a8db79-1755-460e-9a8d-914174978505';
+      const info =  await readManifestFile(manifestFilePath);
+      assert.textEqual(info.displayName, customDislayName);
+      stringCompare.notEqual(info.id, originalManifestGuid);
     });
   });
 });
