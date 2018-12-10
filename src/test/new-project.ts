@@ -62,7 +62,7 @@ const expectExcelCustomFunctionFiles = [
   'src/functions/functions.json',
   'src/taskpane/taskpane.css',
   'src/taskpane/taskpane.html',
-  'src/taskpane/taskpane.js',
+  'src/taskpane/taskpane.ts',
 ];
 
 
