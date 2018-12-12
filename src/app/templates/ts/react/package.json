@@ -41,7 +41,7 @@
         "tslint": "^5.9.1",
         "ts-loader": "^3.5.0",
         "typescript": "^2.7.2",
-        "webpack": "^4.21.1",
+        "webpack": "^4.27.1",
         "webpack-cli": "^3.1.2",
         "webpack-dev-server": "^3.1.1",
         "webpack-merge": "^4.1.1"
