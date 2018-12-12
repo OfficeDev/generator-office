@@ -83,11 +83,6 @@ const WEBPACK_PLUGINS = [
                 minimize: true
             }
         }
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendor',
-        minChunks: Infinity,
-        chunks: ['app']
     })
 ];
 
@@ -101,6 +96,13 @@ module.exports = {
     module: {
         rules,
     },
+    optimization: {
+        splitChunks: {
+          chunks: 'async',
+          minChunks: Infinity,
+          name: 'vendor'
+        }
+      },
     plugins: [
         ...WEBPACK_PLUGINS,
         new ExtractTextPlugin('[name].[hash].css'),
