@@ -13,10 +13,10 @@ const base = (host: string, contents?: string) =>
                  */
                 ${contents || defaultContents}
             });
-        } catch(error) {
+        } catch (error) {
             OfficeHelpers.UI.notify(error);
             OfficeHelpers.Utilities.log(error);
-        };`;
+        }`;
 
 /**
  * Generates any required import statements.
