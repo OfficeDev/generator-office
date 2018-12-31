@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require("webpack");
 
 module.exports = {
     devtool: 'source-map',
@@ -36,6 +37,9 @@ module.exports = {
             template: './function-file/function-file.html',
             filename: 'function-file/function-file.html',
             chunks: ['function-file']
+        }),
+        new webpack.ProvidePlugin({
+            Promise: ["es6-promise", "Promise"]
         })
     ]
 };
