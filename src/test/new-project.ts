@@ -53,16 +53,10 @@ const expectExcelCustomFunctionFiles = [
   '.gitignore',
   'package.json',
   'webpack.config.js',
-  'assets/icon-16.png',
-  'assets/icon-32.png',
-  'assets/icon-80.png',
-  'assets/logo-filled.png',
-  'src/functions/functions.html',
-  'src/functions/functions.ts',
-  'src/functions/functions.json',
-  'src/taskpane/taskpane.css',
-  'src/taskpane/taskpane.html',
-  'src/taskpane/taskpane.ts',
+  'config/web.config',
+  'index.html',
+  'src/customfunctions.ts',
+  'config/customfunctions.json',
 ];
 
 
