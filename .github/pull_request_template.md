@@ -18,6 +18,7 @@ Describe automated/manual testing done.
 
 
 **Platforms tested**:
-[ ] Windows Desktop
-[ ] Mac Desktop
-[ ] Web/Online
+
+- [ ] Windows
+
+- [ ] Mac
