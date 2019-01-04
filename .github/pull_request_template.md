@@ -2,7 +2,7 @@ Thank you for your pull request. Please provide the following information.
 
 ---
 
-> **Do changes in this PR impact **User Experience** (e.g., how the user interacts with Yo Office and/or the files and folders the user sees in the project that Yo Office creates)?**
+1. **Do these changes impact *User Experience*?** (e.g., how the user interacts with Yo Office and/or the files and folders the user sees in the project that Yo Office creates)
 > 
 > * [ ]  Yes
 > * [ ]  No
@@ -10,7 +10,7 @@ Thank you for your pull request. Please provide the following information.
 If Yes, briefly describe what is impacted.
 
 
-> **Do changes in this PR impact **documentation** (e.g., a tutorial on https://docs.microsoft.com/en-us/office/dev/add-ins/overview/office-add-ins)
+2. **Do these changes impact *documentation*?** (e.g., a tutorial on https://docs.microsoft.com/en-us/office/dev/add-ins/overview/office-add-ins)
 > 
 > * [ ]  Yes
 > * [ ]  No
@@ -18,12 +18,12 @@ If Yes, briefly describe what is impacted.
 If Yes, briefly describe what is impacted.
 
 
-**Validation/testing performed:**
+3. **Validation/testing performed**:
 
-Describe automated/manual testing done. 
+Describe manual testing done. 
 
 
-**Platforms tested**:
+4. **Platforms tested**:
 
 > * [ ] Windows
 > * [ ] Mac
