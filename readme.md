@@ -6,7 +6,7 @@
 
 [Yeoman](http://yeoman.io) generator for creating [Microsoft Office Add-in](https://docs.microsoft.com/en-us/office/dev/add-ins/) projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
 
-- use an editor other than Visual Studio
+- use an editor other than Visual Studio (we love Visual Studio Code)
 - are interested in using a technology other than plain HTML, CSS & JavaScript
 
 > If you are building an Angular or React add-in and would like to learn more about using Yo Office specifically for those frameworks, see [Build an Add-in with React](https://docs.microsoft.com/en-us/office/dev/add-ins/excel/excel-add-ins-get-started-react) or [Build an Add-in with Angular](https://docs.microsoft.com/en-us/office/dev/add-ins/excel/excel-add-ins-get-started-angular).
