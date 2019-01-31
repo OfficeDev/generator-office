@@ -5,6 +5,7 @@
 import * as _ from 'lodash';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
+import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import * as path from "path";
 import * as uuid from 'uuid/v4';
@@ -335,6 +336,7 @@ module.exports = yo.extend({
     this.log(`      Please refer to resource.html in your project for more information.`);
     this.log(`      Or visit our repo at: https://github.com/officeDev/generator-office \n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
+    this._openProjectFolder();
     this._exitProcess();
   },
 
@@ -391,7 +393,20 @@ _exitYoOfficeIfProjectFolderExists: function ()
       return false;
   },
 
-  _exitProcess: function () {
+  _openProjectFolder: function () {
+    try {
+      let cmdLine: string;
+      if (process.platform === "win32") {
+        cmdLine = `start cmd.exe /K "cd /d ${this._destinationRoot}"`
+      } else {
+        cmdLine = `open -a Terminal ${this._destinationRoot}`
+      }
+      this.log(`\nOpening project folder at ${chalk.bold.magenta(this._destinationRoot)} in new command prompt\n`);
+      childProcess.execSync(cmdLine);
+    } catch (err) { console.log(`Error trying to open project folder: ${err}`)}
+  },
+
+  _exitProcess: function () {    ;
     process.exit();
   }
 } as any);
