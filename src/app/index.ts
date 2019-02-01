@@ -330,13 +330,18 @@ module.exports = yo.extend({
     /* Next steps and npm commands */
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
-    this.log(`      1. Change directories to ${chalk.bold.magenta(this._destinationRoot)}.`);
-    this.log(`      2. Launch your local web server via ${chalk.inverse(' npm start ')} (you may also need to`);
-    this.log(`         trust the Self-Signed Certificate for the site if you haven't done that).`);
-    this.log(`      3. Sideload the add-in into your Office application via ${chalk.inverse(' npm run sideload')}.`);
-    this.log(`      4. To start editing with Visual Studio Code, run the following command:${chalk.inverse(' code . ')}`);
-    this.log(`         For more information, also visit http://code.visualstudio.com.\n`);
-    this.log(`      ${chalk.blue('Please refer to resource.html in your project for more information,')}`);
+    this.log(`      1. Go the directory where your project was created:\n`);
+    this.log(`         ${chalk.bold('cd ')} ${chalk.bold.magenta(this._destinationRoot)}.\n`);
+    this.log(`      2. Trust the Self-Signed Certificate for your local web server (if you haven't already done that).`);
+    this.log(`         For more information, visit https://github.com/OfficeDev/generator-office/blob/master/src/docs/ssl.md.\n`);
+    this.log(`      3. Start the local web server:\n`);
+    this.log(`         ${chalk.bold('npm start')}.\n`);
+    this.log(`      4. Sideload the add-in into your Office application:\n`);
+    this.log(`         ${chalk.bold('npm run sideload')}\n`);
+    this.log(`      5. Open the project in VS Code:\n`);
+    this.log(`         ${chalk.bold('code .')}.\n`);
+    this.log(`         For more information, visit http://code.visualstudio.com.\n`);
+    this.log(`      ${chalk.blue('Please refer to resource.html in your project for additional information,')}`);
     this.log(`      ${chalk.blue('or visit our repo at: https://github.com/officeDev/generator-office.')}\n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
