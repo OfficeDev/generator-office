@@ -331,15 +331,15 @@ module.exports = yo.extend({
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
     this.log(`      1. Go the directory where your project was created:\n`);
-    this.log(`         ${chalk.bold('cd ')} ${chalk.bold.magenta(this._destinationRoot)}.\n`);
+    this.log(`         ${chalk.bold('cd ' + this._destinationRoot)}\n`);
     this.log(`      2. Trust the Self-Signed Certificate for your local web server (if you haven't already done that).`);
     this.log(`         For more information, visit https://github.com/OfficeDev/generator-office/blob/master/src/docs/ssl.md.\n`);
     this.log(`      3. Start the local web server:\n`);
-    this.log(`         ${chalk.bold('npm start')}.\n`);
+    this.log(`         ${chalk.bold('npm start')}\n`);
     this.log(`      4. Sideload the add-in into your Office application:\n`);
     this.log(`         ${chalk.bold('npm run sideload')}\n`);
     this.log(`      5. Open the project in VS Code:\n`);
-    this.log(`         ${chalk.bold('code .')}.\n`);
+    this.log(`         ${chalk.bold('code .')}\n`);
     this.log(`         For more information, visit http://code.visualstudio.com.\n`);
     this.log(`      ${chalk.blue('Please refer to resource.html in your project for additional information,')}`);
     this.log(`      ${chalk.blue('or visit our repo at: https://github.com/officeDev/generator-office.')}\n`);
