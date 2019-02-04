@@ -341,8 +341,8 @@ module.exports = yo.extend({
     this.log(`      5. Open the project in VS Code:\n`);
     this.log(`         ${chalk.bold('code .')}\n`);
     this.log(`         For more information, visit http://code.visualstudio.com.\n`);
-    this.log(`      ${chalk.blue('Please refer to resource.html in your project for additional information,')}`);
-    this.log(`      ${chalk.blue('or visit our repo at: https://github.com/officeDev/generator-office.')}\n`);
+    this.log(`      Please refer to resource.html in your project for additional information,`);
+    this.log(`      or visit our repo at: https://github.com/officeDev/generator-office.\n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
   },
@@ -400,7 +400,7 @@ _exitYoOfficeIfProjectFolderExists: function ()
       return false;
   },
 
-  _exitProcess: function () {    ;
+  _exitProcess: function () {
     process.exit();
   }
 } as any);
