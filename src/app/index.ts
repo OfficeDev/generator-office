@@ -5,7 +5,6 @@
 import * as _ from 'lodash';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
-import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import * as path from "path";
 import * as uuid from 'uuid/v4';
