@@ -112,9 +112,6 @@ function _buildProject(projectFolder: string)
         let buildOutput = shell.exec('npm run build', {silent: true}).stdout;
         assert.equal(buildOutput.toLowerCase().indexOf(failure), -1, "Build output contained errors");
         shell.cd(__dirname);
-        
-        // do clean-up after test runs
-        helperMethods.deleteFolderRecursively(projectFolder);
     }
     else
     {
