@@ -6,23 +6,23 @@
     "scripts": {
         "clean": "rimraf dist && rimraf .awcache",
         "lint": "tslint --project tsconfig.json",
-        "start": "webpack-dev-server --inline --config config/webpack.dev.js --progress",
+        "start": "webpack-dev-server --inline --mode development --config config/webpack.dev.js --progress",
         "sideload": "office-toolbox sideload -m manifest.xml -a <%= hostInternalName %>",
-        "build": "npm run clean && webpack --config config/webpack.prod.js --colors --progress --bail",
+        "build": "npm run clean && webpack --mode production --config config/webpack.prod.js --colors --progress --bail",
         "validate": "office-toolbox validate -m manifest.xml"
     },
     "dependencies": {
         "@microsoft/office-js-helpers": "^1.0.2",
         "core-js": "^2.6.1",
-        "office-ui-fabric-react": "^5.134.0",
-        "react": "^16.7.0",
-        "react-dom": "^16.7.0"
+        "office-ui-fabric-react": "^6.138.1",
+        "react": "^16.8.1",
+        "react-dom": "^16.8.1"
     },
     "devDependencies": {
-        "@types/office-js": "0.0.140",
-        "@types/react": "^16.7.18",
-        "@types/react-dom": "^16.0.11",
-        "@types/react-hot-loader": "^3.0.6",
+        "@types/office-js": "0.0.155",
+        "@types/react": "^16.8.2",
+        "@types/react-dom": "^16.8.0",
+        "@types/react-hot-loader": "^4.1.0",
         "@types/webpack": "4.4.22",
         "@types/webpack-dev-server": "3.1.1",
         "autoprefixer": "6.7.7",
