@@ -1,12 +1,12 @@
 {
     "projectTypes": {
         "angular": {
-            "displayname": "Office Add-in project using Angular framework",
+            "displayname": "Office Add-in Taskpane project using Angular framework",
             "templates": {
                 "javascript": {
-                    "repository": ""},
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS"},
                 "typescript": {
-                    "repository": ""}
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular"}
                 }     
         },
         "excel-functions": {
@@ -20,13 +20,13 @@
                     "branch": "yo-office"}
                 }
         },
-        "jquery": {
-            "displayname": "Office Add-in project using Jquery framework",
+        "basic-taskpane": {
+            "displayname": "Basic Office Add-in Taskpane project",
             "templates": {
-                "typescript": {
-                    "repository": ""},
                 "javascript": {
-                    "repository": ""}
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS"},
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane"}
                 }
         },
         "manifest": {
@@ -37,34 +37,13 @@
                 }
         },
         "react": {
-            "displayname": "Office Add-in project using React framework",
+            "displayname": "Office Add-in Taskpane project using React framework",
             "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS"},
                 "typescript": {
-                    "repository": ""}
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React"}
                 }
             }
-        },
-        "hostTypes": {
-        "excel": {
-            "displayname": "Excel",
-            "repository": ""
-        },
-        "onenote": {
-            "displayname": "OneNote",
-            "repository": ""
-        },
-        "outlook": {
-            "displayname": "Outlook",
-            "repository": ""},
-        "powerpoint": {
-            "displayname": "PowerPoint",
-            "repository": ""
-        },
-        "project": {
-            "displayname": "Project",
-            "repository": ""},
-        "word": {
-            "displayname": "Word",
-            "repository": ""}
         }
  }

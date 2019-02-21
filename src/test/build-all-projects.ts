@@ -19,7 +19,6 @@ const typescript = 'typescript';
 const space = ' ';
 let parsedProjectJsonData = jsonData.getParsedProjectJsonData();
 let projectTemplates = jsonData.getProjectTemplateNames();
-let hostsTemplates = jsonData.getHostTemplateNames();
 
 describe('Setup test environment for Yo Office build tests', () => {
     it ('Install Yeoman Generator, install local instance of Yo Office and link', function(done){
@@ -31,61 +30,51 @@ describe('Setup test environment for Yo Office build tests', () => {
 describe('Install and build projects', () => {        
 });
 
-// Build Typescript project types for all supported hosts
-for (var i = 0; i < hostsTemplates.length; i++)
-{
-    let host = hostsTemplates[i].toLowerCase();
-    
-    for (var j = 0; j < projectTemplates.length; j++)
-    {        
-        let projectType = projectTemplates[j].toLowerCase();
+// Install and build all supported projects for typescript and javascript
+for (var j = 0; j < projectTemplates.length; j++)
+{        
+    let projectType = projectTemplates[j].toLowerCase();
 
-        // The excel-functions project is only relevant if the host is Excel
-        if (projectType == 'excel-functions' && host != 'excel'){
-            continue;
-        }
-
-        // If projectType is manifest, only install the project.  Building the project is not applicable
-        if (projectType == 'manifest')
+    // If projectType is manifest, only install the project.  Building the project is not applicable
+    if (projectType == 'manifest')
+    {
+        describe('Install ' + projectType, () => {
+            it(stringBuildSucceeds,function(done){
+                let projectName = projectType;
+                let projectFolder = path.join(__dirname, '/', projectName);
+                _installProject(projectType, projectName, projectFolder, undefined);
+                done();                    
+            });
+        });
+    }
+    else
+    {
+        if (parsedProjectJsonData.projectTypes[projectTemplates[j]].templates.typescript != undefined)
         {
-            describe('Install ' +  host + space + projectType, () => {
+            describe(stringBuildStart + space + projectType + space + typescript, () => {
                 it(stringBuildSucceeds,function(done){
-                    let projectName = projectType + host;
-                    let projectFolder = path.join(__dirname, '/', projectName);
-                    _installProject(projectType, projectName, host, projectFolder, undefined);
+                    _installBuildProject(projectType, typescript);
                     done();                    
                 });
             });
         }
-        else
+        if (parsedProjectJsonData.projectTypes[projectTemplates[j]].templates.javascript != undefined)
         {
-            if (parsedProjectJsonData.projectTypes[projectTemplates[j]].templates.typescript != undefined)
-            {
-                describe(stringBuildStart +  host + space + projectType + space + typescript, () => {
-                    it(stringBuildSucceeds,function(done){
-                        _installBuildProject(host, projectType, typescript);
-                        done();                    
-                    });
+            describe(stringBuildStart + space + projectType + space + javascript, () => {
+                it(stringBuildSucceeds,function(done){
+                    _installBuildProject(projectType, javascript);
+                    done();                    
                 });
-            }
-            if (parsedProjectJsonData.projectTypes[projectTemplates[j]].templates.javascript != undefined)
-            {
-                describe(stringBuildStart +  host + space + projectType + space + javascript, () => {
-                    it(stringBuildSucceeds,function(done){
-                        _installBuildProject(host, projectType, javascript);
-                        done();                    
-                    });
-                });
-            }
+            });
         }
     }
 }
 
-function _installBuildProject(host: string, projectType: string, scriptType: string)
+function _installBuildProject(projectType: string, scriptType: string)
 {
-    let projectName = projectType + host + scriptType;
+    let projectName = projectType + scriptType;
     let projectFolder = path.join(__dirname, '/', projectName);
-    _installProject(projectType, projectName, host, projectFolder, scriptType);
+    _installProject(projectType, projectName, projectFolder, scriptType);
     _buildProject(projectFolder);
 }
 
@@ -96,10 +85,10 @@ function _setupTestEnvironment()
     shell.exec('npm link', {silent: true});
 }
 
-function _installProject(projectType: string, projectName: string, host: string, projectFolder: string, scriptType: string)
+function _installProject(projectType: string, projectName: string, projectFolder: string, scriptType: string)
 {
     let language = scriptType == javascript ? js : ts;
-    let cmdLine = yoOffice + space + projectType + space + projectName + space + host + space + output + space + projectFolder + space + language;
+    let cmdLine = yoOffice + space + projectType + space + projectName + space + space + output + space + projectFolder + space + language;
     shell.exec(cmdLine, {silent: true});
 }
 

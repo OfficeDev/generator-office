@@ -10,27 +10,15 @@ export default class projectsJsonData{
         this.m_projectJsonData = JSON.parse(jsonData.toString());
     }
 
-    isValidInput(input: string, isHostParam: boolean)
+    isValidInput(input: string)
     {
-      if (isHostParam)
+      for (let key in this.m_projectJsonData.projectTypes)
       {
-        for (let key in this.m_projectJsonData.hostTypes)
-        {
-           if (_.toLower(input) == key){
-             return true;
-           }
-          }
-          return false;
+        if (_.toLower(input) == key){
+          return true;
         }
-        else{
-          for (let key in this.m_projectJsonData.projectTypes)
-          {
-            if (_.toLower(input) == key){
-              return true;
-            }
-          }
-          return false;
-        }
+      }
+      return false;        
     }
 
     getProjectDisplayName(projectType: string){
@@ -55,27 +43,6 @@ export default class projectsJsonData{
     projectBothScriptTypes (projectType: string)
     {
       return this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.javascript != undefined && this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.typescript != undefined;
-    }
-
-    getHostTemplateNames()
-    {
-      let hosts : string[] = [];
-      for (let key in this.m_projectJsonData.hostTypes)
-      {
-        hosts.push(this.m_projectJsonData.hostTypes[key].displayname);
-      }
-      return hosts;
-    }
-
-    getHostDisplayName(hostKey: string)
-    {
-      for (let key in this.m_projectJsonData.hostTypes)
-      {
-        if (_.toLower(hostKey) == key){
-          return this.m_projectJsonData.hostTypes[key].displayname;
-        }
-      }
-      return undefined;
     }
 
     getProjectTemplateRepository(projectTypeKey: string, scriptType: string)
