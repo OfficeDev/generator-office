@@ -40,7 +40,6 @@ describe('manifest project - answers', () => {
   let answers = {
     projectType: manifestProject,
     name: projectDisplayName,
-    host: 'Excel',
   };
 
 	/** Test addin when user chooses jquery and typescript. */
@@ -66,7 +65,6 @@ describe('manifest project - answers & args - jquery & typescript', () => {
   let projectEscapedName = 'my-office-add-in';
   let answers = {
     name: projectEscapedName,
-    host: 'Excel',
   };
   let argument = [];
 
@@ -95,7 +93,6 @@ describe('manifest project - answers & args - jquery & typescript', () => {
     before((done) => {
       let answers = {
         name: projectEscapedName,
-        host: 'Excel'
       };
       argument[0] = manifestProject;
       argument[1] = projectEscapedName;
