@@ -1,5 +1,14 @@
 {
     "projectTypes": {
+        "basic-taskpane": {
+            "displayname": "Basic Office Add-in Taskpane project",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS"},
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane"}
+                }
+        },
         "angular": {
             "displayname": "Office Add-in Taskpane project using Angular framework",
             "templates": {
@@ -8,6 +17,16 @@
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular"}
                 }     
+        },
+        "react": {
+            "displayname": "Office Add-in Taskpane project using React framework",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS"},
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React"}
+                }
+            }
         },
         "excel-functions": {
             "displayname": "Excel Custom Functions Add-in project (Requires the Insider channel for Excel)",
@@ -20,30 +39,11 @@
                     "branch": "yo-office"}
                 }
         },
-        "basic-taskpane": {
-            "displayname": "Basic Office Add-in Taskpane project",
-            "templates": {
-                "javascript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS"},
-                "typescript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane"}
-                }
-        },
         "manifest": {
-            "displayname": "Office Add-in containing the manifest only",
+            "displayname": "Office Add-in project containing the manifest only",
             "templates": {
                 "manifestonly": {
                     "repository": ""}
                 }
-        },
-        "react": {
-            "displayname": "Office Add-in Taskpane project using React framework",
-            "templates": {
-                "javascript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS"},
-                "typescript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React"}
-                }
-            }
         }
  }

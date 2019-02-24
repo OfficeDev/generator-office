@@ -57,11 +57,6 @@ Title of the project - this is the display name that is written the manifest.xml
  
 >**Note:** The Windows command prompt requires this argument to be in quotes (e.g. "My Office Add-in")
 
-#### `host`
-The Microsoft Office client application that can host the add-in. The supported arguments include Excel (`excel`), OneNote (`onenote`), Outlook (`outlook`), PowerPoint (`powerpoint`), Project (`project`), and Word (`word`).
-  - Type: String
-  - Optional
-
 ### Command Line Options
 The following command line options are supported. If these are not specified, the generator will prompt you for the values before scaffolding the project.  The options should be specified after the projectType, name and host arguments.
 
