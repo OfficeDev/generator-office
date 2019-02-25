@@ -58,7 +58,7 @@ Title of the project - this is the display name that is written the manifest.xml
 >**Note:** The Windows command prompt requires this argument to be in quotes (e.g. "My Office Add-in")
 
 ### Command Line Options
-The following command line options are supported. If these are not specified, the generator will prompt you for the values before scaffolding the project.  The options should be specified after the projectType, name and host arguments.
+The following command line options are supported. If these are not specified, the generator will prompt you for the values before scaffolding the project.  The options should be specified after the projectType and name arguments.
 
 Specifying `--output` tells the generator to create the project in a specific location.  If the output parameter is not specified, the project will be created in the current directory. If the output option specifies a non-empty folder,
 the generator will inform you so you don't accidentally overwrite existing files.
