@@ -1,7 +1,7 @@
 {
     "projectTypes": {
         "basic-taskpane": {
-            "displayname": "Basic Office Add-in Taskpane project",
+            "displayname": "Office Add-in Taskpane project",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS"},
@@ -26,7 +26,13 @@
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React"}
                 }
-            }
+        },
+        "manifest": {
+            "displayname": "Office Add-in project containing the manifest only",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""}
+                }
         },
         "excel-functions": {
             "displayname": "Excel Custom Functions Add-in project (Requires the Insider channel for Excel)",
@@ -38,12 +44,6 @@
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
                     "branch": "yo-office"}
                 }
-        },
-        "manifest": {
-            "displayname": "Office Add-in project containing the manifest only",
-            "templates": {
-                "manifestonly": {
-                    "repository": ""}
-                }
         }
+    }
  }

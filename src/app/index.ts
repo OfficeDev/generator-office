@@ -93,7 +93,6 @@ module.exports = yo.extend({
           name: 'projectType',
           message: 'Choose a project type:',
           type: 'list',
-          default: 'React',
           choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayName(template), value: template })),
           when: this.options.projectType == null || !jsonData.isValidInput(this.options.projectType)
         }
@@ -235,6 +234,7 @@ module.exports = yo.extend({
         let language = this.project.scriptType === typescript ? 'ts' : 'js';
         let jsonData = new projectsJsonData(this.templatePath());
         let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language);
+        const templateFills = Object.assign({}, this.project);
 
         this._projectCreationMessage();
 
@@ -255,7 +255,7 @@ module.exports = yo.extend({
         }
         else
         {
-          this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath());
+          this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
           return resolve();
         }
       }
