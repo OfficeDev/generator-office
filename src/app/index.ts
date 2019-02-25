@@ -303,7 +303,7 @@ module.exports = yo.extend({
     else
       {
         this.log('\n----------------------------------------------------------------------------------\n');
-        this.log(`      Creating Office Taskpane Addin using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
+        this.log(`      Creating Office Taskpane Addin using ${chalk.bold.yellow(this.project.scriptType)} framework and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
         this.log('----------------------------------------------------------------------------------');
       }
   },
