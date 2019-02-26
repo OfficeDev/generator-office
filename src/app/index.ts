@@ -85,6 +85,7 @@ module.exports = yo.extend({
       let jsonData = new projectsJsonData(this.templatePath());
       let isManifestProject = false;
       let isExcelFunctionsProject = false;
+      let scriptType = undefined;
 
       /* askForProjectType will only be triggered if no project type was specified via command line projectType argument,
        * and the projectType argument input was indeed valid */
@@ -304,12 +305,11 @@ module.exports = yo.extend({
       }
     else
       {
-        this.log('\n----------------------------------------------------------------------------------\n');
-        this.log(`      Creating Office Task Pane Addin using ${chalk.bold.yellow(this.project.projectType)} framework and ${chalk.bold.green(_.capitalize(this.project.scriptType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
-        this.log('----------------------------------------------------------------------------------');
+      this.log('\n----------------------------------------------------------------------------------\n');
+      this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} Add-in using ${chalk.bold.yellow(this.project["scriptType"].scriptType)} and the ${chalk.bold.green(_.capitalize(this.project.projectType))} project template at ${chalk.bold.magenta(this._destinationRoot)}\n`);
+      this.log('----------------------------------------------------------------------------------');
       }
   },
-
   _detailedHelp: function () {
     this.log(`\nYo Office ${chalk.bgGreen('Arguments')} and ${chalk.bgMagenta('Options.')}\n`);
     this.log(`NOTE: ${chalk.bgGreen('Arguments')} must be specified in the order below, and ${chalk.bgMagenta('Options')} must follow ${chalk.bgGreen('Arguments')}.\n`);

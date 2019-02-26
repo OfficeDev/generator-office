@@ -56,7 +56,6 @@ describe('answers: manifest project and project name', () => {
 describe('arguments: manifest project and project name', () => {
   describe('manifest project', () => {
     let argument = [];
-    let answers = { };
     argument[0] = manifestProject;
     argument[1] = projectEscapedName;
     before((done) => {
