@@ -1,6 +1,6 @@
 {
     "projectTypes": {
-        "basic-taskpane": {
+        "taskpane": {
             "displayname": "Office Add-in Taskpane project",
             "templates": {
                 "javascript": {
@@ -9,7 +9,7 @@
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane"}
                 }
         },
-        "angular": {
+        "angular-taskpane": {
             "displayname": "Office Add-in Taskpane project using Angular framework",
             "templates": {
                 "javascript": {
@@ -18,7 +18,7 @@
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular"}
                 }     
         },
-        "react": {
+        "react-taskpane": {
             "displayname": "Office Add-in Taskpane project using React framework",
             "templates": {
                 "javascript": {

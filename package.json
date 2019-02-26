@@ -58,7 +58,6 @@
     "concurrently": "^3.4.0",
     "cpx": "^1.5.0",
     "mocha": "^5.2.0",
-    "office-addin-manifest": "^1.2.4",
     "ts-node": "^3.0.2",
     "typescript": "^2.8.3",
     "yeoman-assert": "^3.1.1",

@@ -6,20 +6,21 @@ import * as _ from 'lodash';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as fs from 'fs';
+import { helperMethods } from './helpers/helperMethods';
+import { modifyManifestFile } from 'office-addin-manifest';
 import * as path from "path";
+import projectsJsonData from './config/projectsJsonData';
 import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
-import projectsJsonData from './config/projectsJsonData';
-import { helperMethods } from './helpers/helperMethods';
-import { modifyManifestFile } from 'office-addin-manifest';
 
-let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
-let git = require("simple-git");
+const insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
+const git = require("simple-git");
 const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
 const typescript = `Typescript`;
 const javascript = `Javascript`;
+let scriptTypeCommandOption = undefined;
 
 /* Remove unwanted tags */
 delete insight.context.tags['ai.cloud.roleInstance'];
@@ -130,8 +131,15 @@ module.exports = yo.extend({
         answerForScriptType = await this.prompt(askForScriptType);
       }
 
+      // Set scriptTypeCommandOpion if it was provided as command line argument
+      if (this.options.js) {
+        scriptTypeCommandOption = javascript;
+      }
+      if (this.options.ts) {
+        scriptTypeCommandOption = typescript;
+      }
+
       /* askforName will be triggered if no project name was specified via command line Name argument */
-      let startForName = (new Date()).getTime();
       let askForName = [{
         name: 'name',
         type: 'input',
@@ -140,8 +148,6 @@ module.exports = yo.extend({
         when: this.options.name == null
       }];
       let answerForName = await this.prompt(askForName);
-      let endForName = (new Date()).getTime();
-      let durationForName = (endForName - startForName) / 1000;
 
       /* Configure project properties based on user input or answers to prompts */
       this._configureProject(answerForProjectType, answerForScriptType, answerForName, isManifestProject, isExcelFunctionsProject);
@@ -200,12 +206,8 @@ module.exports = yo.extend({
         projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
-        scriptType: (answerForScriptType !== undefined) ? answerForScriptType.scriptType : undefined
+        scriptType: answerForScriptType || scriptTypeCommandOption
       };
-
-      if (this.options.ts || this.project.projectType === 'react') {
-        this.project.scriptType = typescript; }
-
       /* Set folder if to output param  if specified */
       if (this.options.output != null) {
         this.project.folder = this.options.output; }
@@ -303,7 +305,7 @@ module.exports = yo.extend({
     else
       {
         this.log('\n----------------------------------------------------------------------------------\n');
-        this.log(`      Creating Office Taskpane Addin using ${chalk.bold.yellow(this.project.scriptType)} framework and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
+        this.log(`      Creating Office Task Pane Addin using ${chalk.bold.yellow(this.project.projectType)} framework and ${chalk.bold.green(_.capitalize(this.project.scriptType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
         this.log('----------------------------------------------------------------------------------');
       }
   },
@@ -312,11 +314,11 @@ module.exports = yo.extend({
     this.log(`\nYo Office ${chalk.bgGreen('Arguments')} and ${chalk.bgMagenta('Options.')}\n`);
     this.log(`NOTE: ${chalk.bgGreen('Arguments')} must be specified in the order below, and ${chalk.bgMagenta('Options')} must follow ${chalk.bgGreen('Arguments')}.\n`);
     this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create. Valid project types include:`);
-    this.log(`    ${chalk.yellow('angular:')}  Creates an Office add-in using Angular framework.`);
+    this.log(`    ${chalk.yellow('angular:')}  Creates an Office Add-in Task Pane project using Angular framework.`);
     this.log(`    ${chalk.yellow('excel-functions:')} Creates an Office add-in for Excel custom functions.`);
-    this.log(`    ${chalk.yellow('jquery:')} Creates an Office add-in using Jquery framework.`);
+    this.log(`    ${chalk.yellow('taskpane:')} Creates an Office Add-in Task Pane project .`);
     this.log(`    ${chalk.yellow('manifest:')} Creates an only the manifest file for an Office add-in.`);
-    this.log(`    ${chalk.yellow('react:')} Creates an Office add-in using React framework.\n`);
+    this.log(`    ${chalk.yellow('react:')} Creates an Office Add-in Task Pane project using React framework.\n`);
     this.log(`  ${chalk.bgGreen('name')}:Specifies the name for the project that will be created.\n`);
     this.log(`  ${chalk.bgMagenta('--output')}:Specifies the location in the file system where the project will be created.`);
     this.log(`    ${chalk.yellow('If the option is not specified, the project will be created in the current folder')}\n`);

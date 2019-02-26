@@ -55,9 +55,10 @@ describe('answers: manifest project and project name', () => {
 // Test generation of manifest project when user passes in manifest project and project name as arguments 
 describe('arguments: manifest project and project name', () => {
   describe('manifest project', () => {
-      let argument = [];
-  argument[0] = manifestProject;
-  argument[1] = projectEscapedName;
+    let argument = [];
+    let answers = { };
+    argument[0] = manifestProject;
+    argument[1] = projectEscapedName;
     before((done) => {
       helpers.run(path.join(__dirname, '../app')).withArguments(argument).on('end', done);
     });

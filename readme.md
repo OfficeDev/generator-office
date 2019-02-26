@@ -46,7 +46,7 @@ $ yo office [arguments] [options]
 The following command line arguments are supported. If using the command line arguments, you must use them in the order cited below, or the generator will prompt you for the values.
 
 #### `projectType`
-Framework to use for the project. The supported project types include JQuery (`jquery`), Angular (`angular`), React (`react`) and Excel Custom Functions (`excel-functions`). You can also use Manifest Only (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
+Framework to use for the project. The supported project types include Task Pane (`taskpane`), Angular Task Pane (`angular`), React Task Pane (`react`) and Excel Custom Functions (`excel-functions`). You can also use Manifest Only (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
   - Type: String
   - Optional
 
@@ -72,13 +72,13 @@ Specifying `--js` tells the generator to use JavaScript.
   - Default: False
   - Optional
 
-  Specifying `--ts` tells the generator to use TypeScript.
+Specifying `--ts` tells the generator to use TypeScript.
 
   - Type: Boolean
   - Default: False
   - Optional
 
-    Specifying `--details` tells the generator to provide detailed help, including all the accepted values for each project type and host,
+Specifying `--details` tells the generator to provide detailed help, including all the accepted values for each project type and host,
 
   - Type: Boolean
   - Default: False
@@ -91,8 +91,6 @@ After scaffolding the project, the generator (and all sub generators) run all pa
   - Type: Boolean
   - Default: False
   - Optional
-
->**Note:** Do not use this flag when you pass `react` as framework argument.
 
 ## Running the Generated Site
 
