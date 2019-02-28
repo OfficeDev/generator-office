@@ -76,14 +76,15 @@ Specifying `--js` tells the generator to use JavaScript.
   - Type: Boolean
   - Default: False
   - Optional
+  - Currently not working in conjunction with `React` framework. 
 
-  Specifying `--ts` tells the generator to use TypeScript.
+Specifying `--ts` tells the generator to use TypeScript.
 
   - Type: Boolean
   - Default: False
   - Optional
 
-    Specifying `--details` tells the generator to provide detailed help, including all the accepted values for each project type and host,
+Specifying `--details` tells the generator to provide detailed help, including all the accepted values for each project type and host,
 
   - Type: Boolean
   - Default: False
