@@ -12,43 +12,23 @@ To fix this, you need to configure your developer workstation to trust the self-
 
 ## Table of Contents
 
-* [OS X](#os-x)
-  * [Get certificate in Chrome](#get-certificate-in-chrome)
-  * [Get certificate file from project directory](#get-certificate-file-from-project-directory)
-  * [Add certification file to Key Chain Access](#add-certification-file-to-key-chain-access)
+* [macOS](#macOS)
 * [Windows](#windows)
 
-## [OS X](https://support.apple.com/kb/PH18677)
+## macOS
 
-#### Get certificate in Chrome
-
-1. Start Chrome and do the following:
-   1. Open Developer Tools window by using keyboard shortcuts: Cmd + Opt + I.
-   1. Click to go to 'security' panel and 'overview' screen.
-	 1. Click 'View certificate'. 
-
-   ![](assets/ssl-chrome-devtool.png)
-
-1. Click and drag the image to your desktop. It looks like a little certificate.
-![](assets/ssl-chrome-getcert.png)
-
-#### Get certificate file from project directory
-
-You can locate the server.crt file at **~/your_yo_office_project/certs/server.crt**
-
-#### Add certification file to Key Chain Access
-
-1. Open the **Keychain Access** utility in OS X.
-   1. Select the **System** option on the left.
-   1. Click the lock icon in the upper-left corner to enable changes.
-   ![](assets/ssl-keychain-01.png)
-
-   1. Click the plus button at the bottom and select the **localhost.cer** file you copied to the desktop.
-   1. In the dialog that comes up, click **Always Trust**.
-   1. After **localhost** gets added to the **System** keychain, double-click it to open it again.
-   1. Expand the **Trust** section and for the first option, pick **Always Trust**.
-
-  ![](assets/ssl-keychain-02.png)
+1. In Chrome, open the [Settings](chrome://settings) window.
+2. Expand the **Advanced** section and choose **Manage certficiates**.
+    
+    The **Keychain Access** utility will open.
+    
+3. Double-click the **localhost-ca** certificate.
+4. In the **Trust** section, set the following value
+    
+    **When using this certificate**: **Always Trust**
+    
+5. Close the dialog.
+6. You'll be prompted for your credentials and will need to enter them to enable the certificate
   
 At this point everything has been configured. Quit all browsers, then reopen and try to navigate to the local HTTPS site. The browser should report it as a valid certificate:
 
