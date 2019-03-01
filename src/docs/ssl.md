@@ -17,19 +17,19 @@ To fix this, you need to configure your developer workstation to trust the self-
 
 ## macOS
 
-1. In Chrome, open the [Settings](chrome://settings) window.
-2. Expand the **Advanced** section and choose **Manage certficiates**.
-    
-    The **Keychain Access** utility will open.
-    
-3. Double-click the **localhost-ca** certificate.
-4. In the **Trust** section, set the following value
+1. In **Finder**, open the **certs** folder in the root folder of your project.
+2. Double-click the **ca.crt** file.
+3. In the **Add Certificates** dialog box, choose **Add**. 
+4. You'll be prompted for your credentials. Enter your credentials and choose **Modify Keychain**.
+5. Open the **Keychain Access** utility.
+6. Select the **Certificates** category, and double-click the **localhost-ca** certificate.
+7. In the **Trust** section, set the following value
     
     **When using this certificate**: **Always Trust**
     
-5. Close the dialog.
-6. You'll be prompted for your credentials and will need to enter them to enable the certificate
-  
+8. Close the dialog.
+9. You'll be prompted for your credentials and will need to enter them to enable the certificate
+   
 At this point everything has been configured. Quit all browsers, then reopen and try to navigate to the local HTTPS site. The browser should report it as a valid certificate:
 
   ![](assets/ssl-chrome-good.png)
