@@ -283,7 +283,7 @@ module.exports = yo.extend({
       this.log(`      2. Trust the Self-Signed Certificate for your local web server (if you haven't already done that).`);
       this.log(`         For more information, visit https://github.com/OfficeDev/generator-office/blob/master/src/docs/ssl.md.\n`);
       this.log(`      3. Start the local web server:\n`);
-      this.log(`         ${chalk.bold('npm start')}\n`);
+      this.log(`         ${chalk.bold('npm run dev-server')}\n`);
       this.log(`      4. Sideload the add-in into your Office application:\n`);
       this.log(`         ${chalk.bold('npm run sideload')}\n`);
       this.log(`      5. Open the project in VS Code:\n`);
