@@ -1,3 +1,15 @@
+---
+topic: sample
+products:
+- Office 365
+languages:
+- HTML
+extensions:
+  contentType: tools
+  technologies:
+  - Add-ins
+  createdDate: 8/21/2015 1:12:15 PM
+---
 # Microsoft Office Add-in Project Generator - YO OFFICE!
 
 [![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office)
