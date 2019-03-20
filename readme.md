@@ -46,7 +46,7 @@ $ yo office [arguments] [options]
 The following command line arguments are supported. If using the command line arguments, you must use them in the order cited below, or the generator will prompt you for the values.
 
 #### `projectType`
-Framework to use for the project. The supported project types include JQuery (`jquery`), Angular (`angular`), React (`react`) and Excel Custom Functions (`excel-functions`). You can also use Manifest Only (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
+Framework to use for the project. The supported project types include Task Pane (`taskpane`), Angular Task Pane (`angular`), React Task Pane (`react`) and Excel Custom Functions (`excel-functions`). You can also use Manifest Only (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
   - Type: String
   - Optional
 
@@ -57,13 +57,8 @@ Title of the project - this is the display name that is written the manifest.xml
  
 >**Note:** The Windows command prompt requires this argument to be in quotes (e.g. "My Office Add-in")
 
-#### `host`
-The Microsoft Office client application that can host the add-in. The supported arguments include Excel (`excel`), OneNote (`onenote`), Outlook (`outlook`), PowerPoint (`powerpoint`), Project (`project`), and Word (`word`).
-  - Type: String
-  - Optional
-
 ### Command Line Options
-The following command line options are supported. If these are not specified, the generator will prompt you for the values before scaffolding the project.  The options should be specified after the projectType, name and host arguments.
+The following command line options are supported. If these are not specified, the generator will prompt you for the values before scaffolding the project.  The options should be specified after the projectType and name arguments.
 
 Specifying `--output` tells the generator to create the project in a specific location.  If the output parameter is not specified, the project will be created in the current directory. If the output option specifies a non-empty folder,
 the generator will inform you so you don't accidentally overwrite existing files.
@@ -77,13 +72,13 @@ Specifying `--js` tells the generator to use JavaScript.
   - Default: False
   - Optional
 
-  Specifying `--ts` tells the generator to use TypeScript.
+Specifying `--ts` tells the generator to use TypeScript.
 
   - Type: Boolean
   - Default: False
   - Optional
 
-    Specifying `--details` tells the generator to provide detailed help, including all the accepted values for each project type and host,
+Specifying `--details` tells the generator to provide detailed help, including all the accepted values for each project type and host,
 
   - Type: Boolean
   - Default: False
@@ -96,8 +91,6 @@ After scaffolding the project, the generator (and all sub generators) run all pa
   - Type: Boolean
   - Default: False
   - Optional
-
->**Note:** Do not use this flag when you pass `react` as framework argument.
 
 ## Running the Generated Site
 

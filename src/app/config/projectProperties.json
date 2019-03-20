@@ -1,70 +1,58 @@
 {
     "projectTypes": {
-        "angular": {
-            "displayname": "Office Add-in project using Angular framework",
+        "taskpane": {
+            "displayname": "Office Add-in Task Pane project",
             "templates": {
                 "javascript": {
-                    "repository": ""},
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS"
+                },
                 "typescript": {
-                    "repository": ""}
-                }     
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane"
+                }
+            }
+        },
+        "angular-taskpane": {
+            "displayname": "Office Add-in Task Pane project using Angular framework",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS"
+                },
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular"
+                }
+            }
+        },
+        "react-taskpane": {
+            "displayname": "Office Add-in Task Pane project using React framework",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS"
+                },
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React"
+                }
+            }
+        },
+        "manifest": {
+            "displayname": "Office Add-in project containing the manifest only",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            }
         },
         "excel-functions": {
             "displayname": "Excel Custom Functions Add-in project (Requires the Insider channel for Excel)",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
-                    "branch": "yo-office"},
+                    "branch": "yo-office"
+                },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branch": "yo-office"}
-                }
-        },
-        "jquery": {
-            "displayname": "Office Add-in project using Jquery framework",
-            "templates": {
-                "typescript": {
-                    "repository": ""},
-                "javascript": {
-                    "repository": ""}
-                }
-        },
-        "manifest": {
-            "displayname": "Office Add-in containing the manifest only",
-            "templates": {
-                "manifestonly": {
-                    "repository": ""}
-                }
-        },
-        "react": {
-            "displayname": "Office Add-in project using React framework",
-            "templates": {
-                "typescript": {
-                    "repository": ""}
+                    "branch": "yo-office"
                 }
             }
-        },
-        "hostTypes": {
-        "excel": {
-            "displayname": "Excel",
-            "repository": ""
-        },
-        "onenote": {
-            "displayname": "OneNote",
-            "repository": ""
-        },
-        "outlook": {
-            "displayname": "Outlook",
-            "repository": ""},
-        "powerpoint": {
-            "displayname": "PowerPoint",
-            "repository": ""
-        },
-        "project": {
-            "displayname": "Project",
-            "repository": ""},
-        "word": {
-            "displayname": "Word",
-            "repository": ""}
         }
- }
+    }
+}
