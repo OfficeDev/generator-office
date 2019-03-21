@@ -21,6 +21,7 @@ const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
 const typescript = `Typescript`;
 const javascript = `Javascript`;
+let language = undefined;
 
 /* Remove unwanted tags */
 delete insight.context.tags['ai.cloud.roleInstance'];
@@ -265,64 +266,46 @@ module.exports = yo.extend({
   {
     return new Promise((resolve, reject) => {
       try {
-        let language = this.project.scriptType === typescript ? 'ts' : 'js';
-        const starterCode = generateStarterCode(this.project.host);
-        const templateFills = Object.assign({}, this.project, starterCode);
+        language = this.project.scriptType === typescript ? 'ts' : 'js';
         let jsonData = new projectsJsonData(this.templatePath());
         let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language);
+        const templateFills = Object.assign({}, this.project);
 
         this._projectCreationMessage();
 
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
-        if (projectRepoBranchInfo.repo)
-        {
+        if (projectRepoBranchInfo.repo) {
           git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', projectRepoBranchInfo.branch || 'master'], async (err) => {
+            // move host files (manifest and source to appropriate directories)
+            await this._moveHostFiles();
+
             // modify manifest guid and DisplayName
             await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
-            
+
             // delete the .git folder after cloning over repo
             const gitFolder = path.join(this.destinationPath(), '.git');
-            if (fs.existsSync(gitFolder)){
+            if (fs.existsSync(gitFolder)) {
               helperMethods.deleteFolderRecursively(gitFolder);
             }
+
+            //delete the hosts folder
+            const hostsFolder = path.join(this.destinationPath(), '/hosts');
+            if (fs.existsSync(hostsFolder)) {
+              helperMethods.deleteFolderRecursively(hostsFolder);
+            }
+
             return err ? reject(err) : resolve();
           });
         }
-        else
-        {
-          /* Copy the manifest */
-          this.fs.copyTpl(this.templatePath(`hosts/${_.toLower(this.project.hostInternalName)}/manifest.xml`), this.destinationPath('manifest.xml'), templateFills);
-
-          if (this.project.isManifestOnly) {
-            this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
-          }
-          else {
-                /* Copy the base template */
-                this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
-
-                /* Copy the project type specific overrides */
-                this.fs.copyTpl(this.templatePath(`${language}/${_.toLower(this.project.projectType)}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
-
-                /* Manually copy any dot files as yoeman can't handle them */
-                /* .babelrc */
-                const babelrcPath = this.templatePath(`${language}/${_.toLower(this.project.projectType)}/babelrc.placeholder`);
-                if (this.fs.exists(babelrcPath)) {
-                  this.fs.copy(babelrcPath, this.destinationPath('.babelrc'));
-                }
-
-                /* Copy .gitignore */
-                const gitignorePath = this.templatePath(`${language}/base/gitignore.placeholder`);
-                if (this.fs.exists(gitignorePath)) {
-                this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
-                }
-          }
+        else {
+          this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
           return resolve();
         }
       }
       catch (err) {
-          insight.trackException(new Error('File Copy Error: ' + err));
-          return reject(err);
-        }
+        insight.trackException(new Error('File Copy Error: ' + err));
+        return reject(err);
+      }
     });
   },
   _postInstallHints: function () {
@@ -388,6 +371,34 @@ module.exports = yo.extend({
     this.log(`    ${chalk.yellow('If the option is not specified, Yo Office will prompt for TypeScript or JavaScript')}\n`);
     this._exitProcess();
   },
+
+_moveHostFiles: async function() {
+  return new Promise((resolve, reject) => {
+    const hostFiles = [
+      `manifest.xml`,
+      `src/ribbon/ribbon.html`,
+      `src/ribbon/ribbon.${language}`,
+      `src/taskpane/taskpane.css`,
+      `src/taskpane/taskpane.html`,
+      `src/taskpane/taskpane.${language}`,
+    ];
+
+    for (let i = 0; i < hostFiles.length; i++)    
+    {
+      fs.readFile(`${this.destinationPath()}/hosts/${_.toLower(this.project.host)}/${hostFiles[i]}`, 'utf8', (err, data) => {
+        if (err) {
+          reject(err);
+        }
+        fs.writeFile(`${this.destinationPath()}/${hostFiles[i]}`, data, function (err) {
+          if (err) {
+            reject(err);
+          }
+        });
+      });
+    }
+    resolve();
+  });
+},
 
 _exitYoOfficeIfProjectFolderExists: function ()
   {

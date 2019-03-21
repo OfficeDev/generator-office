@@ -1,50 +1,67 @@
 {
     "projectTypes": {
-        "angular": {
-            "displayname": "Office Add-in project using Angular framework",
+        "taskpane": {
+            "displayname": "Office Add-in Task Pane project",
             "templates": {
                 "javascript": {
-                    "repository": ""},
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS",
+                    "branch": "yo-office"
+                },
                 "typescript": {
-                    "repository": ""}
-                }     
+                    "repository": "https://github.com/TCourtneyOwen/Office-Addin-TaskPane",
+                    "branch": "add-host-templates"
+                }
+            }
+        },
+        "angular-taskpane": {
+            "displayname": "Office Add-in Task Pane project using Angular framework",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS",
+                    "branch": "yo-office"
+                },
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular",
+                    "branch": "yo-office"
+                }
+            }
+        },
+        "react-taskpane": {
+            "displayname": "Office Add-in Task Pane project using React framework",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS",
+                    "branch": "yo-office"
+                },
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React",
+                    "branch": "yo-office"
+                }
+            }
+        },
+        "manifest": {
+            "displayname": "Office Add-in project containing the manifest only",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            }
         },
         "excel-functions": {
             "displayname": "Excel Custom Functions Add-in project (Requires the Insider channel for Excel)",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
-                    "branch": "yo-office"},
+                    "branch": "yo-office"
+                },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branch": "yo-office"}
-                }
-        },
-        "jquery": {
-            "displayname": "Office Add-in project using Jquery framework",
-            "templates": {
-                "typescript": {
-                    "repository": ""},
-                "javascript": {
-                    "repository": ""}
-                }
-        },
-        "manifest": {
-            "displayname": "Office Add-in containing the manifest only",
-            "templates": {
-                "manifestonly": {
-                    "repository": ""}
-                }
-        },
-        "react": {
-            "displayname": "Office Add-in project using React framework",
-            "templates": {
-                "typescript": {
-                    "repository": ""}
+                    "branch": "yo-office"
                 }
             }
-        },
-        "hostTypes": {
+        }
+    },
+    "hostTypes": {
         "excel": {
             "displayname": "Excel",
             "repository": ""
@@ -55,16 +72,19 @@
         },
         "outlook": {
             "displayname": "Outlook",
-            "repository": ""},
+            "repository": ""
+        },
         "powerpoint": {
             "displayname": "PowerPoint",
             "repository": ""
         },
         "project": {
             "displayname": "Project",
-            "repository": ""},
+            "repository": ""
+        },
         "word": {
             "displayname": "Word",
-            "repository": ""}
+            "repository": ""
         }
- }
+    }    
+}
