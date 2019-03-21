@@ -207,7 +207,7 @@ module.exports = yo.extend({
         projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
-        scriptType: answerForScriptType || scriptTypeCommandOption
+        scriptType: answerForScriptType.scriptType || scriptTypeCommandOption
       };
       /* Set folder if to output param  if specified */
       if (this.options.output != null) {

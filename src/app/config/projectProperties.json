@@ -4,10 +4,12 @@
             "displayname": "Office Add-in Task Pane project",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS"
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS",
+                    "branch": "yo-office"
                 },
                 "typescript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane"
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
+                    "branch": "yo-office"
                 }
             }
         },
@@ -15,10 +17,12 @@
             "displayname": "Office Add-in Task Pane project using Angular framework",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS"
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS",
+                    "branch": "yo-office"
                 },
                 "typescript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular"
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular",
+                    "branch": "yo-office"
                 }
             }
         },
@@ -26,10 +30,12 @@
             "displayname": "Office Add-in Task Pane project using React framework",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS"
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS",
+                    "branch": "yo-office"
                 },
                 "typescript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React"
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React",
+                    "branch": "yo-office"
                 }
             }
         },

@@ -1,5 +1,5 @@
 {
-  "name": "office-addin-manifest",
+  "name": "<%= projectInternalName %>",
   "description": "",
   "author": "",
   "version": "0.1.0",
