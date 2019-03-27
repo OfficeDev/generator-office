@@ -14,7 +14,7 @@
     "dependencies": {
         "@microsoft/office-js-helpers": "^1.0.2",
         "core-js": "^2.6.1",
-        "office-ui-fabric-react": "^6.138.1",
+        "office-ui-fabric-react": "^6.161.0",
         "react": "^16.8.1",
         "react-dom": "^16.8.1"
     },
