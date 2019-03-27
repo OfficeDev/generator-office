@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import { initializeIcons } from '@uifabric/icons';
 
 import App from './components/App';
 
