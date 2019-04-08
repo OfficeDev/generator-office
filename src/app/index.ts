@@ -276,8 +276,7 @@ module.exports = yo.extend({
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo) {
           git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', projectRepoBranchInfo.branch || 'master'], async (err) => {
-            // move host files (manifest and source to appropriate directories)
-            await this._moveHostFiles();
+            await helperMethods.cleanupProjectFolder(this.destinationPath(), _.toLower(this.project.hostInternalName), language == 'ts');
 
             // modify manifest guid and DisplayName
             await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
@@ -288,16 +287,12 @@ module.exports = yo.extend({
               helperMethods.deleteFolderRecursively(gitFolder);
             }
 
-            //delete the hosts folder
-            const hostsFolder = path.join(this.destinationPath(), '/hosts');
-            if (fs.existsSync(hostsFolder)) {
-              helperMethods.deleteFolderRecursively(hostsFolder);
-            }
-
             return err ? reject(err) : resolve();
           });
         }
         else {
+          // Manifest-only project
+          this.fs.copyTpl(this.templatePath(`hosts/${_.toLower(this.project.hostInternalName)}/manifest.xml`), this.destinationPath('manifest.xml'), templateFills);
           this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
           return resolve();
         }
@@ -371,34 +366,6 @@ module.exports = yo.extend({
     this.log(`    ${chalk.yellow('If the option is not specified, Yo Office will prompt for TypeScript or JavaScript')}\n`);
     this._exitProcess();
   },
-
-_moveHostFiles: async function() {
-  return new Promise((resolve, reject) => {
-    const hostFiles = [
-      `manifest.xml`,
-      `src/ribbon/ribbon.html`,
-      `src/ribbon/ribbon.${language}`,
-      `src/taskpane/taskpane.css`,
-      `src/taskpane/taskpane.html`,
-      `src/taskpane/taskpane.${language}`,
-    ];
-
-    for (let i = 0; i < hostFiles.length; i++)    
-    {
-      fs.readFile(`${this.destinationPath()}/hosts/${_.toLower(this.project.host)}/${hostFiles[i]}`, 'utf8', (err, data) => {
-        if (err) {
-          reject(err);
-        }
-        fs.writeFile(`${this.destinationPath()}/${hostFiles[i]}`, data, function (err) {
-          if (err) {
-            reject(err);
-          }
-        });
-      });
-    }
-    resolve();
-  });
-},
 
 _exitYoOfficeIfProjectFolderExists: function ()
   {

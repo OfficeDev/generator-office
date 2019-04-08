@@ -9,7 +9,7 @@
                 },
                 "typescript": {
                     "repository": "https://github.com/TCourtneyOwen/Office-Addin-TaskPane",
-                    "branch": "add-host-templates"
+                    "branch": "separate-hosts"
                 }
             }
         },
