@@ -21,7 +21,7 @@ const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
 const typescript = `Typescript`;
 const javascript = `Javascript`;
-let language = undefined;
+let language;
 
 /* Remove unwanted tags */
 delete insight.context.tags['ai.cloud.roleInstance'];
@@ -269,18 +269,20 @@ module.exports = yo.extend({
         language = this.project.scriptType === typescript ? 'ts' : 'js';
         let jsonData = new projectsJsonData(this.templatePath());
         let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language);
-        const templateFills = Object.assign({}, this.project);
 
         this._projectCreationMessage();
 
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo) {
           git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', projectRepoBranchInfo.branch || 'master'], async (err) => {
-            await helperMethods.cleanupProjectFolder(this.destinationPath(), _.toLower(this.project.hostInternalName), language == 'ts');
-
+            // for all project types other than Excel Custom Functions. modify the generated project so it targets the selected host
+            if (!this.project.isExcelFunctionsProject) {
+              await helperMethods.modifyProjectForSingleHost(this.destinationPath(), _.toLower(this.project.hostInternalName), language == 'ts');
+            }
+            
             // modify manifest guid and DisplayName
             await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
-
+            
             // delete the .git folder after cloning over repo
             const gitFolder = path.join(this.destinationPath(), '.git');
             if (fs.existsSync(gitFolder)) {
@@ -292,6 +294,7 @@ module.exports = yo.extend({
         }
         else {
           // Manifest-only project
+          const templateFills = Object.assign({}, this.project);
           this.fs.copyTpl(this.templatePath(`hosts/${_.toLower(this.project.hostInternalName)}/manifest.xml`), this.destinationPath('manifest.xml'), templateFills);
           this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
           return resolve();

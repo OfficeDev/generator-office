@@ -1,5 +1,9 @@
-const path = require('path');
+import * as util from "util";
 const fs = require('fs');
+const readFileAsync = util.promisify(fs.readFile);
+const unlinkFileAsync = util.promisify(fs.unlink);
+const writeFileAsync = util.promisify(fs.writeFile);
+const path = require('path');
 const hosts = [
     "excel",
     "onenote",
@@ -42,11 +46,11 @@ export namespace helperMethods {
         return false;
     };
 
-    export function cleanupProjectFolder(projectFolder: string, host: string, typescript: boolean) {
+    export function modifyProjectForSingleHost(projectFolder: string, host: string, typescript: boolean) {
         return new Promise(async (resolve, reject) => {
             try {
-                await _updateMoveProjectFiles(projectFolder, host, typescript);
-                await _modifyPackageJsonFile(projectFolder, host);
+                await convertProjectToSingleHost(projectFolder, host, typescript);
+                await updatePackageJsonForSingleHost(projectFolder, host);
                 return resolve();
             } catch (err){
                 return reject(err);
@@ -54,70 +58,54 @@ export namespace helperMethods {
         });
     }
 
-    function _updateMoveProjectFiles(projectFolder: string, host: string, typescript: boolean) {
-        return new Promise(async (resolve, reject) => {
+    async function convertProjectToSingleHost(projectFolder: string, host: string, typescript: boolean): Promise<void> {        
+        try {
             // copy host-specific manifest over manifest.xml
-            fs.readFile(path.resolve(`${projectFolder}/manifest.${host}.xml`), 'utf8', (err, contents) => {
-                if (err) return reject(err);
-                fs.writeFile(path.resolve(`${projectFolder}/manifest.xml`), contents, (err) => {
-                    if (err) return reject(err);
-                });
-            });
+            const manifestContent: any = await readFileAsync(path.resolve(`${projectFolder}/manifest.${host}.xml`), 'utf8');
+            await writeFileAsync(path.resolve(`${projectFolder}/manifest.xml`), manifestContent);
 
             // copy host-specific taskpane.ts over src/taskpane/taskpane.ts[js]
-            fs.readFile(path.resolve(`${projectFolder}/src/taskpane/${host}.${typescript ? 'ts' : 'js'}`), 'utf8', (err, contents) => {
-                if (err) return reject(err);
-                fs.writeFile(path.resolve(`${projectFolder}/src/taskpane/taskpane.${typescript ? 'ts' : 'js'}`), contents, (err) => {
-                    if (err) return reject(err);
-                });
-            });
+            const srcContent = await readFileAsync(path.resolve(`${projectFolder}/src/taskpane/${host}.${typescript ? 'ts' : 'js'}`), 'utf8');
+            await writeFileAsync(path.resolve(`${projectFolder}/src/taskpane/taskpane.${typescript ? 'ts' : 'js'}`), srcContent);
 
             // delete all host specific files
-            hosts.forEach(function (host) {
-                fs.unlink(path.resolve(`${projectFolder}/manifest.${host}.xml`), (err) => {
-                    if (err) return reject(err);
-                });
-                fs.unlink(path.resolve(`${projectFolder}/src/taskpane/${host}.${typescript ? 'ts' : 'js'}`), (err) => {
-                    if (err) return reject(err);
-                });
+            hosts.forEach(async function (host) {
+                await unlinkFileAsync(path.resolve(`${projectFolder}/manifest.${host}.xml`));
+                await unlinkFileAsync(path.resolve(`${projectFolder}/src/taskpane/${host}.${typescript ? 'ts' : 'js'}`));
             });
-            return resolve();
-        });
+        } catch(err) {
+            throw new Error(err);
+        }
     }
 
-    function _modifyPackageJsonFile(projectFolder:string, host: string) {
-        return new Promise(async (resolve, reject) => {
+    async function updatePackageJsonForSingleHost(projectFolder:string, host: string): Promise<void> {
+        try {
             // update package.json to reflect selected host
             const packageJson = path.resolve(`${projectFolder}/package.json`);
-            fs.readFile(packageJson, 'utf8', (err, data) => {
-                if (err) return reject(err);
-                let content = JSON.parse(data);
+            const data: any = await readFileAsync(packageJson, 'utf8');
+            let content = JSON.parse(data);
 
-                // update 'config' section in package.json to use selected host
-                content.config["app-to-debug"] = host;
+            // update 'config' section in package.json to use selected host
+            content.config["app-to-debug"] = host;
 
-                // remove scripts from package.json that are unrelated to selected host,
-                // and update sideload and unload scripts to use selected host.
-                Object.keys(content.scripts).forEach(function (key) {
-                    if (key.includes("sideload:") || key.includes("unload:")) {
-                        delete content.scripts[key];
-                    }
-
-                    if (key == "sideload") {
-                        content.scripts[key] = `office-toolbox sideload -m manifest.xml -a ${host}`
-                    }
-
-                    if (key == "unload") {
-                        content.scripts[key] = `office-toolbox remove -m manifest.xml -a ${host}`
-                    }
-                });
-
-                // write updated json to file
-                fs.writeFile(packageJson, JSON.stringify(content, null, 4), (err) => {
-                    if (err) return reject(err);
-                    return resolve();
-                });
+            // remove scripts from package.json that are unrelated to selected host,
+            // and update sideload and unload scripts to use selected host.
+            Object.keys(content.scripts).forEach(function (key) {
+                if (key.includes("sideload:") || key.includes("unload:")) {
+                    delete content.scripts[key];
+                }
+                switch (key) {
+                    case "sideload":
+                    case "unload":
+                        content.scripts[key] = content.scripts[`${key}:${host}`];
+                        break;
+                }
             });
-        });
+
+            // write updated json to file
+            await writeFileAsync(packageJson, JSON.stringify(content, null, 4));
+        } catch (err) {
+            throw new Error(err);
+        }
     }
 }
