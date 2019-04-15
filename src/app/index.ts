@@ -115,17 +115,11 @@ module.exports = yo.extend({
       || (this.options.projectType != null && _.toLower(this.options.projectType)) == manifest) {
           isManifestProject = true; }
 
-      /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or ExcelexcelFunctions was specified via the command prompt */
+      /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or Excel Functions was specified via the command prompt */
       if ((answerForProjectType.projectType != null  && answerForProjectType.projectType) == excelCustomFunctions
       || (this.options.projectType != null && _.toLower(this.options.projectType) == excelCustomFunctions)) {
         isExcelFunctionsProject = true; }
-
-      // Determine if we should prompt for script type. This is to address a bug that is causing Yo Office to crash in Node v10.10.0 - Issue #354
-      // This is a temportary fix - we need to clean up the code in the next major version of the generator
-      let promptForScriptType = !isManifestProject && this.options.js == null  && this.options.ts == null && (this.options.projectType != null && jsonData.projectBothScriptTypes(this.options.projectType)
-      || answerForProjectType.projectType != null && jsonData.projectBothScriptTypes(answerForProjectType.projectType))
-
-      let answerForScriptType;
+        
       let askForScriptType = [
         {
           name: 'scriptType',
@@ -133,11 +127,10 @@ module.exports = yo.extend({
           message: 'Choose a script type:',
           choices: [typescript, javascript],
           default: typescript,
+          when: !this.options.js && !this.options.ts
         }
       ];
-      if (promptForScriptType){
-        answerForScriptType = await this.prompt(askForScriptType);
-      }
+      let answerForScriptType; answerForScriptType = await this.prompt(askForScriptType);
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
       let startForName = (new Date()).getTime();
@@ -228,11 +221,8 @@ module.exports = yo.extend({
         projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
-        scriptType: (answerForScriptType !== undefined) ? answerForScriptType.scriptType : undefined
+        scriptType: answerForScriptType.scriptType || (this.options.ts) ?  typescript : javascript
       };
-
-      if (this.options.ts || this.project.projectType === 'react') {
-        this.project.scriptType = typescript; }
 
       /* Set folder if to output param  if specified */
       if (this.options.output != null) {
@@ -312,17 +302,12 @@ module.exports = yo.extend({
     this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
     this.log(`      1. Go the directory where your project was created:\n`);
     this.log(`         ${chalk.bold('cd ' + this._destinationRoot)}\n`);
-    this.log(`      2. Trust the Self-Signed Certificate for your local web server (if you haven't already done that).`);
-    this.log(`         For more information, visit https://github.com/OfficeDev/generator-office/blob/master/src/docs/ssl.md.\n`);
-    this.log(`      3. Start the local web server:\n`);
+    this.log(`      2. Start the local web server and sideload the add-in:\n`);
     this.log(`         ${chalk.bold('npm start')}\n`);
-    this.log(`      4. Sideload the add-in into your Office application:\n`);
-    this.log(`         ${chalk.bold('npm run sideload')}\n`);
-    this.log(`      5. Open the project in VS Code:\n`);
+    this.log(`      3. Open the project in VS Code:\n`);
     this.log(`         ${chalk.bold('code .')}\n`);
     this.log(`         For more information, visit http://code.visualstudio.com.\n`);
-    this.log(`      Please refer to resource.html in your project for additional information,`);
-    this.log(`      or visit our repo at: https://github.com/officeDev/generator-office.\n`);
+    this.log(`      Please visit https://docs.microsoft.com/en-us/office/dev/add-ins for more information about Office Add-ins.\n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
   },

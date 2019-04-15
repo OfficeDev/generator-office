@@ -58,7 +58,7 @@ $ yo office [arguments] [options]
 The following command line arguments are supported. If using the command line arguments, you must use them in the order cited below, or the generator will prompt you for the values.
 
 #### `projectType`
-Framework to use for the project. The supported project types include JQuery (`jquery`), Angular (`angular`), React (`react`) and Excel Custom Functions (`excel-functions`). You can also use Manifest Only (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
+Framework to use for the project. The supported project types include JQuery (`taskpane`), Angular (`angular`), React (`react`) and Excel Custom Functions (`excel-functions`). You can also use Manifest Only (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
   - Type: String
   - Optional
 
@@ -109,14 +109,8 @@ After scaffolding the project, the generator (and all sub generators) run all pa
   - Default: False
   - Optional
 
->**Note:** Do not use this flag when you pass `react` as framework argument.
-
 ## Running the Generated Site
 
-Office Add-ins must be hosted in an HTTPS site. Yo Office generates a self-signed certificate for use with the development environment. Your computer will need to trust the certificate before you can use the generated add-in.
-
-**Important:** Follow the instructions in [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md) before you start your web application.
-  		  
 Launch the local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:
 
 ```bash
