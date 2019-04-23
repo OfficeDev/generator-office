@@ -307,7 +307,7 @@ module.exports = yo.extend({
     this.log(`      3. Open the project in VS Code:\n`);
     this.log(`         ${chalk.bold('code .')}\n`);
     this.log(`         For more information, visit http://code.visualstudio.com.\n`);
-    this.log(`      Please visit https://docs.microsoft.com/en-us/office/dev/add-ins for more information about Office Add-ins.\n`);
+    this.log(`      Please visit https://docs.microsoft.co/office/dev/add-ins for more information about Office Add-ins.\n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
   },
@@ -357,7 +357,7 @@ module.exports = yo.extend({
 
 _exitYoOfficeIfProjectFolderExists: function ()
   {
-    if (helperMethods.doesProjectFolderExists(this._destinationRoot))
+    if (helperMethods.doesProjectFolderExist(this._destinationRoot))
       {
           this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`);
           this._exitProcess();

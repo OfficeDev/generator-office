@@ -34,7 +34,7 @@ export namespace helperMethods {
         }
     }
 
-    export function doesProjectFolderExists(projectFolder: string)
+    export function doesProjectFolderExist(projectFolder: string)
     {      
     if (fs.existsSync(projectFolder))
         {
