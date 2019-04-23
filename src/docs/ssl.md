@@ -1,8 +1,8 @@
 # Installing the self-signed certificate
 
-Office Add-ins should use HTTPS, not HTTP, even when you are developing, because Office clients require add-ins and webpages to come from a trusted and secure location. If your add-in fails to load within an Office client, it may be because you haven't installed (trusted) the certificate that the Yeoman generator for Office Add-ins provides. 
+Office Add-ins should use HTTPS (not HTTP) even when you are developing, because Office clients require add-ins and webpages to come from a trusted and secure location. If your add-in fails to load within an Office client, it may be because you haven't installed (trusted) the certificate that the Yeoman generator for Office Add-ins provides. 
 
-When you browse to a site that has an untrusted certificate, the browser will display an error with the certificate:
+When you browse to a site that has an untrusted certificate, the browser will display an error with the certificate, as shown in the following screenshots.
 
 **Certificate error in the Chrome browser:**
   
@@ -20,7 +20,7 @@ If you used a sufficiently recent version of the [Yeoman generator for Office Ad
 
 ![Screenshot of dialog box prompting to install the certificate]()
 
-Accept this prompt to install the certificate that the Yeoman generator provides, and the certificate (issued to "Developer CA for Microsoft Office Add-ins") will be added to the current user's **Trusted Root Certification Authorities** certificate store.
+Accept this prompt to install the certificate that the Yeoman generator provides, and the certificate will be added to the current user's **Trusted Root Certification Authorities** certificate store.
 
 ## Manually install the certificate
    
@@ -53,13 +53,11 @@ At this point everything has been configured. Quit all browsers, then reopen and
 Take the following steps to setup the certificate authority cert for localhost:
 
 1.	Go to {project root}\certs.
-2.	Double-click ca.crt, and select **Install Certificate**.
-       
-  ![](assets/ssl-ie-04.png)
+2.	Double-click ca.crt, and select **Install Certificate**.      
+    ![](assets/ssl-ie-04.png)
 
 3.	Select **Local Machine** and select **Next** to continue.
-
-  ![](assets/ssl-ie-05.png)
+    ![](assets/ssl-ie-05.png)
 
 4.	Select **Place all certificates in the following store** and then select **Browse**.
 5.	Select **Trusted Root Certification Authorities** and then select **OK**.
