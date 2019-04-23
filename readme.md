@@ -40,7 +40,7 @@ Choose to create Office Add-in projects using plain HTML, CSS & JavaScript (*mir
 
 ## Install
 
-> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, first install [Git](https://git-scm.com/download) and [Node.js](https://nodejs.org). For developers on Mac, we recommend using [Node Version Manager](https://github.com/creationix/nvm) to install Node.js with the right permissions. When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
+> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, first install [Git](https://git-scm.com/download) and [Node.js](https://nodejs.org) (version 8.0.0 or later). For developers on Mac, we recommend using [Node Version Manager](https://github.com/creationix/nvm) to install Node.js with the right permissions. When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
 
 Install `yo` (Yeoman) and `generator-office` globally using NPM.
 
@@ -117,6 +117,8 @@ Launch the local HTTPS site on `https://localhost:3000` by simply typing the fol
 $ npm start
 ```
 
+>**Note**: Office Add-ins should use HTTPS, not HTTP, even when you are developing. If you are prompted to install a certificate after you run `npm start`, accept the prompt to install the certificate that the Yeoman generator provides. For more information about enabling HTTPS for your add-in, see [Installing the self-signed certificate](src/docs/ssl.md)]
+
 Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
 
 ![](src/docs/assets/browsersync.gif)
@@ -143,7 +145,7 @@ If you are interested in contributing, please start by reading the [Contributing
 
 #### Prerequisites
 
-Ensure you have [Node.js](https://nodejs.org/en/) installed.
+Ensure you have [Node.js](https://nodejs.org/en/) (version 8.0.0 or later) installed.
 
 Install [Yeoman](http://yeoman.io/).
 ```bash
