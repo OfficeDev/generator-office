@@ -14,15 +14,15 @@ When you browse to a site that has an untrusted certificate, the browser will di
 
 This article describes two methods for installing (trusting) the certificate on your machine. Which method you use will depend upon how recent a version of the [Yeoman generator for Office Add-ins](https://github.com/OfficeDev/generator-office) you used to create your add-in project.
 
-## Automatically install the certificate when prompted
+## Method #1: automatically install the certificate when prompted
 
 If you used a sufficiently recent version of the [Yeoman generator for Office Add-ins](https://github.com/OfficeDev/generator-office) to create your add-in project, you'll be prompted to install a certificate when you start the local web server, if a valid certificate doesn't already exist on your machine.
 
 ![Screenshot of dialog box prompting to install the certificate](assets/yo-office-install-cert-dialog.png)
 
-Accept this prompt to install the certificate that the Yeoman generator provides, and the certificate will be added to the current user's **Trusted Root Certification Authorities** certificate store.
+Accept this prompt to install the certificate that the Yeoman generator provides, and the certificate will be added to the current user's **Trusted Root Certification Authorities** certificate store. You now have a valid self-signed certificate installed on your machine.
 
-## Manually install the certificate
+## Method #2: manually install the certificate
    
 If you used an older version of the [Yeoman generator for Office Add-ins](https://github.com/OfficeDev/generator-office) to create your add-in project, you'll need to manually configure your machine to trust the self-signed certificate. The steps for this differ depending on your developer environment (macOS / Windows):
 
