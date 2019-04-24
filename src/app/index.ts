@@ -267,7 +267,7 @@ module.exports = yo.extend({
           git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', projectRepoBranchInfo.branch || 'master'], async (err) => {
             // for all project types other than Excel Custom Functions. modify the generated project so it targets the selected host
             if (!this.project.isExcelFunctionsProject) {
-              await helperMethods.modifyProjectForSingleHost(this.destinationPath(), _.toLower(this.project.hostInternalName), language == 'ts');
+              await helperMethods.modifyProjectForSingleHost(this.destinationPath(), _.toLower(this.project.projectType), _.toLower(this.project.hostInternalName), language == 'ts');
             }
             
             // modify manifest guid and DisplayName
