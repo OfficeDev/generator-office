@@ -6,11 +6,11 @@ When you browse to a site that has an untrusted certificate, the browser will di
 
 **Certificate error in the Chrome browser:**
   
-  ![](assets/ssl-chrome-error.png)
+  ![Screenshot of certificate error in Chrome browser](assets/ssl-chrome-error.png)
 
 **Certificate error in the Edge browser:**
 
-  ![](assets/ssl-edge-error.png)
+  ![Screenshot of certificate error in Edge browser](assets/ssl-edge-error.png)
 
 This article describes two methods for installing (trusting) the certificate on your machine. Which method you use will depend upon how recent a version of the [Yeoman generator for Office Add-ins](https://github.com/OfficeDev/generator-office) you used to create your add-in project.
 
@@ -18,7 +18,7 @@ This article describes two methods for installing (trusting) the certificate on 
 
 If you used a sufficiently recent version of the [Yeoman generator for Office Add-ins](https://github.com/OfficeDev/generator-office) to create your add-in project, you'll be prompted to install a certificate when you start the local web server, if a valid certificate doesn't already exist on your machine.
 
-![Screenshot of dialog box prompting to install the certificate]()
+![Screenshot of dialog box prompting to install the certificate](assets/yo-office-install-cert-dialog.png)
 
 Accept this prompt to install the certificate that the Yeoman generator provides, and the certificate will be added to the current user's **Trusted Root Certification Authorities** certificate store.
 
@@ -46,7 +46,7 @@ If you used an older version of the [Yeoman generator for Office Add-ins](https:
    
 At this point everything has been configured. Quit all browsers, then reopen and try to navigate to the local HTTPS site. The browser should report it as a valid certificate:
 
-  ![](assets/ssl-chrome-good.png)
+  ![Screenshot of Chrome browser when certificate is valid](assets/ssl-chrome-good.png)
 
 ### [Windows](https://technet.microsoft.com/en-us/library/cc754841.aspx)
 
