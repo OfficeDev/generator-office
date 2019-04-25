@@ -67,7 +67,7 @@ module.exports = yo.extend({
       alias: 'o',
       type: String,
       required: false,
-      desc: 'Use the prerelease version of project template.'
+      desc: 'Use the prerelease version of the project template.'
     });
 
     this.option('details', {
