@@ -94,7 +94,7 @@ export default class projectsJsonData{
       return undefined;
     }
 
-    getProjectTemplateBranchName(projectTypeKey: string, scriptType: string)
+  getProjectTemplateBranchName(projectTypeKey: string, scriptType: string, prerelease: boolean)
     {
       for (let key in this.m_projectJsonData.projectTypes)
       {
@@ -104,20 +104,24 @@ export default class projectsJsonData{
             return this.m_projectJsonData.projectTypes.manifest.templates.branch;
           }
           else{
-             return this.m_projectJsonData.projectTypes[key].templates[scriptType].branch;
+            if (prerelease) {
+              return this.m_projectJsonData.projectTypes[key].templates[scriptType].prerelease
+            } else {
+              return this.m_projectJsonData.projectTypes[key].templates[scriptType].branch;
+            }
           }          
         }
       }
       return undefined;
     }
 
-    getProjectRepoAndBranch(projectTypeKey: string, scriptType: string)
+    getProjectRepoAndBranch(projectTypeKey: string, scriptType: string, prerelease: boolean)
     {
       scriptType =  scriptType === 'ts' ? 'typescript' : 'javascript';
       let repoBranchInfo = { repo: <string> null, branch: <string> null };
 
       repoBranchInfo.repo = this.getProjectTemplateRepository(projectTypeKey, scriptType);
-      repoBranchInfo.branch = (repoBranchInfo.repo) ? this.getProjectTemplateBranchName(projectTypeKey, scriptType) : undefined;
+      repoBranchInfo.branch = (repoBranchInfo.repo) ? this.getProjectTemplateBranchName(projectTypeKey, scriptType, prerelease) : undefined;
       
       return repoBranchInfo;
     }

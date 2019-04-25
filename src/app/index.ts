@@ -63,6 +63,13 @@ module.exports = yo.extend({
       desc: 'Project folder name if different from project name.'
     });
 
+    this.option('prerelease', {
+      alias: 'o',
+      type: String,
+      required: false,
+      desc: 'Use the prerelease version of project template.'
+    });
+
     this.option('details', {
       alias: 'd',
       type: Boolean,
@@ -221,12 +228,15 @@ module.exports = yo.extend({
         projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
-        scriptType: this.options.ts || this.options.js || answerForScriptType.scriptType
+        scriptType: answerForScriptType.scriptType ? answerForScriptType.scriptType : this.options.ts ? typescript : javascript 
       };
 
       /* Set folder if to output param  if specified */
       if (this.options.output != null) {
         this.project.folder = this.options.output; }
+      
+      /* Set language variable */
+      language = this.project.scriptType === typescript ? 'ts' : 'js';
 
       this.project.projectInternalName = _.kebabCase(this.project.name);
       this.project.projectDisplayName = this.project.name;
@@ -255,10 +265,9 @@ module.exports = yo.extend({
   _copyProjectFiles()
   {
     return new Promise((resolve, reject) => {
-      try {
-        language = this.project.scriptType === typescript ? 'ts' : 'js';
+      try {        
         let jsonData = new projectsJsonData(this.templatePath());
-        let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language);
+        let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
 
         this._projectCreationMessage();
 

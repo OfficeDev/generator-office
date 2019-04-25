@@ -5,37 +5,43 @@
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS",
-                    "branch": "yo-office"
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
-                    "branch": "yo-office"
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
                 }
             }
         },
-        "angular-taskpane": {
+        "angular": {
             "displayname": "Office Add-in Task Pane project using Angular framework",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS",
-                    "branch": "yo-office"
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular",
-                    "branch": "yo-office"
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
                 }
             }
         },
-        "react-taskpane": {
+        "react": {
             "displayname": "Office Add-in Task Pane project using React framework",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS",
-                    "branch": "yo-office"
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React",
-                    "branch": "yo-office"
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
                 }
             }
         },
@@ -52,11 +58,13 @@
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
-                    "branch": "yo-office"
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branch": "yo-office"
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
                 }
             }
         }

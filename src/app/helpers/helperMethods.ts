@@ -79,7 +79,7 @@ export namespace helperMethods {
                     });
                     break;
                 }
-                case "angular-taskpane":
+                case "angular":
                 {
                     // copy host-specific app.component.ts[js] over src/taskpane/app/app.component.ts[js]
                     const srcContent = await readFileAsync(path.resolve(`${projectFolder}/src/taskpane/app/${host}.app.component.${typescript ? 'ts' : 'js'}`), 'utf8');
@@ -92,7 +92,7 @@ export namespace helperMethods {
                     });
                     break;
                 }
-                case "react-taskpane":
+                case "react":
                 {
                     // copy host-specific App.tsx[js] over src/taskpane/app/components/App.tsx[js]
                     const srcContent = await readFileAsync(path.resolve(`${projectFolder}/src/taskpane/components/${_.upperFirst(host)}.App.${typescript ? 'tsx' : 'js'}`), 'utf8');
