@@ -76,7 +76,8 @@ export namespace helperMethods {
                     hosts.forEach(async function (host) {
                         await unlinkFileAsync(path.resolve(`${projectFolder}/manifest.${host}.xml`));
                         await unlinkFileAsync(path.resolve(`${projectFolder}/src/taskpane/${host}.${typescript ? 'ts' : 'js'}`));
-                    });                    
+                    });
+                    break;
                 }
                 case "angular-taskpane":
                 {
@@ -88,7 +89,8 @@ export namespace helperMethods {
                     hosts.forEach(async function (host) {
                         await unlinkFileAsync(path.resolve(`${projectFolder}/manifest.${host}.xml`));
                         await unlinkFileAsync(path.resolve(`${projectFolder}/src/taskpane/app/${host}.app.component.${typescript ? 'ts' : 'js'}`));
-                    });   
+                    });
+                    break;
                 }
                 case "react-taskpane":
                 {
@@ -101,7 +103,10 @@ export namespace helperMethods {
                         await unlinkFileAsync(path.resolve(`${projectFolder}/manifest.${host}.xml`));
                         await unlinkFileAsync(path.resolve(`${projectFolder}/src/taskpane/components/${_.upperFirst(host)}.App.${typescript ? 'tsx' : 'js'}`));
                     });
+                    break;
                 }
+                default:
+                    throw new Error("Invalid project type");
             }
         } catch(err) {
             throw new Error(err);

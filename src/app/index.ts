@@ -130,7 +130,7 @@ module.exports = yo.extend({
           when: !this.options.js && !this.options.ts
         }
       ];
-      let answerForScriptType; answerForScriptType = await this.prompt(askForScriptType);
+      let answerForScriptType = await this.prompt(askForScriptType);
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
       let startForName = (new Date()).getTime();
@@ -221,7 +221,7 @@ module.exports = yo.extend({
         projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
-        scriptType: answerForScriptType.scriptType || (this.options.ts) ?  typescript : javascript
+        scriptType: this.options.ts || this.options.js || answerForScriptType.scriptType
       };
 
       /* Set folder if to output param  if specified */
