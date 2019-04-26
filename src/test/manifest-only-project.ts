@@ -7,7 +7,9 @@ import * as helpers from 'yeoman-test';
 import * as assert from 'yeoman-assert';
 import * as path from 'path';
 
-const manifestProject = 'Manifest';
+const manifestProject = 'manifest';
+const projectDisplayName = 'My Office Add-in';
+const projectEscapedName = 'my-office-add-in';
 
 const expectedFiles = [
   'package.json',
@@ -23,27 +25,22 @@ const unexpectedFiles = [
   'function-file/function-file.js',
   'function-file/function-file.html',
   'function-file/function-file.ts',
-  'certs/ca.crt',
-  'certs/server.crt',
-  'certs/server.key',
   'config/webpack.common.js',
   'config/webpack.dev.js',
   'config/webpack.prod.js'
 ]
 
 /**
- * Test addin from user answers
- * manifest project, default folder, defaul host.
+ * Test addin when user passes in answers
+ * manifest project, default folder, default host.
  */
 describe('manifest project - answers', () => {
-  let projectDisplayName = 'My Office Add-in';
   let answers = {
     projectType: manifestProject,
     name: projectDisplayName,
     host: 'Excel',
   };
 
-	/** Test addin when user chooses jquery and typescript. */
   describe('manifest', () => {
     before((done) => {
       helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
@@ -58,50 +55,23 @@ describe('manifest project - answers', () => {
 });
 
 /**
- * Test addin from user answers and arguments
- * manifest project, default folder, typescript, jquery.
+ * Test addin when user passes in answers and arguments
+ * manifest project, default folder, default host.
  */
-describe('manifest project - answers & args - jquery & typescript', () => {
-  let projectDisplayName = 'My Office Add-in';
-  let projectEscapedName = 'my-office-add-in';
+describe('manifest project - answers & args', () => {
   let answers = {
-    name: projectEscapedName,
+    name: projectDisplayName,
     host: 'Excel',
   };
   let argument = [];
 
-	/**
-	 * Test addin when user pass in argument
-	 * "my-office-add-in"
-	 */
   describe('argument: project', () => {
     before((done) => {
       argument[0] = manifestProject;
       helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
     });
 
-    it('creates expected files', (done) => {
-      assert.file(expectedFiles);
-      assert.noFile(unexpectedFiles);
-      done();
-    });
-  });
-
-	/**
-	 * Test addin when user pass in argument
-	 * "my-office-add-in excel"
-	 */
-  describe('arguments: project name', () => {
-    before((done) => {
-      let answers = {
-        name: projectEscapedName,
-        host: 'Excel'
-      };
-      argument[0] = manifestProject;
-      argument[1] = projectEscapedName;
-
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
-    });
+    console.log("validating files")
 
     it('creates expected files', (done) => {
       assert.file(expectedFiles);
@@ -109,18 +79,52 @@ describe('manifest project - answers & args - jquery & typescript', () => {
       done();
     });
   });
+});
 
-	/**
-	 * Test addin when user pass in argument
-	 * "my-office-add-in excel manifest"
-	 */
-  describe('arguments: project name host', () => {
+/**
+ * Test addin when user passes in answers and arguments
+ * manifest project, default folder, default host.
+ */
+describe('manifest project - answers & args', () => {
+  let answers = {
+    host: 'Excel',
+  };
+  let argument = [];
+
+  describe('argument: project', () => {
     before((done) => {
       argument[0] = manifestProject;
       argument[1] = projectEscapedName;
-      argument[2] = 'excel';
       helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
     });
+
+    console.log("validating files")
+
+    it('creates expected files', (done) => {
+      assert.file(expectedFiles);
+      assert.noFile(unexpectedFiles);
+      done();
+    });
+  });
+});
+
+/**
+ * Test addin when user passes in arguments
+ * manifest project, default folder, default host.
+ */
+describe('manifest project - answers & args', () => {
+  let answers = {};
+  let argument = [];
+
+  describe('argument: project', () => {
+    before((done) => {
+      argument[0] = manifestProject;
+      argument[1] = projectEscapedName;
+      argument[2] = 'Excel';
+      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
+    });
+
+    console.log("validating files")
 
     it('creates expected files', (done) => {
       assert.file(expectedFiles);

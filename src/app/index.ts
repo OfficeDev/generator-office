@@ -10,7 +10,6 @@ import * as path from "path";
 import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
-import generateStarterCode from './config/starterCode';
 import projectsJsonData from './config/projectsJsonData';
 import { helperMethods } from './helpers/helperMethods';
 import { modifyManifestFile } from 'office-addin-manifest';
@@ -134,7 +133,7 @@ module.exports = yo.extend({
           message: 'Choose a script type:',
           choices: [typescript, javascript],
           default: typescript,
-          when: !this.options.js && !this.options.ts
+          when: !this.options.js && !this.options.ts && !isManifestProject
         }
       ];
       let answerForScriptType = await this.prompt(askForScriptType);
