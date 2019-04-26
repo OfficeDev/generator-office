@@ -105,7 +105,7 @@ function _installProject(projectType: string, projectName: string, host: string,
 
 function _buildProject(projectFolder: string)
 {
-    if (helperMethods.doesProjectFolderExists(projectFolder))
+    if (helperMethods.doesProjectFolderExist(projectFolder))
     {
         const failure = 'error';
         shell.cd(projectFolder);

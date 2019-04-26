@@ -1,50 +1,75 @@
 {
     "projectTypes": {
-        "angular": {
-            "displayname": "Office Add-in project using Angular framework",
+        "taskpane": {
+            "displayname": "Office Add-in Task Pane project",
             "templates": {
                 "javascript": {
-                    "repository": ""},
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS",
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
+                },
                 "typescript": {
-                    "repository": ""}
-                }     
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
+                }
+            }
+        },
+        "angular": {
+            "displayname": "Office Add-in Task Pane project using Angular framework",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS",
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
+                },
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular",
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
+                }
+            }
+        },
+        "react": {
+            "displayname": "Office Add-in Task Pane project using React framework",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS",
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
+                },
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React",
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
+                }
+            }
+        },
+        "manifest": {
+            "displayname": "Office Add-in project containing the manifest only",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            }
         },
         "excel-functions": {
             "displayname": "Excel Custom Functions Add-in project (Requires the Insider channel for Excel)",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
-                    "branch": "yo-office"},
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
+                },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branch": "yo-office"}
-                }
-        },
-        "jquery": {
-            "displayname": "Office Add-in project using Jquery framework",
-            "templates": {
-                "typescript": {
-                    "repository": ""},
-                "javascript": {
-                    "repository": ""}
-                }
-        },
-        "manifest": {
-            "displayname": "Office Add-in containing the manifest only",
-            "templates": {
-                "manifestonly": {
-                    "repository": ""}
-                }
-        },
-        "react": {
-            "displayname": "Office Add-in project using React framework",
-            "templates": {
-                "typescript": {
-                    "repository": ""}
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
                 }
             }
-        },
-        "hostTypes": {
+        }
+    },
+    "hostTypes": {
         "excel": {
             "displayname": "Excel",
             "repository": ""
@@ -55,16 +80,19 @@
         },
         "outlook": {
             "displayname": "Outlook",
-            "repository": ""},
+            "repository": ""
+        },
         "powerpoint": {
             "displayname": "PowerPoint",
             "repository": ""
         },
         "project": {
             "displayname": "Project",
-            "repository": ""},
+            "repository": ""
+        },
         "word": {
             "displayname": "Word",
-            "repository": ""}
+            "repository": ""
         }
- }
+    }    
+}

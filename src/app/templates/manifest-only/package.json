@@ -7,7 +7,7 @@
     "validate": "office-toolbox validate -m manifest.xml"
   },
   "dependencies": {
-    "office-toolbox": "^0.1.0"
+    "office-toolbox": "^0.1.1"
   },
   "devDependencies": {}
 }

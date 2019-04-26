@@ -21,6 +21,7 @@ const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
 const typescript = `Typescript`;
 const javascript = `Javascript`;
+let language;
 
 /* Remove unwanted tags */
 delete insight.context.tags['ai.cloud.roleInstance'];
@@ -60,6 +61,13 @@ module.exports = yo.extend({
       type: String,
       required: false,
       desc: 'Project folder name if different from project name.'
+    });
+
+    this.option('prerelease', {
+      alias: 'o',
+      type: String,
+      required: false,
+      desc: 'Use the prerelease version of the project template.'
     });
 
     this.option('details', {
@@ -114,17 +122,11 @@ module.exports = yo.extend({
       || (this.options.projectType != null && _.toLower(this.options.projectType)) == manifest) {
           isManifestProject = true; }
 
-      /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or ExcelexcelFunctions was specified via the command prompt */
+      /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or Excel Functions was specified via the command prompt */
       if ((answerForProjectType.projectType != null  && answerForProjectType.projectType) == excelCustomFunctions
       || (this.options.projectType != null && _.toLower(this.options.projectType) == excelCustomFunctions)) {
         isExcelFunctionsProject = true; }
-
-      // Determine if we should prompt for script type. This is to address a bug that is causing Yo Office to crash in Node v10.10.0 - Issue #354
-      // This is a temportary fix - we need to clean up the code in the next major version of the generator
-      let promptForScriptType = !isManifestProject && this.options.js == null  && this.options.ts == null && (this.options.projectType != null && jsonData.projectBothScriptTypes(this.options.projectType)
-      || answerForProjectType.projectType != null && jsonData.projectBothScriptTypes(answerForProjectType.projectType))
-
-      let answerForScriptType;
+        
       let askForScriptType = [
         {
           name: 'scriptType',
@@ -132,11 +134,10 @@ module.exports = yo.extend({
           message: 'Choose a script type:',
           choices: [typescript, javascript],
           default: typescript,
+          when: !this.options.js && !this.options.ts
         }
       ];
-      if (promptForScriptType){
-        answerForScriptType = await this.prompt(askForScriptType);
-      }
+      let answerForScriptType = await this.prompt(askForScriptType);
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
       let startForName = (new Date()).getTime();
@@ -227,15 +228,15 @@ module.exports = yo.extend({
         projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
-        scriptType: (answerForScriptType !== undefined) ? answerForScriptType.scriptType : undefined
+        scriptType: answerForScriptType.scriptType ? answerForScriptType.scriptType : this.options.ts ? typescript : javascript 
       };
-
-      if (this.options.ts || this.project.projectType === 'react') {
-        this.project.scriptType = typescript; }
 
       /* Set folder if to output param  if specified */
       if (this.options.output != null) {
         this.project.folder = this.options.output; }
+      
+      /* Set language variable */
+      language = this.project.scriptType === typescript ? 'ts' : 'js';
 
       this.project.projectInternalName = _.kebabCase(this.project.name);
       this.project.projectDisplayName = this.project.name;
@@ -264,65 +265,44 @@ module.exports = yo.extend({
   _copyProjectFiles()
   {
     return new Promise((resolve, reject) => {
-      try {
-        let language = this.project.scriptType === typescript ? 'ts' : 'js';
-        const starterCode = generateStarterCode(this.project.host);
-        const templateFills = Object.assign({}, this.project, starterCode);
+      try {        
         let jsonData = new projectsJsonData(this.templatePath());
-        let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language);
+        let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
 
         this._projectCreationMessage();
 
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
-        if (projectRepoBranchInfo.repo)
-        {
+        if (projectRepoBranchInfo.repo) {
           git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', projectRepoBranchInfo.branch || 'master'], async (err) => {
+            // for all project types other than Excel Custom Functions. modify the generated project so it targets the selected host
+            if (!this.project.isExcelFunctionsProject) {
+              await helperMethods.modifyProjectForSingleHost(this.destinationPath(), _.toLower(this.project.projectType), _.toLower(this.project.hostInternalName), language == 'ts');
+            }
+            
             // modify manifest guid and DisplayName
             await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
             
             // delete the .git folder after cloning over repo
             const gitFolder = path.join(this.destinationPath(), '.git');
-            if (fs.existsSync(gitFolder)){
+            if (fs.existsSync(gitFolder)) {
               helperMethods.deleteFolderRecursively(gitFolder);
             }
+
             return err ? reject(err) : resolve();
           });
         }
-        else
-        {
-          /* Copy the manifest */
+        else {
+          // Manifest-only project
+          const templateFills = Object.assign({}, this.project);
           this.fs.copyTpl(this.templatePath(`hosts/${_.toLower(this.project.hostInternalName)}/manifest.xml`), this.destinationPath('manifest.xml'), templateFills);
-
-          if (this.project.isManifestOnly) {
-            this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
-          }
-          else {
-                /* Copy the base template */
-                this.fs.copy(this.templatePath(`${language}/base/**`), this.destinationPath(), { globOptions: { ignore: `**/*.placeholder` }});
-
-                /* Copy the project type specific overrides */
-                this.fs.copyTpl(this.templatePath(`${language}/${_.toLower(this.project.projectType)}/**`), this.destinationPath(), templateFills, null, { globOptions: { ignore: `**/*.placeholder` }});
-
-                /* Manually copy any dot files as yoeman can't handle them */
-                /* .babelrc */
-                const babelrcPath = this.templatePath(`${language}/${_.toLower(this.project.projectType)}/babelrc.placeholder`);
-                if (this.fs.exists(babelrcPath)) {
-                  this.fs.copy(babelrcPath, this.destinationPath('.babelrc'));
-                }
-
-                /* Copy .gitignore */
-                const gitignorePath = this.templatePath(`${language}/base/gitignore.placeholder`);
-                if (this.fs.exists(gitignorePath)) {
-                this.fs.copy(gitignorePath, this.destinationPath('.gitignore'));
-                }
-          }
+          this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
           return resolve();
         }
       }
       catch (err) {
-          insight.trackException(new Error('File Copy Error: ' + err));
-          return reject(err);
-        }
+        insight.trackException(new Error('File Copy Error: ' + err));
+        return reject(err);
+      }
     });
   },
   _postInstallHints: function () {
@@ -331,17 +311,12 @@ module.exports = yo.extend({
     this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
     this.log(`      1. Go the directory where your project was created:\n`);
     this.log(`         ${chalk.bold('cd ' + this._destinationRoot)}\n`);
-    this.log(`      2. Trust the Self-Signed Certificate for your local web server (if you haven't already done that).`);
-    this.log(`         For more information, visit https://github.com/OfficeDev/generator-office/blob/master/src/docs/ssl.md.\n`);
-    this.log(`      3. Start the local web server:\n`);
+    this.log(`      2. Start the local web server and sideload the add-in:\n`);
     this.log(`         ${chalk.bold('npm start')}\n`);
-    this.log(`      4. Sideload the add-in into your Office application:\n`);
-    this.log(`         ${chalk.bold('npm run sideload')}\n`);
-    this.log(`      5. Open the project in VS Code:\n`);
+    this.log(`      3. Open the project in VS Code:\n`);
     this.log(`         ${chalk.bold('code .')}\n`);
     this.log(`         For more information, visit http://code.visualstudio.com.\n`);
-    this.log(`      Please refer to resource.html in your project for additional information,`);
-    this.log(`      or visit our repo at: https://github.com/officeDev/generator-office.\n`);
+    this.log(`      Please visit https://docs.microsoft.co/office/dev/add-ins for more information about Office Add-ins.\n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
   },
@@ -391,7 +366,7 @@ module.exports = yo.extend({
 
 _exitYoOfficeIfProjectFolderExists: function ()
   {
-    if (helperMethods.doesProjectFolderExists(this._destinationRoot))
+    if (helperMethods.doesProjectFolderExist(this._destinationRoot))
       {
           this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`);
           this._exitProcess();

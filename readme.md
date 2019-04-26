@@ -40,7 +40,7 @@ Choose to create Office Add-in projects using plain HTML, CSS & JavaScript (*mir
 
 ## Install
 
-> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, first install [Git](https://git-scm.com/download) and [Node.js](https://nodejs.org). For developers on Mac, we recommend using [Node Version Manager](https://github.com/creationix/nvm) to install Node.js with the right permissions. When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
+> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, first install [Git](https://git-scm.com/download) and [Node.js](https://nodejs.org) (version 8.0.0 or later). For developers on Mac, we recommend using [Node Version Manager](https://github.com/creationix/nvm) to install Node.js with the right permissions. When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
 
 Install `yo` (Yeoman) and `generator-office` globally using NPM.
 
@@ -58,7 +58,15 @@ $ yo office [arguments] [options]
 The following command line arguments are supported. If using the command line arguments, you must use them in the order cited below, or the generator will prompt you for the values.
 
 #### `projectType`
-Framework to use for the project. The supported project types include JQuery (`jquery`), Angular (`angular`), React (`react`) and Excel Custom Functions (`excel-functions`). You can also use Manifest Only (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
+Specifies the project type to create. 
+
+Project Type | Description
+----------- | ------------------------
+taskpane | Task Pane add-in using HTML
+angular | Task Pane add-in using the Angular framework
+react | Task Pane add-in using the React framework
+excel-functions | Task Pane add-in with Excel Custom Functions
+manifest | Manifest and related files for an Office Add-in
   - Type: String
   - Optional
 
@@ -109,19 +117,15 @@ After scaffolding the project, the generator (and all sub generators) run all pa
   - Default: False
   - Optional
 
->**Note:** Do not use this flag when you pass `react` as framework argument.
-
 ## Running the Generated Site
 
-Office Add-ins must be hosted in an HTTPS site. Yo Office generates a self-signed certificate for use with the development environment. Your computer will need to trust the certificate before you can use the generated add-in.
-
-**Important:** Follow the instructions in [Adding Self-Signed Certificates as Trusted Root Certificate](src/docs/ssl.md) before you start your web application.
-  		  
 Launch the local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:
 
 ```bash
 $ npm start
 ```
+
+> **Note**: Office Add-ins should use HTTPS, not HTTP, even when you are developing. If you are prompted to install a certificate after you run `npm start`, accept the prompt to install the certificate that the Yeoman generator provides. For more information about enabling HTTPS for your add-in, see [Installing the self-signed certificate](src/docs/ssl.md).
 
 Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
 
@@ -149,7 +153,7 @@ If you are interested in contributing, please start by reading the [Contributing
 
 #### Prerequisites
 
-Ensure you have [Node.js](https://nodejs.org/en/) installed.
+Ensure you have [Node.js](https://nodejs.org/en/) (version 8.0.0 or later) installed.
 
 Install [Yeoman](http://yeoman.io/).
 ```bash
