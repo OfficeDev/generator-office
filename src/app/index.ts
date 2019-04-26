@@ -18,8 +18,8 @@ let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 let git = require("simple-git");
 const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
-const typescript = `Typescript`;
-const javascript = `Javascript`;
+const typescript = `TypeScript`;
+const javascript = `JavaScript`;
 let language;
 
 /* Remove unwanted tags */
@@ -63,7 +63,6 @@ module.exports = yo.extend({
     });
 
     this.option('prerelease', {
-      alias: 'o',
       type: String,
       required: false,
       desc: 'Use the prerelease version of the project template.'
