@@ -58,7 +58,15 @@ $ yo office [arguments] [options]
 The following command line arguments are supported. If using the command line arguments, you must use them in the order cited below, or the generator will prompt you for the values.
 
 #### `projectType`
-Framework to use for the project. The supported project types include JQuery (`taskpane`), Angular (`angular`), React (`react`) and Excel Custom Functions (`excel-functions`). You can also use Manifest Only (`manifest`) which will create only the `manifest.xml` for an Office Add-in.
+Specifies the project type to create. 
+
+Project Type | Description
+----------- | ------------------------
+taskpane | Task Pane add-in using HTML
+angular | Task Pane add-in using the Angular framework
+react | Task Pane add-in using the React framework
+excel-functions | Task Pane add-in with Excel Custom Functions
+manifest | Manifest and related files for an Office Add-in
   - Type: String
   - Optional
 
