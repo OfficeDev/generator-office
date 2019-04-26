@@ -39,10 +39,10 @@ export namespace helperMethods {
     {      
     if (fs.existsSync(projectFolder))
         {
-        if (fs.readdirSync(projectFolder).length > 0)
-        {          
-            return true;
-        }
+            if (fs.readdirSync(projectFolder).length > 0)
+            {          
+                return true;
+            }
         }
         return false;
     };
@@ -61,6 +61,7 @@ export namespace helperMethods {
 
     async function convertProjectToSingleHost(projectFolder: string, projectType: string, host: string, typescript: boolean): Promise<void> {        
         try {
+            const extension = typescript ? "ts" : "js";
             // copy host-specific manifest over manifest.xml
             const manifestContent: any = await readFileAsync(path.resolve(`${projectFolder}/manifest.${host}.xml`), 'utf8');
             await writeFileAsync(path.resolve(`${projectFolder}/manifest.xml`), manifestContent);
@@ -69,39 +70,39 @@ export namespace helperMethods {
                 case "taskpane":
                 {
                     // copy host-specific taskpane.ts[js] over src/taskpane/taskpane.ts[js]
-                    const srcContent = await readFileAsync(path.resolve(`${projectFolder}/src/taskpane/${host}.${typescript ? 'ts' : 'js'}`), 'utf8');
-                    await writeFileAsync(path.resolve(`${projectFolder}/src/taskpane/taskpane.${typescript ? 'ts' : 'js'}`), srcContent);
+                    const srcContent = await readFileAsync(path.resolve(`${projectFolder}/src/taskpane/${host}.${extension}`), 'utf8');
+                    await writeFileAsync(path.resolve(`${projectFolder}/src/taskpane/taskpane.${extension}`), srcContent);
 
                     // delete all host specific files
                     hosts.forEach(async function (host) {
                         await unlinkFileAsync(path.resolve(`${projectFolder}/manifest.${host}.xml`));
-                        await unlinkFileAsync(path.resolve(`${projectFolder}/src/taskpane/${host}.${typescript ? 'ts' : 'js'}`));
+                        await unlinkFileAsync(path.resolve(`${projectFolder}/src/taskpane/${host}.${extension}`));
                     });
                     break;
                 }
                 case "angular":
                 {
                     // copy host-specific app.component.ts[js] over src/taskpane/app/app.component.ts[js]
-                    const srcContent = await readFileAsync(path.resolve(`${projectFolder}/src/taskpane/app/${host}.app.component.${typescript ? 'ts' : 'js'}`), 'utf8');
-                    await writeFileAsync(path.resolve(`${projectFolder}/src/taskpane/app/app.component.${typescript ? 'ts' : 'js'}`), srcContent);
+                    const srcContent = await readFileAsync(path.resolve(`${projectFolder}/src/taskpane/app/${host}.app.component.${extension}`), 'utf8');
+                    await writeFileAsync(path.resolve(`${projectFolder}/src/taskpane/app/app.component.${extension}`), srcContent);
 
                     // delete all host specific files
                     hosts.forEach(async function (host) {
                         await unlinkFileAsync(path.resolve(`${projectFolder}/manifest.${host}.xml`));
-                        await unlinkFileAsync(path.resolve(`${projectFolder}/src/taskpane/app/${host}.app.component.${typescript ? 'ts' : 'js'}`));
+                        await unlinkFileAsync(path.resolve(`${projectFolder}/src/taskpane/app/${host}.app.component.${extension}`));
                     });
                     break;
                 }
                 case "react":
                 {
                     // copy host-specific App.tsx[js] over src/taskpane/app/components/App.tsx[js]
-                    const srcContent = await readFileAsync(path.resolve(`${projectFolder}/src/taskpane/components/${_.upperFirst(host)}.App.${typescript ? 'tsx' : 'js'}`), 'utf8');
-                    await writeFileAsync(path.resolve(`${projectFolder}/src/taskpane/components/App.${typescript ? 'tsx' : 'js'}`), srcContent);
+                    const srcContent = await readFileAsync(path.resolve(`${projectFolder}/src/taskpane/components/${_.upperFirst(host)}.App.${extension}`), 'utf8');
+                    await writeFileAsync(path.resolve(`${projectFolder}/src/taskpane/components/App.${extension}`), srcContent);
 
                     // delete all host specific files
                     hosts.forEach(async function (host) {
                         await unlinkFileAsync(path.resolve(`${projectFolder}/manifest.${host}.xml`));
-                        await unlinkFileAsync(path.resolve(`${projectFolder}/src/taskpane/components/${_.upperFirst(host)}.App.${typescript ? 'tsx' : 'js'}`));
+                        await unlinkFileAsync(path.resolve(`${projectFolder}/src/taskpane/components/${_.upperFirst(host)}.App.${extension}`));
                     });
                     break;
                 }
