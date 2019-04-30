@@ -61,7 +61,7 @@ export namespace helperMethods {
 
     async function convertProjectToSingleHost(projectFolder: string, projectType: string, host: string, typescript: boolean): Promise<void> {        
         try {
-            const extension = typescript ? "ts" : "js";
+            let extension = typescript ? "ts" : "js";
             // copy host-specific manifest over manifest.xml
             const manifestContent: any = await readFileAsync(path.resolve(`${projectFolder}/manifest.${host}.xml`), 'utf8');
             await writeFileAsync(path.resolve(`${projectFolder}/manifest.xml`), manifestContent);
@@ -96,6 +96,7 @@ export namespace helperMethods {
                 case "react":
                 {
                     // copy host-specific App.tsx[js] over src/taskpane/app/components/App.tsx[js]
+                    extension = typescript ? "tsx" : "js";
                     const srcContent = await readFileAsync(path.resolve(`${projectFolder}/src/taskpane/components/${_.upperFirst(host)}.App.${extension}`), 'utf8');
                     await writeFileAsync(path.resolve(`${projectFolder}/src/taskpane/components/App.${extension}`), srcContent);
 
