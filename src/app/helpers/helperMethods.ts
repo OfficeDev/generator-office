@@ -1,3 +1,4 @@
+import * as json5 from "json5";
 import * as _ from 'lodash';
 import * as util from "util";
 const fs = require('fs');
@@ -51,7 +52,7 @@ export namespace helperMethods {
         return new Promise(async (resolve, reject) => {
             try {
                 await convertProjectToSingleHost(projectFolder, projectType, host, typescript);
-                await updatePackageJsonForSingleHost(projectFolder, host);
+                await updateProjectJsonForSingleHost(projectFolder, host);
                 return resolve();
             } catch (err){
                 return reject(err);
@@ -59,7 +60,7 @@ export namespace helperMethods {
         });
     }
 
-    async function convertProjectToSingleHost(projectFolder: string, projectType: string, host: string, typescript: boolean): Promise<void> {        
+    async function convertProjectToSingleHost(projectFolder: string, projectType: string, host: string, typescript: boolean): Promise<void> {
         try {
             let extension = typescript ? "ts" : "js";
             // copy host-specific manifest over manifest.xml
@@ -115,34 +116,66 @@ export namespace helperMethods {
         }
     }
 
-    async function updatePackageJsonForSingleHost(projectFolder:string, host: string): Promise<void> {
+    async function updateProjectJsonForSingleHost(projectFolder:string, host: string): Promise<void> {
         try {
-            // update package.json to reflect selected host
-            const packageJson = path.resolve(`${projectFolder}/package.json`);
-            const data: any = await readFileAsync(packageJson, 'utf8');
-            let content = JSON.parse(data);
+            // update package.json and launch.json to reflect selected host
+            await updatePackageJsonForSingleHost(projectFolder, host);
+            await updateLaunchJsonForSingleHost(projectFolder, host);
 
-            // update 'config' section in package.json to use selected host
-            content.config["app-to-debug"] = host;
-
-            // remove scripts from package.json that are unrelated to selected host,
-            // and update sideload and unload scripts to use selected host.
-            Object.keys(content.scripts).forEach(function (key) {
-                if (key.includes("sideload:") || key.includes("unload:")) {
-                    delete content.scripts[key];
-                }
-                switch (key) {
-                    case "sideload":
-                    case "unload":
-                        content.scripts[key] = content.scripts[`${key}:${host}`];
-                        break;
-                }
-            });
-
-            // write updated json to file
-            await writeFileAsync(packageJson, JSON.stringify(content, null, 4));
         } catch (err) {
             throw new Error(err);
         }
+    }
+}
+
+async function updatePackageJsonForSingleHost(projectFolder: string, host: string): Promise<void> {
+    try {
+        // update package.json to reflect selected host
+        const packageJson = path.resolve(`${projectFolder}/package.json`);
+        const data: any = await readFileAsync(packageJson, 'utf8');
+        let content = json5.parse(data);
+
+        // update 'config' section in package.json to use selected host
+        content.config["app-to-debug"] = host;
+
+        // remove scripts from package.json that are unrelated to selected host,
+        // and update sideload and unload scripts to use selected host.
+        Object.keys(content.scripts).forEach(function (key) {
+            if (key.includes("sideload:") || key.includes("unload:")) {
+                delete content.scripts[key];
+            }
+            switch (key) {
+                case "sideload":
+                case "unload":
+                    content.scripts[key] = content.scripts[`${key}:${host}`];
+                    break;
+            }
+        });
+
+        // write updated json to file
+        await writeFileAsync(packageJson, JSON.stringify(content, null, 4));
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function updateLaunchJsonForSingleHost(projectFolder: string, host: string): Promise<void> {
+    try {
+        // update launch.json to reflect selected host
+        const launchJson = path.resolve(`${projectFolder}/.vscode/launch.json`);
+        const data: any = await readFileAsync(launchJson, 'utf8');
+        let content = json5.parse(data);
+
+        // remove configurations from launch.json that are unrelated to selected host,
+        Object.keys(content.configurations).reverse().forEach(function (key) {
+            if (!_.toLower(content.configurations[key].name).includes(host) && !_.toLower(content.configurations[key].name).includes("office")) {
+                content.configurations.splice(key, 1);
+            }
+        });
+
+        // write updated json to file
+        await writeFileAsync(launchJson, JSON.stringify(content, null, 4));
+    } catch (err) {
+        throw new Error(err);
     }
 }
