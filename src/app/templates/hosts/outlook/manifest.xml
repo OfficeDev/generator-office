@@ -21,7 +21,7 @@
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
   <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png" />
-  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/hi-res-icon.png"/>
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-80.png.png"/>
 
   <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
   <SupportUrl DefaultValue="[Insert the URL of a page that provides support information for the app]" />
@@ -68,7 +68,7 @@
 
         <DesktopFormFactor>
           <!-- Location of the Functions that UI-less buttons can trigger (ExecuteFunction Actions). -->
-          <FunctionFile resid="functionFile" />
+          <FunctionFile resid="Commands.Url" />
 
           <!-- Message Read -->
           <ExtensionPoint xsi:type="MessageReadCommandSurface">
@@ -76,21 +76,21 @@
             <OfficeTab id="TabDefault">
               <!-- Up to 6 Groups added per Tab -->
               <Group id="msgReadGroup">
-                <Label resid="groupLabel" />
+                <Label resid="GroupLabel" />
                 <!-- Launch the add-in : task pane button -->
                 <Control xsi:type="Button" id="msgReadOpenPaneButton">
-                  <Label resid="paneReadButtonLabel" />
+                  <Label resid="TaskpaneButton.Label" />
                   <Supertip>
-                    <Title resid="paneReadSuperTipTitle" />
-                    <Description resid="paneReadSuperTipDescription" />
+                    <Title resid="TaskpaneButton.Label" />
+                    <Description resid="TaskpaneButton.Tooltip" />
                   </Supertip>
                   <Icon>
-                    <bt:Image size="16" resid="icon16" />
-                    <bt:Image size="32" resid="icon32" />
-                    <bt:Image size="80" resid="icon80" />
+                    <bt:Image size="16" resid="Icon.16x16" />
+                    <bt:Image size="32" resid="Icon.32x32" />
+                    <bt:Image size="80" resid="Icon.80x80" />
                   </Icon>
                   <Action xsi:type="ShowTaskpane">
-                    <SourceLocation resid="messageReadTaskPaneUrl" />
+                    <SourceLocation resid="Taskpane.Url" />
                   </Action>
                 </Control>
                 <!-- Go to http://aka.ms/ButtonCommands to learn how to add more Controls: ExecuteFunction and Menu -->
@@ -104,22 +104,20 @@
 
     <Resources>
       <bt:Images>
-        <bt:Image id="icon16" DefaultValue="https://localhost:3000/assets/icon-16.png"/>
-        <bt:Image id="icon32" DefaultValue="https://localhost:3000/assets/icon-32.png"/>
-        <bt:Image id="icon80" DefaultValue="https://localhost:3000/assets/icon-80.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://localhost:3000/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://localhost:3000/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://localhost:3000/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="functionFile" DefaultValue="https://localhost:3000/function-file/function-file.html"/>
-        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://localhost:3000/index.html"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://localhost:3000/commands.html" />
+        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html" />
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="groupLabel" DefaultValue="My Add-in Group"/>
-        <bt:String id="customTabLabel"  DefaultValue="My Add-in Tab"/>
-        <bt:String id="paneReadButtonLabel" DefaultValue="Display all properties"/>
-        <bt:String id="paneReadSuperTipTitle" DefaultValue="Get all properties"/>
+        <bt:String id="GroupLabel" DefaultValue="Contoso Add-in"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Show Taskpane"/>
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="paneReadSuperTipDescription" DefaultValue="Opens a pane displaying all available properties. This is an example of a button that opens a task pane."/>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Opens a pane displaying all available properties."/>
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>
