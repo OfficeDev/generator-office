@@ -5,6 +5,7 @@
 import * as _ from 'lodash';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
+import * as childProcess from "child_process";
 import * as fs from 'fs';
 import * as path from "path";
 import * as uuid from 'uuid/v4';
@@ -259,7 +260,7 @@ module.exports = yo.extend({
       insight.trackException(new Error('Configuration Error: ' + err));
     }
   },
-
+  
   _copyProjectFiles()
   {
     return new Promise((resolve, reject) => {
@@ -274,7 +275,13 @@ module.exports = yo.extend({
           git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', projectRepoBranchInfo.branch || 'master'], async (err) => {
             // for all project types other than Excel Custom Functions. modify the generated project so it targets the selected host
             if (!this.project.isExcelFunctionsProject) {
-              await helperMethods.modifyProjectForSingleHost(this.destinationPath(), _.toLower(this.project.projectType), _.toLower(this.project.hostInternalName), language == 'ts');
+              // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
+              const cmdLine = `npm run  --prefix ${this.destinationPath()} convert-to-single-host -- ${_.toLower(this.project.hostInternalName)}`;
+              await childProcess.exec(cmdLine, (err) => {
+                if (err) {
+                  return reject(err);
+                }
+              });  
             }
             
             // modify manifest guid and DisplayName
