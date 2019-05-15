@@ -5,12 +5,12 @@
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS",
-                    "branch": "master",
+                    "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
-                    "branch": "master",
+                    "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 }
             }
@@ -20,12 +20,12 @@
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS",
-                    "branch": "master",
+                    "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular",
-                    "branch": "master",
+                    "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 }
             }
@@ -39,8 +39,8 @@
                     "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
-                    "repository": "https://github.com/TCourtneyOwen/Office-Addin-TaskPane-React",
-                    "branch": "merge-office-addin-taskpane",
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React",
+                    "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 }
             }
