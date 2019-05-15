@@ -276,7 +276,7 @@ module.exports = yo.extend({
             // for all project types other than Excel Custom Functions. modify the generated project so it targets the selected host
             if (!this.project.isExcelFunctionsProject) {
               // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
-              const cmdLine = `npm run  --prefix ${this.destinationPath()} convert-to-single-host -- ${_.toLower(this.project.hostInternalName)}`;
+              const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
               await childProcess.exec(cmdLine, (err) => {
                 if (err) {
                   return reject(err);
