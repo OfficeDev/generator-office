@@ -74,7 +74,7 @@ describe('Office-Add-Taskpane-Ts projects', () => {
     describe('Manifest.xml is updated appropriately', () => {
         it('Manifest.xml is updated appropriately', async () => {
             const expectedHostType = `<Host Name="Workbook"/>`;
-            const unexpectedHostContentTypes = [
+            const unexpectedHostTypes = [
                 `<Host Name="Notebook" />`,
                 `<Host Name="Mailbox" />`,
                 `<Host Name="Presentation" />`,
@@ -85,7 +85,7 @@ describe('Office-Add-Taskpane-Ts projects', () => {
             const manifestContent: string = await readFileAsync("manifest.xml", 'utf8');
             assert.equal(manifestContent.includes(expectedHostType), true);
 
-            unexpectedHostContentTypes.forEach(type => {
+            unexpectedHostTypes.forEach(type => {
                 if (manifestContent.includes(type)) {
                     unexpectedHostsFound = true;
                 }
@@ -151,7 +151,7 @@ describe('Office-Add-Taskpane-Angular-Js project', () => {
     describe('Manifest.xml is updated appropriately', () => {
         it('Manifest.xml is updated appropriately', async () => {
             const expectedHostType = `<Host Name="Document"/>`;
-            const unexpectedHostContentTypes = [
+            const unexpectedHostTypes = [
                 `<Host Name="Notebook" />`,
                 `<Host Name="Mailbox" />`,
                 `<Host Name="Presentation" />`,
@@ -162,7 +162,7 @@ describe('Office-Add-Taskpane-Angular-Js project', () => {
             const manifestContent: string = await readFileAsync("manifest.xml", 'utf8');
             assert.equal(manifestContent.includes(expectedHostType), true);
 
-            unexpectedHostContentTypes.forEach(type => {
+            unexpectedHostTypes.forEach(type => {
                 if (manifestContent.includes(type)) {
                     unexpectedHostsFound = true;
                 }
@@ -228,7 +228,7 @@ describe('Office-Add-Taskpane-React-Ts project', () => {
     describe('Manifest.xml is updated appropriately', () => {
         it('Manifest.xml is updated appropriately', async () => {
             const expectedHostType = `<Host Name="Presentation"/>`;
-            const unexpectedHostContentTypes = [
+            const unexpectedHostTypes = [
                 `<Host Name="Notebook" />`,
                 `<Host Name="Mailbox" />`,
                 `<Host Name="Document" />`,
@@ -239,7 +239,7 @@ describe('Office-Add-Taskpane-React-Ts project', () => {
             const manifestContent: string = await readFileAsync("manifest.xml", 'utf8');
             assert.equal(manifestContent.includes(expectedHostType), true);
 
-            unexpectedHostContentTypes.forEach(type => {
+            unexpectedHostTypes.forEach(type => {
                 if (manifestContent.includes(type)) {
                     unexpectedHostsFound = true;
                 }
