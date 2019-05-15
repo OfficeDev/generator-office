@@ -9,19 +9,21 @@ import * as childProcess from "child_process";
 import * as fs from 'fs';
 import * as path from "path";
 import * as uuid from 'uuid/v4';
+import { promisify } from "util";
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 import projectsJsonData from './config/projectsJsonData';
 import { helperMethods } from './helpers/helperMethods';
 import { modifyManifestFile } from 'office-addin-manifest';
 
-let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 let git = require("simple-git");
+let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
+let language;
+const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
-const typescript = `TypeScript`;
 const javascript = `JavaScript`;
-let language;
+const typescript = `TypeScript`;
 
 /* Remove unwanted tags */
 delete insight.context.tags['ai.cloud.roleInstance'];
@@ -277,11 +279,7 @@ module.exports = yo.extend({
             if (!this.project.isExcelFunctionsProject) {
               // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
               const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
-              await childProcess.exec(cmdLine, (err) => {
-                if (err) {
-                  return reject(err);
-                }
-              });  
+              await childProcessExec(cmdLine);
             }
             
             // modify manifest guid and DisplayName
