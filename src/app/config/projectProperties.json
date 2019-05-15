@@ -54,7 +54,7 @@
             }
         },
         "excel-functions": {
-            "displayname": "Excel Custom Functions Add-in project (Requires the Insider channel for Excel)",
+            "displayname": "Excel Custom Functions Add-in project",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
