@@ -6,7 +6,10 @@ import * as _ from 'lodash';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as fs from 'fs';
+import * as fsextra from "fs-extra";
 import * as path from "path";
+import * as request from "request";
+import * as unzip from "unzip";
 import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
@@ -18,6 +21,8 @@ let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
 let git = require("simple-git");
 const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
+const zipFile = 'project.zip';
+const repoZipPath = '/archive/master.zip';
 const typescript = `TypeScript`;
 const javascript = `JavaScript`;
 let language;
@@ -262,7 +267,7 @@ module.exports = yo.extend({
 
   _copyProjectFiles()
   {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {        
         let jsonData = new projectsJsonData(this.templatePath());
         let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
@@ -271,23 +276,21 @@ module.exports = yo.extend({
 
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo) {
-          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', projectRepoBranchInfo.branch || 'master'], async (err) => {
-            // for all project types other than Excel Custom Functions. modify the generated project so it targets the selected host
-            if (!this.project.isExcelFunctionsProject) {
-              await helperMethods.modifyProjectForSingleHost(this.destinationPath(), _.toLower(this.project.projectType), _.toLower(this.project.hostInternalName), language == 'ts');
-            }
-            
-            // modify manifest guid and DisplayName
-            await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
-            
-            // delete the .git folder after cloning over repo
-            const gitFolder = path.join(this.destinationPath(), '.git');
-            if (fs.existsSync(gitFolder)) {
-              helperMethods.deleteFolderRecursively(gitFolder);
-            }
+          await request(`${projectRepoBranchInfo.repo}/archive/${projectRepoBranchInfo.branch}.zip`)
+            .pipe(fs.createWriteStream(zipFile))
+            .on('error', function () {
+            })
+            .on('close', async (err) => {
+              await helperMethods.unzipProjectTemplate(this.destinationPath());
+              
+              // modify manifest guid and DisplayName
+              await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
 
-            return err ? reject(err) : resolve();
-          });
+              if (!this.project.isExcelFunctionsProject) {
+                await helperMethods.modifyProjectForSingleHost(this.destinationPath(), _.toLower(this.project.projectType), _.toLower(this.project.hostInternalName), language == 'ts');
+              }
+              return err ? reject(err) : resolve();
+            });
         }
         else {
           // Manifest-only project

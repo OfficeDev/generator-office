@@ -1,4 +1,6 @@
 import * as _ from 'lodash';
+import * as fsextra from "fs-extra";
+import * as unzip from "unzip";
 import * as util from "util";
 const fs = require('fs');
 const readFileAsync = util.promisify(fs.readFile);
@@ -46,6 +48,65 @@ export namespace helperMethods {
         }
         return false;
     };
+
+    export async function unzipProjectTemplate(projectFolder: string) {
+        return new Promise(async (resolve, reject) => {
+            const zipFile = 'project.zip';
+            const readStream = fs.createReadStream(`${projectFolder}/${zipFile}`);
+            readStream.pipe(unzip.Extract({ path: projectFolder }))
+                .on('close', async () => {
+                    await moveProjectFiles(projectFolder);
+                    return resolve();
+                });
+            readStream.on('error', function (err) {
+                return reject(err);
+            })
+        });
+    }
+
+    export async function moveProjectFiles(projectFolder: string) {
+        return new Promise(async (resolve, reject) => {
+
+            // delete original zip file
+            const zipFile = path.join(`${projectFolder}/project.zip`);
+            if (fs.existsSync(zipFile)) {
+                await unlinkFileAsync(zipFile);
+            }
+
+            // get the name of the unzipped project folder
+            fs.readdir(projectFolder, function (err, folder) {
+                const unzippedFolder = folder;
+            });
+
+            const moveFrom = `${projectFolder}/Office-Addin-Taskpane-master`;
+            var moveTo = projectFolder;
+
+            // Loop through all the files in the temp directory
+            fs.readdir(moveFrom, function (err, files) {
+                if (err) {
+                    reject(err);
+                }
+
+                files.forEach(function (file, index) {
+                    // Make one pass and make the file complete
+                    var fromPath = path.join(moveFrom, file);
+                    var toPath = path.join(moveTo, file);
+
+                    fs.exists(fromPath, (exists) => {
+                        if (exists) {
+                            fs.rename(fromPath, toPath, function (error) {
+                                if (error) {
+                                    reject(error);
+                                }
+                            });
+                        }
+                        else reject();
+                    });
+                    resolve();
+                });
+            });
+        });
+    }
 
     export function modifyProjectForSingleHost(projectFolder: string, projectType: string, host: string, typescript: boolean) {
         return new Promise(async (resolve, reject) => {
