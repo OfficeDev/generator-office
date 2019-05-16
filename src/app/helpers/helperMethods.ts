@@ -2,7 +2,9 @@ import * as _ from 'lodash';
 import * as fsextra from "fs-extra";
 import * as unzip from "unzip";
 import * as util from "util";
+import { resolve } from 'dns';
 const fs = require('fs');
+const readDir = util.promisify(fs.readdir);
 const readFileAsync = util.promisify(fs.readFile);
 const unlinkFileAsync = util.promisify(fs.unlink);
 const writeFileAsync = util.promisify(fs.writeFile);
@@ -49,6 +51,23 @@ export namespace helperMethods {
         return false;
     };
 
+    export async function generateProject(projectFolderPath: string, projectRepo: string, projectBranch: string) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await unzipProjectTemplate(projectFolderPath);
+                return resolve();
+            } catch (err) {
+                return reject(err);
+            }
+        });
+    }
+
+    async function downloadZipFile(projectFolderPath: string, projectRepo: string, projectBranch: string) {
+        return new Promise(async (resolve, reject) => {
+
+        });
+    }
+
     export async function unzipProjectTemplate(projectFolder: string) {
         return new Promise(async (resolve, reject) => {
             const zipFile = 'project.zip';
@@ -73,18 +92,16 @@ export namespace helperMethods {
                 await unlinkFileAsync(zipFile);
             }
 
-            // get the name of the unzipped project folder
-            fs.readdir(projectFolder, function (err, folder) {
-                const unzippedFolder = folder;
-            });
+            // get the name of the unzipped project folder            
+            const unzippedFolder = await readDir(projectFolder);
 
-            const moveFrom = `${projectFolder}/Office-Addin-Taskpane-master`;
+            const moveFrom = `${projectFolder}/${unzippedFolder[0]}`;
             var moveTo = projectFolder;
 
             // Loop through all the files in the temp directory
             fs.readdir(moveFrom, function (err, files) {
                 if (err) {
-                    reject(err);
+                    return reject(err);
                 }
 
                 files.forEach(function (file, index) {
@@ -96,15 +113,15 @@ export namespace helperMethods {
                         if (exists) {
                             fs.rename(fromPath, toPath, function (error) {
                                 if (error) {
-                                    reject(error);
+                                    return reject(error);
                                 }
                             });
                         }
                         else reject();
                     });
-                    resolve();
                 });
             });
+            return resolve();
         });
     }
 
