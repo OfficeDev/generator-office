@@ -2,11 +2,7 @@ import * as fsextra from "fs-extra";
 import * as path from "path";
 import * as request from "request";
 import * as unzip from "unzipper";
-import { promisify } from "util";
 const fs = require('fs');
-const renameFile = promisify(fs.rename);
-const readFileAsync = promisify(fs.readFile);
-const unlinkFileAsync = promisify(fs.unlink);
 const zipFile = 'project.zip';
 
 export namespace helperMethods {
@@ -99,7 +95,7 @@ export namespace helperMethods {
             var toPath = path.join(moveToFolder, file);
 
             if (fs.existsSync(fromPath) && !fromPath.includes("gitignore")) {
-                renameFile(fromPath, toPath);
+                fs.renameSync(fromPath, toPath);
             }
         });
 
