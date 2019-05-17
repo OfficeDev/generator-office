@@ -46,7 +46,6 @@
     "opn": "^6.0.0",
     "request": "^2.88.0",
     "rimraf": "^2.6.3",
-    "simple-git": "^1.110.0",
     "unzip": "^0.1.11",
     "uuid": "^3.3.2",
     "yeoman-generator": "^1.1.1",

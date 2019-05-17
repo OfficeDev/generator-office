@@ -5,12 +5,9 @@
 import * as _ from 'lodash';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
-import * as fs from 'fs';
-import * as fsextra from "fs-extra";
-import * as path from "path";
-import * as request from "request";
-import * as unzip from "unzip";
+import * as childProcess from "child_process";
 import * as uuid from 'uuid/v4';
+import { promisify } from "util";
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 import projectsJsonData from './config/projectsJsonData';
@@ -18,11 +15,9 @@ import { helperMethods } from './helpers/helperMethods';
 import { modifyManifestFile } from 'office-addin-manifest';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
-let git = require("simple-git");
+const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
-const zipFile = 'project.zip';
-const repoZipPath = '/archive/master.zip';
 const typescript = `TypeScript`;
 const javascript = `JavaScript`;
 let language;
@@ -264,7 +259,7 @@ module.exports = yo.extend({
       insight.trackException(new Error('Configuration Error: ' + err));
     }
   },
-
+  
   _copyProjectFiles()
   {
     return new Promise(async (resolve, reject) => {
@@ -276,21 +271,17 @@ module.exports = yo.extend({
 
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo) {
-          await request(`${projectRepoBranchInfo.repo}/archive/${projectRepoBranchInfo.branch}.zip`)
-            .pipe(fs.createWriteStream(zipFile))
-            .on('error', function () {
-            })
-            .on('close', async (err) => {
-              await helperMethods.unzipProjectTemplate(this.destinationPath());
+          await helperMethods.downloadProjectTemplate(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
               
-              // modify manifest guid and DisplayName
-              await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
+          // modify manifest guid and DisplayName
+          await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
 
-              if (!this.project.isExcelFunctionsProject) {
-                await helperMethods.modifyProjectForSingleHost(this.destinationPath(), _.toLower(this.project.projectType), _.toLower(this.project.hostInternalName), language == 'ts');
-              }
-              return err ? reject(err) : resolve();
-            });
+          if (!this.project.isExcelFunctionsProject) {
+            // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
+            const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
+            await childProcessExec(cmdLine); 
+          }
+          return resolve()
         }
         else {
           // Manifest-only project
