@@ -1,4 +1,3 @@
-import * as fsextra from "fs-extra";
 import * as path from "path";
 import * as request from "request";
 import * as unzip from "unzipper";
