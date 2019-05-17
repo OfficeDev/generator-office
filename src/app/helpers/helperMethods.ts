@@ -1,35 +1,39 @@
 import * as fsextra from "fs-extra";
 import * as path from "path";
 import * as request from "request";
-import * as unzip from "unzip";
+import * as unzip from "unzipper";
 import { promisify } from "util";
 const fs = require('fs');
 const renameFile = promisify(fs.rename);
+const readFileAsync = promisify(fs.readFile);
+const unlinkFileAsync = promisify(fs.unlink);
 const zipFile = 'project.zip';
 
 export namespace helperMethods {
-    export function deleteFolderRecursively(projectFolder: string) 
-    {
-        if(fs.existsSync(projectFolder))
-        {
-            fs.readdirSync(projectFolder).forEach(function(file,index){ 
-            var curPath = projectFolder + "/" + file; 
-            
-            if(fs.lstatSync(curPath).isDirectory())
+    function deleteFolderRecursively(projectFolder: string) {
+        try {
+            if(fs.existsSync(projectFolder))
             {
-                deleteFolderRecursively(curPath);
+                fs.readdirSync(projectFolder).forEach(function(file,index){ 
+                var curPath = projectFolder + "/" + file; 
+                
+                if(fs.lstatSync(curPath).isDirectory())
+                {
+                    deleteFolderRecursively(curPath);
+                }
+                else
+                {
+                    fs.unlinkSync(curPath);
+                }
+            }); 
+            fs.rmdirSync(projectFolder); 
             }
-            else
-            {
-                fs.unlinkSync(curPath);
-            }
-        }); 
-        fs.rmdirSync(projectFolder); 
+        } catch (err) {
+            throw new Error(err);
         }
     }
 
-    export function doesProjectFolderExist(projectFolder: string)
-    {      
+    export function doesProjectFolderExist(projectFolder: string) {      
     if (fs.existsSync(projectFolder))
         {
             if (fs.readdirSync(projectFolder).length > 0)
@@ -40,7 +44,7 @@ export namespace helperMethods {
         return false;
     };
 
-    export async function downloadProjectTemplate(projectFolder: string, projectRepo: string, projectBranch: string) {
+    export async function downloadProjectTemplate(projectFolder: string, projectRepo: string, projectBranch: string): Promise<void> {
         return new Promise(async (resolve, reject) => {
             try {
                 await request(`${projectRepo}/archive/${projectBranch}.zip`)
@@ -58,7 +62,7 @@ export namespace helperMethods {
     });
     }
 
-    async function unzipProjectTemplate(projectFolder: string) {
+    async function unzipProjectTemplate(projectFolder: string): Promise<void> {
         return new Promise(async (resolve, reject) => {
             const zipFile = 'project.zip';
             const readStream = fs.createReadStream(`${projectFolder}/${zipFile}`);
