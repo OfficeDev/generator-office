@@ -64,10 +64,10 @@ export namespace helperMethods {
             readStream.pipe(unzip.Extract({ path: projectFolder }))
                 .on('close', async () => {
                     await moveProjectFiles(projectFolder);
-                    return resolve();
+                    resolve();
                 });
             readStream.on('error', function (err) {
-                return reject(err);
+                reject(err);
             })
         });
     }
@@ -90,8 +90,8 @@ export namespace helperMethods {
 
         // loop through all the files and folders in the unzipped folder and move them to project root
         fs.readdirSync(moveFromFolder).forEach(function(file) { 
-            var fromPath = path.join(moveFromFolder, file);
-            var toPath = path.join(moveToFolder, file);
+            const fromPath = path.join(moveFromFolder, file);
+            const toPath = path.join(moveToFolder, file);
 
             if (fs.existsSync(fromPath) && !fromPath.includes("gitignore")) {
                 fs.renameSync(fromPath, toPath);
