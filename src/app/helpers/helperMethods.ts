@@ -62,6 +62,9 @@ export namespace helperMethods {
             const zipFile = 'project.zip';
             const readStream = fs.createReadStream(`${projectFolder}/${zipFile}`);
             readStream.pipe(unzip.Extract({ path: projectFolder }))
+                .on('error', function () {
+                    throw new Error("unable to unzip project zip file")
+                })
                 .on('close', async () => {
                     await moveProjectFiles(projectFolder);
                     resolve();
@@ -86,12 +89,11 @@ export namespace helperMethods {
 
         // construct paths to move files out of unzipped folder into project root folder
         const moveFromFolder = path.resolve(`${projectFolder}/${unzippedFolder[0]}`);
-        const moveToFolder = projectFolder;
 
         // loop through all the files and folders in the unzipped folder and move them to project root
         fs.readdirSync(moveFromFolder).forEach(function(file) { 
             const fromPath = path.join(moveFromFolder, file);
-            const toPath = path.join(moveToFolder, file);
+            const toPath = path.join(projectFolder, file);
 
             if (fs.existsSync(fromPath) && !fromPath.includes("gitignore")) {
                 fs.renameSync(fromPath, toPath);
