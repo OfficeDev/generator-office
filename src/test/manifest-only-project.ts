@@ -71,8 +71,6 @@ describe('manifest project - answers & args', () => {
       helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
     });
 
-    console.log("validating files")
-
     it('creates expected files', (done) => {
       assert.file(expectedFiles);
       assert.noFile(unexpectedFiles);
@@ -98,8 +96,6 @@ describe('manifest project - answers & args', () => {
       helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
     });
 
-    console.log("validating files")
-
     it('creates expected files', (done) => {
       assert.file(expectedFiles);
       assert.noFile(unexpectedFiles);
@@ -123,8 +119,6 @@ describe('manifest project - answers & args', () => {
       argument[2] = 'Excel';
       helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
     });
-
-    console.log("validating files")
 
     it('creates expected files', (done) => {
       assert.file(expectedFiles);
