@@ -6,10 +6,8 @@ import * as _ from 'lodash';
 import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as childProcess from "child_process";
-import * as fs from 'fs';
-import * as path from "path";
-import { promisify } from "util";
 import * as uuid from 'uuid/v4';
+import { promisify } from "util";
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 import projectsJsonData from './config/projectsJsonData';
@@ -17,7 +15,6 @@ import { helperMethods } from './helpers/helperMethods';
 import { modifyManifestFile } from 'office-addin-manifest';
 
 let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
-let git = require("simple-git");
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
@@ -265,7 +262,7 @@ module.exports = yo.extend({
   
   _copyProjectFiles()
   {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {        
         let jsonData = new projectsJsonData(this.templatePath());
         let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
@@ -274,25 +271,16 @@ module.exports = yo.extend({
 
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo) {
-          git().clone(projectRepoBranchInfo.repo, this.destinationPath(), ['--branch', projectRepoBranchInfo.branch || 'master'], async (err) => {
-            // for all project types other than Excel Custom Functions. modify the generated project so it targets the selected host
-            if (!this.project.isExcelFunctionsProject) {
-              // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
-              const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
-              await childProcessExec(cmdLine); 
-            }
-            
-            // modify manifest guid and DisplayName
-            await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
-            
-            // delete the .git folder after cloning over repo
-            const gitFolder = path.join(this.destinationPath(), '.git');
-            if (fs.existsSync(gitFolder)) {
-              helperMethods.deleteFolderRecursively(gitFolder);
-            }
+          await helperMethods.downloadProjectTemplateZipFile(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
+              
+          // modify manifest guid and DisplayName
+          await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
 
-            return err ? reject(err) : resolve();
-          });
+          // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
+          const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
+          await childProcessExec(cmdLine);
+
+          return resolve()
         }
         else {
           // Manifest-only project

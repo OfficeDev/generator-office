@@ -8,10 +8,12 @@ import * as helpers from 'yeoman-test';
 import { readManifestFile } from "office-addin-manifest";
 import * as path from 'path';
 import { promisify } from "util";
-const readFileAsync = promisify(fs.readFile);
 const hosts = ["excel", "onenote", "outlook", "powerpoint", "project", "word"];
 const manifestFile = "manifest.xml";
 const packageJsonFile = "package.json";
+// For now, all tests will be run with the prerelease option until convert-to-single-host is merged to the yo-office branches
+const prerelease = process.argv.indexOf('--prerelease') > -1 || true;
+const readFileAsync = promisify(fs.readFile);
 const unexpectedManifestFiles = [
     'manifest.excel.xml',
     'manifest.onenote.xml',
@@ -39,14 +41,14 @@ describe('Office-Add-Taskpane-Ts projects', () => {
     ]
     let answers = {
         projectType: "taskpane",
-        scriptType: "TypeScript",
+        scriptType: "TypeScript",   
         name: "TaskpaneProject",
         host: hosts[0]
     };
 
     describe('Office-Add-Taskpane project', () => {
         before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
+            helpers.run(path.join(__dirname, '../app')).withOptions(prerelease ? { 'prerelease': true } : {}).withPrompts(answers).on('end', done);
         });
 
         it('creates expected files', (done) => {
@@ -92,11 +94,11 @@ describe('Office-Add-Taskpane-Angular-Js project', () => {
     ]
     const unexpectedFiles = [
         'src/taskpane/app/excel.app.component.js',
-        'src/taskpane/app/onenote.app.component.ts',
+        'src/taskpane/app/onenote.app.component.js',
         'src/taskpane/app/outlook.app.component.js',
         'src/taskpane/app/powerpoint.app.component.js',
         'src/taskpane/app/project.app.component.js',
-        'src/taskpane/app/word.app.component.ts',
+        'src/taskpane/app/word.app.component.js',
     ]
     let answers = {
         projectType: "angular",
@@ -107,7 +109,7 @@ describe('Office-Add-Taskpane-Angular-Js project', () => {
 
     describe('Office-Add-Taskpane project', () => {
         before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
+            helpers.run(path.join(__dirname, '../app')).withOptions(prerelease ? { 'prerelease': true } : {}).withPrompts(answers).on('end', done);
         });
 
         it('creates expected files', (done) => {
@@ -168,7 +170,7 @@ describe('Office-Add-Taskpane-React-Ts project', () => {
 
     describe('Office-Add-Taskpane project', () => {
         before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
+            helpers.run(path.join(__dirname, '../app')).withOptions(prerelease ? { 'prerelease': true } : {}).withPrompts(answers).on('end', done);
         });
 
         it('creates expected files', (done) => {
