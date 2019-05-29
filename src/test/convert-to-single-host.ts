@@ -8,10 +8,11 @@ import * as helpers from 'yeoman-test';
 import { readManifestFile } from "office-addin-manifest";
 import * as path from 'path';
 import { promisify } from "util";
-const readFileAsync = promisify(fs.readFile);
 const hosts = ["excel", "onenote", "outlook", "powerpoint", "project", "word"];
 const manifestFile = "manifest.xml";
 const packageJsonFile = "package.json";
+const prerelease = process.argv.indexOf('--prerelease') > -1;
+const readFileAsync = promisify(fs.readFile);
 const unexpectedManifestFiles = [
     'manifest.excel.xml',
     'manifest.onenote.xml',
@@ -39,14 +40,14 @@ describe('Office-Add-Taskpane-Ts projects', () => {
     ]
     let answers = {
         projectType: "taskpane",
-        scriptType: "TypeScript",
+        scriptType: "TypeScript",   
         name: "TaskpaneProject",
         host: hosts[0]
     };
 
     describe('Office-Add-Taskpane project', () => {
         before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions({ 'prerelease': true }).withPrompts(answers).on('end', done);
+            helpers.run(path.join(__dirname, '../app')).withOptions(prerelease ? { 'prerelease': true } : {}).withPrompts(answers).on('end', done);
         });
 
         it('creates expected files', (done) => {
@@ -107,7 +108,7 @@ describe('Office-Add-Taskpane-Angular-Js project', () => {
 
     describe('Office-Add-Taskpane project', () => {
         before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions({ 'prerelease': true }).withPrompts(answers).on('end', done);
+            helpers.run(path.join(__dirname, '../app')).withOptions(prerelease ? { 'prerelease': true } : {}).withPrompts(answers).on('end', done);
         });
 
         it('creates expected files', (done) => {
@@ -168,7 +169,7 @@ describe('Office-Add-Taskpane-React-Ts project', () => {
 
     describe('Office-Add-Taskpane project', () => {
         before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions({ 'prerelease': true }).withPrompts(answers).on('end', done);
+            helpers.run(path.join(__dirname, '../app')).withOptions(prerelease ? { 'prerelease': true } : {}).withPrompts(answers).on('end', done);
         });
 
         it('creates expected files', (done) => {
