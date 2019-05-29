@@ -271,16 +271,15 @@ module.exports = yo.extend({
 
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo) {
-          await helperMethods.downloadProjectTemplate(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
+          await helperMethods.downloadProjectTemplateZipFile(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
               
           // modify manifest guid and DisplayName
           await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
 
-          if (!this.project.isExcelFunctionsProject) {
-            // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
-            const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
-            await childProcessExec(cmdLine); 
-          }
+          // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
+          const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
+          await childProcessExec(cmdLine);
+
           return resolve()
         }
         else {

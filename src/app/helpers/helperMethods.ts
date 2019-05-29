@@ -24,12 +24,12 @@ export namespace helperMethods {
             fs.rmdirSync(projectFolder); 
             }
         } catch (err) {
-            throw new Error(err);
+            throw new Error(`Unable to delete folder "${projectFolder}".\n${err}`);
         }
     }
 
-    export function doesProjectFolderExist(projectFolder: string) {      
-    if (fs.existsSync(projectFolder))
+    export function doesProjectFolderExist(projectFolder: string) {
+        if (fs.existsSync(projectFolder))
         {
             if (fs.readdirSync(projectFolder).length > 0)
             {          
@@ -39,21 +39,18 @@ export namespace helperMethods {
         return false;
     };
 
-    export async function downloadProjectTemplate(projectFolder: string, projectRepo: string, projectBranch: string): Promise<void> {
+    export async function downloadProjectTemplateZipFile(projectFolder: string, projectRepo: string, projectBranch: string): Promise<void> {
         return new Promise(async (resolve, reject) => {
-            try {
-                await request(`${projectRepo}/archive/${projectBranch}.zip`)
-                .pipe(fs.createWriteStream(zipFile))
-                .on('error', function () {
-                    throw new Error("unable to download project zip file")
-                })
-                .on('close', async (err) => {
-                  await unzipProjectTemplate(projectFolder);
-                  resolve();
-            });
-        } catch (err) {
-            reject(err);
-        }
+            const projectTemplateZipFile = `${projectRepo}/archive/${projectBranch}.zip`;
+            await request(projectTemplateZipFile)
+            .pipe(fs.createWriteStream(zipFile))
+            .on('error', function (err) {
+                reject(`Unable to download project zip file for "${projectTemplateZipFile}".\n${err}`);
+            })
+            .on('close', async () => {
+                await unzipProjectTemplate(projectFolder);
+                resolve();
+        });
     });
     }
 
@@ -62,17 +59,14 @@ export namespace helperMethods {
             const zipFile = 'project.zip';
             const readStream = fs.createReadStream(`${projectFolder}/${zipFile}`);
             readStream.pipe(unzip.Extract({ path: projectFolder }))
-                .on('error', function () {
-                    throw new Error("unable to unzip project zip file")
+                .on('error', function (err) {
+                    reject(`Unable to unzip project zip file for "${projectFolder}".\n${err}`);
                 })
                 .on('close', async () => {
                     await moveProjectFiles(projectFolder);
                     resolve();
                 });
-            readStream.on('error', function (err) {
-                reject(err);
-            })
-        });
+            });
     }
 
     async function moveProjectFiles(projectFolder: string): Promise<void> {
@@ -95,7 +89,7 @@ export namespace helperMethods {
             const fromPath = path.join(moveFromFolder, file);
             const toPath = path.join(projectFolder, file);
 
-            if (fs.existsSync(fromPath) && !fromPath.includes("gitignore")) {
+            if (fs.existsSync(fromPath) && !fromPath.includes(".gitignore")) {
                 fs.renameSync(fromPath, toPath);
             }
         });

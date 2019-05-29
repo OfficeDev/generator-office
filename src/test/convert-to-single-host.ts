@@ -46,7 +46,7 @@ describe('Office-Add-Taskpane-Ts projects', () => {
 
     describe('Office-Add-Taskpane project', () => {
         before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
+            helpers.run(path.join(__dirname, '../app')).withOptions({ 'prerelease': true }).withPrompts(answers).on('end', done);
         });
 
         it('creates expected files', (done) => {
@@ -107,7 +107,7 @@ describe('Office-Add-Taskpane-Angular-Js project', () => {
 
     describe('Office-Add-Taskpane project', () => {
         before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
+            helpers.run(path.join(__dirname, '../app')).withOptions({ 'prerelease': true }).withPrompts(answers).on('end', done);
         });
 
         it('creates expected files', (done) => {
@@ -168,7 +168,7 @@ describe('Office-Add-Taskpane-React-Ts project', () => {
 
     describe('Office-Add-Taskpane project', () => {
         before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
+            helpers.run(path.join(__dirname, '../app')).withOptions({ 'prerelease': true }).withPrompts(answers).on('end', done);
         });
 
         it('creates expected files', (done) => {
