@@ -307,7 +307,7 @@ module.exports = yo.extend({
     this.log(`      3. Open the project in VS Code:\n`);
     this.log(`         ${chalk.bold('code .')}\n`);
     this.log(`         For more information, visit http://code.visualstudio.com.\n`);
-    this.log(`      Please visit https://docs.microsoft.co/office/dev/add-ins for more information about Office Add-ins.\n`);
+    this.log(`      Please visit https://docs.microsoft.com/office/dev/add-ins for more information about Office Add-ins.\n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
   },
