@@ -273,12 +273,12 @@ module.exports = yo.extend({
         if (projectRepoBranchInfo.repo) {
           await helperMethods.downloadProjectTemplateZipFile(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
               
-          // modify manifest guid and DisplayName
-          await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
-
           // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
           const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
           await childProcessExec(cmdLine);
+
+          // modify manifest guid and DisplayName
+          await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
 
           return resolve()
         }
