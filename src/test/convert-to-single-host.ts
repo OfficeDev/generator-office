@@ -26,6 +26,7 @@ const unexpectedManifestFiles = [
 // Test to verify converting a project to a single host
 // for Office-Addin-Taskpane Typescript project using Excel host
 describe('Office-Add-Taskpane-Ts projects', () => {
+    const testProjectName = "TaskpaneProject"
     const expectedFiles = [
         packageJsonFile,
         manifestFile,
@@ -42,7 +43,7 @@ describe('Office-Add-Taskpane-Ts projects', () => {
     let answers = {
         projectType: "taskpane",
         scriptType: "TypeScript",   
-        name: "TaskpaneProject",
+        name: testProjectName,
         host: hosts[0]
     };
 
@@ -80,6 +81,7 @@ describe('Office-Add-Taskpane-Ts projects', () => {
         it('Manifest.xml is updated appropriately', async () => {
             const manifestInfo = await readManifestFile(manifestFile);
             assert.equal(manifestInfo.hosts, "Workbook");
+            assert.equal(manifestInfo.displayName, testProjectName);
         });
     });
 });
