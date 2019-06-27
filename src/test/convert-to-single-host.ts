@@ -11,7 +11,6 @@ import { promisify } from "util";
 const hosts = ["excel", "onenote", "outlook", "powerpoint", "project", "word"];
 const manifestFile = "manifest.xml";
 const packageJsonFile = "package.json";
-// For now, all tests will be run with the prerelease option until convert-to-single-host is merged to the yo-office branches
 const readFileAsync = promisify(fs.readFile);
 const unexpectedManifestFiles = [
     'manifest.excel.xml',
