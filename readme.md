@@ -11,20 +11,13 @@ extensions:
   - Add-ins
   createdDate: 8/21/2015 1:12:15 PM
 ---
-# Microsoft Office Add-in Project Generator - YO OFFICE!
+# Yeoman generator for Office Add-ins - YO OFFICE!
 
 [![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office)
 [![Downloads](http://img.shields.io/npm/dm/generator-office.svg)](https://npmjs.org/package/generator-office)
 [![TravisCI Build Status](https://travis-ci.org/OfficeDev/generator-office.svg)](https://travis-ci.org/OfficeDev/generator-office)
 
-[Yeoman](http://yeoman.io) generator for creating [Microsoft Office Add-in](https://docs.microsoft.com/en-us/office/dev/add-ins/) projects using any text editor. Microsoft includes fantastic & [rich development tools for creating Office related projects using Visual Studio 2013](http://aka.ms/OfficeDevToolsForVS2013) or [tools for Visual Studio 2015](http://aka.ms/OfficeDevToolsForVS2015). This generator is for those developers who:
-
-- use an editor other than Visual Studio (we love Visual Studio Code)
-- are interested in using a technology other than plain HTML, CSS & JavaScript
-
-> If you are building an Angular or React add-in and would like to learn more about using Yo Office specifically for those frameworks, see [Build an Add-in with React](https://docs.microsoft.com/en-us/office/dev/add-ins/excel/excel-add-ins-get-started-react) or [Build an Add-in with Angular](https://docs.microsoft.com/en-us/office/dev/add-ins/excel/excel-add-ins-get-started-angular).
-
-Like other Yeoman generators, this simply creates the scaffolding of files for your Office Add-in project. It allows you to create add-ins for:
+This [Yeoman](http://yeoman.io) generator creates a Node.js [Office Add-in](https://docs.microsoft.com/en-us/office/dev/add-ins) project that can be managed with Visual Studio Code or any other editor. You can use it to create Office Add-ins for:
 
 - Excel
 - OneNote
@@ -34,7 +27,22 @@ Like other Yeoman generators, this simply creates the scaffolding of files for y
 - Word
 - Excel Custom Functions
 
-Choose to create Office Add-in projects using plain HTML, CSS & JavaScript (*mirroring the same projects that Visual Studio creates*) or create Angular-based projects.
+Like other Yeoman generators, this generator simply creates the scaffolding of files for your Office Add-in project. You can choose to create Office Add-in projects using plain HTML, CSS & JavaScript, or using Angular or React. 
+
+The following articles provide guidance for using the Yeoman generator to create various types of Office Add-ins:
+
+- [Build an Excel add-in](https://docs.microsoft.com/en-us/office/dev/add-ins/quickstarts/excel-quickstart-jquery)
+- [Build an Excel add-in using Angular](https://docs.microsoft.com/en-us/office/dev/add-ins/quickstarts/excel-quickstart-angular)
+- [Build an Excel add-in using React](https://docs.microsoft.com/en-us/office/dev/add-ins/quickstarts/excel-quickstart-react)
+- [Build a OneNote add-in](https://docs.microsoft.com/en-us/office/dev/add-ins/quickstarts/onenote-quickstart)
+- [Build an Outlook add-in](https://docs.microsoft.com/en-us/outlook/add-ins/quick-start?context=office%2Fdev%2Fadd-ins%2Fcontext)
+- [Build a PowerPoint add-in](https://docs.microsoft.com/en-us/office/dev/add-ins/quickstarts/powerpoint-quickstart)
+- [Build a Project add-in](https://docs.microsoft.com/en-us/office/dev/add-ins/quickstarts/project-quickstart)
+- [Build a Word add-in](https://docs.microsoft.com/en-us/office/dev/add-ins/quickstarts/word-quickstart)
+
+> **Note:** While you can also use [Visual Studio](https://visualstudio.microsoft.com/vs) to create Office Add-in projects, the Yeoman generator provides more options in terms of the types of projects you can create. For example:
+> - The Yeoman generator can create Office Add-in projects that use plain HTML, CSS & JavaScript, or React, or Angular, whereas Visual Studio can only create Office Add-ins projects that use plain HTML, CSS & JavaScript.
+> - The Yeoman generator can create 7 types of add-ins (Excel, OneNote, Outlook, PowerPoint, Project, Word, Excel Custom Functions), whereas Visual Studio can only create 4 types of add-ins (Excel, Outlook, PowerPoint, and Word).
 
 ## Install
 
