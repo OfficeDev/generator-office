@@ -34,7 +34,7 @@ Like other Yeoman generators, this generator simply creates the scaffolding of f
 > - The Yeoman generator can create Office Add-ins projects that use TypeScript, whereas Visual Studio cannot.
 > - The Yeoman generator can create add-ins for Excel, OneNote, Outlook, PowerPoint, Project, Word, Excel Custom Functions, whereas Visual Studio can only create add-ins for Excel, Outlook, PowerPoint, and Word.
 
-For detailed information about using the Yeoman generator to create Office Add-ins, see any of the 5-minute quick starts in the [Office Add-ins documentation](https://docs.microsoft.com/en-us/office/dev/dd-ins).
+For detailed information about using the Yeoman generator to create Office Add-ins, see any of the 5-minute quick starts in the [Office Add-ins documentation](https://docs.microsoft.com/en-us/office/dev/add-ins).
 
 ## Install
 
