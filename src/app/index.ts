@@ -1,32 +1,38 @@
-/*
+ /*
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
 import * as _ from 'lodash';
-import * as appInsights from 'applicationinsights';
 import * as chalk from 'chalk';
 import * as childProcess from "child_process";
-import * as uuid from 'uuid/v4';
-import { promisify } from "util";
-import * as yosay from 'yosay';
-import * as yo from 'yeoman-generator';
-import projectsJsonData from './config/projectsJsonData';
+import * as defaults from "./defaults";
 import { helperMethods } from './helpers/helperMethods';
 import { modifyManifestFile } from 'office-addin-manifest';
+import projectsJsonData from './config/projectsJsonData';
+import { promisify } from "util";
+import * as usageData from "office-addin-usage-data";
+import * as uuid from 'uuid/v4';
+import * as yosay from 'yosay';
+import * as yo from 'yeoman-generator';
 
-let insight = appInsights.getClient('1ced6a2f-b3b2-4da5-a1b8-746512fbc840');
+const telemetryObject: usageData.IUsageDataOptions = {
+  groupName: usageData.groupName,
+  projectName: defaults.usageDataProjectName,
+  raisePrompt: false,
+  instrumentationKey: defaults.usageDataInstrumentationKey,
+  promptQuestion: defaults.usageDataPromptMessage,
+  usageDataLevel: usageData.UsageDataLevel.off,
+  method: usageData.UsageDataReportingMethod.applicationInsights,
+  isForTesting: false
+}
+let addInTelemetry : usageData.OfficeAddinUsageData;
+
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
 const typescript = `TypeScript`;
 const javascript = `JavaScript`;
 let language;
-
-/* Remove unwanted tags */
-delete insight.context.tags['ai.cloud.roleInstance'];
-delete insight.context.tags['ai.device.osVersion'];
-delete insight.context.tags['ai.device.osArchitecture'];
-delete insight.context.tags['ai.device.osPlatform'];
 
 module.exports = yo.extend({
  /*  Setup the generator */
@@ -68,6 +74,12 @@ module.exports = yo.extend({
       desc: 'Use the prerelease version of the project template.'
     });
 
+    this.option('telemetry-off', {
+      type: Boolean,
+      required: false,
+      desc: 'Turn telemetry collection off.'
+    });
+
     this.option('details', {
       alias: 'd',
       type: Boolean,
@@ -81,6 +93,12 @@ module.exports = yo.extend({
     if (this.options.details){
      this._detailedHelp();
     }
+    if (this.options['telemetry-off']) {
+      usageData.writeUsageDataJsonData(telemetryObject.groupName, usageData.UsageDataLevel.off);
+      console.log(`\nOffice Add-in CLI telemetry has been turned off`);
+      process.exit();
+    }
+
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
     this.project = {};
@@ -89,6 +107,27 @@ module.exports = yo.extend({
   /* Prompt user for project options */
   prompting: async function () {
     try {
+      let promptForTelemetry = [
+        {
+          name: 'telemetryPromptAnswer',
+          message: telemetryObject.promptQuestion,
+          type: 'list',
+          default: 'Continue',
+          choices: ['Continue', 'Exit'],
+          when: usageData.needToPromptForUsageData(telemetryObject.groupName)
+        }
+      ];
+      let answerForTelemetryPrompt = await this.prompt(promptForTelemetry);
+      if (answerForTelemetryPrompt.telemetryPromptAnswer) {
+        if (answerForTelemetryPrompt.telemetryPromptAnswer === 'Continue') {
+          telemetryObject.usageDataLevel = usageData.UsageDataLevel.on;
+        } else {
+          process.exit();
+        }
+      } else {
+        telemetryObject.usageDataLevel = usageData.readUsageDataLevel(telemetryObject.groupName);
+      }
+
       let jsonData = new projectsJsonData(this.templatePath());
       let isManifestProject = false;
       let isExcelFunctionsProject = false;
@@ -148,7 +187,6 @@ module.exports = yo.extend({
       }];
       let answerForName = await this.prompt(askForName);
       let endForName = (new Date()).getTime();
-      let durationForName = (endForName - startForName) / 1000;
 
       /* askForHost will be triggered if no project name was specified via the command line Host argument, and the Host argument
        * input was in fact valid, and the project type is not Excel-Functions */
@@ -166,18 +204,20 @@ module.exports = yo.extend({
       let endForHost = (new Date()).getTime();
       let durationForHost = (endForHost - startForHost) / 1000;
 
+      addInTelemetry = new usageData.OfficeAddinUsageData(telemetryObject);
+
       /* Configure project properties based on user input or answers to prompts */
       this._configureProject(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject);
-
-      /* Gnerate Insights logging */
-      const noElapsedTime = 0;
-      insight.trackEvent('Name', { Name: this.project.name }, { durationForName });
-      insight.trackEvent('Host', { Host: this.project.host }, { durationForHost });
-      insight.trackEvent('ScriptType', { ScriptType: this.project.scriptType }, { noElapsedTime });
-      insight.trackEvent('IsManifestOnly', { IsManifestOnly: this.project.isManifestOnly.toString() }, { noElapsedTime });
-      insight.trackEvent('ProjectType', { ProjectType: this.project.projectType }, { durationForProjectType });
+      var projectInfo = {
+        Host: [this.project.host, durationForHost],
+        ScriptType: [this.project.scriptType],
+        IsManifestOnly: [this.project.isManifestOnly.toString()],
+        ProjectType: [this.project.projectType, durationForProjectType],
+      };
+      // Send telemetry for project created
+      addInTelemetry.reportEvent(telemetryObject.projectName, projectInfo);
     } catch (err) {
-      insight.trackException(new Error('Prompting Error: ' + err));
+      addInTelemetry.reportError("promptingError",new Error('Prompting Error: ' + err));
     }
   },
 
@@ -188,7 +228,7 @@ module.exports = yo.extend({
       done();
     })
     .catch((err) => {
-      insight.trackException(new Error('Installation Error: ' + err));
+      addInTelemetry.reportError("installingIssue",new Error('Installation Error: ' + err));
       process.exitCode = 1;
     });
   },
@@ -210,7 +250,7 @@ module.exports = yo.extend({
         });
       }
     } catch (err) {
-      insight.trackException(new Error('Installation Error: ' + err));
+      addInTelemetry.reportError("installingIssue",new Error('Installation Error: ' + err));
       process.exitCode = 1;
     }
   },
@@ -251,12 +291,10 @@ module.exports = yo.extend({
       /* Check to to see if destination folder already exists. If so, we will exit and prompt the user to provide
       a different project name or output folder */
       this._exitYoOfficeIfProjectFolderExists();
-
-      let duration = this.project.duration;
-      insight.trackEvent('App_Data', { AppID: this.project.projectId, Host: this.project.host, ProjectType: this.project.projectType, isTypeScript: (this.project.scriptType === typescript).toString() }, { duration });
     }
     catch (err) {
-      insight.trackException(new Error('Configuration Error: ' + err));
+      addInTelemetry.reportError("configurationError",new Error('Configuration Error: ' + err));
+
     }
   },
   
@@ -291,7 +329,7 @@ module.exports = yo.extend({
         }
       }
       catch (err) {
-        insight.trackException(new Error('File Copy Error: ' + err));
+        addInTelemetry.reportError("fileCopyError",new Error("File Copy Error: " + err));
         return reject(err);
       }
     });
