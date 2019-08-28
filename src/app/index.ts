@@ -15,7 +15,7 @@ import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 
-const telemetryObject: usageData.IUsageDataOptions = {
+const usageDataOptions: usageData.IUsageDataOptions = {
   groupName: usageData.groupName,
   projectName: defaults.usageDataProjectName,
   raisePrompt: false,
@@ -74,12 +74,6 @@ module.exports = yo.extend({
       desc: 'Use the prerelease version of the project template.'
     });
 
-    this.option('telemetry-off', {
-      type: Boolean,
-      required: false,
-      desc: 'Turn telemetry collection off.'
-    });
-
     this.option('details', {
       alias: 'd',
       type: Boolean,
@@ -93,11 +87,6 @@ module.exports = yo.extend({
     if (this.options.details){
      this._detailedHelp();
     }
-    if (this.options['telemetry-off']) {
-      usageData.writeUsageDataJsonData(telemetryObject.groupName, usageData.UsageDataLevel.off);
-      console.log(`\nOffice Add-in CLI telemetry has been turned off`);
-      process.exit();
-    }
 
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
@@ -110,22 +99,22 @@ module.exports = yo.extend({
       let promptForTelemetry = [
         {
           name: 'telemetryPromptAnswer',
-          message: telemetryObject.promptQuestion,
+          message: usageDataOptions.promptQuestion,
           type: 'list',
           default: 'Continue',
           choices: ['Continue', 'Exit'],
-          when: usageData.needToPromptForUsageData(telemetryObject.groupName)
+          when: usageData.needToPromptForUsageData(usageDataOptions.groupName)
         }
       ];
       let answerForTelemetryPrompt = await this.prompt(promptForTelemetry);
       if (answerForTelemetryPrompt.telemetryPromptAnswer) {
         if (answerForTelemetryPrompt.telemetryPromptAnswer === 'Continue') {
-          telemetryObject.usageDataLevel = usageData.UsageDataLevel.on;
+          usageDataOptions.usageDataLevel = usageData.UsageDataLevel.on;
         } else {
           process.exit();
         }
       } else {
-        telemetryObject.usageDataLevel = usageData.readUsageDataLevel(telemetryObject.groupName);
+        usageDataOptions.usageDataLevel = usageData.readUsageDataLevel(usageDataOptions.groupName);
       }
 
       let jsonData = new projectsJsonData(this.templatePath());
@@ -204,7 +193,7 @@ module.exports = yo.extend({
       let endForHost = (new Date()).getTime();
       let durationForHost = (endForHost - startForHost) / 1000;
 
-      addInTelemetry = new usageData.OfficeAddinUsageData(telemetryObject);
+      addInTelemetry = new usageData.OfficeAddinUsageData(usageDataOptions);
 
       /* Configure project properties based on user input or answers to prompts */
       this._configureProject(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject);
@@ -215,7 +204,7 @@ module.exports = yo.extend({
         ProjectType: [this.project.projectType, durationForProjectType],
       };
       // Send telemetry for project created
-      addInTelemetry.reportEvent(telemetryObject.projectName, projectInfo);
+      addInTelemetry.reportEvent(usageDataOptions.projectName, projectInfo);
     } catch (err) {
       addInTelemetry.reportError("promptingError",new Error('Prompting Error: ' + err));
     }
