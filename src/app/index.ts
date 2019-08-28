@@ -87,7 +87,6 @@ module.exports = yo.extend({
     if (this.options.details){
      this._detailedHelp();
     }
-
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
     this.project = {};
@@ -96,9 +95,9 @@ module.exports = yo.extend({
   /* Prompt user for project options */
   prompting: async function () {
     try {
-      let promptForTelemetry = [
+      let promptForUsageData = [
         {
-          name: 'telemetryPromptAnswer',
+          name: 'usageDataPromptAnswer',
           message: usageDataOptions.promptQuestion,
           type: 'list',
           default: 'Continue',
@@ -106,9 +105,9 @@ module.exports = yo.extend({
           when: usageData.needToPromptForUsageData(usageDataOptions.groupName)
         }
       ];
-      let answerForTelemetryPrompt = await this.prompt(promptForTelemetry);
-      if (answerForTelemetryPrompt.telemetryPromptAnswer) {
-        if (answerForTelemetryPrompt.telemetryPromptAnswer === 'Continue') {
+      let answerForUsageDataPrompt = await this.prompt(promptForUsageData);
+      if (answerForUsageDataPrompt.usageDataPromptAnswer) {
+        if (answerForUsageDataPrompt.usageDataPromptAnswer === 'Continue') {
           usageDataOptions.usageDataLevel = usageData.UsageDataLevel.on;
         } else {
           process.exit();
@@ -201,7 +200,7 @@ module.exports = yo.extend({
         IsManifestOnly: [this.project.isManifestOnly.toString()],
         ProjectType: [this.project.projectType, durationForProjectType],
       };
-      // Send telemetry for project created
+      // Send usage data for project created
       usageDataObject.reportEvent(defaults.promptSelectionstEventName, projectInfo);
     } catch (err) {
       usageDataObject.reportError(defaults.promptSelectionsErrorEventName,new Error('Prompting Error: ' + err));
