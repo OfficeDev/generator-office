@@ -20,7 +20,7 @@ const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
 const typescript = `TypeScript`;
 const javascript = `JavaScript`;
-let isTestData: boolean = false;
+let isProdData: boolean = true;
 let language;
 
 let usageDataObject: usageData.OfficeAddinUsageData;
@@ -95,7 +95,7 @@ module.exports = yo.extend({
      this._detailedHelp();
     }
     if (this.options['is-test']) {
-      isTestData = true;
+      isProdData = false;
     }
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
@@ -209,12 +209,12 @@ module.exports = yo.extend({
         ScriptType: [this.project.scriptType],
         IsManifestOnly: [this.project.isManifestOnly.toString()],
         ProjectType: [this.project.projectType, durationForProjectType],
-        IsTestData: [isTestData]
+        IsProdData: [isProdData]
       };
       // Send usage data for project created
       usageDataObject.reportEvent(defaults.promptSelectionstEventName, projectInfo);
     } catch (err) {
-      usageDataObject.reportError(defaults.promptSelectionsErrorEventName,new Error('Prompting Error: ' + err));
+      usageDataObject.reportError(isProdData ? defaults.promptSelectionsErrorEventName : defaults.testPromptSelectionsErrorEventName, new Error('Prompting Error: ' + err));
     }
   },
 
@@ -225,7 +225,7 @@ module.exports = yo.extend({
       done();
     })
     .catch((err) => {
-      usageDataObject.reportError(defaults.copyFilesErrorEventName,new Error('Installation Error: ' + err));
+      usageDataObject.reportError(isProdData ? defaults.copyFilesErrorEventName : defaults.testCopyFilesErrorEventName, new Error('Installation Error: ' + err));
       process.exitCode = 1;
     });
   },
@@ -247,7 +247,7 @@ module.exports = yo.extend({
         });
       }
     } catch (err) {
-      usageDataObject.reportError(defaults.installDependenciesErrorEventName, new Error('Installation Error: ' + err));
+      usageDataObject.reportError(isProdData ? defaults.installDependenciesErrorEventName : defaults.testInstallDependenciesErrorEventName, new Error('Installation Error: ' + err));
       process.exitCode = 1;
     }
   },
@@ -290,7 +290,7 @@ module.exports = yo.extend({
       this._exitYoOfficeIfProjectFolderExists();
     }
     catch (err) {
-      usageDataObject.reportError(defaults.configurationErrorEventName, new Error('Configuration Error: ' + err));
+      usageDataObject.reportError(isProdData ? defaults.configurationErrorEventName : defaults.testConfigurationErrorEventName, new Error('Configuration Error: ' + err));
 
     }
   },
@@ -326,7 +326,7 @@ module.exports = yo.extend({
         }
       }
       catch (err) {
-        usageDataObject.reportError(defaults.copyFilesErrorEventName, new Error("File Copy Error: " + err));
+        usageDataObject.reportError(isProdData ? defaults.copyFilesErrorEventName : defaults.testCopyFilesErrorEventName, new Error("File Copy Error: " + err));
         return reject(err);
       }
     });
