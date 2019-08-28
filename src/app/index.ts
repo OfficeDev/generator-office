@@ -15,6 +15,14 @@ import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
 import * as yo from 'yeoman-generator';
 
+const childProcessExec = promisify(childProcess.exec);
+const excelCustomFunctions = `excel-functions`;
+const manifest = 'manifest';
+const typescript = `TypeScript`;
+const javascript = `JavaScript`;
+let language;
+
+let usageDataObject: usageData.OfficeAddinUsageData;
 const usageDataOptions: usageData.IUsageDataOptions = {
   groupName: usageData.groupName,
   projectName: defaults.usageDataProjectName,
@@ -25,14 +33,6 @@ const usageDataOptions: usageData.IUsageDataOptions = {
   method: usageData.UsageDataReportingMethod.applicationInsights,
   isForTesting: false
 }
-let addInTelemetry : usageData.OfficeAddinUsageData;
-
-const childProcessExec = promisify(childProcess.exec);
-const excelCustomFunctions = `excel-functions`;
-const manifest = 'manifest';
-const typescript = `TypeScript`;
-const javascript = `JavaScript`;
-let language;
 
 module.exports = yo.extend({
  /*  Setup the generator */
@@ -166,7 +166,6 @@ module.exports = yo.extend({
       let answerForScriptType = await this.prompt(askForScriptType);
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
-      let startForName = (new Date()).getTime();
       let askForName = [{
         name: 'name',
         type: 'input',
@@ -175,7 +174,6 @@ module.exports = yo.extend({
         when: this.options.name == null
       }];
       let answerForName = await this.prompt(askForName);
-      let endForName = (new Date()).getTime();
 
       /* askForHost will be triggered if no project name was specified via the command line Host argument, and the Host argument
        * input was in fact valid, and the project type is not Excel-Functions */
@@ -193,7 +191,7 @@ module.exports = yo.extend({
       let endForHost = (new Date()).getTime();
       let durationForHost = (endForHost - startForHost) / 1000;
 
-      addInTelemetry = new usageData.OfficeAddinUsageData(usageDataOptions);
+      usageDataObject = new usageData.OfficeAddinUsageData(usageDataOptions);
 
       /* Configure project properties based on user input or answers to prompts */
       this._configureProject(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject);
@@ -204,9 +202,9 @@ module.exports = yo.extend({
         ProjectType: [this.project.projectType, durationForProjectType],
       };
       // Send telemetry for project created
-      addInTelemetry.reportEvent(usageDataOptions.projectName, projectInfo);
+      usageDataObject.reportEvent(defaults.promptSelectionstEventName, projectInfo);
     } catch (err) {
-      addInTelemetry.reportError("promptingError",new Error('Prompting Error: ' + err));
+      usageDataObject.reportError(defaults.promptSelectionsErrorEventName,new Error('Prompting Error: ' + err));
     }
   },
 
@@ -217,7 +215,7 @@ module.exports = yo.extend({
       done();
     })
     .catch((err) => {
-      addInTelemetry.reportError("installingIssue",new Error('Installation Error: ' + err));
+      usageDataObject.reportError(defaults.copyFilesErrorEventName,new Error('Installation Error: ' + err));
       process.exitCode = 1;
     });
   },
@@ -239,7 +237,7 @@ module.exports = yo.extend({
         });
       }
     } catch (err) {
-      addInTelemetry.reportError("installingIssue",new Error('Installation Error: ' + err));
+      usageDataObject.reportError(defaults.installDependenciesErrorEventName, new Error('Installation Error: ' + err));
       process.exitCode = 1;
     }
   },
@@ -282,7 +280,7 @@ module.exports = yo.extend({
       this._exitYoOfficeIfProjectFolderExists();
     }
     catch (err) {
-      addInTelemetry.reportError("configurationError",new Error('Configuration Error: ' + err));
+      usageDataObject.reportError(defaults.configurationErrorEventName, new Error('Configuration Error: ' + err));
 
     }
   },
@@ -318,7 +316,7 @@ module.exports = yo.extend({
         }
       }
       catch (err) {
-        addInTelemetry.reportError("fileCopyError",new Error("File Copy Error: " + err));
+        usageDataObject.reportError(defaults.copyFilesErrorEventName, new Error("File Copy Error: " + err));
         return reject(err);
       }
     });
