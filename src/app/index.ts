@@ -20,6 +20,7 @@ const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
 const typescript = `TypeScript`;
 const javascript = `JavaScript`;
+let isTestData: boolean = false;
 let language;
 
 let usageDataObject: usageData.OfficeAddinUsageData;
@@ -74,6 +75,12 @@ module.exports = yo.extend({
       desc: 'Use the prerelease version of the project template.'
     });
 
+    this.option('is-test', {
+      type: String,
+      required: false,
+      desc: 'Project is created in the context of unit tests.'
+    });
+
     this.option('details', {
       alias: 'd',
       type: Boolean,
@@ -86,6 +93,9 @@ module.exports = yo.extend({
   initializing: function () {
     if (this.options.details){
      this._detailedHelp();
+    }
+    if (this.options['is-test']) {
+      isTestData = true;
     }
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
@@ -199,6 +209,7 @@ module.exports = yo.extend({
         ScriptType: [this.project.scriptType],
         IsManifestOnly: [this.project.isManifestOnly.toString()],
         ProjectType: [this.project.projectType, durationForProjectType],
+        IsTestData: [isTestData]
       };
       // Send usage data for project created
       usageDataObject.reportEvent(defaults.promptSelectionstEventName, projectInfo);

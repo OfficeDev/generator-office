@@ -186,7 +186,7 @@ At this point, `yo office` will be running with your custom built `office-genera
 
 Yo Office collects anonymized usage data and sends it to Microsoft. This allows us to understand how Yo Office is used and how to improve it.
 
-For more details on what we collect and how to turn it off, see our [Data usage notice](https://github.com/Office-Addin-Scripts/blob/master/usage-data.md)
+For more details on what we collect and how to turn it off, see our [Data usage notice](https://aka.ms/OfficeAddInCLIPrivacy)
 
 ---
 

@@ -43,7 +43,7 @@ describe('manifest project - answers', () => {
 
   describe('manifest', () => {
     before((done) => {
-      helpers.run(path.join(__dirname, '../app')).withPrompts(answers).on('end', done);
+      helpers.run(path.join(__dirname, '../app')).withOptions({ 'is-test': true }).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -68,7 +68,7 @@ describe('manifest project - answers & args', () => {
   describe('argument: project', () => {
     before((done) => {
       argument[0] = manifestProject;
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
+      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'is-test': true }).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -93,7 +93,7 @@ describe('manifest project - answers & args', () => {
     before((done) => {
       argument[0] = manifestProject;
       argument[1] = projectEscapedName;
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
+      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'is-test': true }).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -117,7 +117,7 @@ describe('manifest project - answers & args', () => {
       argument[0] = manifestProject;
       argument[1] = projectEscapedName;
       argument[2] = 'Excel';
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withPrompts(answers).on('end', done);
+      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'is-test': true }).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
