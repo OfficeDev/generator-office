@@ -1,7 +1,7 @@
- /*
- * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
- * See LICENSE in the project root for license information.
- */
+/*
+* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+* See LICENSE in the project root for license information.
+*/
 import * as _ from 'lodash';
 import * as chalk from 'chalk';
 import * as childProcess from "child_process";
@@ -36,7 +36,7 @@ const usageDataOptions: usageData.IUsageDataOptions = {
 }
 
 module.exports = yo.extend({
- /*  Setup the generator */
+  /*  Setup the generator */
   constructor: function () {
     yo.apply(this, arguments);
 
@@ -91,8 +91,8 @@ module.exports = yo.extend({
 
   /* Generator initalization */
   initializing: function () {
-    if (this.options.details){
-     this._detailedHelp();
+    if (this.options.details) {
+      this._detailedHelp();
     }
     if (this.options['is-test']) {
       isProdData = false;
@@ -153,15 +153,17 @@ module.exports = yo.extend({
       let durationForProjectType = (endForProjectType - startForProjectType) / 1000;
 
       /* Set isManifestProject to true if Manifest project type selected from prompt or Manifest was specified via the command prompt */
-      if ((answerForProjectType.projectType != null && _.toLower(answerForProjectType.projectType) == manifest)
-      || (this.options.projectType != null && _.toLower(this.options.projectType)) == manifest) {
-          isManifestProject = true; }
+      if ((answerForProjectType.projectType != null && _.toLower(answerForProjectType.projectType) === manifest)
+        || (this.options.projectType != null && _.toLower(this.options.projectType)) === manifest) {
+        isManifestProject = true;
+      }
 
       /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or Excel Functions was specified via the command prompt */
-      if ((answerForProjectType.projectType != null  && answerForProjectType.projectType) == excelCustomFunctions
-      || (this.options.projectType != null && _.toLower(this.options.projectType) == excelCustomFunctions)) {
-        isExcelFunctionsProject = true; }
-        
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === excelCustomFunctions
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === excelCustomFunctions)) {
+        isExcelFunctionsProject = true;
+      }
+
       let askForScriptType = [
         {
           name: 'scriptType',
@@ -194,7 +196,7 @@ module.exports = yo.extend({
         default: 'Excel',
         choices: jsonData.getHostTemplateNames().map(host => ({ name: host, value: host })),
         when: (this.options.host == null || this.options.host != null && !jsonData.isValidInput(this.options.host, true /* isHostParam */))
-        && !isExcelFunctionsProject
+          && !isExcelFunctionsProject
       }];
       let answerForHost = await this.prompt(askForHost);
       let endForHost = (new Date()).getTime();
@@ -204,7 +206,7 @@ module.exports = yo.extend({
 
       /* Configure project properties based on user input or answers to prompts */
       this._configureProject(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject);
-      var projectInfo = {
+      const projectInfo = {
         Host: [this.project.host, durationForHost],
         ScriptType: [this.project.scriptType],
         IsManifestOnly: [this.project.isManifestOnly.toString()],
@@ -221,13 +223,13 @@ module.exports = yo.extend({
   writing: function () {
     const done = this.async();
     this._copyProjectFiles()
-    .then(() => {
-      done();
-    })
-    .catch((err) => {
-      usageDataObject.reportError(isProdData ? defaults.copyFilesErrorEventName : defaults.testCopyFilesErrorEventName, new Error('Installation Error: ' + err));
-      process.exitCode = 1;
-    });
+      .then(() => {
+        done();
+      })
+      .catch((err) => {
+        usageDataObject.reportError(isProdData ? defaults.copyFilesErrorEventName : defaults.testCopyFilesErrorEventName, new Error('Installation Error: ' + err));
+        process.exitCode = 1;
+      });
   },
 
   install: function () {
@@ -252,10 +254,8 @@ module.exports = yo.extend({
     }
   },
 
-  _configureProject: function(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject)
-  {
-    try
-    {
+  _configureProject: function (answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject) {
+    try {
       this.project = {
         folder: this.options.output || answerForName.name || this.options.name,
         name: this.options.name || answerForName.name,
@@ -263,13 +263,14 @@ module.exports = yo.extend({
         projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
-        scriptType: answerForScriptType.scriptType ? answerForScriptType.scriptType : this.options.ts ? typescript : javascript 
+        scriptType: answerForScriptType.scriptType ? answerForScriptType.scriptType : this.options.ts ? typescript : javascript
       };
 
       /* Set folder if to output param  if specified */
       if (this.options.output != null) {
-        this.project.folder = this.options.output; }
-      
+        this.project.folder = this.options.output;
+      }
+
       /* Set language variable */
       language = this.project.scriptType === typescript ? 'ts' : 'js';
 
@@ -294,11 +295,10 @@ module.exports = yo.extend({
 
     }
   },
-  
-  _copyProjectFiles()
-  {
+
+  _copyProjectFiles() {
     return new Promise(async (resolve, reject) => {
-      try {        
+      try {
         let jsonData = new projectsJsonData(this.templatePath());
         let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
 
@@ -307,7 +307,7 @@ module.exports = yo.extend({
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo) {
           await helperMethods.downloadProjectTemplateZipFile(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
-              
+
           // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
           const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
           await childProcessExec(cmdLine);
@@ -347,21 +347,18 @@ module.exports = yo.extend({
     this._exitProcess();
   },
 
-  _projectCreationMessage: function()
-  {
+  _projectCreationMessage: function () {
     /* Log to console the type of project being created */
-    if (this.project.isManifestOnly)
-      {
-        this.log('----------------------------------------------------------------------------------\n');
-        this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
-        this.log('----------------------------------------------------------------------------------');
-      }
-    else
-      {
-        this.log('\n----------------------------------------------------------------------------------\n');
-        this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(_.capitalize(this.project.host))} using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
-        this.log('----------------------------------------------------------------------------------');
-      }
+    if (this.project.isManifestOnly) {
+      this.log('----------------------------------------------------------------------------------\n');
+      this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
+      this.log('----------------------------------------------------------------------------------');
+    }
+    else {
+      this.log('\n----------------------------------------------------------------------------------\n');
+      this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(_.capitalize(this.project.host))} using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
+      this.log('----------------------------------------------------------------------------------');
+    }
   },
 
   _detailedHelp: function () {
@@ -390,14 +387,12 @@ module.exports = yo.extend({
     this._exitProcess();
   },
 
-_exitYoOfficeIfProjectFolderExists: function ()
-  {
-    if (helperMethods.doesProjectFolderExist(this._destinationRoot))
-      {
-          this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`);
-          this._exitProcess();
-      }
-      return false;
+  _exitYoOfficeIfProjectFolderExists: function () {
+    if (helperMethods.doesProjectFolderExist(this._destinationRoot)) {
+      this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`);
+      this._exitProcess();
+    }
+    return false;
   },
 
   _exitProcess: function () {
