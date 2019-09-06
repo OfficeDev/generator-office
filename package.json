@@ -41,7 +41,7 @@
     "chalk": "^1.1.3",
     "lodash": "^4.17.15",
     "office-addin-manifest": "^1.4.12",
-    "office-addin-usage-data": "^1.0.1",
+    "office-addin-usage-data": "^1.0.3",
     "opn": "^6.0.0",
     "request": "^2.88.0",
     "rimraf": "^3.0.0",
