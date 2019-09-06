@@ -95,7 +95,7 @@ module.exports = yo.extend({
       this._detailedHelp();
     }
     if (this.options['test']) {
-      isForTesting = false;
+      isForTesting = true;
     }
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
