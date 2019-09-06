@@ -63,6 +63,6 @@
     "ts-node": "^8.3.0",
     "typescript": "^3.6.2",
     "yeoman-assert": "^3.1.1",
-    "yeoman-test": "^2.0.0"
+    "yeoman-test": "^1.9.1"
   }
 }

@@ -20,7 +20,7 @@ const excelCustomFunctions = `excel-functions`;
 const manifest = 'manifest';
 const typescript = `TypeScript`;
 const javascript = `JavaScript`;
-let isProdData: boolean = true;
+let isForTesting: boolean = false;
 let language;
 
 let usageDataObject: usageData.OfficeAddinUsageData;
@@ -75,7 +75,7 @@ module.exports = yo.extend({
       desc: 'Use the prerelease version of the project template.'
     });
 
-    this.option('is-test', {
+    this.option('test', {
       type: String,
       required: false,
       desc: 'Project is created in the context of unit tests.'
@@ -94,8 +94,8 @@ module.exports = yo.extend({
     if (this.options.details) {
       this._detailedHelp();
     }
-    if (this.options['is-test']) {
-      isProdData = false;
+    if (this.options['test']) {
+      isForTesting = false;
     }
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
@@ -211,23 +211,23 @@ module.exports = yo.extend({
         ScriptType: [this.project.scriptType],
         IsManifestOnly: [this.project.isManifestOnly.toString()],
         ProjectType: [this.project.projectType, durationForProjectType],
-        IsProdData: [isProdData]
+        isForTesting: [isForTesting]
       };
       // Send usage data for project created
       usageDataObject.reportEvent(defaults.promptSelectionstEventName, projectInfo);
     } catch (err) {
-      usageDataObject.reportError(isProdData ? defaults.promptSelectionsErrorEventName : defaults.testPromptSelectionsErrorEventName, new Error('Prompting Error: ' + err));
+      usageDataObject.reportError(`${defaults.promptSelectionsErrorEventName}${isForTesting ? "-test" : ""}`, new Error('Prompting Error: ' + err));
     }
   },
-
-  writing: function () {
+ 
+  writing: function () { 
     const done = this.async();
     this._copyProjectFiles()
       .then(() => {
         done();
       })
       .catch((err) => {
-        usageDataObject.reportError(isProdData ? defaults.copyFilesErrorEventName : defaults.testCopyFilesErrorEventName, new Error('Installation Error: ' + err));
+        usageDataObject.reportError(`${defaults.copyFilesErrorEventName}${isForTesting ? "-test" : ""}`, new Error('Installation Error: ' + err));
         process.exitCode = 1;
       });
   },
@@ -249,7 +249,7 @@ module.exports = yo.extend({
         });
       }
     } catch (err) {
-      usageDataObject.reportError(isProdData ? defaults.installDependenciesErrorEventName : defaults.testInstallDependenciesErrorEventName, new Error('Installation Error: ' + err));
+      usageDataObject.reportError(`${defaults.installDependenciesErrorEventName}${isForTesting ? "-test" : ""}`, new Error('Installation Error: ' + err));
       process.exitCode = 1;
     }
   },
@@ -291,7 +291,7 @@ module.exports = yo.extend({
       this._exitYoOfficeIfProjectFolderExists();
     }
     catch (err) {
-      usageDataObject.reportError(isProdData ? defaults.configurationErrorEventName : defaults.testConfigurationErrorEventName, new Error('Configuration Error: ' + err));
+      usageDataObject.reportError(`${defaults.configurationErrorEventName}${isForTesting ? "-test" : ""}`, new Error('Configuration Error: ' + err));
 
     }
   },
@@ -326,7 +326,7 @@ module.exports = yo.extend({
         }
       }
       catch (err) {
-        usageDataObject.reportError(isProdData ? defaults.copyFilesErrorEventName : defaults.testCopyFilesErrorEventName, new Error("File Copy Error: " + err));
+        usageDataObject.reportError(`${defaults.copyFilesErrorEventName}${isForTesting ? "-test" : ""}`, new Error("File Copy Error: " + err));
         return reject(err);
       }
     });
