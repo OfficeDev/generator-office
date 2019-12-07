@@ -49,13 +49,13 @@
             "displayname": "Office Add-in Task Pane project supporting single sign-on",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/TCourtneyOwen/Office-Addin-TaskPane-SSO-JS",
-                    "branch": "yo-office-template",
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-SSO-JS",
+                    "branch": "yo-office-prerelease",
                     "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-Taskpane-SSO",
-                    "branch": "sso-project-template",
+                    "branch": "yo-office-prerelease",
                     "prerelease": "yo-office-prerelease"
                 }
             }
