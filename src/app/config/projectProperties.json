@@ -50,12 +50,12 @@
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-SSO-JS",
-                    "branch": "yo-office-prerelease",
+                    "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-Taskpane-SSO",
-                    "branch": "yo-office-prerelease",
+                    "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 }
             }
