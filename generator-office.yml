@@ -1,11 +1,12 @@
 ### YamlMime:Sample
-page_type: tool 
+page_type: sample 
 products: 
 - office-365 
 languages: 
 - html 
 - typescript 
 extensions: 
+ contentType: tools
  technologies: 
  - Add-ins 
  createdDate: 8/21/2015 1:12:15 PM
