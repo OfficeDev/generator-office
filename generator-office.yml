@@ -10,3 +10,5 @@ extensions:
  technologies: 
  - Add-ins 
  createdDate: 8/21/2015 1:12:15 PM
+title: Yo Office
+description: Yeoman generator for building Microsoft Office related projects.
