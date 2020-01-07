@@ -53,7 +53,7 @@ export default class projectsJsonData {
     let hosts: string[] = [];
     for (let key in this.m_projectJsonData.hostTypes) {
       if (isSsoProject) {
-        if (key === 'excel' || key === 'word' || key === 'powerpoint') {
+        if (key === 'excel' || key === 'word' || key === 'powerpoint' || key === 'outlook') {
           hosts.push(this.m_projectJsonData.hostTypes[key].displayname);
         }
       } else {
