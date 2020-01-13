@@ -51,6 +51,7 @@ taskpane | Task Pane add-in using HTML
 angular | Task Pane add-in using the Angular framework
 react | Task Pane add-in using the React framework
 excel-functions | Task Pane add-in with Excel Custom Functions
+single-sign-on | Taskpane add-in supporting single-sign-on
 manifest | Manifest and related files for an Office Add-in
   - Type: String
   - Optional

@@ -17,9 +17,12 @@ import * as yo from 'yeoman-generator';
 
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
-const manifest = 'manifest';
-const typescript = `TypeScript`;
+let isSsoProject = false;
 const javascript = `JavaScript`;
+const manifest = 'manifest';
+const sso = 'single-sign-on';
+const typescript = `TypeScript`;
+
 let language;
 
 let usageDataObject: usageData.OfficeAddinUsageData;
@@ -157,10 +160,16 @@ module.exports = yo.extend({
         isManifestProject = true;
       }
 
-      /* Set isExcelFunctionsProject to true if ExcelexcelFunctions project type selected from prompt or Excel Functions was specified via the command prompt */
+      /* Set isExcelFunctionsProject to true if ExcelFunctions project type selected from prompt or Excel Functions was specified via the command prompt */
       if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === excelCustomFunctions
         || (this.options.projectType != null && _.toLower(this.options.projectType) === excelCustomFunctions)) {
         isExcelFunctionsProject = true;
+      }
+
+      /* Set isSsoProject to true if SSO project type selected from prompt or Single Sign-On was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === sso
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === sso)) {
+        isSsoProject = true;
       }
 
       let askForScriptType = [
@@ -193,7 +202,7 @@ module.exports = yo.extend({
         message: 'Which Office client application would you like to support?',
         type: 'list',
         default: 'Excel',
-        choices: jsonData.getHostTemplateNames().map(host => ({ name: host, value: host })),
+        choices: jsonData.getHostTemplateNames(isSsoProject).map(host => ({ name: host, value: host })),
         when: (this.options.host == null || this.options.host != null && !jsonData.isValidInput(this.options.host, true /* isHostParam */))
           && !isExcelFunctionsProject
       }];
@@ -218,8 +227,8 @@ module.exports = yo.extend({
       usageDataObject.reportError(defaults.promptSelectionsErrorEventName, new Error('Prompting Error: ' + err));
     }
   },
- 
-  writing: function () { 
+
+  writing: function () {
     const done = this.async();
     this._copyProjectFiles()
       .then(() => {
@@ -336,10 +345,19 @@ module.exports = yo.extend({
     this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
     this.log(`      1. Go the directory where your project was created:\n`);
     this.log(`         ${chalk.bold('cd ' + this._destinationRoot)}\n`);
-    this.log(`      2. Start the local web server and sideload the add-in:\n`);
-    this.log(`         ${chalk.bold('npm start')}\n`);
-    this.log(`      3. Open the project in VS Code:\n`);
-    this.log(`         ${chalk.bold('code .')}\n`);
+    if (isSsoProject) {
+      this.log(`      2. Configure your SSO taskpane add-in:\n`);
+      this.log(`         ${chalk.bold('npm run configure-sso')}\n`);
+      this.log(`      3. Start the local web server and sideload the add-in:\n`);
+      this.log(`         ${chalk.bold('npm start')}\n`);
+      this.log(`      4. Open the project in VS Code:\n`);
+      this.log(`         ${chalk.bold('code .')}\n`);
+    } else {
+      this.log(`      2. Start the local web server and sideload the add-in:\n`);
+      this.log(`         ${chalk.bold('npm start')}\n`);
+      this.log(`      3. Open the project in VS Code:\n`);
+      this.log(`         ${chalk.bold('code .')}\n`);
+    }
     this.log(`         For more information, visit http://code.visualstudio.com.\n`);
     this.log(`      Please visit https://docs.microsoft.com/office/dev/add-ins for more information about Office Add-ins.\n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
