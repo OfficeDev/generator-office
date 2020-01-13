@@ -1,16 +1,3 @@
----
-topic: sample
-products:
-- office-365
-languages:
-- html
-- typescript
-extensions:
-  contentType: tools
-  technologies:
-  - Add-ins
-  createdDate: 8/21/2015 1:12:15 PM
----
 # Yeoman generator for Office Add-ins - YO OFFICE!
 
 [![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office)
