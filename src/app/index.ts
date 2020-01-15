@@ -41,7 +41,7 @@ module.exports = yo.extend({
   /*  Setup the generator */
   constructor: function () {
         if (parseInt(process.version.slice(1, process.version.indexOf('.'))) % 2 == 1) {
-        this.log(yosay("generator-office currently does not support v13 of Node. Please downgrade to the latest LTS version of Node."));
+        console.log(yosay('generator-office currently does not support ' + process.version + ' of Node. Please switch to the latest LTS version of Node.'));
         this._exitProcess();
     }
     yo.apply(this, arguments);
