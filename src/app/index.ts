@@ -40,7 +40,7 @@ const usageDataOptions: usageData.IUsageDataOptions = {
 module.exports = yo.extend({
   /*  Setup the generator */
   constructor: function () {
-    if (process.version.startsWith('v13.')) {
+        if (parseInt(process.version.slice(1, process.version.indexOf('.'))) % 2 == 1) {
         this.log(yosay("generator-office currently does not support v13 of Node. Please downgrade to the latest LTS version of Node."));
         this._exitProcess();
     }
