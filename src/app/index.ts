@@ -206,7 +206,7 @@ module.exports = yo.extend({
         message: 'Which Office client application would you like to support?',
         type: 'list',
         default: 'Excel',
-        choices: jsonData.getHostTemplateNames(isSsoProject).map(host => ({ name: host, value: host })),
+        choices: jsonData.getHostTemplateNames(answerForProjectType.projectType).map(host => ({ name: host, value: host })),
         when: (this.options.host == null || this.options.host != null && !jsonData.isValidInput(this.options.host, true /* isHostParam */))
           && !isExcelFunctionsProject
       }];
