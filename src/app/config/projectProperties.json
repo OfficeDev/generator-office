@@ -13,7 +13,14 @@
                     "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 }
-            }
+            },
+            "supportedHosts": [
+                    "Excel",
+                    "Onenote",
+                    "Outlook",
+                    "Powerpoint",
+                    "Project",
+                    "Word"]
         },
         "angular": {
             "displayname": "Office Add-in Task Pane project using Angular framework",
@@ -28,7 +35,15 @@
                     "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 }
-            }
+            },
+            "supportedHosts": [
+                "Excel",
+                "Onenote",
+                "Outlook",
+                "Powerpoint",
+                "Project",
+                "Word"
+            ]
         },
         "react": {
             "displayname": "Office Add-in Task Pane project using React framework",
@@ -43,7 +58,15 @@
                     "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 }
-            }
+            },
+            "supportedHosts": [
+                "Excel",
+                "Onenote",
+                "Outlook",
+                "Powerpoint",
+                "Project",
+                "Word"
+            ]
         },
         "single-sign-on": {
             "displayname": "Office Add-in Task Pane project supporting single sign-on",
@@ -58,7 +81,13 @@
                     "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 }
-            }
+            },
+            "supportedHosts": [
+                "Excel",
+                "Outlook",
+                "Powerpoint",
+                "Word"
+            ]
         },
         "manifest": {
             "displayname": "Office Add-in project containing the manifest only",
@@ -66,7 +95,15 @@
                 "manifestonly": {
                     "repository": ""
                 }
-            }
+            },
+            "supportedHosts": [
+                "Excel",
+                "Onenote",
+                "Outlook",
+                "Powerpoint",
+                "Project",
+                "Word"
+            ]
         },
         "excel-functions": {
             "displayname": "Excel Custom Functions Add-in project",
@@ -81,33 +118,30 @@
                     "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 }
-            }
+            },
+            "supportedHosts": [
+                "Excel"
+            ]
         }
     },
     "hostTypes": {
         "excel": {
-            "displayname": "Excel",
-            "repository": ""
+            "displayname": "Excel"
         },
         "onenote": {
-            "displayname": "OneNote",
-            "repository": ""
+            "displayname": "OneNote"
         },
         "outlook": {
-            "displayname": "Outlook",
-            "repository": ""
+            "displayname": "Outlook"
         },
         "powerpoint": {
-            "displayname": "PowerPoint",
-            "repository": ""
+            "displayname": "PowerPoint"
         },
         "project": {
-            "displayname": "Project",
-            "repository": ""
+            "displayname": "Project"
         },
         "word": {
-            "displayname": "Word",
-            "repository": ""
+            "displayname": "Word"
         }
     }
 }

@@ -49,15 +49,11 @@ export default class projectsJsonData {
     return this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.javascript != undefined && this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.typescript != undefined;
   }
 
-  getHostTemplateNames(isSsoProject: boolean) {
+  getHostTemplateNames(projectType: string) {
     let hosts: string[] = [];
-    for (let key in this.m_projectJsonData.hostTypes) {
-      if (isSsoProject) {
-        if (key === 'excel' || key === 'word' || key === 'powerpoint') {
-          hosts.push(this.m_projectJsonData.hostTypes[key].displayname);
-        }
-      } else {
-        hosts.push(this.m_projectJsonData.hostTypes[key].displayname);
+    for (let key in this.m_projectJsonData.projectTypes) {
+      if (key === projectType) {
+        hosts = this.m_projectJsonData.projectTypes[key].supportedHosts;
       }
     }
     return hosts;
