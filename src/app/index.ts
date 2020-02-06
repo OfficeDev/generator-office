@@ -356,6 +356,13 @@ module.exports = yo.extend({
       this.log(`         ${chalk.bold('npm start')}\n`);
       this.log(`      4. Open the project in VS Code:\n`);
       this.log(`         ${chalk.bold('code .')}\n`);
+    } else if (this.project.isExcelFunctionsProject) {
+      this.log(`      2. Build your Excel Custom Functions taskpane add-in:\n`);
+      this.log(`         ${chalk.bold('npm run build')}\n`);
+      this.log(`      3. Start the local web server and sideload the add-in:\n`);
+      this.log(`         ${chalk.bold('npm start')}\n`);
+      this.log(`      4. Open the project in VS Code:\n`);
+      this.log(`         ${chalk.bold('code .')}\n`);
     } else {
       this.log(`      2. Start the local web server and sideload the add-in:\n`);
       this.log(`         ${chalk.bold('npm start')}\n`);
