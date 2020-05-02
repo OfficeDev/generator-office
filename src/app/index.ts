@@ -13,18 +13,16 @@ import { promisify } from "util";
 import * as usageData from "office-addin-usage-data";
 import * as uuid from 'uuid/v4';
 import * as yosay from 'yosay';
-import * as yo from 'yeoman-generator';
+const yo = require("yeoman-generator");
 
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 let isSsoProject = false;
 const javascript = `JavaScript`;
+let language;
 const manifest = 'manifest';
 const sso = 'single-sign-on';
 const typescript = `TypeScript`;
-
-let language;
-
 let usageDataObject: usageData.OfficeAddinUsageData;
 const usageDataOptions: usageData.IUsageDataOptions = {
   groupName: usageData.groupName,
@@ -37,14 +35,15 @@ const usageDataOptions: usageData.IUsageDataOptions = {
   isForTesting: false
 }
 
-module.exports = yo.extend({
+module.exports = class extends yo {
   /*  Setup the generator */
-  constructor: function () {
-        if (parseInt(process.version.slice(1, process.version.indexOf('.'))) % 2 == 1) {
-        console.log(yosay('generator-office does not support your version of Node. Please switch to the latest LTS version of Node.'));
-        this._exitProcess();
+  constructor(args, opts) {
+    super(args, opts);
+
+    if (parseInt(process.version.slice(1, process.version.indexOf('.'))) % 2 == 1) {
+      console.log(yosay('generator-office does not support your version of Node. Please switch to the latest LTS version of Node.'));
+      this._exitProcess();
     }
-    yo.apply(this, arguments);
 
     this.argument('projectType', { type: String, required: false });
     this.argument('name', { type: String, required: false });
@@ -93,10 +92,10 @@ module.exports = yo.extend({
       required: false,
       desc: 'Get more details on Yo Office arguments.'
     });
-  },
+  }
 
   /* Generator initalization */
-  initializing: function () {
+  initializing(): void {
     if (this.options.details) {
       this._detailedHelp();
     }
@@ -106,10 +105,10 @@ module.exports = yo.extend({
     let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
     this.project = {};
-  },
+  }
 
   /* Prompt user for project options */
-  prompting: async function () {
+  async prompting(): Promise<void> {
     try {
       let promptForUsageData = [
         {
@@ -230,10 +229,10 @@ module.exports = yo.extend({
     } catch (err) {
       usageDataObject.reportError(defaults.promptSelectionsErrorEventName, new Error('Prompting Error: ' + err));
     }
-  },
+  }
 
-  writing: function () {
-    const done = this.async();
+  writing(): void {
+    const done =  this.async();
     this._copyProjectFiles()
       .then(() => {
         done();
@@ -242,9 +241,9 @@ module.exports = yo.extend({
         usageDataObject.reportError(defaults.copyFilesErrorEventName, new Error('Installation Error: ' + err));
         process.exitCode = 1;
       });
-  },
+  }
 
-  install: function () {
+  install(): void {
     try {
       if (this.options['skip-install']) {
         this.installDependencies({
@@ -264,9 +263,9 @@ module.exports = yo.extend({
       usageDataObject.reportError(defaults.installDependenciesErrorEventName, new Error('Installation Error: ' + err));
       process.exitCode = 1;
     }
-  },
+  }
 
-  _configureProject: function (answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject) {
+  _configureProject(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject): void {
     try {
       this.project = {
         folder: this.options.output || answerForName.name || this.options.name,
@@ -306,9 +305,9 @@ module.exports = yo.extend({
       usageDataObject.reportError(defaults.configurationErrorEventName, new Error('Configuration Error: ' + err));
 
     }
-  },
+  }
 
-  _copyProjectFiles() {
+  async _copyProjectFiles(): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         let jsonData = new projectsJsonData(this.templatePath());
@@ -342,8 +341,9 @@ module.exports = yo.extend({
         return reject(err);
       }
     });
-  },
-  _postInstallHints: function () {
+  }
+
+  _postInstallHints(): void {
     /* Next steps and npm commands */
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
@@ -373,9 +373,9 @@ module.exports = yo.extend({
     this.log(`      Please visit https://docs.microsoft.com/office/dev/add-ins for more information about Office Add-ins.\n`);
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
-  },
+  }
 
-  _projectCreationMessage: function () {
+  _projectCreationMessage(): void {
     /* Log to console the type of project being created */
     if (this.project.isManifestOnly) {
       this.log('----------------------------------------------------------------------------------\n');
@@ -387,9 +387,9 @@ module.exports = yo.extend({
       this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(_.capitalize(this.project.host))} using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
       this.log('----------------------------------------------------------------------------------');
     }
-  },
+  }
 
-  _detailedHelp: function () {
+  _detailedHelp(): void {
     this.log(`\nYo Office ${chalk.bgGreen('Arguments')} and ${chalk.bgMagenta('Options.')}\n`);
     this.log(`NOTE: ${chalk.bgGreen('Arguments')} must be specified in the order below, and ${chalk.bgMagenta('Options')} must follow ${chalk.bgGreen('Arguments')}.\n`);
     this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create. Valid project types include:`);
@@ -413,17 +413,17 @@ module.exports = yo.extend({
     this.log(`  ${chalk.bgMagenta('--ts')}:Specifies that the project will use TypeScript instead of JavaScript.`);
     this.log(`    ${chalk.yellow('If the option is not specified, Yo Office will prompt for TypeScript or JavaScript')}\n`);
     this._exitProcess();
-  },
+  }
 
-  _exitYoOfficeIfProjectFolderExists: function () {
+  _exitYoOfficeIfProjectFolderExists(): boolean {
     if (helperMethods.doesProjectFolderExist(this._destinationRoot)) {
       this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`);
       this._exitProcess();
     }
     return false;
-  },
+  }
 
-  _exitProcess: function () {
+  _exitProcess(): void {
     process.exit();
   }
-} as any);
+} as any;
