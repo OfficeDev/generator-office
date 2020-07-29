@@ -248,20 +248,28 @@ module.exports = class extends yo {
       if (this.options['skip-install']) {
         this.installDependencies({
           npm: false,
-          bower: false,
-          callback: this._postInstallHints.bind(this)
+          bower: false
         });
       }
       else {
         this.installDependencies({
           npm: true,
-          bower: false,
-          callback: this._postInstallHints.bind(this)
+          bower: false
         });
       }
     } catch (err) {
       usageDataObject.reportError(defaults.installDependenciesErrorEventName, new Error('Installation Error: ' + err));
       process.exitCode = 1;
+    }
+  }
+
+  end(): void {
+    if (!this.options['test']) {
+      try {
+        this._postInstallHints();
+      } catch (err) {
+        usageDataObject.reportError(defaults.postInstallHintsErrorEventName, new Error('Exit Error: ' + err));
+      }
     }
   }
 
