@@ -39,7 +39,7 @@
   ],
   "dependencies": {
     "chalk": "^4.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "office-addin-manifest": "^1.5.2",
     "office-addin-usage-data": "^1.1.4",
     "opn": "^6.0.0",
