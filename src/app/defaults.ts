@@ -3,6 +3,8 @@ import * as chalk from "chalk";
 export const configurationErrorEventName: string = "configuration-error-generator-office";
 export const copyFilesErrorEventName: string = "copy-files-error-generator-office";
 export const installDependenciesErrorEventName = "install-dependencies-error-generator-office";
+export const networkShareSideloadingSteps: string = "https://docs.microsoft.com/en-us/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins";
+export const outlookSideloadingSteps = "https://docs.microsoft.com/en-us/office/dev/add-ins/outlook/sideload-outlook-add-ins-for-testing";
 export const postInstallHintsErrorEventName = "post-install-hints-error-generator-office";
 export const promptSelectionstEventName: string = "prompt-selections-generator-office";
 export const promptSelectionsErrorEventName: string = "prompt-selections-error-generator-office";
