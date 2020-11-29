@@ -17,6 +17,7 @@ const yo = require("yeoman-generator");
 
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
+const sharedRuntime = 'shared-runtime';
 let isSsoProject = false;
 const javascript = `JavaScript`;
 let language;
@@ -163,9 +164,10 @@ module.exports = class extends yo {
         isManifestProject = true;
       }
 
-      /* Set isExcelFunctionsProject to true if ExcelFunctions project type selected from prompt or Excel Functions was specified via the command prompt */
-      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === excelCustomFunctions
-        || (this.options.projectType != null && _.toLower(this.options.projectType) === excelCustomFunctions)) {
+      /* Set isExcelFunctionsProject to true if ExcelFunctions or Shared Rumtime project type selected from prompt or Excel Functions or
+       *Shared Rumtime was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === excelCustomFunctions || sharedRuntime
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === excelCustomFunctions || sharedRuntime)) {
         isExcelFunctionsProject = true;
       }
 
@@ -296,7 +298,7 @@ module.exports = class extends yo {
       this.project.projectInternalName = _.kebabCase(this.project.name);
       this.project.projectDisplayName = this.project.name;
       this.project.projectId = uuid();
-      if (this.project.projectType === excelCustomFunctions) {
+      if (this.project.projectType === excelCustomFunctions || sharedRuntime) {
         this.project.host = 'Excel';
         this.project.hostInternalName = 'Excel';
       }
@@ -323,7 +325,7 @@ module.exports = class extends yo {
 
         this._projectCreationMessage();
 
-        // Copy project template files from project repository (currently only custom functions has its own separate repo)
+        // Copy project template files from project repository
         if (projectRepoBranchInfo.repo) {
           await helperMethods.downloadProjectTemplateZipFile(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
 
@@ -365,7 +367,11 @@ module.exports = class extends yo {
       this.log(`      4. Open the project in VS Code:\n`);
       this.log(`         ${chalk.bold('code .')}\n`);
     } else if (this.project.isExcelFunctionsProject) {
-      this.log(`      2. Build your Excel Custom Functions taskpane add-in:\n`);
+      if (this.project.projectType === excelCustomFunctions) {
+        this.log(`      2. Build your Excel Custom Functions taskpane add-in:\n`);
+      } else {
+        this.log(`      2. Build your Excel Custom Functions Shared Runtime taskpane add-in:\n`);
+      }
       this.log(`         ${chalk.bold('npm run build')}\n`);
       this.log(`      3. Start the local web server and sideload the add-in:\n`);
       this.log(`         ${chalk.bold('npm start')}\n`);
