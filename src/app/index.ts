@@ -164,10 +164,11 @@ module.exports = class extends yo {
         isManifestProject = true;
       }
 
-      /* Set isExcelFunctionsProject to true if ExcelFunctions or Shared Rumtime project type selected from prompt or Excel Functions or
-       *Shared Rumtime was specified via the command prompt */
-      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === excelCustomFunctions || sharedRuntime
-        || (this.options.projectType != null && _.toLower(this.options.projectType) === excelCustomFunctions || sharedRuntime)) {
+      /* Set isExcelFunctionsProject to true if Excel Functions or Shared Rumtime project type selected from prompt or via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === excelCustomFunctions
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === excelCustomFunctions)
+        || (answerForProjectType.projectType != null && answerForProjectType.projectType) === sharedRuntime
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === sharedRuntime)){
         isExcelFunctionsProject = true;
       }
 
@@ -298,7 +299,7 @@ module.exports = class extends yo {
       this.project.projectInternalName = _.kebabCase(this.project.name);
       this.project.projectDisplayName = this.project.name;
       this.project.projectId = uuid();
-      if (this.project.projectType === excelCustomFunctions || sharedRuntime) {
+      if (this.project.projectType === excelCustomFunctions || this.project.projectType === sharedRuntime) {
         this.project.host = 'Excel';
         this.project.hostInternalName = 'Excel';
       }
