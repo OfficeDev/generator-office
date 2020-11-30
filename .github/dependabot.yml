@@ -9,3 +9,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      time: "08:00"
+      timezone: "America/Los_Angeles"
+    open-pull-requests-limit: 5
