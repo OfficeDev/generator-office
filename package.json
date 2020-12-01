@@ -53,7 +53,7 @@
   "devDependencies": {
     "@types/chalk": "^2.2.0",
     "@types/lodash": "^4.14.150",
-    "@types/mocha": "^7.0.2",
+    "@types/mocha": "^8.0.4",
     "@types/node": "^14.0.1",
     "@types/request": "^2.48.4",
     "@types/unzipper": "^0.10.3",
