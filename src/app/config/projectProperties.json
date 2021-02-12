@@ -122,6 +122,24 @@
             "supportedHosts": [
                 "Excel"
             ]
+        },
+        "excel-shared-runtime": {
+            "displayname": "Excel Shared Runtime Add-in project",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
+                    "branch": "shared-runtime-yo-office",
+                    "prerelease": "shared-runtime-yo-office-prerelease"
+                },
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
+                    "branch": "shared-runtime-yo-office",
+                    "prerelease": "shared-runtime-yo-office-prerelease"
+                }
+            },
+            "supportedHosts": [
+                "Excel"
+            ]
         }
     },
     "hostTypes": {
