@@ -423,6 +423,7 @@ module.exports = class extends yo {
     this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create. Valid project types include:`);
     this.log(`    ${chalk.yellow('angular:')}  Creates an Office add-in using Angular framework.`);
     this.log(`    ${chalk.yellow('excel-functions:')} Creates an Office add-in for Excel custom functions.  Must specify 'Excel' as host parameter.`);
+    this.log(`    ${chalk.yellow('excel-shared-runtime:')} Creates an Office add-in for Excel shared runtime.  Must specify 'Excel' as host parameter.`);
     this.log(`    ${chalk.yellow('jquery:')} Creates an Office add-in using Jquery framework.`);
     this.log(`    ${chalk.yellow('manifest:')} Creates an only the manifest file for an Office add-in.`);
     this.log(`    ${chalk.yellow('react:')} Creates an Office add-in using React framework.\n`);
