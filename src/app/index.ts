@@ -371,6 +371,9 @@ module.exports = class extends yo {
       this.log(`         ${chalk.bold('npm start')}\n`);
       this.log(`      4. Open the project in VS Code:\n`);
       this.log(`         ${chalk.bold('code .')}\n`);
+    } else if (this.project.isManifestOnly) {
+      this.log(`      2. Open the project in VS Code:\n`);
+      this.log(`         ${chalk.bold('code .')}\n`);
     } else {
       if (this.project.host === "Excel" || this.project.host === "Word" || this.project.host === "Powerpoint") {
         this.log(`      2. Start the local web server and sideload the add-in:\n`);
