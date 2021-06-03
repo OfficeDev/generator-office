@@ -62,7 +62,7 @@ describe('Office-Add-Taskpane-Ts projects', () => {
         it('Package.json is updated properly', async () => {
             const data: any = await readFileAsync(packageJsonFile, 'utf8');
             let content = JSON.parse(data);
-            assert.equal(content.config["app-to-debug"], hosts[0]);
+            assert.equal(content.config["app_to_debug"], hosts[0]);
 
             // Verify host-specific sideload and unload sripts have been removed
             let unexexpectedScriptsFound: boolean = false;
@@ -124,7 +124,7 @@ describe('Office-Add-Taskpane-Angular-Js project', () => {
         it('Package.json is updated properly', async () => {
             const data: any = await readFileAsync(packageJsonFile, 'utf8');
             let content = JSON.parse(data);
-            assert.equal(content.config["app-to-debug"], hosts[5]);
+            assert.equal(content.config["app_to_debug"], hosts[5]);
 
             // Verify host-specific sideload and unload sripts have been removed
             let unexexpectedScriptsFound: boolean = false;
@@ -185,7 +185,7 @@ describe('Office-Add-Taskpane-React-Ts project', () => {
         it('Package.json is updated properly', async () => {
             const data: any = await readFileAsync(packageJsonFile, 'utf8');
             let content = JSON.parse(data);
-            assert.equal(content.config["app-to-debug"], hosts[3]);
+            assert.equal(content.config["app_to_debug"], hosts[3]);
 
             // Verify host-specific sideload and unload sripts have been removed
             let unexexpectedScriptsFound: boolean = false;
