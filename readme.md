@@ -72,6 +72,7 @@ react | Task Pane add-in using the React framework
 excel-functions | Task Pane add-in with Excel Custom Functions
 single-sign-on | Taskpane add-in supporting single-sign-on
 manifest | Manifest and related files for an Office Add-in
+shared-runtime | Task Pane add-in with Excel Custom Functions and Shared Runtime
 
 - Type: String
 - Optional
