@@ -8,6 +8,8 @@ cache:
   - node_modules
 node_js:
   - 'stable'
+  - 'lts/*'
+  - 14
 before_script: "npm run build"
 script: "npm run test"
 os:
