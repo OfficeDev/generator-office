@@ -9,7 +9,7 @@ cache:
 node_js:
   - 'stable'
   - 'lts/*'
-  - 12
+  - 14
 before_script: "npm run build"
 script: "npm run test"
 os:

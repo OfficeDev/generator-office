@@ -15,7 +15,7 @@
     "test": "mocha --timeout 0 -r ts-node/register generators/test/**.js"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "homepage": "https://github.com/officedev/generator-office",
   "license": "MIT",
