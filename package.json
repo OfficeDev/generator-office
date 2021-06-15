@@ -45,7 +45,7 @@
     "request": "^2.88.2",
     "rimraf": "^3.0.2",
     "unzipper": "^0.10.11",
-    "uuid": "^3.3.3",
+    "uuid": "^8.3.2",
     "yeoman-generator": "^4.10.1",
     "yosay": "^2.0.2"
   },
