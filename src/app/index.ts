@@ -304,6 +304,8 @@ module.exports = class extends yo {
         this.project.hostInternalName = this.project.host;
       }
       this.destinationRoot(this.project.folder);
+      process.chdir(this._destinationRoot);
+      this.env.cwd = this._destinationRoot;
 
       /* Check to to see if destination folder already exists. If so, we will exit and prompt the user to provide
       a different project name or output folder */
