@@ -15,6 +15,11 @@ import { v4 as uuidv4 } from 'uuid';
 import * as yosay from 'yosay';
 const yo = require("yeoman-generator");
 
+// Workaround for generator-office breaking change (v4 => v5)
+// If we can figure out how to get the new packageManagerInstallTask to work 
+// with downloaded package.json then we won't need this or the installDependencies calls
+-_.extend(yo.prototype, require('yeoman-generator/lib/actions/install'));
+
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 let isSsoProject = false;
