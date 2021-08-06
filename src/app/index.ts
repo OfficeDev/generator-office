@@ -7,7 +7,7 @@ import * as chalk from 'chalk';
 import * as childProcess from "child_process";
 import * as defaults from "./defaults";
 import { helperMethods } from './helpers/helperMethods';
-import { modifyManifestFile } from 'office-addin-manifest';
+import { OfficeAddinManifest } from 'office-addin-manifest';
 import projectsJsonData from './config/projectsJsonData';
 import { promisify } from "util";
 import * as usageData from "office-addin-usage-data";
@@ -339,7 +339,7 @@ module.exports = class extends yo {
           await childProcessExec(cmdLine);
 
           // modify manifest guid and DisplayName
-          await modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
+          await OfficeAddinManifest.modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
 
           return resolve()
         }

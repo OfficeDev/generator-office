@@ -5,7 +5,7 @@
 import * as assert from 'yeoman-assert';
 import * as fs from "fs";
 import * as helpers from 'yeoman-test';
-import { readManifestFile } from "office-addin-manifest";
+import { OfficeAddinManifest } from "office-addin-manifest";
 import * as path from 'path';
 import { promisify } from "util";
 const hosts = ["excel", "onenote", "outlook", "powerpoint", "project", "word"];
@@ -77,7 +77,7 @@ describe('Office-Add-Taskpane-Ts projects', () => {
 
     describe('Manifest.xml is updated appropriately', () => {
         it('Manifest.xml is updated appropriately', async () => {
-            const manifestInfo = await readManifestFile(manifestFile);
+            const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestFile);
             assert.equal(manifestInfo.hosts, "Workbook");
             assert.equal(manifestInfo.displayName, testProjectName);
         });
@@ -139,7 +139,7 @@ describe('Office-Add-Taskpane-Angular-Js project', () => {
 
     describe('Manifest.xml is updated appropriately', () => {
         it('Manifest.xml is updated appropriately', async () => {
-            const manifestInfo = await readManifestFile(manifestFile);
+            const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestFile);
             assert.equal(manifestInfo.hosts, "Document");
         });
     });
@@ -200,7 +200,7 @@ describe('Office-Add-Taskpane-React-Ts project', () => {
 
     describe('Manifest.xml is updated appropriately', () => {
         it('Manifest.xml is updated appropriately', async () => {
-            const manifestInfo = await readManifestFile(manifestFile);
+            const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestFile);
             assert.equal(manifestInfo.hosts, "Presentation");
         });
     });
