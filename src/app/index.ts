@@ -360,43 +360,37 @@ module.exports = class extends yo {
 
   _postInstallHints(): void {
     let projFolder: string = /\s/.test(this._destinationRoot) ? "\"" + this._destinationRoot + "\"" : this._destinationRoot;
+    let stepNumber: number = 1;
 
     /* Next steps and npm commands */
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
-    this.log(`      1. Go the directory where your project was created:\n`);
+    this.log(`      ${stepNumber++}. Go the directory where your project was created:\n`);
     this.log(`         ${chalk.bold('cd ' + projFolder)}\n`);
+    
     if (isSsoProject) {
-      this.log(`      2. Configure your SSO taskpane add-in:\n`);
+      this.log(`      ${stepNumber++}. Configure your SSO taskpane add-in:\n`);
       this.log(`         ${chalk.bold('npm run configure-sso')}\n`);
-      this.log(`      3. Start the local web server and sideload the add-in:\n`);
-      this.log(`         ${chalk.bold('npm start')}\n`);
-      this.log(`      4. Open the project in VS Code:\n`);
-      this.log(`         ${chalk.bold('code .')}\n`);
     } else if (this.project.isExcelFunctionsProject) {
-      this.log(`      2. Build your Excel Custom Functions taskpane add-in:\n`);
+      this.log(`      ${stepNumber++}. Build your Excel Custom Functions taskpane add-in:\n`);
       this.log(`         ${chalk.bold('npm run build')}\n`);
-      this.log(`      3. Start the local web server and sideload the add-in:\n`);
-      this.log(`         ${chalk.bold('npm start')}\n`);
-      this.log(`      4. Open the project in VS Code:\n`);
-      this.log(`         ${chalk.bold('code .')}\n`);
-    } else if (this.project.isManifestOnly) {
-      this.log(`      2. Open the project in VS Code:\n`);
-      this.log(`         ${chalk.bold('code .')}\n`);
-    } else if (this.project.host === "Excel" || this.project.host === "Word" || this.project.host === "Powerpoint" || this.project.host === "Outlook") {
-      this.log(`      2. Start the local web server and sideload the add-in:\n`);
-      this.log(`         ${chalk.bold('npm start')}\n`);
-      this.log(`      3. Open the project in VS Code:\n`);
-      this.log(`         ${chalk.bold('code .')}\n`);
-    } else {
-      this.log(`      2. Start the local web server:\n`);
-      this.log(`         ${chalk.bold('npm run dev-server')}\n`);
-      this.log(`      3. Sideload the the add-in:\n`);
-      this.log(`         ${chalk.bold('Follow these instructions:')}`);
-      this.log(`         ${defaults.networkShareSideloadingSteps}\n`);
-      this.log(`      4. Open the project in VS Code:\n`);
-      this.log(`         ${chalk.bold('code .')}\n`);
     }
+    
+    if (!this.project.isManifestOnly) {
+      if (this.project.host === "Excel" || this.project.host === "Word" || this.project.host === "Powerpoint" || this.project.host === "Outlook") {
+        this.log(`      ${stepNumber++}. Start the local web server and sideload the add-in:\n`);
+        this.log(`         ${chalk.bold('npm start')}\n`);
+      } else {
+        this.log(`      ${stepNumber++}. Start the local web server:\n`);
+        this.log(`         ${chalk.bold('npm run dev-server')}\n`);
+        this.log(`      ${stepNumber++}. Sideload the the add-in:\n`);
+        this.log(`         ${chalk.bold('Follow these instructions:')}`);
+        this.log(`         ${defaults.networkShareSideloadingSteps}\n`);
+      }
+    }
+
+    this.log(`      ${stepNumber++}. Open the project in VS Code:\n`);
+    this.log(`         ${chalk.bold('code .')}\n`);
     this.log(`         For more information, visit http://code.visualstudio.com.\n`);
     this.log(`      Please visit https://docs.microsoft.com/office/dev/add-ins for more information about Office Add-ins.\n`);
     if(this.project.host === "Outlook") {
