@@ -384,29 +384,19 @@ module.exports = class extends yo {
       this.log(`      2. Open the project in VS Code:\n`);
       this.log(`         ${chalk.bold('code .')}\n`);
     } else {
-      if (this.project.host === "Excel" || this.project.host === "Word" || this.project.host === "Powerpoint") {
+      if (this.project.host === "Excel" || this.project.host === "Word" || this.project.host === "Powerpoint" || this.project.host === "Outlook") {
         this.log(`      2. Start the local web server and sideload the add-in:\n`);
         this.log(`         ${chalk.bold('npm start')}\n`);
         this.log(`      3. Open the project in VS Code:\n`);
         this.log(`         ${chalk.bold('code .')}\n`);
       } else {
-        if (this.project.host === "Outlook") {
-          this.log(`      2. Start the local web server:\n`);
-          this.log(`         ${chalk.bold('npm run dev-server')}\n`);
-          this.log(`      3. Sideload the the add-in:\n`);
-          this.log(`         ${chalk.bold('Follow these instructions:')}`);
-          this.log(`         ${defaults.outlookSideloadingSteps}\n`);
-          this.log(`      4. Open the project in VS Code:\n`);
-          this.log(`         ${chalk.bold('code .')}\n`);
-        } else {
-          this.log(`      2. Start the local web server:\n`);
-          this.log(`         ${chalk.bold('npm run dev-server')}\n`);
-          this.log(`      3. Sideload the the add-in:\n`);
-          this.log(`         ${chalk.bold('Follow these instructions:')}`);
-          this.log(`         ${defaults.networkShareSideloadingSteps}\n`);
-          this.log(`      4. Open the project in VS Code:\n`);
-          this.log(`         ${chalk.bold('code .')}\n`);
-        }
+        this.log(`      2. Start the local web server:\n`);
+        this.log(`         ${chalk.bold('npm run dev-server')}\n`);
+        this.log(`      3. Sideload the the add-in:\n`);
+        this.log(`         ${chalk.bold('Follow these instructions:')}`);
+        this.log(`         ${defaults.networkShareSideloadingSteps}\n`);
+        this.log(`      4. Open the project in VS Code:\n`);
+        this.log(`         ${chalk.bold('code .')}\n`);
       }
     }
     this.log(`         For more information, visit http://code.visualstudio.com.\n`);
