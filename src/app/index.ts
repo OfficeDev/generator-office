@@ -359,11 +359,13 @@ module.exports = class extends yo {
   }
 
   _postInstallHints(): void {
+    let projFolder: string = /\s/.test(this._destinationRoot) ? "\"" + this._destinationRoot + "\"" : this._destinationRoot;
+
     /* Next steps and npm commands */
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
     this.log(`      1. Go the directory where your project was created:\n`);
-    this.log(`         ${chalk.bold('cd ' + this._destinationRoot)}\n`);
+    this.log(`         ${chalk.bold('cd ' + projFolder)}\n`);
     if (isSsoProject) {
       this.log(`      2. Configure your SSO taskpane add-in:\n`);
       this.log(`         ${chalk.bold('npm run configure-sso')}\n`);
