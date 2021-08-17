@@ -401,6 +401,9 @@ module.exports = class extends yo {
     }
     this.log(`         For more information, visit http://code.visualstudio.com.\n`);
     this.log(`      Please visit https://docs.microsoft.com/office/dev/add-ins for more information about Office Add-ins.\n`);
+    if(this.project.host === "Outlook") {
+      this.log(`      Please visit ${defaults.outlookSideloadingSteps} for more information about Outlook sideloading.\n`);
+    }
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
   }
