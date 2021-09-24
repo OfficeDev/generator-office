@@ -1,0 +1,6 @@
+steps:
+  - script: |
+     echo Install Office-AddinDev-Certs at machine level
+     call npx office-addin-dev-certs install --machine
+  
+    displayName: 'Install add-in dev cert'

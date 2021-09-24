@@ -1,0 +1,19 @@
+steps:
+  - script: |
+     echo Enable EdgeWebView Loopback
+     call npx office-addin-dev-settings appcontainer EdgeWebView --loopback --yes
+     
+     echo Set Edge WebView Registry Settings
+     
+     set PATH1="HKEY_CURRENT_USER\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Mappings\S-1-15-2-1310292540-1029022339-4008023048-2190398717-53961996-4257829345-603366646"
+     
+     reg add %PATH1% /f /v DisplayName /t REG_SZ /d "@{Microsoft.Win32WebViewHost_10.0.19041.423_neutral_neutral_cw5n1h2txyewy?ms-resource://Windows.Win32WebViewHost/resources/DisplayName}"
+     reg add %PATH1% /f /v Moniker /t REG_SZ /d "microsoft.win32webviewhost_cw5n1h2txyewy"
+     
+     set PATH2="HKEY_CURRENT_USER\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Mappings\S-1-15-2-1310292540-1029022339-4008023048-2190398717-53961996-4257829345-603366646\Children\S-1-15-2-1310292540-1029022339-4008023048-2190398717-53961996-4257829345-603366646-3829197285-1050560373-949424154-522343454"
+     
+     reg add %PATH2% /f /v DisplayName /t REG_SZ /d "microsoft.win32webviewhost_cw5n1h2txyewy/123"
+     reg add %PATH2% /f /v Moniker /t REG_SZ /d "123"
+     reg add %PATH2% /f /v ParentMoniker /t REG_SZ /d "microsoft.win32webviewhost_cw5n1h2txyewy"
+ 
+    displayName: 'Enable Edge WebView'

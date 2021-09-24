@@ -1,0 +1,15 @@
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+jobs:
+  - job: Windows10Latest
+    pool:
+      name: OE-OfficeClientApps
+    steps:
+      - template: ./install.yml
+      - template: ./lint.yml
+      - template: ./build.yml
+      - template: ./devcerts.yml
+      - template: ./edgewebview.yml
+      - template: ./test.yml

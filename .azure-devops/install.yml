@@ -1,0 +1,3 @@
+steps:
+- task: Npm@1
+  displayName: 'Install'

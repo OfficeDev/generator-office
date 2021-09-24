@@ -1,0 +1,10 @@
+steps:
+  - task: CmdLine@2
+    inputs:
+      script: |
+        echo Running Tests
+            
+        npm run test
+            
+        echo Done running tests
+    displayName: 'Run Tests'
