@@ -8,7 +8,7 @@ jobs:
       name: OE-OfficeClientApps
     steps:
       - template: ./install.yml
-      - template: ./lint.yml
+      # - template: ./lint.yml
       - template: ./build.yml
       - template: ./devcerts.yml
       - template: ./edgewebview.yml
