@@ -18,17 +18,17 @@ jobs:
     pool:
       name: OPX Mac Dogfood Pool
     steps:
-    - template: ./install.yaml
+    - template: ./install.yml
     # - template: ./lint.yml
-    - template: ./build.yaml
-    - template: ./tests.yaml
-    - template: ./cleanup.yaml
+    - template: ./build.yml
+    - template: ./tests.yml
+    - template: ./cleanup.yml
 
   - job: Linux
     pool:
       name: Azure Pipelines
       vmImage: ubuntu-latest
     steps:
-    - template: ./install.yaml
-    - template: ./build.yaml
-    - template: ./tests.yaml
+    - template: ./install.yml
+    - template: ./build.yml
+    - template: ./tests.yml
