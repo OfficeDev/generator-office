@@ -21,7 +21,7 @@ jobs:
     - template: ./install.yml
     # - template: ./lint.yml
     - template: ./build.yml
-    - template: ./tests.yml
+    - template: ./test.yml
     - template: ./cleanup.yml
 
   - job: Linux
@@ -31,4 +31,4 @@ jobs:
     steps:
     - template: ./install.yml
     - template: ./build.yml
-    - template: ./tests.yml
+    - template: ./test.yml
