@@ -22,7 +22,7 @@ jobs:
     # - template: ./lint.yml
     - template: ./build.yml
     - template: ./test.yml
-    - template: ./cleanup.yml
+    - template: ./cleanup.yaml
 
   - job: Linux
     pool:
