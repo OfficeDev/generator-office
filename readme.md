@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office)
 [![Downloads](http://img.shields.io/npm/dm/generator-office.svg)](https://npmjs.org/package/generator-office)
 
-This [Yeoman](http://yeoman.io) generator creates a Node.js [Office Add-in](https://docs.microsoft.com/en-us/office/dev/add-ins) project that can be managed with Visual Studio Code or any other editor. You can use it to create Office Add-ins for:
+This [Yeoman](http://yeoman.io) generator creates a Node.js [Office Add-in](https://docs.microsoft.com/office/dev/add-ins) project that can be managed with Visual Studio Code or any other editor. You can use it to create Office Add-ins for:
 
 - Excel
 - OneNote
@@ -21,7 +21,7 @@ Like other Yeoman generators, this generator simply creates the scaffolding of f
 > - The Yeoman generator can create Office Add-ins projects that use TypeScript, whereas Visual Studio cannot.
 > - The Yeoman generator can create add-ins for Excel, OneNote, Outlook, PowerPoint, Project, Word, Excel Custom Functions, whereas Visual Studio can only create add-ins for Excel, Outlook, PowerPoint, and Word.
 
-For detailed information about using the Yeoman generator to create Office Add-ins, see any of the 5-minute quick starts in the [Office Add-ins documentation](https://docs.microsoft.com/en-us/office/dev/add-ins).
+For detailed information about using the Yeoman generator to create Office Add-ins, see any of the 5-minute quick starts in the [Office Add-ins documentation](https://docs.microsoft.com/office/dev/add-ins).
 
 ## Install
 
@@ -155,7 +155,7 @@ npm run validate
 
 ![](src/docs/assets/validator.gif)
 
-For more information on manifest validation, refer to our [add-in manifests documentation](https://docs.microsoft.com/en-us/office/dev/add-ins/develop/add-in-manifests).
+For more information on manifest validation, refer to our [add-in manifests documentation](https://docs.microsoft.com/office/dev/add-ins/develop/add-in-manifests).
 
 ## Contributing
 
