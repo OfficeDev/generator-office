@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office)
 [![Downloads](http://img.shields.io/npm/dm/generator-office.svg)](https://npmjs.org/package/generator-office)
 
-This [Yeoman](http://yeoman.io) generator creates a Node.js [Office Add-in](https://docs.microsoft.com/en-us/office/dev/add-ins) project that can be managed with Visual Studio Code or any other editor. You can use it to create Office Add-ins for:
+This [Yeoman](http://yeoman.io) generator creates a Node.js [Office Add-in](https://docs.microsoft.com/office/dev/add-ins) project that can be managed with Visual Studio Code or any other editor. You can use it to create Office Add-ins for:
 
 - Excel
 - OneNote
@@ -21,7 +21,7 @@ Like other Yeoman generators, this generator simply creates the scaffolding of f
 > - The Yeoman generator can create Office Add-ins projects that use TypeScript, whereas Visual Studio cannot.
 > - The Yeoman generator can create add-ins for Excel, OneNote, Outlook, PowerPoint, Project, Word, Excel Custom Functions, whereas Visual Studio can only create add-ins for Excel, Outlook, PowerPoint, and Word.
 
-For detailed information about using the Yeoman generator to create Office Add-ins, see any of the 5-minute quick starts in the [Office Add-ins documentation](https://docs.microsoft.com/en-us/office/dev/add-ins).
+For detailed information about using the Yeoman generator to create Office Add-ins, see any of the 5-minute quick starts in the [Office Add-ins documentation](https://docs.microsoft.com/office/dev/add-ins).
 
 ## Install
 
@@ -30,13 +30,13 @@ For detailed information about using the Yeoman generator to create Office Add-i
 Install `yo` (Yeoman) and `generator-office` globally using NPM.
 
 ```bash
-$ npm install -g yo generator-office
+npm install -g yo generator-office
 ```
 
 ## Usage
 
 ```bash
-$ yo office [arguments] [options]
+yo office [arguments] [options]
 ```
 
 ### Command Line Arguments
@@ -46,8 +46,10 @@ The following command line arguments are supported. If using the command line ar
 #### Example
 
 ```bash
-$ yo office --projectType react --name "New Web AddIn" --host word --ts true
+yo office --projectType react --name "New Web AddIn" --host word --ts true
+```
 
+```output
      _-----_     ╭──────────────────────────╮
     |       |    │   Welcome to the Office  │
     |--(o)--|    │   Add-in generator, by   │
@@ -132,7 +134,7 @@ After scaffolding the project, the generator (and all sub generators) run all pa
 Launch the local HTTPS site on `https://localhost:3000` by simply typing the following command in your console:
 
 ```bash
-$ npm start
+npm start
 ```
 
 > **Note**: Office Add-ins should use HTTPS, not HTTP, even when you are developing. If you are prompted to install a certificate after you run `npm start`, accept the prompt to install the certificate that the Yeoman generator provides.
@@ -148,12 +150,12 @@ As you modify your `manifest.xml` file, use the included [Office Toolbox](https:
 To run Office Add-in Validator, use the following command in your project directory:
 
 ```bash
-$ npm run validate
+npm run validate
 ```
 
 ![](src/docs/assets/validator.gif)
 
-For more information on manifest validation, refer to our [add-in manifests documentation](https://docs.microsoft.com/en-us/office/dev/add-ins/develop/add-in-manifests).
+For more information on manifest validation, refer to our [add-in manifests documentation](https://docs.microsoft.com/office/dev/add-ins/develop/add-in-manifests).
 
 ## Contributing
 
@@ -170,15 +172,15 @@ Ensure you have [Node.js](https://nodejs.org/en/) (version 8.0.0 or later) insta
 Install [Yeoman](http://yeoman.io/).
 
 ```bash
-$ npm install -g yo
+npm install -g yo
 ```
 
 #### Initialize the repo
 
 ```bash
-$ git clone https://github.com/OfficeDev/generator-office.git
-$ cd generator-office
-$ npm install
+git clone https://github.com/OfficeDev/generator-office.git
+cd generator-office
+npm install
 ```
 
 #### Make your desired changes
@@ -189,10 +191,10 @@ $ npm install
 #### Build and link your changes
 
 ```bash
-$ npm run build
-$ npm link
-$ cd ..
-$ yo office
+npm run build
+npm link
+cd ..
+yo office
 ```
 
 At this point, `yo office` will be running with your custom built `office-generator` changes.
