@@ -1,5 +1,5 @@
+import axios from "axios"
 import * as path from "path";
-import * as request from "request";
 import * as unzip from "unzipper";
 const fs = require('fs');
 const zipFile = 'project.zip';
@@ -33,10 +33,26 @@ export namespace helperMethods {
     };
 
     export async function downloadProjectTemplateZipFile(projectFolder: string, projectRepo: string, projectBranch: string): Promise<void> {
-        return new Promise(async (resolve, reject) => {
-            const projectTemplateZipFile = `${projectRepo}/archive/${projectBranch}.zip`;
-            await request(projectTemplateZipFile)
-                .pipe(fs.createWriteStream(zipFile))
+        // return new Promise(async (resolve, reject) => {
+        //     const projectTemplateZipFile = `${projectRepo}/archive/${projectBranch}.zip`;
+        //     await request(projectTemplateZipFile)
+        //         .pipe(fs.createWriteStream(zipFile))
+        //         .on('error', function (err) {
+        //             reject(`Unable to download project zip file for "${projectTemplateZipFile}".\n${err}`);
+        //         })
+        //         .on('close', async () => {
+        //             await unzipProjectTemplate(projectFolder);
+        //             resolve();
+        //         });
+        // });
+        const projectTemplateZipFile = `${projectRepo}/archive/${projectBranch}.zip`;
+        return axios({
+            method: 'get',
+            url: projectTemplateZipFile,
+            responseType: 'stream',
+        }).then(response => {
+            return new Promise((resolve, reject) => {
+                response.data.pipe(fs.createWriteStream(zipFile))
                 .on('error', function (err) {
                     reject(`Unable to download project zip file for "${projectTemplateZipFile}".\n${err}`);
                 })
@@ -44,6 +60,7 @@ export namespace helperMethods {
                     await unzipProjectTemplate(projectFolder);
                     resolve();
                 });
+            });
         });
     }
 
