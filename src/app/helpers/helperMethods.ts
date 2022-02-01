@@ -1,14 +1,16 @@
 import axios from "axios"
+import * as fs from "fs";
 import * as path from "path";
 import * as unzip from "unzipper";
-const fs = require('fs');
+
 const zipFile = 'project.zip';
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace helperMethods {
     function deleteFolderRecursively(projectFolder: string) {
         try {
             if (fs.existsSync(projectFolder)) {
-                fs.readdirSync(projectFolder).forEach(function (file, index) {
+                fs.readdirSync(projectFolder).forEach(function (file) {
                     const curPath = `${projectFolder}/${file}`;
 
                     if (fs.lstatSync(curPath).isDirectory()) {

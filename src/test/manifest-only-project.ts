@@ -35,7 +35,7 @@ const unexpectedFiles = [
  * manifest project, default folder, default host.
  */
 describe('manifest project - answers', () => {
-  let answers = {
+  const answers = {
     projectType: manifestProject,
     name: projectDisplayName,
     host: 'Excel',
@@ -59,11 +59,11 @@ describe('manifest project - answers', () => {
  * manifest project, default folder, default host.
  */
 describe('manifest project - answers & args', () => {
-  let answers = {
+  const answers = {
     name: projectDisplayName,
     host: 'Excel',
   };
-  let argument = [];
+  const argument = [];
 
   describe('argument: project', () => {
     before((done) => {
@@ -84,10 +84,10 @@ describe('manifest project - answers & args', () => {
  * manifest project, default folder, default host.
  */
 describe('manifest project - answers & args', () => {
-  let answers = {
+  const answers = {
     host: 'Excel',
   };
-  let argument = [];
+  const argument = [];
 
   describe('argument: project', () => {
     before((done) => {
@@ -109,8 +109,8 @@ describe('manifest project - answers & args', () => {
  * manifest project, default folder, default host.
  */
 describe('manifest project - answers & args', () => {
-  let answers = {};
-  let argument = [];
+  const answers = {};
+  const argument = [];
 
   describe('argument: project', () => {
     before((done) => {

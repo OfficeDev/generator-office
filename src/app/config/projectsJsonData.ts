@@ -2,17 +2,17 @@ import * as fs from 'fs';
 import * as _ from 'lodash';
 
 export default class projectsJsonData {
-  m_projectJsonDataFile: string = '/projectProperties.json';
+  m_projectJsonDataFile = '/projectProperties.json';
   m_projectJsonData;
 
   constructor(templatePath: string) {
-    let jsonData = fs.readFileSync(templatePath + this.m_projectJsonDataFile);
+    const jsonData = fs.readFileSync(templatePath + this.m_projectJsonDataFile);
     this.m_projectJsonData = JSON.parse(jsonData.toString());
   }
 
   isValidInput(input: string, isHostParam: boolean) {
     if (isHostParam) {
-      for (let key in this.m_projectJsonData.hostTypes) {
+      for (const key in this.m_projectJsonData.hostTypes) {
         if (_.toLower(input) == key) {
           return true;
         }
@@ -20,7 +20,7 @@ export default class projectsJsonData {
       return false;
     }
     else {
-      for (let key in this.m_projectJsonData.projectTypes) {
+      for (const key in this.m_projectJsonData.projectTypes) {
         if (_.toLower(input) == key) {
           return true;
         }
@@ -38,8 +38,8 @@ export default class projectsJsonData {
   }
 
   getProjectTemplateNames() {
-    let projectTemplates: string[] = [];
-    for (let key in this.m_projectJsonData.projectTypes) {
+    const projectTemplates: string[] = [];
+    for (const key in this.m_projectJsonData.projectTypes) {
       projectTemplates.push(key);
     }
     return projectTemplates;
@@ -51,7 +51,7 @@ export default class projectsJsonData {
 
   getHostTemplateNames(projectType: string) {
     let hosts: string[] = [];
-    for (let key in this.m_projectJsonData.projectTypes) {
+    for (const key in this.m_projectJsonData.projectTypes) {
       if (key === projectType) {
         hosts = this.m_projectJsonData.projectTypes[key].supportedHosts;
       }
@@ -60,7 +60,7 @@ export default class projectsJsonData {
   }
 
   getHostDisplayName(hostKey: string) {
-    for (let key in this.m_projectJsonData.hostTypes) {
+    for (const key in this.m_projectJsonData.hostTypes) {
       if (_.toLower(hostKey) == key) {
         return this.m_projectJsonData.hostTypes[key].displayname;
       }
@@ -69,7 +69,7 @@ export default class projectsJsonData {
   }
 
   getProjectTemplateRepository(projectTypeKey: string, scriptType: string) {
-    for (let key in this.m_projectJsonData.projectTypes) {
+    for (const key in this.m_projectJsonData.projectTypes) {
       if (_.toLower(projectTypeKey) == key) {
         if (projectTypeKey == 'manifest') {
           return this.m_projectJsonData.projectTypes[key].templates.manifestonly.repository;
@@ -83,7 +83,7 @@ export default class projectsJsonData {
   }
 
   getProjectTemplateBranchName(projectTypeKey: string, scriptType: string, prerelease: boolean) {
-    for (let key in this.m_projectJsonData.projectTypes) {
+    for (const key in this.m_projectJsonData.projectTypes) {
       if (_.toLower(projectTypeKey) == key) {
         if (projectTypeKey == 'manifest') {
           return this.m_projectJsonData.projectTypes.manifest.templates.branch;
@@ -102,7 +102,7 @@ export default class projectsJsonData {
 
   getProjectRepoAndBranch(projectTypeKey: string, scriptType: string, prerelease: boolean) {
     scriptType = scriptType === 'ts' ? 'typescript' : 'javascript';
-    let repoBranchInfo = { repo: <string>null, branch: <string>null };
+    const repoBranchInfo = { repo: <string>null, branch: <string>null };
 
     repoBranchInfo.repo = this.getProjectTemplateRepository(projectTypeKey, scriptType);
     repoBranchInfo.branch = (repoBranchInfo.repo) ? this.getProjectTemplateBranchName(projectTypeKey, scriptType, prerelease) : undefined;

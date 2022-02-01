@@ -13,12 +13,12 @@ import { promisify } from "util";
 import * as usageData from "office-addin-usage-data";
 import { v4 as uuidv4 } from 'uuid';
 import * as yosay from 'yosay';
-const yo = require("yeoman-generator");
+const yo = require("yeoman-generator"); // eslint-disable-line @typescript-eslint/no-var-requires
 
 // Workaround for generator-office breaking change (v4 => v5)
 // If we can figure out how to get the new packageManagerInstallTask to work 
 // with downloaded package.json then we won't need this or the installDependencies calls
--_.extend(yo.prototype, require('yeoman-generator/lib/actions/install'));
+-_.extend(yo.prototype, require('yeoman-generator/lib/actions/install')); // eslint-disable-line @typescript-eslint/no-var-requires
 
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
@@ -107,7 +107,7 @@ module.exports = class extends yo {
     if (this.options['test']) {
       usageDataOptions.isForTesting = true;
     }
-    let message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
+    const message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
     this.project = {};
   }
@@ -115,7 +115,7 @@ module.exports = class extends yo {
   /* Prompt user for project options */
   async prompting(): Promise<void> {
     try {
-      let promptForUsageData = [
+      const promptForUsageData = [
         {
           name: 'usageDataPromptAnswer',
           message: usageDataOptions.promptQuestion,
@@ -125,7 +125,7 @@ module.exports = class extends yo {
           when: usageData.needToPromptForUsageData(usageDataOptions.groupName)
         }
       ];
-      let answerForUsageDataPrompt = await this.prompt(promptForUsageData);
+      const answerForUsageDataPrompt = await this.prompt(promptForUsageData);
       if (answerForUsageDataPrompt.usageDataPromptAnswer) {
         if (answerForUsageDataPrompt.usageDataPromptAnswer === 'Continue') {
           usageDataOptions.usageDataLevel = usageData.UsageDataLevel.on;
@@ -136,7 +136,7 @@ module.exports = class extends yo {
         usageDataOptions.usageDataLevel = usageData.readUsageDataLevel(usageDataOptions.groupName);
       }
 
-      let jsonData = new projectsJsonData(this.templatePath());
+      const jsonData = new projectsJsonData(this.templatePath());
       let isManifestProject = false;
       let isExcelFunctionsProject = false;
 
@@ -147,8 +147,8 @@ module.exports = class extends yo {
 
       /* askForProjectType will only be triggered if no project type was specified via command line projectType argument,
        * and the projectType argument input was indeed valid */
-      let startForProjectType = (new Date()).getTime();
-      let askForProjectType = [
+      const startForProjectType = (new Date()).getTime();
+      const askForProjectType = [
         {
           name: 'projectType',
           message: 'Choose a project type:',
@@ -158,9 +158,9 @@ module.exports = class extends yo {
           when: this.options.projectType == null || !jsonData.isValidInput(this.options.projectType, false /* isHostParam */)
         }
       ];
-      let answerForProjectType = await this.prompt(askForProjectType);
-      let endForProjectType = (new Date()).getTime();
-      let durationForProjectType = (endForProjectType - startForProjectType) / 1000;
+      const answerForProjectType = await this.prompt(askForProjectType);
+      const endForProjectType = (new Date()).getTime();
+      const durationForProjectType = (endForProjectType - startForProjectType) / 1000;
 
       /* Set isManifestProject to true if Manifest project type selected from prompt or Manifest was specified via the command prompt */
       if ((answerForProjectType.projectType != null && _.toLower(answerForProjectType.projectType) === manifest)
@@ -180,7 +180,7 @@ module.exports = class extends yo {
         isSsoProject = true;
       }
 
-      let askForScriptType = [
+      const askForScriptType = [
         {
           name: 'scriptType',
           type: 'list',
@@ -190,22 +190,22 @@ module.exports = class extends yo {
           when: !this.options.js && !this.options.ts && !isManifestProject
         }
       ];
-      let answerForScriptType = await this.prompt(askForScriptType);
+      const answerForScriptType = await this.prompt(askForScriptType);
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
-      let askForName = [{
+      const askForName = [{
         name: 'name',
         type: 'input',
         message: 'What do you want to name your add-in?',
         default: 'My Office Add-in',
         when: this.options.name == null
       }];
-      let answerForName = await this.prompt(askForName);
+      const answerForName = await this.prompt(askForName);
 
       /* askForHost will be triggered if no project name was specified via the command line Host argument, and the Host argument
        * input was in fact valid, and the project type is not Excel-Functions */
-      let startForHost = (new Date()).getTime();
-      let askForHost = [{
+      const startForHost = (new Date()).getTime();
+      const askForHost = [{
         name: 'host',
         message: 'Which Office client application would you like to support?',
         type: 'list',
@@ -214,9 +214,9 @@ module.exports = class extends yo {
         when: (this.options.host == null || this.options.host != null && !jsonData.isValidInput(this.options.host, true /* isHostParam */))
           && !isExcelFunctionsProject
       }];
-      let answerForHost = await this.prompt(askForHost);
-      let endForHost = (new Date()).getTime();
-      let durationForHost = (endForHost - startForHost) / 1000;
+      const answerForHost = await this.prompt(askForHost);
+      const endForHost = (new Date()).getTime();
+      const durationForHost = (endForHost - startForHost) / 1000;
 
       usageDataObject = new usageData.OfficeAddinUsageData(usageDataOptions);
 
@@ -322,11 +322,11 @@ module.exports = class extends yo {
     }
   }
 
-  async _copyProjectFiles(): Promise<any> {
+  async _copyProjectFiles(): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
-        let jsonData = new projectsJsonData(this.templatePath());
-        let projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
+        const jsonData = new projectsJsonData(this.templatePath());
+        const projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
 
         this._projectCreationMessage();
 
@@ -359,8 +359,8 @@ module.exports = class extends yo {
   }
 
   _postInstallHints(): void {
-    let projFolder: string = /\s/.test(this._destinationRoot) ? "\"" + this._destinationRoot + "\"" : this._destinationRoot;
-    let stepNumber: number = 1;
+    const projFolder: string = /\s/.test(this._destinationRoot) ? "\"" + this._destinationRoot + "\"" : this._destinationRoot;
+    let stepNumber = 1;
 
     /* Next steps and npm commands */
     this.log('----------------------------------------------------------------------------------------------------------\n');
@@ -451,4 +451,4 @@ module.exports = class extends yo {
   _exitProcess(): void {
     process.exit();
   }
-} as any;
+} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
