@@ -33,25 +33,13 @@ export namespace helperMethods {
     };
 
     export async function downloadProjectTemplateZipFile(projectFolder: string, projectRepo: string, projectBranch: string): Promise<void> {
-        // return new Promise(async (resolve, reject) => {
-        //     const projectTemplateZipFile = `${projectRepo}/archive/${projectBranch}.zip`;
-        //     await request(projectTemplateZipFile)
-        //         .pipe(fs.createWriteStream(zipFile))
-        //         .on('error', function (err) {
-        //             reject(`Unable to download project zip file for "${projectTemplateZipFile}".\n${err}`);
-        //         })
-        //         .on('close', async () => {
-        //             await unzipProjectTemplate(projectFolder);
-        //             resolve();
-        //         });
-        // });
         const projectTemplateZipFile = `${projectRepo}/archive/${projectBranch}.zip`;
         return axios({
             method: 'get',
             url: projectTemplateZipFile,
             responseType: 'stream',
         }).then(response => {
-            return new Promise((resolve, reject) => {
+            return new Promise<void>((resolve, reject) => {
                 response.data.pipe(fs.createWriteStream(zipFile))
                 .on('error', function (err) {
                     reject(`Unable to download project zip file for "${projectTemplateZipFile}".\n${err}`);
@@ -61,7 +49,7 @@ export namespace helperMethods {
                     resolve();
                 });
             });
-        });
+        }).catch(err => { console.log(`Unable to download project zip file for "${projectTemplateZipFile}".\n${err}`); });
     }
 
     async function unzipProjectTemplate(projectFolder: string): Promise<void> {
@@ -73,13 +61,13 @@ export namespace helperMethods {
                     reject(`Unable to unzip project zip file for "${projectFolder}".\n${err}`);
                 })
                 .on('close', async () => {
-                    await moveProjectFiles(projectFolder);
+                    moveProjectFiles(projectFolder);
                     resolve();
                 });
         });
     }
 
-    async function moveProjectFiles(projectFolder: string): Promise<void> {
+    function moveProjectFiles(projectFolder: string): void {
         // delete original zip file
         const zipFilePath = path.resolve(`${projectFolder}/${zipFile}`);
         if (fs.existsSync(zipFilePath)) {
