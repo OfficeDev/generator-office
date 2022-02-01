@@ -8,6 +8,7 @@ import * as helpers from 'yeoman-test';
 import { OfficeAddinManifest } from "office-addin-manifest";
 import * as path from 'path';
 import { promisify } from "util";
+
 const hosts = ["excel", "onenote", "outlook", "powerpoint", "project", "word"];
 const manifestFile = "manifest.xml";
 const packageJsonFile = "package.json";
@@ -38,7 +39,7 @@ describe('Office-Add-Taskpane-Ts projects', () => {
         'src/taskpane/project.ts',
         'src/taskpane/word.ts'
     ]
-    let answers = {
+    const answers = {
         projectType: "taskpane",
         scriptType: "TypeScript",
         name: testProjectName,
@@ -60,12 +61,12 @@ describe('Office-Add-Taskpane-Ts projects', () => {
 
     describe('Package.json is updated appropriately', () => {
         it('Package.json is updated properly', async () => {
-            const data: any = await readFileAsync(packageJsonFile, 'utf8');
-            let content = JSON.parse(data);
+            const data: string = await readFileAsync(packageJsonFile, 'utf8');
+            const content = JSON.parse(data);
             assert.equal(content.config["app_to_debug"], hosts[0]);
 
             // Verify host-specific sideload and unload sripts have been removed
-            let unexexpectedScriptsFound: boolean = false;
+            let unexexpectedScriptsFound = false;
             Object.keys(content.scripts).forEach(function (key) {
                 if (key.includes("sideload:") || key.includes("unload:")) {
                     unexexpectedScriptsFound = true;
@@ -100,7 +101,7 @@ describe('Office-Add-Taskpane-Angular-Js project', () => {
         'src/taskpane/app/project.app.component.js',
         'src/taskpane/app/word.app.component.js',
     ]
-    let answers = {
+    const answers = {
         projectType: "angular",
         scriptType: "JavaScript",
         name: "AngularProject",
@@ -122,12 +123,12 @@ describe('Office-Add-Taskpane-Angular-Js project', () => {
 
     describe('Package.json is updated appropriately', () => {
         it('Package.json is updated properly', async () => {
-            const data: any = await readFileAsync(packageJsonFile, 'utf8');
-            let content = JSON.parse(data);
+            const data: string = await readFileAsync(packageJsonFile, 'utf8');
+            const content = JSON.parse(data);
             assert.equal(content.config["app_to_debug"], hosts[5]);
 
             // Verify host-specific sideload and unload sripts have been removed
-            let unexexpectedScriptsFound: boolean = false;
+            let unexexpectedScriptsFound = false;
             Object.keys(content.scripts).forEach(function (key) {
                 if (key.includes("sideload:") || key.includes("unload:")) {
                     unexexpectedScriptsFound = true;
@@ -161,7 +162,7 @@ describe('Office-Add-Taskpane-React-Ts project', () => {
         'src/taskpane/components/Project.App.tsx',
         'src/taskpane/components/Word.App.tsx',
     ]
-    let answers = {
+    const answers = {
         projectType: "react",
         scriptType: "TypeScript",
         name: "ReactProject",
@@ -183,12 +184,12 @@ describe('Office-Add-Taskpane-React-Ts project', () => {
 
     describe('Package.json is updated appropriately', () => {
         it('Package.json is updated properly', async () => {
-            const data: any = await readFileAsync(packageJsonFile, 'utf8');
-            let content = JSON.parse(data);
+            const data: string = await readFileAsync(packageJsonFile, 'utf8');
+            const content = JSON.parse(data);
             assert.equal(content.config["app_to_debug"], hosts[3]);
 
             // Verify host-specific sideload and unload sripts have been removed
-            let unexexpectedScriptsFound: boolean = false;
+            let unexexpectedScriptsFound = false;
             Object.keys(content.scripts).forEach(function (key) {
                 if (key.includes("sideload:") || key.includes("unload:")) {
                     unexexpectedScriptsFound = true;
@@ -230,7 +231,7 @@ describe('Office-Add-Taskpane-SSO-TS project', () => {
         'manifest.word.xml',
         'manifest.powerpoint.xml'
     ]
-    let answers = {
+    const answers = {
         projectType: "single-sign-on",
         scriptType: "TypeScript",
         name: "SSOTypeScriptProject",
@@ -276,7 +277,7 @@ describe('Office-Add-Taskpane-SSO-JS project', () => {
         'manifest.word.xml',
         'manifest.powerpoint.xml'
     ]
-    let answers = {
+    const answers = {
         projectType: "single-sign-on",
         scriptType: "JavaScript",
         name: "SSOJavaScriptProject",
