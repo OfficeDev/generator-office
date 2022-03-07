@@ -23,10 +23,12 @@ const yo = require("yeoman-generator"); // eslint-disable-line @typescript-eslin
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 let isSsoProject = false;
+let isJsonProject = false;
 const javascript = `JavaScript`;
 let language;
 const manifest = 'manifest';
 const sso = 'single-sign-on';
+const jsonProject = 'json-based-manifest';
 const typescript = `TypeScript`;
 let usageDataObject: usageData.OfficeAddinUsageData;
 const usageDataOptions: usageData.IUsageDataOptions = {
@@ -148,10 +150,11 @@ module.exports = class extends yo {
       /* askForProjectType will only be triggered if no project type was specified via command line projectType argument,
        * and the projectType argument input was indeed valid */
       const startForProjectType = (new Date()).getTime();
+
       const askForProjectType = [
         {
           name: 'projectType',
-          message: 'Choose a project type:',
+          message: 'Choose a project type:222',
           type: 'list',
           default: 'React',
           choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayName(template), value: template })),
@@ -178,6 +181,12 @@ module.exports = class extends yo {
       if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === sso
         || (this.options.projectType != null && _.toLower(this.options.projectType) === sso)) {
         isSsoProject = true;
+      }
+
+      /* Set isJsonProject to true if JSON project type selected from prompt or Jon based was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === jsonProject
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === jsonProject)) {
+        isJsonProject = true;
       }
 
       const askForScriptType = [
@@ -285,6 +294,7 @@ module.exports = class extends yo {
         name: this.options.name || answerForName.name,
         host: this.options.host || answerForHost.host,
         projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
+        manifestType: isJsonProject ? "json" : "xml",
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
         scriptType: answerForScriptType.scriptType ? answerForScriptType.scriptType : this.options.ts ? typescript : javascript
@@ -335,7 +345,7 @@ module.exports = class extends yo {
           await helperMethods.downloadProjectTemplateZipFile(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
 
           // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
-          const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
+          const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)} ${this.project.manifestType}`;
           await childProcessExec(cmdLine);
 
           // modify manifest guid and DisplayName
