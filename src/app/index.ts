@@ -154,7 +154,7 @@ module.exports = class extends yo {
       const askForProjectType = [
         {
           name: 'projectType',
-          message: 'Choose a project type:222',
+          message: 'Choose a project type:',
           type: 'list',
           default: 'React',
           choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayName(template), value: template })),
@@ -196,7 +196,7 @@ module.exports = class extends yo {
           message: 'Choose a script type:',
           choices: [typescript, javascript],
           default: typescript,
-          when: !this.options.js && !this.options.ts && !isManifestProject
+          when: !this.options.js && !this.options.ts && !isManifestProject && !isJsonProject
         }
       ];
       const answerForScriptType = await this.prompt(askForScriptType);
@@ -221,7 +221,7 @@ module.exports = class extends yo {
         default: 'Excel',
         choices: jsonData.getHostTemplateNames(answerForProjectType.projectType).map(host => ({ name: host, value: host })),
         when: (this.options.host == null || this.options.host != null && !jsonData.isValidInput(this.options.host, true /* isHostParam */))
-          && !isExcelFunctionsProject
+          && !isExcelFunctionsProject && !isJsonProject
       }];
       const answerForHost = await this.prompt(askForHost);
       const endForHost = (new Date()).getTime();
@@ -314,6 +314,10 @@ module.exports = class extends yo {
       if (this.project.projectType === excelCustomFunctions) {
         this.project.host = 'Excel';
         this.project.hostInternalName = 'Excel';
+      } else if (isJsonProject) {
+        this.project.host = 'Outlook';
+        this.project.hostInternalName = 'Outlook';
+        language = 'ts';
       }
       else {
         this.project.hostInternalName = this.project.host;
@@ -336,7 +340,7 @@ module.exports = class extends yo {
     return new Promise(async (resolve, reject) => {
       try {
         const jsonData = new projectsJsonData(this.templatePath());
-        const projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
+        const projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease, isJsonProject);
 
         this._projectCreationMessage();
 
@@ -345,7 +349,7 @@ module.exports = class extends yo {
           await helperMethods.downloadProjectTemplateZipFile(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
 
           // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
-          const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)} ${this.project.manifestType}`;
+          const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
           await childProcessExec(cmdLine);
 
           // modify manifest guid and DisplayName

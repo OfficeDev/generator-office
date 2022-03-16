@@ -126,11 +126,6 @@
         "json-based-manifest": {
             "displayname": "[Preview] Json Based Add-in Project",
             "templates": {
-                "javascript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
-                },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
                     "branch": "yo-office",
