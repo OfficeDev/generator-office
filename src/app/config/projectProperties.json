@@ -106,17 +106,17 @@
             ]
         },
         "excel-functions": {
-            "displayname": "Excel Custom Functions Add-in project",
+            "displayname": "Excel Custom Functions Shared Runtime Add-in project",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "shared-runtime-yo-office",
+                    "prerelease": "shared-runtime-yo-office-prerelease"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "shared-runtime-yo-office",
+                    "prerelease": "shared-runtime-yo-office-prerelease"
                 }
             },
             "supportedHosts": [
