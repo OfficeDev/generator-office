@@ -128,8 +128,8 @@
             "templates": {
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "json",
+                    "prerelease": "json"
                 }
             },
             "supportedHosts": [

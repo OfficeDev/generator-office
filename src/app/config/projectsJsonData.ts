@@ -100,16 +100,13 @@ export default class projectsJsonData {
     return undefined;
   }
 
-  getProjectRepoAndBranch(projectTypeKey: string, scriptType: string, prerelease: boolean, isJsonProject: boolean) {
+  getProjectRepoAndBranch(projectTypeKey: string, scriptType: string, prerelease: boolean) {
     scriptType = scriptType === 'ts' ? 'typescript' : 'javascript';
     const repoBranchInfo = { repo: <string>null, branch: <string>null };
 
     repoBranchInfo.repo = this.getProjectTemplateRepository(projectTypeKey, scriptType);
-    if (isJsonProject) {
-      repoBranchInfo.branch = "json";
-    } else {
-      repoBranchInfo.branch = (repoBranchInfo.repo) ? this.getProjectTemplateBranchName(projectTypeKey, scriptType, prerelease) : undefined;
-    }
+    repoBranchInfo.branch = (repoBranchInfo.repo) ? this.getProjectTemplateBranchName(projectTypeKey, scriptType, prerelease) : undefined;
+
     return repoBranchInfo;
   }
 }

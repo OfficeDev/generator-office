@@ -340,7 +340,7 @@ module.exports = class extends yo {
     return new Promise(async (resolve, reject) => {
       try {
         const jsonData = new projectsJsonData(this.templatePath());
-        const projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease, isJsonProject);
+        const projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
 
         this._projectCreationMessage();
 
