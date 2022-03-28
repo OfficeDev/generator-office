@@ -149,7 +149,6 @@ module.exports = class extends yo {
       /* askForProjectType will only be triggered if no project type was specified via command line projectType argument,
        * and the projectType argument input was indeed valid */
       const startForProjectType = (new Date()).getTime();
-
       const askForProjectType = [
         {
           name: 'projectType',
@@ -313,7 +312,8 @@ module.exports = class extends yo {
       if (this.project.projectType === excelCustomFunctions) {
         this.project.host = 'Excel';
         this.project.hostInternalName = 'Excel';
-      } else {
+      }
+      else {
         this.project.hostInternalName = this.project.host;
       }
       this.destinationRoot(this.project.folder);
