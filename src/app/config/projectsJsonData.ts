@@ -59,6 +59,21 @@ export default class projectsJsonData {
     return hosts;
   }
 
+  getSupportedScripts(projectType: string) {
+    const scripts: string[] = [];
+    for (const template in this.m_projectJsonData.projectTypes[projectType].templates) {
+      let script: string;
+      if (template === "javascript") {
+        script = "JavaScript";
+      } else if (template === "typescript") {
+        script = "TypeScript";
+      }
+
+      scripts.push(script);
+    }
+    return scripts;
+  }
+
   getHostDisplayName(hostKey: string) {
     for (const key in this.m_projectJsonData.hostTypes) {
       if (_.toLower(hostKey) == key) {
