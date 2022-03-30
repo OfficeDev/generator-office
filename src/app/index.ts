@@ -183,19 +183,20 @@ module.exports = class extends yo {
         isSsoProject = true;
       }
 
+      const getSupportedScriptTypes = jsonData.getSupportedScriptTypes(projectType);
       const askForScriptType = [
         {
           name: 'scriptType',
           type: 'list',
           message: 'Choose a script type:',
-          choices: jsonData.getSupportedScripts(projectType),
-          default: jsonData.getSupportedScripts(projectType)[1],
-          when: !this.options.js && !this.options.ts && !isManifestProject && jsonData.getSupportedScripts(projectType).length > 1
+          choices: getSupportedScriptTypes,
+          default: getSupportedScriptTypes,
+          when: !this.options.js && !this.options.ts && !isManifestProject && getSupportedScriptTypes.length > 1
         }
       ];
       const answerForScriptType = await this.prompt(askForScriptType);
       if (!answerForScriptType.scriptType) {
-        answerForScriptType.scriptType = jsonData.getSupportedScripts(projectType)[0];
+        answerForScriptType.scriptType = getSupportedScriptTypes[0];
       }
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
@@ -218,7 +219,7 @@ module.exports = class extends yo {
         default: jsonData.getHostTemplateNames(projectType)[0],
         choices: jsonData.getHostTemplateNames(projectType).map(host => ({ name: host, value: host })),
         when: (this.options.host == null || this.options.host != null && !jsonData.isValidInput(this.options.host, true /* isHostParam */))
-          && !isExcelFunctionsProject && jsonData.getHostTemplateNames(projectType).length > 1
+          && jsonData.getHostTemplateNames(projectType).length > 1
       }];
       const answerForHost = await this.prompt(askForHost);
       if (!answerForHost.host) {

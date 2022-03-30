@@ -59,19 +59,19 @@ export default class projectsJsonData {
     return hosts;
   }
 
-  getSupportedScripts(projectType: string) {
-    const scripts: string[] = [];
+  getSupportedScriptTypes(projectType: string) {
+    const scriptTypes: string[] = [];
     for (const template in this.m_projectJsonData.projectTypes[projectType].templates) {
-      let script: string;
+      let scriptType: string;
       if (template === "javascript") {
-        script = "JavaScript";
+        scriptType = "JavaScript";
       } else if (template === "typescript") {
-        script = "TypeScript";
+        scriptType = "TypeScript";
       }
 
-      scripts.push(script);
+      scriptTypes.push(scriptType);
     }
-    return scripts;
+    return scriptTypes;
   }
 
   getHostDisplayName(hostKey: string) {
