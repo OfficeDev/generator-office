@@ -241,7 +241,6 @@ module.exports = class extends yo {
       usageDataObject.reportEvent(defaults.promptSelectionstEventName, projectInfo);
     } catch (err) {
       usageDataObject.reportError(defaults.promptSelectionsErrorEventName, new Error('Prompting Error: ' + err));
-      throw err;
     }
   }
 
