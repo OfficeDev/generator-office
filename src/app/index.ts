@@ -190,7 +190,7 @@ module.exports = class extends yo {
           type: 'list',
           message: 'Choose a script type:',
           choices: getSupportedScriptTypes,
-          default: getSupportedScriptTypes,
+          default: getSupportedScriptTypes[0],
           when: !this.options.js && !this.options.ts && !isManifestProject && getSupportedScriptTypes.length > 1
         }
       ];
