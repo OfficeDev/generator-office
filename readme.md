@@ -11,27 +11,20 @@ This [Yeoman](http://yeoman.io) generator creates a Node.js [Office Add-in](http
 - PowerPoint
 - Project
 - Word
-- Excel Custom Functions
+
+In addition you can use it to create add-ins that use single sign-on or Excel custom functions.
 
 Like other Yeoman generators, this generator simply creates the scaffolding of files for your Office Add-in project. You can choose to create Office Add-in projects using plain HTML, CSS & JavaScript, or using Angular or React, and can choose between JavaScript and Typescript as well.
 
 > **Note:** While you can also use [Visual Studio](https://visualstudio.microsoft.com/vs) to create Office Add-in projects, the Yeoman generator provides more options in terms of the types of projects you can create. For example:
 >
-> - The Yeoman generator can create Office Add-in projects that use plain HTML, CSS & JavaScript, or React, or Angular, whereas Visual Studio can only create Office Add-in projects that use plain HTML, CSS & JavaScript.
-> - The Yeoman generator can create Office Add-ins projects that use TypeScript, whereas Visual Studio cannot.
-> - The Yeoman generator can create add-ins for Excel, OneNote, Outlook, PowerPoint, Project, Word, Excel Custom Functions, whereas Visual Studio can only create add-ins for Excel, Outlook, PowerPoint, and Word.
+> - The Yeoman generator can create Office Add-in projects that use plain HTML, CSS & JavaScript, or React, or Angular; whereas Visual Studio can only create Office Add-in projects that use plain HTML, CSS & JavaScript.
+> - The Yeoman generator can create Office Add-ins projects that use either JavaScript or TypeScript; whereas Visual Studio only creates JavaScript projects which you would need to convert manually if you want to use TypeScript.
+> - The Yeoman generator can create add-ins for Excel, OneNote, Outlook, PowerPoint, Project, and Word; whereas Visual Studio can only create add-ins for Excel, Outlook, PowerPoint, and Word.
 
-For detailed information about using the Yeoman generator to create Office Add-ins, see any of the 5-minute quick starts in the [Office Add-ins documentation](https://docs.microsoft.com/office/dev/add-ins).
+For detailed information about installing and using the Yeoman generator to create Office Add-ins, see [Create Office Add-in projects using the Yeoman Generator](https://docs.microsoft.com/office/dev/add-ins/develop/yeoman-generator-overview).
 
-## Install
-
-> **Important:** If this is the first time you're using Yeoman or installing a Yeoman generator, first install [Git](https://git-scm.com/download) and [Node.js](https://nodejs.org) (version 8.0.0 or later). For developers on Mac, we recommend using [Node Version Manager](https://github.com/creationix/nvm) to install Node.js with the right permissions. When the installation completes, restart your console (or if you are using Windows, restart your machine) to ensure you use the updated system environment variables.
-
-Install `yo` (Yeoman) and `generator-office` globally using NPM.
-
-```bash
-npm install -g yo generator-office
-```
+The generator is normally used in interactive mode, but you can use command line arguments and options as described in the sections below.
 
 ## Usage
 
@@ -84,7 +77,7 @@ Title of the project - this is the display name that is written the manifest.xml
 - Type: String
 - Optional
 
->**Note:** The Windows command prompt requires this argument to be in quotes (e.g. "My Office Add-in")
+> **Note:** The Windows command prompt requires this argument to be in quotes (e.g. "My Office Add-in")
 
 #### `--host`
 
@@ -139,9 +132,7 @@ npm start
 
 > **Note**: Office Add-ins should use HTTPS, not HTTP, even when you are developing. If you are prompted to install a certificate after you run `npm start`, accept the prompt to install the certificate that the Yeoman generator provides.
 
-Browse to the 'External' IP address listed in your console to test your web app across multiple browsers and devices that are connected on your local network.
-
-![](src/docs/assets/browsersync.gif)
+Next, sideload the add-in in an Office application. See [Sideload an Office Add-in for testing](https://docs.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing).
 
 ## Validate manifest.xml
 
