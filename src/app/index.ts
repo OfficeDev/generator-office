@@ -114,6 +114,7 @@ module.exports = class extends yo {
 
   /* Prompt user for project options */
   async prompting(): Promise<void> {
+    usageDataObject = new usageData.OfficeAddinUsageData(usageDataOptions);
     try {
       const promptForUsageData = [
         {
@@ -162,6 +163,8 @@ module.exports = class extends yo {
       const endForProjectType = (new Date()).getTime();
       const durationForProjectType = (endForProjectType - startForProjectType) / 1000;
 
+      const projectType = _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType);
+
       /* Set isManifestProject to true if Manifest project type selected from prompt or Manifest was specified via the command prompt */
       if ((answerForProjectType.projectType != null && _.toLower(answerForProjectType.projectType) === manifest)
         || (this.options.projectType != null && _.toLower(this.options.projectType)) === manifest) {
@@ -180,17 +183,21 @@ module.exports = class extends yo {
         isSsoProject = true;
       }
 
+      const getSupportedScriptTypes = jsonData.getSupportedScriptTypes(projectType);
       const askForScriptType = [
         {
           name: 'scriptType',
           type: 'list',
           message: 'Choose a script type:',
-          choices: [typescript, javascript],
-          default: typescript,
-          when: !this.options.js && !this.options.ts && !isManifestProject
+          choices: getSupportedScriptTypes,
+          default: getSupportedScriptTypes[0],
+          when: !this.options.js && !this.options.ts && !isManifestProject && getSupportedScriptTypes.length > 1
         }
       ];
       const answerForScriptType = await this.prompt(askForScriptType);
+      if (!answerForScriptType.scriptType) {
+        answerForScriptType.scriptType = getSupportedScriptTypes[0];
+      }
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
       const askForName = [{
@@ -209,16 +216,17 @@ module.exports = class extends yo {
         name: 'host',
         message: 'Which Office client application would you like to support?',
         type: 'list',
-        default: 'Excel',
-        choices: jsonData.getHostTemplateNames(answerForProjectType.projectType).map(host => ({ name: host, value: host })),
+        default: jsonData.getHostTemplateNames(projectType)[0],
+        choices: jsonData.getHostTemplateNames(projectType).map(host => ({ name: host, value: host })),
         when: (this.options.host == null || this.options.host != null && !jsonData.isValidInput(this.options.host, true /* isHostParam */))
-          && !isExcelFunctionsProject
+          && jsonData.getHostTemplateNames(projectType).length > 1
       }];
       const answerForHost = await this.prompt(askForHost);
+      if (!answerForHost.host) {
+        answerForHost.host = jsonData.getHostTemplateNames(projectType)[0];
+      }
       const endForHost = (new Date()).getTime();
       const durationForHost = (endForHost - startForHost) / 1000;
-
-      usageDataObject = new usageData.OfficeAddinUsageData(usageDataOptions);
 
       /* Configure project properties based on user input or answers to prompts */
       this._configureProject(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject);

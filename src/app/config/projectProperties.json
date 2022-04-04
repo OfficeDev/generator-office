@@ -122,6 +122,19 @@
             "supportedHosts": [
                 "Excel"
             ]
+        },
+        "json-based-manifest": {
+            "displayname": "[Preview] Json Based Add-in Project",
+            "templates": {
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
+                    "branch": "json-yo-office",
+                    "prerelease": "json-yo-office-prerelease"
+                }
+            },
+            "supportedHosts": [
+                "Outlook"
+            ]
         }
     },
     "hostTypes": {
