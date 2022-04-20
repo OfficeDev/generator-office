@@ -124,7 +124,7 @@
             ]
         },
         "json-based-manifest": {
-            "displayname": "[Preview] Json Based Add-in Project",
+            "displayname": "Outlook Add-in with Teams Manifest (Developer preview)",
             "templates": {
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
