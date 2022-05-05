@@ -123,7 +123,7 @@
                 "Excel"
             ]
         },
-        "json-based-manifest": {
+        "teams-manifest": {
             "displayname": "Outlook Add-in with Teams Manifest (Developer preview)",
             "templates": {
                 "typescript": {
