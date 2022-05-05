@@ -29,7 +29,6 @@ let language;
 const manifest = 'manifest';
 const sso = 'single-sign-on';
 const typescript = `TypeScript`;
-const teams = `teams-manifest`;
 
 let usageDataObject: usageData.OfficeAddinUsageData;
 const usageDataOptions: usageData.IUsageDataOptions = {
@@ -350,7 +349,7 @@ module.exports = class extends yo {
           await childProcessExec(cmdLine);
 
           let manifest = "/manifest.xml";
-          if (this.project.projectType === teams) {
+          if (jsonData.getManifestType(this.project.projectType) === "json") {
             manifest = "/manifest/manifest.json";
           }
           // modify manifest guid and DisplayName
