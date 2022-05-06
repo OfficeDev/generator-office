@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import * as chalk from 'chalk';
 import * as childProcess from "child_process";
 import * as defaults from "./defaults";
+import * as path from "path";
 import { helperMethods } from './helpers/helperMethods';
 import { OfficeAddinManifest } from 'office-addin-manifest';
 import projectsJsonData from './config/projectsJsonData';
@@ -28,6 +29,7 @@ let language;
 const manifest = 'manifest';
 const sso = 'single-sign-on';
 const typescript = `TypeScript`;
+
 let usageDataObject: usageData.OfficeAddinUsageData;
 const usageDataOptions: usageData.IUsageDataOptions = {
   groupName: usageData.groupName,
@@ -347,7 +349,7 @@ module.exports = class extends yo {
           await childProcessExec(cmdLine);
 
           // modify manifest guid and DisplayName
-          await OfficeAddinManifest.modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
+          await OfficeAddinManifest.modifyManifestFile(`${path.join(this.destinationPath(), jsonData.getManifestPath(this.project.projectType))}`, 'random', `${this.project.name}`);
 
           return resolve()
         }

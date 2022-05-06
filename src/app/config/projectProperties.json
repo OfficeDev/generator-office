@@ -2,6 +2,7 @@
     "projectTypes": {
         "taskpane": {
             "displayname": "Office Add-in Task Pane project",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS",
@@ -24,6 +25,7 @@
         },
         "angular": {
             "displayname": "Office Add-in Task Pane project using Angular framework",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS",
@@ -47,6 +49,7 @@
         },
         "react": {
             "displayname": "Office Add-in Task Pane project using React framework",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS",
@@ -70,6 +73,7 @@
         },
         "single-sign-on": {
             "displayname": "Office Add-in Task Pane project supporting single sign-on",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-SSO-JS",
@@ -91,6 +95,7 @@
         },
         "manifest": {
             "displayname": "Office Add-in project containing the manifest only",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "manifestonly": {
                     "repository": ""
@@ -107,6 +112,7 @@
         },
         "excel-functions": {
             "displayname": "Excel Custom Functions Add-in project",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
@@ -123,8 +129,9 @@
                 "Excel"
             ]
         },
-        "json-based-manifest": {
+        "teams-manifest": {
             "displayname": "Outlook Add-in with Teams Manifest (Developer preview)",
+            "manifestPath": "manifest/manifest.json",
             "templates": {
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
