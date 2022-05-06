@@ -2,7 +2,7 @@
     "projectTypes": {
         "taskpane": {
             "displayname": "Office Add-in Task Pane project",
-            "manifestType": "xml",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS",
@@ -25,7 +25,7 @@
         },
         "angular": {
             "displayname": "Office Add-in Task Pane project using Angular framework",
-            "manifestType": "xml",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS",
@@ -49,7 +49,7 @@
         },
         "react": {
             "displayname": "Office Add-in Task Pane project using React framework",
-            "manifestType": "xml",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS",
@@ -73,7 +73,7 @@
         },
         "single-sign-on": {
             "displayname": "Office Add-in Task Pane project supporting single sign-on",
-            "manifestType": "xml",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-SSO-JS",
@@ -95,7 +95,7 @@
         },
         "manifest": {
             "displayname": "Office Add-in project containing the manifest only",
-            "manifestType": "xml",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "manifestonly": {
                     "repository": ""
@@ -112,7 +112,7 @@
         },
         "excel-functions": {
             "displayname": "Excel Custom Functions Add-in project",
-            "manifestType": "xml",
+            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
@@ -131,7 +131,7 @@
         },
         "teams-manifest": {
             "displayname": "Outlook Add-in with Teams Manifest (Developer preview)",
-            "manifestType": "json",
+            "manifestPath": "manifest/manifest.json",
             "templates": {
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",

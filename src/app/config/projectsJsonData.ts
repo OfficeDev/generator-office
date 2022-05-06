@@ -49,8 +49,8 @@ export default class projectsJsonData {
     return this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.javascript != undefined && this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.typescript != undefined;
   }
 
-  getManifestType(projectType: string): string | undefined {
-    return this.m_projectJsonData.projectTypes[projectType].manifestType;
+  getManifestPath(projectType: string): string | undefined {
+    return this.m_projectJsonData.projectTypes[projectType].manifestPath;
   }
 
   getHostTemplateNames(projectType: string) {

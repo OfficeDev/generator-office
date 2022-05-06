@@ -348,12 +348,8 @@ module.exports = class extends yo {
           const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)}`;
           await childProcessExec(cmdLine);
 
-          let manifest = "/manifest.xml";
-          if (jsonData.getManifestType(this.project.projectType) === "json") {
-            manifest = "/manifest/manifest.json";
-          }
           // modify manifest guid and DisplayName
-          await OfficeAddinManifest.modifyManifestFile(`${path.join(this.destinationPath(), manifest)}`, 'random', `${this.project.name}`);
+          await OfficeAddinManifest.modifyManifestFile(`${path.join(this.destinationPath(), jsonData.getManifestPath(this.project.projectType))}`, 'random', `${this.project.name}`);
 
           return resolve()
         }
