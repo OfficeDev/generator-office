@@ -135,6 +135,7 @@ module.exports = class extends yo {
         } else {
           process.exit();
         }
+        usageData.writeUsageDataJsonData(usageDataOptions.groupName, usageDataOptions.usageDataLevel);
       } else {
         usageDataOptions.usageDataLevel = usageData.readUsageDataLevel(usageDataOptions.groupName);
       }
