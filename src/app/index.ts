@@ -116,7 +116,6 @@ module.exports = class extends yo {
 
   /* Prompt user for project options */
   async prompting(): Promise<void> {
-    usageDataObject = new usageData.OfficeAddinUsageData(usageDataOptions);
     try {
       const promptForUsageData = [
         {
@@ -230,6 +229,8 @@ module.exports = class extends yo {
       const endForHost = (new Date()).getTime();
       const durationForHost = (endForHost - startForHost) / 1000;
 
+      usageDataObject = new usageData.OfficeAddinUsageData(usageDataOptions);
+
       /* Configure project properties based on user input or answers to prompts */
       this._configureProject(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject);
       const projectInfo = {
@@ -242,6 +243,7 @@ module.exports = class extends yo {
       // Send usage data for project created
       usageDataObject.reportEvent(defaults.promptSelectionstEventName, projectInfo);
     } catch (err) {
+      usageDataObject = new usageData.OfficeAddinUsageData(usageDataOptions);
       usageDataObject.reportError(defaults.promptSelectionsErrorEventName, new Error('Prompting Error: ' + err));
     }
   }
