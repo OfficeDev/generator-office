@@ -49,6 +49,10 @@ export default class projectsJsonData {
     return this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.javascript != undefined && this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.typescript != undefined;
   }
 
+  getManifestPath(projectType: string): string | undefined {
+    return this.m_projectJsonData.projectTypes[projectType].manifestPath;
+  }
+
   getHostTemplateNames(projectType: string) {
     let hosts: string[] = [];
     for (const key in this.m_projectJsonData.projectTypes) {
@@ -57,6 +61,21 @@ export default class projectsJsonData {
       }
     }
     return hosts;
+  }
+
+  getSupportedScriptTypes(projectType: string) {
+    const scriptTypes: string[] = [];
+    for (const template in this.m_projectJsonData.projectTypes[projectType].templates) {
+      let scriptType: string;
+      if (template === "javascript") {
+        scriptType = "JavaScript";
+      } else if (template === "typescript") {
+        scriptType = "TypeScript";
+      }
+
+      scriptTypes.push(scriptType);
+    }
+    return scriptTypes;
   }
 
   getHostDisplayName(hostKey: string) {

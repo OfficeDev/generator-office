@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import * as chalk from 'chalk';
 import * as childProcess from "child_process";
 import * as defaults from "./defaults";
+import * as path from "path";
 import { helperMethods } from './helpers/helperMethods';
 import { OfficeAddinManifest } from 'office-addin-manifest';
 import projectsJsonData from './config/projectsJsonData';
@@ -28,6 +29,7 @@ let language;
 const manifest = 'manifest';
 const sso = 'single-sign-on';
 const typescript = `TypeScript`;
+
 let usageDataObject: usageData.OfficeAddinUsageData;
 const usageDataOptions: usageData.IUsageDataOptions = {
   groupName: usageData.groupName,
@@ -162,6 +164,8 @@ module.exports = class extends yo {
       const endForProjectType = (new Date()).getTime();
       const durationForProjectType = (endForProjectType - startForProjectType) / 1000;
 
+      const projectType = _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType);
+
       /* Set isManifestProject to true if Manifest project type selected from prompt or Manifest was specified via the command prompt */
       if ((answerForProjectType.projectType != null && _.toLower(answerForProjectType.projectType) === manifest)
         || (this.options.projectType != null && _.toLower(this.options.projectType)) === manifest) {
@@ -180,17 +184,21 @@ module.exports = class extends yo {
         isSsoProject = true;
       }
 
+      const getSupportedScriptTypes = jsonData.getSupportedScriptTypes(projectType);
       const askForScriptType = [
         {
           name: 'scriptType',
           type: 'list',
           message: 'Choose a script type:',
-          choices: [typescript, javascript],
-          default: typescript,
-          when: !this.options.js && !this.options.ts && !isManifestProject
+          choices: getSupportedScriptTypes,
+          default: getSupportedScriptTypes[0],
+          when: !this.options.js && !this.options.ts && !isManifestProject && getSupportedScriptTypes.length > 1
         }
       ];
       const answerForScriptType = await this.prompt(askForScriptType);
+      if (!answerForScriptType.scriptType) {
+        answerForScriptType.scriptType = getSupportedScriptTypes[0];
+      }
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
       const askForName = [{
@@ -209,12 +217,15 @@ module.exports = class extends yo {
         name: 'host',
         message: 'Which Office client application would you like to support?',
         type: 'list',
-        default: 'Excel',
-        choices: jsonData.getHostTemplateNames(answerForProjectType.projectType).map(host => ({ name: host, value: host })),
+        default: jsonData.getHostTemplateNames(projectType)[0],
+        choices: jsonData.getHostTemplateNames(projectType).map(host => ({ name: host, value: host })),
         when: (this.options.host == null || this.options.host != null && !jsonData.isValidInput(this.options.host, true /* isHostParam */))
-          && !isExcelFunctionsProject
+          && jsonData.getHostTemplateNames(projectType).length > 1
       }];
       const answerForHost = await this.prompt(askForHost);
+      if (!answerForHost.host) {
+        answerForHost.host = jsonData.getHostTemplateNames(projectType)[0];
+      }
       const endForHost = (new Date()).getTime();
       const durationForHost = (endForHost - startForHost) / 1000;
 
@@ -232,6 +243,7 @@ module.exports = class extends yo {
       // Send usage data for project created
       usageDataObject.reportEvent(defaults.promptSelectionstEventName, projectInfo);
     } catch (err) {
+      usageDataObject = new usageData.OfficeAddinUsageData(usageDataOptions);
       usageDataObject.reportError(defaults.promptSelectionsErrorEventName, new Error('Prompting Error: ' + err));
     }
   }
@@ -339,7 +351,7 @@ module.exports = class extends yo {
           await childProcessExec(cmdLine);
 
           // modify manifest guid and DisplayName
-          await OfficeAddinManifest.modifyManifestFile(`${this.destinationPath()}/manifest.xml`, 'random', `${this.project.name}`);
+          await OfficeAddinManifest.modifyManifestFile(`${path.join(this.destinationPath(), jsonData.getManifestPath(this.project.projectType))}`, 'random', `${this.project.name}`);
 
           return resolve()
         }
