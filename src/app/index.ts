@@ -196,7 +196,7 @@ module.exports = class extends yo {
         }
       ];
       const answerForScriptType = await this.prompt(askForScriptType);
-      if (!answerForScriptType.scriptType) {
+      if (!answerForScriptType.scriptType && !this.options.ts) {
         answerForScriptType.scriptType = getSupportedScriptTypes[0];
       }
 
