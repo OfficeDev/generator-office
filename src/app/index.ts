@@ -196,7 +196,7 @@ module.exports = class extends yo {
         }
       ];
       const answerForScriptType = await this.prompt(askForScriptType);
-      if (!answerForScriptType.scriptType && !this.options.ts) {
+      if (!answerForScriptType.scriptType && !this.options.js && !this.options.ts) {
         answerForScriptType.scriptType = getSupportedScriptTypes[0];
       }
 
@@ -223,7 +223,7 @@ module.exports = class extends yo {
           && jsonData.getHostTemplateNames(projectType).length > 1
       }];
       const answerForHost = await this.prompt(askForHost);
-      if (!answerForHost.host) {
+      if (!answerForHost.host && !this.options.host) {
         answerForHost.host = jsonData.getHostTemplateNames(projectType)[0];
       }
       const endForHost = (new Date()).getTime();
