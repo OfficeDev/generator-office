@@ -129,6 +129,25 @@
                 "Excel"
             ]
         },
+        "excel-functions-shared": {
+            "displayname": "Excel Shared Runtime Custom Functions Add-in project",
+            "manifestPath": "manifest.xml",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
+                    "branch": "shared-runtime-yo-office",
+                    "prerelease": "shared-runtime-yo-office-prerelease"
+                },
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
+                    "branch": "shared-runtime-yo-office",
+                    "prerelease": "shared-runtime-yo-office-prerelease"
+                }
+            },
+            "supportedHosts": [
+                "Excel"
+            ]
+        },
         "teams-manifest": {
             "displayname": "Outlook Add-in with Teams Manifest (Developer preview)",
             "manifestPath": "manifest/manifest.json",
