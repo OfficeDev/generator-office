@@ -72,7 +72,7 @@
             ]
         },
         "single-sign-on": {
-            "displayname": "Office Add-in Task Pane project supporting single sign-on",
+            "displayname": "Office Add-in Task Pane project with single sign-on (not for production)",
             "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
