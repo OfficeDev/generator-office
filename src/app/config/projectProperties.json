@@ -23,17 +23,17 @@
                     "Project",
                     "Word"]
         },
-        "angular": {
-            "displayname": "Office Add-in Task Pane project using Angular framework",
+        "react": {
+            "displayname": "Office Add-in Task Pane project using React framework",
             "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS",
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS",
                     "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular",
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React",
                     "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 }
@@ -47,17 +47,17 @@
                 "Word"
             ]
         },
-        "react": {
-            "displayname": "Office Add-in Task Pane project using React framework",
+        "angular": {
+            "displayname": "Office Add-in Task Pane project using Angular framework",
             "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS",
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular-JS",
                     "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React",
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-Angular",
                     "branch": "yo-office",
                     "prerelease": "yo-office-prerelease"
                 }
@@ -93,55 +93,38 @@
                 "Word"
             ]
         },
-        "manifest": {
-            "displayname": "Office Add-in project containing the manifest only",
-            "manifestPath": "manifest.xml",
-            "templates": {
-                "manifestonly": {
-                    "repository": ""
-                }
-            },
-            "supportedHosts": [
-                "Excel",
-                "Onenote",
-                "Outlook",
-                "Powerpoint",
-                "Project",
-                "Word"
-            ]
-        },
-        "excel-functions": {
-            "displayname": "Excel Custom Functions Add-in project",
+        "excel-functions-shared": {
+            "displayname": "Excel Custom Functions using a Shared Runtime",
             "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "shared-runtime-yo-office",
+                    "prerelease": "shared-runtime-yo-office-prerelease"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "shared-runtime-yo-office",
+                    "prerelease": "shared-runtime-yo-office-prerelease"
                 }
             },
             "supportedHosts": [
                 "Excel"
             ]
         },
-        "excel-functions-shared": {
-            "displayname": "Excel Shared Runtime Custom Functions Add-in project",
+        "excel-functions": {
+            "displayname": "Excel Custom Functions using a JavaScript-only Runtime",
             "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
-                    "branch": "shared-runtime-yo-office",
-                    "prerelease": "shared-runtime-yo-office-prerelease"
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branch": "shared-runtime-yo-office",
-                    "prerelease": "shared-runtime-yo-office-prerelease"
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
                 }
             },
             "supportedHosts": [
@@ -160,6 +143,23 @@
             },
             "supportedHosts": [
                 "Outlook"
+            ]
+        },
+        "manifest": {
+            "displayname": "Office Add-in project containing the manifest only",
+            "manifestPath": "manifest.xml",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            },
+            "supportedHosts": [
+                "Excel",
+                "Onenote",
+                "Outlook",
+                "Powerpoint",
+                "Project",
+                "Word"
             ]
         }
     },

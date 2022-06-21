@@ -196,6 +196,9 @@ module.exports = class extends yo {
         }
       ];
       const answerForScriptType = await this.prompt(askForScriptType);
+      if (!answerForScriptType.scriptType && !this.options.ts) {
+        answerForScriptType.scriptType = getSupportedScriptTypes[0];
+      }
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
       const askForName = [{
@@ -220,6 +223,9 @@ module.exports = class extends yo {
           && jsonData.getHostTemplateNames(projectType).length > 1
       }];
       const answerForHost = await this.prompt(askForHost);
+      if (!answerForHost.host && !this.options.host) {
+        answerForHost.host = jsonData.getHostTemplateNames(projectType)[0];
+      }
       const endForHost = (new Date()).getTime();
       const durationForHost = (endForHost - startForHost) / 1000;
 
@@ -307,13 +313,8 @@ module.exports = class extends yo {
       this.project.projectInternalName = _.kebabCase(this.project.name);
       this.project.projectDisplayName = this.project.name;
       this.project.projectId = uuidv4();
-      if (this.project.projectType === excelCustomFunctions) {
-        this.project.host = 'Excel';
-        this.project.hostInternalName = 'Excel';
-      }
-      else {
-        this.project.hostInternalName = this.project.host;
-      }
+      this.project.hostInternalName = this.project.host;
+
       this.destinationRoot(this.project.folder);
       process.chdir(this._destinationRoot);
       this.env.cwd = this._destinationRoot;
@@ -425,10 +426,12 @@ module.exports = class extends yo {
     this.log(`NOTE: ${chalk.bgGreen('Arguments')} must be specified in the order below, and ${chalk.bgMagenta('Options')} must follow ${chalk.bgGreen('Arguments')}.\n`);
     this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create. Valid project types include:`);
     this.log(`    ${chalk.yellow('angular:')}  Creates an Office add-in using Angular framework.`);
-    this.log(`    ${chalk.yellow('excel-functions:')} Creates an Office add-in for Excel custom functions.  Must specify 'Excel' as host parameter.`);
+    this.log(`    ${chalk.yellow('excel-functions-shared:')} Creates an Office add-in for Excel custom functions using a Shared Runtime.  Must specify 'Excel' as host parameter.`);
+    this.log(`    ${chalk.yellow('excel-functions:')} Creates an Office add-in for Excel custom functions using a JavaScript-only Runtime.  Must specify 'Excel' as host parameter.`);
     this.log(`    ${chalk.yellow('jquery:')} Creates an Office add-in using Jquery framework.`);
     this.log(`    ${chalk.yellow('manifest:')} Creates an only the manifest file for an Office add-in.`);
     this.log(`    ${chalk.yellow('react:')} Creates an Office add-in using React framework.\n`);
+    this.log(`    ${chalk.yellow('teams-manifest:')} Creates Outlook Add-in with Teams Manifest (Developer preview).\n`);
     this.log(`  ${chalk.bgGreen('name')}:Specifies the name for the project that will be created.\n`);
     this.log(`  ${chalk.bgGreen('host')}:Specifies the host app in the add-in manifest.`);
     this.log(`    ${chalk.yellow('excel:')}  Creates an Office add-in for Excel. Valid hosts include:`);
