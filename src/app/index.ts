@@ -29,6 +29,7 @@ let language;
 const manifest = 'manifest';
 const sso = 'single-sign-on';
 const typescript = `TypeScript`;
+let jsonData;
 
 let usageDataObject: usageData.OfficeAddinUsageData;
 const usageDataOptions: usageData.IUsageDataOptions = {
@@ -138,7 +139,7 @@ module.exports = class extends yo {
         usageDataOptions.usageDataLevel = usageData.readUsageDataLevel(usageDataOptions.groupName);
       }
 
-      const jsonData = new projectsJsonData(this.templatePath());
+      jsonData = new projectsJsonData(this.templatePath());
       let isManifestProject = false;
       let isExcelFunctionsProject = false;
 
@@ -196,9 +197,6 @@ module.exports = class extends yo {
         }
       ];
       const answerForScriptType = await this.prompt(askForScriptType);
-      if (!answerForScriptType.scriptType && !this.options.ts) {
-        answerForScriptType.scriptType = getSupportedScriptTypes[0];
-      }
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
       const askForName = [{
@@ -223,9 +221,6 @@ module.exports = class extends yo {
           && jsonData.getHostTemplateNames(projectType).length > 1
       }];
       const answerForHost = await this.prompt(askForHost);
-      if (!answerForHost.host && !this.options.host) {
-        answerForHost.host = jsonData.getHostTemplateNames(projectType)[0];
-      }
       const endForHost = (new Date()).getTime();
       const durationForHost = (endForHost - startForHost) / 1000;
 
@@ -295,12 +290,12 @@ module.exports = class extends yo {
       this.project = {
         folder: this.options.output || answerForName.name || this.options.name,
         name: this.options.name || answerForName.name,
-        host: this.options.host || answerForHost.host,
         projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
-        scriptType: answerForScriptType.scriptType ? answerForScriptType.scriptType : this.options.ts ? typescript : javascript
       };
+      this.project.host = answerForHost.host ? answerForHost.host : this.options.host ? this.options.host : jsonData.getHostTemplateNames(this.project.projectType)[0];
+      this.project.scriptType = answerForScriptType.scriptType ? answerForScriptType.scriptType : this.options.ts ? typescript : this.options.js ? this.options.js : jsonData.getSupportedScriptTypes(this.project.projectType)[0];
 
       /* Set folder if to output param  if specified */
       if (this.options.output != null) {
