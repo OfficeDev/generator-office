@@ -299,6 +299,9 @@ module.exports = class extends yo {
         : this.options.host
         ? this.options.host
         : jsonData.getHostTemplateNames(this.project.projectType)[0];
+      if (!this.project.host) {
+        throw new Error(`Host ${this.project.host} was not found.`);
+      }
       this.project.scriptType = answerForScriptType.scriptType
         ? answerForScriptType.scriptType
         : this.options.ts
@@ -306,6 +309,9 @@ module.exports = class extends yo {
         : this.options.js
         ? javascript
         : jsonData.getSupportedScriptTypes(this.project.projectType)[0];
+      if (!this.project.scriptType) {
+        throw new Error(`Script type ${this.project.scriptType} was not found.`);
+      }
 
       /* Set folder if to output param  if specified */
       if (this.options.output != null) {
