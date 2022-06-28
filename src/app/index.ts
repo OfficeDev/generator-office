@@ -287,28 +287,32 @@ module.exports = class extends yo {
 
   _configureProject(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject): void {
     try {
+      const projType = _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType)
+
       this.project = {
         folder: this.options.output || answerForName.name || this.options.name,
+        host: answerForHost.host
+          ? answerForHost.host
+          : this.options.host
+          ? this.options.host
+          : jsonData.getHostTemplateNames(projType)[0],
         name: this.options.name || answerForName.name,
-        projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
+        projectType: projType,
+        scriptType: answerForScriptType.scriptType
+          ? answerForScriptType.scriptType
+          : this.options.ts
+          ? typescript
+          : this.options.js
+          ? javascript
+          : jsonData.getSupportedScriptTypes(projType)[0],
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
       };
-      this.project.host = answerForHost.host
-        ? answerForHost.host
-        : this.options.host
-        ? this.options.host
-        : jsonData.getHostTemplateNames(this.project.projectType)[0];
+
       if (!this.project.host) {
         throw new Error(`Host ${this.project.host} was not found.`);
       }
-      this.project.scriptType = answerForScriptType.scriptType
-        ? answerForScriptType.scriptType
-        : this.options.ts
-        ? typescript
-        : this.options.js
-        ? javascript
-        : jsonData.getSupportedScriptTypes(this.project.projectType)[0];
+
       if (!this.project.scriptType) {
         throw new Error(`Script type ${this.project.scriptType} was not found.`);
       }
