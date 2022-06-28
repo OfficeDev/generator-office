@@ -294,12 +294,17 @@ module.exports = class extends yo {
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
       };
-      this.project.host = answerForHost.host ? answerForHost.host 
-        : this.options.host ? this.options.host 
+      this.project.host = answerForHost.host
+        ? answerForHost.host
+        : this.options.host
+        ? this.options.host
         : jsonData.getHostTemplateNames(this.project.projectType)[0];
-      this.project.scriptType = answerForScriptType.scriptType ? answerForScriptType.scriptType
-        : this.options.ts ? typescript
-        : this.options.js ? javascript
+      this.project.scriptType = answerForScriptType.scriptType
+        ? answerForScriptType.scriptType
+        : this.options.ts
+        ? typescript
+        : this.options.js
+        ? javascript
         : jsonData.getSupportedScriptTypes(this.project.projectType)[0];
 
       /* Set folder if to output param  if specified */
