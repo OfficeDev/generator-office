@@ -295,7 +295,7 @@ module.exports = class extends yo {
           ? answerForHost.host
           : this.options.host
           ? this.options.host
-          : jsonData.getHostTemplateNames(projType)[0],
+          : jsonData?.getHostTemplateNames(projType)[0],
         name: this.options.name || answerForName.name,
         projectType: projType,
         scriptType: answerForScriptType.scriptType
@@ -304,18 +304,10 @@ module.exports = class extends yo {
           ? typescript
           : this.options.js
           ? javascript
-          : jsonData.getSupportedScriptTypes(projType)[0],
+          : jsonData?.getSupportedScriptTypes(projType)[0],
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
       };
-
-      if (!this.project.host) {
-        throw new Error(`Host ${this.project.host} was not found.`);
-      }
-
-      if (!this.project.scriptType) {
-        throw new Error(`Script type ${this.project.scriptType} was not found.`);
-      }
 
       /* Set folder if to output param  if specified */
       if (this.options.output != null) {
