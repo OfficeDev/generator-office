@@ -71,28 +71,6 @@
                 "Word"
             ]
         },
-        "single-sign-on": {
-            "displayname": "Office Add-in Task Pane project supporting single sign-on",
-            "manifestPath": "manifest.xml",
-            "templates": {
-                "javascript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-SSO-JS",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
-                },
-                "typescript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-Taskpane-SSO",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
-                }
-            },
-            "supportedHosts": [
-                "Excel",
-                "Outlook",
-                "Powerpoint",
-                "Word"
-            ]
-        },
         "manifest": {
             "displayname": "Office Add-in project containing the manifest only",
             "manifestPath": "manifest.xml",
