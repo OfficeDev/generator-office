@@ -23,11 +23,9 @@ const yo = require("yeoman-generator"); // eslint-disable-line @typescript-eslin
 
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
-let isSsoProject = false;
 const javascript = `JavaScript`;
 let language;
 const manifest = 'manifest';
-const sso = 'single-sign-on';
 const typescript = `TypeScript`;
 
 let usageDataObject: usageData.OfficeAddinUsageData;
@@ -176,12 +174,6 @@ module.exports = class extends yo {
       if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === excelCustomFunctions
         || (this.options.projectType != null && _.toLower(this.options.projectType) === excelCustomFunctions)) {
         isExcelFunctionsProject = true;
-      }
-
-      /* Set isSsoProject to true if SSO project type selected from prompt or Single Sign-On was specified via the command prompt */
-      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === sso
-        || (this.options.projectType != null && _.toLower(this.options.projectType) === sso)) {
-        isSsoProject = true;
       }
 
       const getSupportedScriptTypes = jsonData.getSupportedScriptTypes(projectType);
@@ -374,10 +366,7 @@ module.exports = class extends yo {
     this.log(`      ${stepNumber++}. Go the directory where your project was created:\n`);
     this.log(`         ${chalk.bold('cd ' + projFolder)}\n`);
     
-    if (isSsoProject) {
-      this.log(`      ${stepNumber++}. Configure your SSO taskpane add-in:\n`);
-      this.log(`         ${chalk.bold('npm run configure-sso')}\n`);
-    } else if (this.project.isExcelFunctionsProject) {
+    if (this.project.isExcelFunctionsProject) {
       this.log(`      ${stepNumber++}. Build your Excel Custom Functions taskpane add-in:\n`);
       this.log(`         ${chalk.bold('npm run build')}\n`);
     }
