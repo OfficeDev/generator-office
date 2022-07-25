@@ -29,6 +29,7 @@ let language;
 const manifest = 'manifest';
 const sso = 'single-sign-on';
 const typescript = `TypeScript`;
+let jsonData;
 
 let usageDataObject: usageData.OfficeAddinUsageData;
 const usageDataOptions: usageData.IUsageDataOptions = {
@@ -138,7 +139,7 @@ module.exports = class extends yo {
         usageDataOptions.usageDataLevel = usageData.readUsageDataLevel(usageDataOptions.groupName);
       }
 
-      const jsonData = new projectsJsonData(this.templatePath());
+      jsonData = new projectsJsonData(this.templatePath());
       let isManifestProject = false;
       let isExcelFunctionsProject = false;
 
@@ -286,14 +287,26 @@ module.exports = class extends yo {
 
   _configureProject(answerForProjectType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject): void {
     try {
+      const projType = _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType)
+
       this.project = {
         folder: this.options.output || answerForName.name || this.options.name,
+        host: answerForHost.host
+          ? answerForHost.host
+          : this.options.host
+          ? this.options.host
+          : jsonData?.getHostTemplateNames(projType)[0],
         name: this.options.name || answerForName.name,
-        host: this.options.host || answerForHost.host,
-        projectType: _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType),
+        projectType: projType,
+        scriptType: answerForScriptType.scriptType
+          ? answerForScriptType.scriptType
+          : this.options.ts
+          ? typescript
+          : this.options.js
+          ? javascript
+          : jsonData?.getSupportedScriptTypes(projType)[0],
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
-        scriptType: answerForScriptType.scriptType ? answerForScriptType.scriptType : this.options.ts ? typescript : javascript
       };
 
       /* Set folder if to output param  if specified */
@@ -307,13 +320,8 @@ module.exports = class extends yo {
       this.project.projectInternalName = _.kebabCase(this.project.name);
       this.project.projectDisplayName = this.project.name;
       this.project.projectId = uuidv4();
-      if (this.project.projectType === excelCustomFunctions) {
-        this.project.host = 'Excel';
-        this.project.hostInternalName = 'Excel';
-      }
-      else {
-        this.project.hostInternalName = this.project.host;
-      }
+      this.project.hostInternalName = this.project.host;
+
       this.destinationRoot(this.project.folder);
       process.chdir(this._destinationRoot);
       this.env.cwd = this._destinationRoot;
@@ -425,10 +433,12 @@ module.exports = class extends yo {
     this.log(`NOTE: ${chalk.bgGreen('Arguments')} must be specified in the order below, and ${chalk.bgMagenta('Options')} must follow ${chalk.bgGreen('Arguments')}.\n`);
     this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create. Valid project types include:`);
     this.log(`    ${chalk.yellow('angular:')}  Creates an Office add-in using Angular framework.`);
-    this.log(`    ${chalk.yellow('excel-functions:')} Creates an Office add-in for Excel custom functions.  Must specify 'Excel' as host parameter.`);
+    this.log(`    ${chalk.yellow('excel-functions-shared:')} Creates an Office add-in for Excel custom functions using a Shared Runtime.`);
+    this.log(`    ${chalk.yellow('excel-functions:')} Creates an Office add-in for Excel custom functions using a JavaScript-only Runtime.`);
     this.log(`    ${chalk.yellow('jquery:')} Creates an Office add-in using Jquery framework.`);
     this.log(`    ${chalk.yellow('manifest:')} Creates an only the manifest file for an Office add-in.`);
     this.log(`    ${chalk.yellow('react:')} Creates an Office add-in using React framework.\n`);
+    this.log(`    ${chalk.yellow('teams-manifest:')} Creates Outlook Add-in with Teams Manifest (Developer preview).\n`);
     this.log(`  ${chalk.bgGreen('name')}:Specifies the name for the project that will be created.\n`);
     this.log(`  ${chalk.bgGreen('host')}:Specifies the host app in the add-in manifest.`);
     this.log(`    ${chalk.yellow('excel:')}  Creates an Office add-in for Excel. Valid hosts include:`);

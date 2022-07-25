@@ -207,93 +207,93 @@ describe('Office-Add-Taskpane-React-Ts project', () => {
     });
 });
 
-// Test to verify converting a project to a single host
-// for SSO Typescript project using Excel host
-describe('Office-Add-Taskpane-SSO-TS project', () => {
-    const expectedFiles = [
-        packageJsonFile,
-        manifestFile,
-        '.ENV',
-        'src/taskpane/taskpane.ts',
-        'src/taskpane/taskpane.html',
-        'src/taskpane/taskpane.css',
-        'src/helpers/fallbackauthdialog.html',
-        'src/helpers/fallbackauthdialog.ts',
-        'src/helpers/fallbackauthhelper.ts',
-        'src/helpers/ssoauthhelper.ts'
+// // Test to verify converting a project to a single host
+// // for SSO Typescript project using Excel host
+// describe('Office-Add-Taskpane-SSO-TS project', () => {
+//     const expectedFiles = [
+//         packageJsonFile,
+//         manifestFile,
+//         '.ENV',
+//         'src/taskpane/taskpane.ts',
+//         'src/taskpane/taskpane.html',
+//         'src/taskpane/taskpane.css',
+//         'src/helpers/fallbackauthdialog.html',
+//         'src/helpers/fallbackauthdialog.ts',
+//         'src/helpers/fallbackauthhelper.ts',
+//         'src/helpers/ssoauthhelper.ts'
 
-    ]
-    const unexpectedFiles = [
-        'src/taskpane/excel.ts',
-        'src/taskpane/word.ts',
-        'src/taskpane/powerpoint.ts',
-        'manifest.excel.xml',
-        'manifest.word.xml',
-        'manifest.powerpoint.xml'
-    ]
-    const answers = {
-        projectType: "single-sign-on",
-        scriptType: "TypeScript",
-        name: "SSOTypeScriptProject",
-        host: hosts[0]
-    };
+//     ]
+//     const unexpectedFiles = [
+//         'src/taskpane/excel.ts',
+//         'src/taskpane/word.ts',
+//         'src/taskpane/powerpoint.ts',
+//         'manifest.excel.xml',
+//         'manifest.word.xml',
+//         'manifest.powerpoint.xml'
+//     ]
+//     const answers = {
+//         projectType: "single-sign-on",
+//         scriptType: "TypeScript",
+//         name: "SSOTypeScriptProject",
+//         host: hosts[0]
+//     };
 
-    describe('Office-Add-Taskpane-SSO-TS project', () => {
-        before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
-        });
+//     describe('Office-Add-Taskpane-SSO-TS project', () => {
+//         before((done) => {
+//             helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+//         });
 
-        it('creates expected files', (done) => {
-            assert.file(expectedFiles);
-            assert.noFile(unexpectedFiles);
-            assert.noFile(unexpectedManifestFiles);
-            done();
-        });
-    });
-});
+//         it('creates expected files', (done) => {
+//             assert.file(expectedFiles);
+//             assert.noFile(unexpectedFiles);
+//             assert.noFile(unexpectedManifestFiles);
+//             done();
+//         });
+//     });
+// });
 
-// Test to verify converting a project to a single host
-// for SSO JavaScript project using PowerPoint host
-describe('Office-Add-Taskpane-SSO-JS project', () => {
-    const expectedFiles = [
-        packageJsonFile,
-        manifestFile,
-        '.ENV',
-        'src/taskpane/taskpane.js',
-        'src/taskpane/taskpane.html',
-        'src/taskpane/taskpane.css',
-        'src/helpers/documenthelper.js',
-        'src/helpers/fallbackauthdialog.html',
-        'src/helpers/fallbackauthdialog.js',
-        'src/helpers/fallbackauthhelper.js',
-        'src/helpers/ssoauthhelper.js'
+// // Test to verify converting a project to a single host
+// // for SSO JavaScript project using PowerPoint host
+// describe('Office-Add-Taskpane-SSO-JS project', () => {
+//     const expectedFiles = [
+//         packageJsonFile,
+//         manifestFile,
+//         '.ENV',
+//         'src/taskpane/taskpane.js',
+//         'src/taskpane/taskpane.html',
+//         'src/taskpane/taskpane.css',
+//         'src/helpers/documenthelper.js',
+//         'src/helpers/fallbackauthdialog.html',
+//         'src/helpers/fallbackauthdialog.js',
+//         'src/helpers/fallbackauthhelper.js',
+//         'src/helpers/ssoauthhelper.js'
 
-    ]
-    const unexpectedFiles = [
-        'src/taskpane/excel.js',
-        'src/taskpane/word.js',
-        'src/taskpane/powerpoint.js',
-        'manifest.excel.xml',
-        'manifest.word.xml',
-        'manifest.powerpoint.xml'
-    ]
-    const answers = {
-        projectType: "single-sign-on",
-        scriptType: "JavaScript",
-        name: "SSOJavaScriptProject",
-        host: hosts[3]
-    };
+//     ]
+//     const unexpectedFiles = [
+//         'src/taskpane/excel.js',
+//         'src/taskpane/word.js',
+//         'src/taskpane/powerpoint.js',
+//         'manifest.excel.xml',
+//         'manifest.word.xml',
+//         'manifest.powerpoint.xml'
+//     ]
+//     const answers = {
+//         projectType: "single-sign-on",
+//         scriptType: "JavaScript",
+//         name: "SSOJavaScriptProject",
+//         host: hosts[3]
+//     };
 
-    describe('Office-Add-Taskpane-SSO-JS project', () => {
-        before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
-        });
+//     describe('Office-Add-Taskpane-SSO-JS project', () => {
+//         before((done) => {
+//             helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+//         });
 
-        it('creates expected files', (done) => {
-            assert.file(expectedFiles);
-            assert.noFile(unexpectedFiles);
-            assert.noFile(unexpectedManifestFiles);
-            done();
-        });
-    });
-});
+//         it('creates expected files', (done) => {
+//             assert.file(expectedFiles);
+//             assert.noFile(unexpectedFiles);
+//             assert.noFile(unexpectedManifestFiles);
+//             done();
+//         });
+//     });
+// });
