@@ -109,6 +109,28 @@
                 "Excel"
             ]
         },
+        "single-sign-on": {
+            "displayname": "Office Add-in Task Pane project supporting single sign-on (localhost)",
+            "manifestPath": "manifest.xml",
+            "templates": {
+                "javascript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-SSO-JS",
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
+                },
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-Taskpane-SSO",
+                    "branch": "yo-office",
+                    "prerelease": "yo-office-prerelease"
+                }
+            },
+            "supportedHosts": [
+                "Excel",
+                "Outlook",
+                "Powerpoint",
+                "Word"
+            ]
+        },
         "teams-manifest": {
             "displayname": "Outlook Add-in with Teams Manifest (Developer preview)",
             "manifestPath": "manifest/manifest.json",
