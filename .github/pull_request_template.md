@@ -10,7 +10,7 @@ Thank you for your pull request. Please provide the following information.
     If Yes, briefly describe what is impacted.
 
 
-2. **Do these changes impact *documentation*?** (e.g., a tutorial on https://docs.microsoft.com/en-us/office/dev/add-ins/overview/office-add-ins)
+2. **Do these changes impact *documentation*?** (e.g., a tutorial on https://learn.microsoft.com/en-us/office/dev/add-ins/overview/office-add-ins)
     > 
     > * [ ]  Yes
     > * [ ]  No

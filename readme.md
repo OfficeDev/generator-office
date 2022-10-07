@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/generator-office.svg)](http://badge.fury.io/js/generator-office)
 [![Downloads](http://img.shields.io/npm/dm/generator-office.svg)](https://npmjs.org/package/generator-office)
 
-This [Yeoman](http://yeoman.io) generator creates a Node.js [Office Add-in](https://docs.microsoft.com/office/dev/add-ins) project that can be managed with Visual Studio Code or any other editor. You can use it to create Office Add-ins for:
+This [Yeoman](http://yeoman.io) generator creates a Node.js [Office Add-in](https://learn.microsoft.com/office/dev/add-ins) project that can be managed with Visual Studio Code or any other editor. You can use it to create Office Add-ins for:
 
 - Excel
 - OneNote
@@ -22,7 +22,7 @@ Like other Yeoman generators, this generator simply creates the scaffolding of f
 > - The Yeoman generator can create Office Add-ins projects that use either JavaScript or TypeScript; whereas Visual Studio only creates JavaScript projects which you would need to convert manually if you want to use TypeScript.
 > - The Yeoman generator can create add-ins for Excel, OneNote, Outlook, PowerPoint, Project, and Word; whereas Visual Studio can only create add-ins for Excel, Outlook, PowerPoint, and Word.
 
-For detailed information about installing and using the Yeoman generator to create Office Add-ins, see [Create Office Add-in projects using the Yeoman Generator](https://docs.microsoft.com/office/dev/add-ins/develop/yeoman-generator-overview).
+For detailed information about installing and using the Yeoman generator to create Office Add-ins, see [Create Office Add-in projects using the Yeoman Generator](https://learn.microsoft.com/office/dev/add-ins/develop/yeoman-generator-overview).
 
 The generator is normally used in interactive mode, but you can use command line arguments and options as described in the sections below.
 
@@ -132,7 +132,7 @@ npm start
 
 > **Note**: Office Add-ins should use HTTPS, not HTTP, even when you are developing. If you are prompted to install a certificate after you run `npm start`, accept the prompt to install the certificate that the Yeoman generator provides.
 
-Next, sideload the add-in in an Office application. See [Sideload an Office Add-in for testing](https://docs.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing).
+Next, sideload the add-in in an Office application. See [Sideload an Office Add-in for testing](https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing).
 
 ## Validate manifest.xml
 
@@ -146,7 +146,7 @@ npm run validate
 
 ![](src/docs/assets/validator.gif)
 
-For more information on manifest validation, refer to our [add-in manifests documentation](https://docs.microsoft.com/office/dev/add-ins/develop/add-in-manifests).
+For more information on manifest validation, refer to our [add-in manifests documentation](https://learn.microsoft.com/office/dev/add-ins/develop/add-in-manifests).
 
 ## Contributing
 

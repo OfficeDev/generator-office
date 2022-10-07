@@ -406,7 +406,7 @@ module.exports = class extends yo {
     this.log(`      ${stepNumber++}. Open the project in VS Code:\n`);
     this.log(`         ${chalk.bold('code .')}\n`);
     this.log(`         For more information, visit http://code.visualstudio.com.\n`);
-    this.log(`      Please visit https://docs.microsoft.com/office/dev/add-ins for more information about Office Add-ins.\n`);
+    this.log(`      Please visit https://learn.microsoft.com/office/dev/add-ins for more information about Office Add-ins.\n`);
     if(this.project.host === "Outlook") {
       this.log(`      Please visit ${defaults.outlookSideloadingSteps} for more information about Outlook sideloading.\n`);
     }
@@ -414,7 +414,7 @@ module.exports = class extends yo {
       this.log(`\n      ${chalk.yellow('*Note that this template is not deployable as is.  In order to use this\n')}`);
       this.log(`      ${chalk.yellow(' in production the use of the office-addin-sso calls in the code need to be\n')}`);
       this.log(`      ${chalk.yellow(' replaced with project code that does the same thing.\n')}`);
-      this.log(`      ${chalk.yellow(' See https://docs.microsoft.com/en-us/office/dev/add-ins/develop/create-sso-office-add-ins-nodejs\n')}`)
+      this.log(`      ${chalk.yellow(' See https://learn.microsoft.com/en-us/office/dev/add-ins/develop/create-sso-office-add-ins-nodejs\n')}`)
     }
     this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
