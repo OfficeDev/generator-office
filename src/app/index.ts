@@ -14,7 +14,7 @@ import { promisify } from "util";
 import * as usageData from "office-addin-usage-data";
 import { v4 as uuidv4 } from 'uuid';
 import * as yosay from 'yosay';
-const yo = require("yeoman-generator"); // eslint-disable-line @typescript-eslint/no-var-requires
+import * as yo from "yeoman-generator"; // eslint-disable-line @typescript-eslint/no-var-requires
 
 // Workaround for generator-office breaking change (v4 => v5)
 // If we can figure out how to get the new packageManagerInstallTask to work 
@@ -44,6 +44,9 @@ const usageDataOptions: usageData.IUsageDataOptions = {
 }
 
 module.exports = class extends yo {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  project: any;
+
   /*  Setup the generator */
   constructor(args, opts) {
     super(args, opts);
@@ -59,46 +62,39 @@ module.exports = class extends yo {
 
     this.option('skip-install', {
       type: Boolean,
-      required: false,
-      desc: 'Skip running `npm install` post scaffolding.'
+      description: 'Skip running `npm install` post scaffolding.'
     });
 
     this.option('js', {
       type: Boolean,
-      required: false,
-      desc: 'Project uses JavaScript instead of TypeScript.'
+      description: 'Project uses JavaScript instead of TypeScript.'
     });
 
     this.option('ts', {
       type: Boolean,
-      required: false,
-      desc: 'Project uses TypeScript instead of JavaScript.'
+      description: 'Project uses TypeScript instead of JavaScript.'
     });
 
     this.option('output', {
       alias: 'o',
       type: String,
-      required: false,
-      desc: 'Project folder name if different from project name.'
+      description: 'Project folder name if different from project name.'
     });
 
     this.option('prerelease', {
       type: String,
-      required: false,
-      desc: 'Use the prerelease version of the project template.'
+      description: 'Use the prerelease version of the project template.'
     });
 
     this.option('test', {
       type: String,
-      required: false,
-      desc: 'Project is created in the context of unit tests.'
+      description: 'Project is created in the context of unit tests.'
     });
 
     this.option('details', {
       alias: 'd',
       type: Boolean,
-      required: false,
-      desc: 'Get more details on Yo Office arguments.'
+      description: 'Get more details on Yo Office arguments.'
     });
   }
 
@@ -112,7 +108,6 @@ module.exports = class extends yo {
     }
     const message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     this.log(yosay(message));
-    this.project = {};
   }
 
   /* Prompt user for project options */
@@ -243,12 +238,8 @@ module.exports = class extends yo {
     }
   }
 
-  writing(): void {
-    const done =  this.async();
-    this._copyProjectFiles()
-      .then(() => {
-        done();
-      })
+  async writing(): Promise<void> {
+    await this._copyProjectFiles()
       .catch((err) => {
         usageDataObject.reportError(defaults.copyFilesErrorEventName, new Error('Installation Error: ' + err));
         process.exitCode = 1;
@@ -323,8 +314,8 @@ module.exports = class extends yo {
       this.project.hostInternalName = this.project.host;
 
       this.destinationRoot(this.project.folder);
-      process.chdir(this._destinationRoot);
-      this.env.cwd = this._destinationRoot;
+      process.chdir(this.destinationRoot());
+      this.env.cwd = this.destinationRoot();
 
       /* Check to to see if destination folder already exists. If so, we will exit and prompt the user to provide
       a different project name or output folder */
@@ -354,16 +345,15 @@ module.exports = class extends yo {
 
           // modify manifest guid and DisplayName
           await OfficeAddinManifest.modifyManifestFile(`${path.join(this.destinationPath(), jsonData.getManifestPath(this.project.projectType))}`, 'random', `${this.project.name}`);
-
-          return resolve()
         }
         else {
           // Manifest-only project
           const templateFills = Object.assign({}, this.project);
           this.fs.copyTpl(this.templatePath(`hosts/${_.toLower(this.project.hostInternalName)}/manifest.xml`), this.destinationPath('manifest.xml'), templateFills);
           this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
-          return resolve();
         }
+
+        return resolve()
       }
       catch (err) {
         usageDataObject.reportError(defaults.copyFilesErrorEventName, new Error("File Copy Error: " + err));
@@ -373,7 +363,7 @@ module.exports = class extends yo {
   }
 
   _postInstallHints(): void {
-    const projFolder: string = /\s/.test(this._destinationRoot) ? "\"" + this._destinationRoot + "\"" : this._destinationRoot;
+    const projFolder: string = /\s/.test(this.destinationRoot()) ? "\"" + this.destinationRoot() + "\"" : this.destinationRoot();
     let stepNumber = 1;
 
     /* Next steps and npm commands */
@@ -418,12 +408,12 @@ module.exports = class extends yo {
     /* Log to console the type of project being created */
     if (this.project.isManifestOnly) {
       this.log('----------------------------------------------------------------------------------\n');
-      this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
+      this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this.destinationRoot())}\n`);
       this.log('----------------------------------------------------------------------------------');
     }
     else {
       this.log('\n----------------------------------------------------------------------------------\n');
-      this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(_.capitalize(this.project.host))} using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this._destinationRoot)}\n`);
+      this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(_.capitalize(this.project.host))} using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.green(_.capitalize(this.project.projectType))} at ${chalk.bold.magenta(this.destinationRoot())}\n`);
       this.log('----------------------------------------------------------------------------------');
     }
   }
@@ -457,8 +447,8 @@ module.exports = class extends yo {
   }
 
   _exitYoOfficeIfProjectFolderExists(): boolean {
-    if (helperMethods.doesProjectFolderExist(this._destinationRoot)) {
-      this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this._destinationRoot)} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`);
+    if (helperMethods.doesProjectFolderExist(this.destinationRoot())) {
+      this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this.destinationRoot())} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`);
       this._exitProcess();
     }
     return false;
