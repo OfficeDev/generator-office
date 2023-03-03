@@ -132,13 +132,13 @@
             ]
         },
         "teams-manifest": {
-            "displayname": "Outlook Add-in with Teams Manifest (Developer preview)",
-            "manifestPath": "manifest/manifest.json",
+            "displayname": "Outlook Add-in with Teams Manifest (preview)",
+            "manifestPath": "manifest.json",
             "templates": {
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
-                    "branch": "json-yo-office",
-                    "prerelease": "json-yo-office-prerelease"
+                    "branch": "json-preview-yo-office",
+                    "prerelease": "json-preview-yo-office-prerelease"
                 }
             },
             "supportedHosts": [
