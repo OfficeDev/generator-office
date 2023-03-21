@@ -428,7 +428,7 @@ module.exports = class extends yo {
     this.log(`    ${chalk.yellow('jquery:')} Creates an Office add-in using Jquery framework.`);
     this.log(`    ${chalk.yellow('manifest:')} Creates an only the manifest file for an Office add-in.`);
     this.log(`    ${chalk.yellow('react:')} Creates an Office add-in using React framework.\n`);
-    this.log(`    ${chalk.yellow('teams-manifest:')} Creates Outlook Add-in with Teams Manifest (Developer preview).\n`);
+    this.log(`    ${chalk.yellow('unified-manifest:')} Creates Outlook Add-in with a unified Microsoft 365 manifest (preview).\n`);
     this.log(`  ${chalk.bgGreen('name')}:Specifies the name for the project that will be created.\n`);
     this.log(`  ${chalk.bgGreen('host')}:Specifies the host app in the add-in manifest.`);
     this.log(`    ${chalk.yellow('excel:')}  Creates an Office add-in for Excel. Valid hosts include:`);

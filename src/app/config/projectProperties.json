@@ -131,8 +131,8 @@
                 "Word"
             ]
         },
-        "teams-manifest": {
-            "displayname": "Outlook Add-in with Teams Manifest (preview)",
+        "unified-manifest": {
+            "displayname": "Outlook Add-in with unified Microsoft 365 manifest (preview)",
             "manifestPath": "manifest.json",
             "templates": {
                 "typescript": {
