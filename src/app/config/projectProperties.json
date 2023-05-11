@@ -132,7 +132,7 @@
             ]
         },
         "unified-manifest": {
-            "displayname": "Outlook Add-in with unified Microsoft 365 manifest (preview)",
+            "displayname": "Outlook Add-in with unified manifest for Microsoft 365 (preview)",
             "manifestPath": "manifest.json",
             "templates": {
                 "typescript": {
