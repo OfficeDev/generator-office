@@ -422,7 +422,6 @@ module.exports = class extends yo {
     this.log(`\nYo Office ${chalk.bgGreen('Arguments')} and ${chalk.bgMagenta('Options.')}\n`);
     this.log(`NOTE: ${chalk.bgGreen('Arguments')} must be specified in the order below, and ${chalk.bgMagenta('Options')} must follow ${chalk.bgGreen('Arguments')}.\n`);
     this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create. Valid project types include:`);
-    this.log(`    ${chalk.yellow('angular:')}  Creates an Office add-in using Angular framework.`);
     this.log(`    ${chalk.yellow('excel-functions-shared:')} Creates an Office add-in for Excel custom functions using a Shared Runtime.`);
     this.log(`    ${chalk.yellow('excel-functions:')} Creates an Office add-in for Excel custom functions using a JavaScript-only Runtime.`);
     this.log(`    ${chalk.yellow('jquery:')} Creates an Office add-in using Jquery framework.`);
