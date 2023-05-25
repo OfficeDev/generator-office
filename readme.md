@@ -14,11 +14,11 @@ This [Yeoman](http://yeoman.io) generator creates a Node.js [Office Add-in](http
 
 In addition you can use it to create add-ins that use single sign-on or Excel custom functions.
 
-Like other Yeoman generators, this generator simply creates the scaffolding of files for your Office Add-in project. You can choose to create Office Add-in projects using plain HTML, CSS & JavaScript, or using Angular or React, and can choose between JavaScript and Typescript as well.
+Like other Yeoman generators, this generator simply creates the scaffolding of files for your Office Add-in project. You can choose to create Office Add-in projects using plain HTML, CSS & JavaScript, or using React, and can choose between JavaScript and Typescript as well.
 
 > **Note:** While you can also use [Visual Studio](https://visualstudio.microsoft.com/vs) to create Office Add-in projects, the Yeoman generator provides more options in terms of the types of projects you can create. For example:
 >
-> - The Yeoman generator can create Office Add-in projects that use plain HTML, CSS & JavaScript, or React, or Angular; whereas Visual Studio can only create Office Add-in projects that use plain HTML, CSS & JavaScript.
+> - The Yeoman generator can create Office Add-in projects that use plain HTML, CSS & JavaScript, or React; whereas Visual Studio can only create Office Add-in projects that use plain HTML, CSS & JavaScript.
 > - The Yeoman generator can create Office Add-ins projects that use either JavaScript or TypeScript; whereas Visual Studio only creates JavaScript projects which you would need to convert manually if you want to use TypeScript.
 > - The Yeoman generator can create add-ins for Excel, OneNote, Outlook, PowerPoint, Project, and Word; whereas Visual Studio can only create add-ins for Excel, Outlook, PowerPoint, and Word.
 
@@ -61,7 +61,6 @@ Specifies the project type to create.
 Project Type | Description
 ----------- | ------------------------
 taskpane | Task Pane add-in using HTML
-angular | Task Pane add-in using the Angular framework
 react | Task Pane add-in using the React framework
 excel-functions | Task Pane add-in with Excel Custom Functions
 single-sign-on | Taskpane add-in supporting single-sign-on
