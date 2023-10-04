@@ -4,3 +4,11 @@ steps:
   inputs:
     command: custom
     customCommand: 'run build'
+- task: AzureCLI@2
+  displayName: Azure CLI
+  inputs:
+    azureSubscription: Azure
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az account show
