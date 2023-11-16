@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as _ from 'lodash';
+import * as chalk from 'chalk';
 
 export default class projectsJsonData {
   m_projectJsonDataFile = '/projectProperties.json';
@@ -30,7 +31,13 @@ export default class projectsJsonData {
   }
 
   getProjectDisplayName(projectType: string) {
-    return this.m_projectJsonData.projectTypes[_.toLower(projectType)].displayname;
+    const displayName = this.m_projectJsonData.projectTypes[_.toLower(projectType)].displayname;
+  
+    if (projectType === 'one-line-open-sample') {
+      return chalk.green(displayName);
+    }
+  
+    return displayName;
   }
 
   getParsedProjectJsonData() {

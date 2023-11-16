@@ -16,6 +16,9 @@ import { v4 as uuidv4 } from 'uuid';
 import * as yosay from 'yosay';
 import * as yo from "yeoman-generator"; // eslint-disable-line @typescript-eslint/no-var-requires
 
+const { exec_script } = require('./config/Sample_script');
+
+
 // Workaround for generator-office breaking change (v4 => v5)
 // If we can figure out how to get the new packageManagerInstallTask to work 
 // with downloaded package.json then we won't need this or the installDependencies calls
@@ -24,9 +27,11 @@ import * as yo from "yeoman-generator"; // eslint-disable-line @typescript-eslin
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 let isSsoProject = false;
+let isOnelineOpenSample = false;
 const javascript = `JavaScript`;
 let language;
 const manifest = 'manifest';
+const oneLineSample = 'one-line-open-sample';
 const sso = 'single-sign-on';
 const typescript = `TypeScript`;
 let jsonData;
@@ -96,6 +101,11 @@ module.exports = class extends yo {
       type: Boolean,
       description: 'Get more details on Yo Office arguments.'
     });
+
+    this.option('sample', {
+      type: String,
+      description: 'One-line download and launch sample add-in.'
+    })
   }
 
   /* Generator initalization */
@@ -139,7 +149,7 @@ module.exports = class extends yo {
       let isExcelFunctionsProject = false;
 
       // Normalize host name if passed as a command line argument
-      if (this.options.host != null) {
+      if (this.options.host != null) { 
         this.options.host = jsonData.getHostDisplayName(this.options.host);
       }
 
@@ -156,7 +166,13 @@ module.exports = class extends yo {
           when: this.options.projectType == null || !jsonData.isValidInput(this.options.projectType, false /* isHostParam */)
         }
       ];
-      const answerForProjectType = await this.prompt(askForProjectType);
+      var answerForProjectType;
+      if (this.options.sample) {
+        answerForProjectType = { projectType: 'one-line-open-sample' };
+      }else{
+        answerForProjectType = await this.prompt(askForProjectType);
+      }
+      
       const endForProjectType = (new Date()).getTime();
       const durationForProjectType = (endForProjectType - startForProjectType) / 1000;
 
@@ -180,6 +196,14 @@ module.exports = class extends yo {
         isSsoProject = true;
       }
 
+      /* Set isOnelineOpenSample to true if OnelineOpenSample project type selected from prompt or OnlineOpenSample was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === oneLineSample
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === oneLineSample)) {
+        isOnelineOpenSample = true;
+      }
+
+
+
       const getSupportedScriptTypes = jsonData.getSupportedScriptTypes(projectType);
       const askForScriptType = [
         {
@@ -199,9 +223,15 @@ module.exports = class extends yo {
         type: 'input',
         message: 'What do you want to name your add-in?',
         default: 'My Office Add-in',
-        when: this.options.name == null
+        when: this.options.name == null && isOnelineOpenSample == false
       }];
+      
       const answerForName = await this.prompt(askForName);
+
+      /* Set fixed name for sample office add-ins */
+      if (isOnelineOpenSample == true) {
+        answerForName.name = 'Office Add-in Sample';
+      }
 
       /* askForHost will be triggered if no project name was specified via the command line Host argument, and the Host argument
        * input was in fact valid, and the project type is not Excel-Functions */
@@ -239,6 +269,12 @@ module.exports = class extends yo {
   }
 
   async writing(): Promise<void> {
+    if(this.project.isOnelineOpenSample == true){
+
+      await exec_script();
+
+      return;
+    }
     await this._copyProjectFiles()
       .catch((err) => {
         usageDataObject.reportError(defaults.copyFilesErrorEventName, new Error('Installation Error: ' + err));
@@ -249,6 +285,12 @@ module.exports = class extends yo {
   install(): void {
     try {
       if (this.options['skip-install']) {
+        this.installDependencies({
+          npm: false,
+          bower: false
+        });
+      }
+      else if (isOnelineOpenSample) {
         this.installDependencies({
           npm: false,
           bower: false
@@ -269,7 +311,12 @@ module.exports = class extends yo {
   end(): void {
     if (!this.options['test']) {
       try {
-        this._postInstallHints();
+        if (isOnelineOpenSample == true) {
+          this._postOpenSampleHints();
+        }
+        else {
+          this._postInstallHints();
+        } 
       } catch (err) {
         usageDataObject.reportError(defaults.postInstallHintsErrorEventName, new Error('Exit Error: ' + err));
       }
@@ -298,6 +345,7 @@ module.exports = class extends yo {
           : jsonData?.getSupportedScriptTypes(projType)[0],
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
+        isOnelineOpenSample: isOnelineOpenSample
       };
 
       /* Set folder if to output param  if specified */
@@ -330,6 +378,9 @@ module.exports = class extends yo {
   async _copyProjectFiles(): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
+
+        
+
         const jsonData = new projectsJsonData(this.templatePath());
         const projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
 
@@ -360,6 +411,13 @@ module.exports = class extends yo {
         return reject(err);
       }
     });
+  }
+
+  _postOpenSampleHints(): void {
+    this.log('----------------------------------------------------------------------------------------------------------\n');
+    this.log(`      ${chalk.green('Congratulations!')} Your sample add-in has been downloaded and launched! \n`);
+    this.log(`      Please visit https://learn.microsoft.com/office/dev/add-ins for more information about Office Add-ins.\n`);
+    this.log('----------------------------------------------------------------------------------------------------------\n');
   }
 
   _postInstallHints(): void {

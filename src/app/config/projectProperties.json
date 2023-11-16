@@ -1,5 +1,18 @@
 {
     "projectTypes": {
+
+        "one-line-open-sample": {
+            "displayname": "One click to run/edit a sample project (NEW!)",
+            "manifestPath": "manifest.xml",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            },
+            "supportedHosts": [
+                "Excel"
+            ]
+        },
         "taskpane": {
             "displayname": "Office Add-in Task Pane project",
             "manifestPath": "manifest.xml",
