@@ -31,13 +31,21 @@ export default class projectsJsonData {
   }
 
   getProjectDisplayName(projectType: string) {
-    const displayName = this.m_projectJsonData.projectTypes[_.toLower(projectType)].displayname;
+    let displayName = this.m_projectJsonData.projectTypes[_.toLower(projectType)].displayname;
   
-    if (projectType === 'one-line-open-sample') {
+    if (projectType === 'excel_sample' || projectType === 'word_sample' || projectType === 'excel_hello_world' || projectType === 'word_hello_world') {
       return chalk.green(displayName);
     }
   
     return displayName;
+  }
+
+  getProjectDisplayNames() {
+    const projectDisplayNames: string[] = [];
+    for (const key in this.m_projectJsonData.projectTypes) {
+      projectDisplayNames.push(this.getProjectDisplayName(key));
+    }
+    return projectDisplayNames;
   }
 
   getParsedProjectJsonData() {

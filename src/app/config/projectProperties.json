@@ -1,8 +1,7 @@
 {
     "projectTypes": {
-
-        "one-line-open-sample": {
-            "displayname": "One click to run/edit a sample project (NEW!)",
+        "excel_sample": {
+            "displayname": "[New] Excel Mail merge Add-in project",
             "manifestPath": "manifest.xml",
             "templates": {
                 "manifestonly": {
@@ -13,6 +12,20 @@
                 "Excel"
             ]
         },
+
+        "word_sample": {
+            "displayname": "[New] Word AI generated content Add-in project",
+            "manifestPath": "manifest.xml",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            },
+            "supportedHosts": [
+                "Word"
+            ]
+        },
+
         "taskpane": {
             "displayname": "Office Add-in Task Pane project",
             "manifestPath": "manifest.xml",
@@ -170,6 +183,17 @@
         },
         "word": {
             "displayname": "Word"
+        }
+    },
+    "sampleOptions": {
+        "excel_sample": {
+            "displayname": "Excel Sample Add-in"
+        },
+        "word_sample": {
+            "displayname": "Word Sample Add-in"
+        },
+        "PowerPoint_sample": {
+            "displayname": "PowerPoint Sample Add-in"
         }
     }
 }

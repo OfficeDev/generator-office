@@ -17,6 +17,8 @@ import * as yosay from 'yosay';
 import * as yo from "yeoman-generator"; // eslint-disable-line @typescript-eslint/no-var-requires
 
 const { exec_script } = require('./config/Sample_script');
+const { exec_script_Excel_Mail, exec_script_Word_AIGC } = require('./config/Sample_Excel_Word');
+const { exec_script_hello_world_excel, exec_script_hello_world_word } = require('./config/Sample_Hello_world_script');
 
 
 // Workaround for generator-office breaking change (v4 => v5)
@@ -28,10 +30,18 @@ const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 let isSsoProject = false;
 let isOnelineOpenSample = false;
+let isOnelineOpenSampleExcel = false;
+let isOnelineOpenSampleWord = false;
+let isOnelineOpenSampleExcelHelloWorld = false;
+let isOnelineOpenSampleWordHelloWorld = false;
 const javascript = `JavaScript`;
 let language;
 const manifest = 'manifest';
 const oneLineSample = 'one-line-open-sample';
+const oneLineSampleExcel = 'excel_sample';
+const oneLineSampleWord = 'word_sample';
+const oneLineHelloWorldExcel = 'excel_hello_world';
+const oneLineHelloWorldWord = 'word_hello_world';
 const sso = 'single-sign-on';
 const typescript = `TypeScript`;
 let jsonData;
@@ -102,9 +112,14 @@ module.exports = class extends yo {
       description: 'Get more details on Yo Office arguments.'
     });
 
-    this.option('sample', {
+    this.option('excel_sample', {
       type: String,
-      description: 'One-line download and launch sample add-in.'
+      description: 'One-line download and launch Excel sample add-in.'
+    });
+
+    this.option('word_sample', {
+      type: String,
+      description: 'One-line download and launch Word sample add-in.'
     })
   }
 
@@ -156,6 +171,7 @@ module.exports = class extends yo {
       /* askForProjectType will only be triggered if no project type was specified via command line projectType argument,
        * and the projectType argument input was indeed valid */
       const startForProjectType = (new Date()).getTime();
+
       const askForProjectType = [
         {
           name: 'projectType',
@@ -196,13 +212,19 @@ module.exports = class extends yo {
         isSsoProject = true;
       }
 
-      /* Set isOnelineOpenSample to true if OnelineOpenSample project type selected from prompt or OnlineOpenSample was specified via the command prompt */
-      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === oneLineSample
-        || (this.options.projectType != null && _.toLower(this.options.projectType) === oneLineSample)) {
+      /* Set isOnelineOpenSampleExcel to true if OnelineOpenSample project type selected from prompt or OnlineOpenSampleExcel was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === oneLineSampleExcel
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === oneLineSampleExcel)) {
         isOnelineOpenSample = true;
+        isOnelineOpenSampleExcel = true;
       }
 
-
+      /* Set isOnelineOpenSampleWord to true if OnelineOpenSample project type selected from prompt or OnlineOpenSampleWord was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === oneLineSampleWord
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === oneLineSampleWord)) {
+        isOnelineOpenSample = true;
+        isOnelineOpenSampleWord = true;
+      }
 
       const getSupportedScriptTypes = jsonData.getSupportedScriptTypes(projectType);
       const askForScriptType = [
@@ -270,10 +292,22 @@ module.exports = class extends yo {
 
   async writing(): Promise<void> {
     if(this.project.isOnelineOpenSample == true){
-
-      await exec_script();
-
-      return;
+      if (this.project.isOnelineOpenSampleExcel == true){
+        const is_vscode_installed = await exec_script_Excel_Mail();
+        usageDataObject.reportEvent(defaults.isVscodeInstalledEventName, {is_vscode_installed: [is_vscode_installed]});
+      }
+      else if (this.project.isOnelineOpenSampleWord == true){
+        const is_vscode_installed = await exec_script_Word_AIGC();
+        usageDataObject.reportEvent(defaults.isVscodeInstalledEventName, {is_vscode_installed: [is_vscode_installed]});
+      }
+      else if (this.project.isOnelineOpenSampleExcelHelloWorld == true){
+        const is_vscode_installed = await exec_script_hello_world_excel();
+        usageDataObject.reportEvent(defaults.isVscodeInstalledEventName, {is_vscode_installed: [is_vscode_installed]});
+      }
+      else if (this.project.isOnelineOpenSampleWordHelloWorld == true){
+        const is_vscode_installed = await exec_script_hello_world_word();
+        usageDataObject.reportEvent(defaults.isVscodeInstalledEventName, {is_vscode_installed: [is_vscode_installed]});
+      }
     }
     await this._copyProjectFiles()
       .catch((err) => {
@@ -345,7 +379,11 @@ module.exports = class extends yo {
           : jsonData?.getSupportedScriptTypes(projType)[0],
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
-        isOnelineOpenSample: isOnelineOpenSample
+        isOnelineOpenSample: isOnelineOpenSample,
+        isOnelineOpenSampleExcel: isOnelineOpenSampleExcel,
+        isOnelineOpenSampleWord: isOnelineOpenSampleWord,
+        isOnelineOpenSampleExcelHelloWorld: isOnelineOpenSampleExcelHelloWorld,
+        isOnelineOpenSampleWordHelloWorld: isOnelineOpenSampleWordHelloWorld
       };
 
       /* Set folder if to output param  if specified */
