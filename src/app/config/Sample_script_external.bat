@@ -58,7 +58,7 @@ if exist %foldername% (
     goto loop
 )
 
-yo office --output %foldername%
+yo office --output %foldername% --projectType excel_sample
 
 @REM echo Sample script has been finished.
 @REM exit
