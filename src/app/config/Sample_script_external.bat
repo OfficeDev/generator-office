@@ -62,3 +62,5 @@ yo office --output %foldername% --projectType excel_sample
 
 @REM echo Sample script has been finished.
 @REM exit
+
+pause
