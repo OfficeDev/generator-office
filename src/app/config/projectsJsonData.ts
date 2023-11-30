@@ -109,7 +109,12 @@ export default class projectsJsonData {
         }
         else {
           if (prerelease) {
-            return this.m_projectJsonData.projectTypes[key].templates[scriptType].prerelease
+            if (this.m_projectJsonData.projectTypes[key].templates[scriptType].prerelease) {
+              return this.m_projectJsonData.projectTypes[key].templates[scriptType].prerelease
+            }
+            else {
+              return "master";
+            }
           } else {
             return this.m_projectJsonData.projectTypes[key].templates[scriptType].branch;
           }

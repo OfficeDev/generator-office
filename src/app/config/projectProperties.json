@@ -6,13 +6,11 @@
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "yo-office"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "yo-office"
                 }
             },
             "supportedHosts": [
@@ -29,13 +27,11 @@
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "yo-office"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "yo-office"
                 }
             },
             "supportedHosts": [
@@ -54,12 +50,12 @@
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
                     "branch": "shared-runtime-yo-office",
-                    "prerelease": "shared-runtime-yo-office-prerelease"
+                    "prerelease": "shared-runtime"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
                     "branch": "shared-runtime-yo-office",
-                    "prerelease": "shared-runtime-yo-office-prerelease"
+                    "prerelease": "shared-runtime"
                 }
             },
             "supportedHosts": [
@@ -72,13 +68,11 @@
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "yo-office"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "yo-office"
                 }
             },
             "supportedHosts": [
@@ -91,13 +85,11 @@
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-SSO-JS",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "yo-office"
                 },
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-Taskpane-SSO",
-                    "branch": "yo-office",
-                    "prerelease": "yo-office-prerelease"
+                    "branch": "yo-office"
                 }
             },
             "supportedHosts": [
@@ -114,7 +106,7 @@
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
                     "branch": "json-preview-yo-office",
-                    "prerelease": "json-preview-yo-office-prerelease"
+                    "prerelease": "json-preview"
                 }
             },
             "supportedHosts": [
