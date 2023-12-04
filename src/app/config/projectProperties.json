@@ -1,5 +1,32 @@
 {
     "projectTypes": {
+
+        "excel_hello_world": {
+            "displayname": "[New] Excel Hello World Add-in project",
+            "manifestPath": "manifest.xml",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            },
+            "supportedHosts": [
+                "Excel"
+            ]
+        },
+
+        "word_hello_world": {
+            "displayname": "[New] Word Hello World Add-in project",
+            "manifestPath": "manifest.xml",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            },
+            "supportedHosts": [
+                "Word"
+            ]
+        },
+
         "excel_sample": {
             "displayname": "[New] Excel Mail merge Add-in project",
             "manifestPath": "manifest.xml",
@@ -183,17 +210,6 @@
         },
         "word": {
             "displayname": "Word"
-        }
-    },
-    "sampleOptions": {
-        "excel_sample": {
-            "displayname": "Excel Sample Add-in"
-        },
-        "word_sample": {
-            "displayname": "Word Sample Add-in"
-        },
-        "PowerPoint_sample": {
-            "displayname": "PowerPoint Sample Add-in"
         }
     }
 }

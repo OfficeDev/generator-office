@@ -18,7 +18,7 @@ import * as yo from "yeoman-generator"; // eslint-disable-line @typescript-eslin
 
 const { exec_script } = require('./config/Sample_script');
 const { exec_script_Excel_Mail, exec_script_Word_AIGC } = require('./config/Sample_Excel_Word');
-const { exec_script_hello_world_excel, exec_script_hello_world_word } = require('./config/Sample_Hello_world_script');
+const { exec_script_Excel_Hello_World, exec_script_Word_Hello_World } = require('./config/Sample_Hello_world_script');
 
 
 // Workaround for generator-office breaking change (v4 => v5)
@@ -37,7 +37,6 @@ let isOnelineOpenSampleWordHelloWorld = false;
 const javascript = `JavaScript`;
 let language;
 const manifest = 'manifest';
-const oneLineSample = 'one-line-open-sample';
 const oneLineSampleExcel = 'excel_sample';
 const oneLineSampleWord = 'word_sample';
 const oneLineHelloWorldExcel = 'excel_hello_world';
@@ -111,16 +110,6 @@ module.exports = class extends yo {
       type: Boolean,
       description: 'Get more details on Yo Office arguments.'
     });
-
-    this.option('excel_sample', {
-      type: String,
-      description: 'One-line download and launch Excel sample add-in.'
-    });
-
-    this.option('word_sample', {
-      type: String,
-      description: 'One-line download and launch Word sample add-in.'
-    })
   }
 
   /* Generator initalization */
@@ -179,10 +168,11 @@ module.exports = class extends yo {
           type: 'list',
           default: 'React',
           choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayName(template), value: template })),
-          when: this.options.projectType == null || !jsonData.isValidInput(this.options.projectType, false /* isHostParam */)
+          when: this.options.projectType == null || (!jsonData.isValidInput(this.options.projectType, false /* isHostParam */))
         }
       ];
       var answerForProjectType;
+
       if (this.options.sample) {
         answerForProjectType = { projectType: 'one-line-open-sample' };
       }else{
@@ -224,6 +214,20 @@ module.exports = class extends yo {
         || (this.options.projectType != null && _.toLower(this.options.projectType) === oneLineSampleWord)) {
         isOnelineOpenSample = true;
         isOnelineOpenSampleWord = true;
+      }
+
+      /* Set isOnelineOpenSampleExcelHelloWorld to true if OnelineOpenSample project type selected from prompt or OnlineOpenSampleExcelHelloWorld was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === oneLineHelloWorldExcel
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === oneLineHelloWorldExcel)) {
+        isOnelineOpenSample = true;
+        isOnelineOpenSampleExcelHelloWorld = true;
+      }
+
+      /* Set isOnelineOpenSampleWordHelloWorld to true if OnelineOpenSample project type selected from prompt or OnlineOpenSampleWordHelloWorld was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === oneLineHelloWorldWord
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === oneLineHelloWorldWord)) {
+        isOnelineOpenSample = true;
+        isOnelineOpenSampleWordHelloWorld = true;
       }
 
       const getSupportedScriptTypes = jsonData.getSupportedScriptTypes(projectType);
@@ -301,11 +305,11 @@ module.exports = class extends yo {
         usageDataObject.reportEvent(defaults.isVscodeInstalledEventName, {is_vscode_installed: [is_vscode_installed]});
       }
       else if (this.project.isOnelineOpenSampleExcelHelloWorld == true){
-        const is_vscode_installed = await exec_script_hello_world_excel();
+        const is_vscode_installed = await exec_script_Excel_Hello_World();
         usageDataObject.reportEvent(defaults.isVscodeInstalledEventName, {is_vscode_installed: [is_vscode_installed]});
       }
       else if (this.project.isOnelineOpenSampleWordHelloWorld == true){
-        const is_vscode_installed = await exec_script_hello_world_word();
+        const is_vscode_installed = await exec_script_Word_Hello_World();
         usageDataObject.reportEvent(defaults.isVscodeInstalledEventName, {is_vscode_installed: [is_vscode_installed]});
       }
     }

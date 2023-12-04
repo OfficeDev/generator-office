@@ -31,21 +31,7 @@ export default class projectsJsonData {
   }
 
   getProjectDisplayName(projectType: string) {
-    let displayName = this.m_projectJsonData.projectTypes[_.toLower(projectType)].displayname;
-  
-    if (projectType === 'excel_sample' || projectType === 'word_sample' || projectType === 'excel_hello_world' || projectType === 'word_hello_world') {
-      return chalk.green(displayName);
-    }
-  
-    return displayName;
-  }
-
-  getProjectDisplayNames() {
-    const projectDisplayNames: string[] = [];
-    for (const key in this.m_projectJsonData.projectTypes) {
-      projectDisplayNames.push(this.getProjectDisplayName(key));
-    }
-    return projectDisplayNames;
+    return this.m_projectJsonData.projectTypes[_.toLower(projectType)].displayname;
   }
 
   getParsedProjectJsonData() {
@@ -55,7 +41,9 @@ export default class projectsJsonData {
   getProjectTemplateNames() {
     const projectTemplates: string[] = [];
     for (const key in this.m_projectJsonData.projectTypes) {
-      projectTemplates.push(key);
+      if (key != 'excel_sample' && key != 'word_sample' && key != 'excel_hello_world' && key != 'word_hello_world'){
+        projectTemplates.push(key);
+      }
     }
     return projectTemplates;
   }
