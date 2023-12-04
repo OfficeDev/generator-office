@@ -168,16 +168,10 @@ module.exports = class extends yo {
           type: 'list',
           default: 'React',
           choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayName(template), value: template })),
-          when: this.options.projectType == null || (!jsonData.isValidInput(this.options.projectType, false /* isHostParam */))
+          when: this.options.projectType == null || !jsonData.isValidInput(this.options.projectType, false /* isHostParam */)
         }
       ];
-      var answerForProjectType;
-
-      if (this.options.sample) {
-        answerForProjectType = { projectType: 'one-line-open-sample' };
-      }else{
-        answerForProjectType = await this.prompt(askForProjectType);
-      }
+      const answerForProjectType = await this.prompt(askForProjectType);
       
       const endForProjectType = (new Date()).getTime();
       const durationForProjectType = (endForProjectType - startForProjectType) / 1000;
