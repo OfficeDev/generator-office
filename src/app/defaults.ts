@@ -8,5 +8,6 @@ export const outlookSideloadingSteps = "https://learn.microsoft.com/office/dev/a
 export const postInstallHintsErrorEventName = "post-install-hints-error-generator-office";
 export const promptSelectionstEventName = "prompt-selections-generator-office";
 export const promptSelectionsErrorEventName = "prompt-selections-error-generator-office";
+export const isVscodeInstalledEventName = "if-vscode-installed-generator-office";
 export const usageDataProjectName = "generator-office";
 export const usageDataPromptMessage = `Office Add-in CLI tools collect anonymized usage data which is sent to Microsoft to help improve our product. Please read our privacy notice at ${chalk.blue('https://aka.ms/OfficeAddInCLIPrivacy')}. ​To disable data collection, choose Exit and run ${chalk.green('“npx office-addin-usage-data off”')}.\n\n`;

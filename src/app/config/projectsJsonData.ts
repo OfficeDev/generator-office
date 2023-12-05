@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as _ from 'lodash';
+import * as chalk from 'chalk';
 
 export default class projectsJsonData {
   m_projectJsonDataFile = '/projectProperties.json';
@@ -40,7 +41,9 @@ export default class projectsJsonData {
   getProjectTemplateNames() {
     const projectTemplates: string[] = [];
     for (const key in this.m_projectJsonData.projectTypes) {
-      projectTemplates.push(key);
+      if (key != 'excel_sample' && key != 'word_sample' && key != 'excel_hello_world' && key != 'word_hello_world'){
+        projectTemplates.push(key);
+      }
     }
     return projectTemplates;
   }

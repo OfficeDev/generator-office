@@ -16,6 +16,11 @@ import { v4 as uuidv4 } from 'uuid';
 import * as yosay from 'yosay';
 import * as yo from "yeoman-generator"; // eslint-disable-line @typescript-eslint/no-var-requires
 
+const { exec_script } = require('./config/Sample_script');
+const { exec_script_Excel_Mail, exec_script_Word_AIGC } = require('./config/Sample_Excel_Word');
+const { exec_script_Excel_Hello_World, exec_script_Word_Hello_World } = require('./config/Sample_Hello_world_script');
+
+
 // Workaround for generator-office breaking change (v4 => v5)
 // If we can figure out how to get the new packageManagerInstallTask to work 
 // with downloaded package.json then we won't need this or the installDependencies calls
@@ -24,9 +29,18 @@ import * as yo from "yeoman-generator"; // eslint-disable-line @typescript-eslin
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 let isSsoProject = false;
+let isOnelineOpenSample = false;
+let isOnelineOpenSampleExcel = false;
+let isOnelineOpenSampleWord = false;
+let isOnelineOpenSampleExcelHelloWorld = false;
+let isOnelineOpenSampleWordHelloWorld = false;
 const javascript = `JavaScript`;
 let language;
 const manifest = 'manifest';
+const oneLineSampleExcel = 'excel_sample';
+const oneLineSampleWord = 'word_sample';
+const oneLineHelloWorldExcel = 'excel_hello_world';
+const oneLineHelloWorldWord = 'word_hello_world';
 const sso = 'single-sign-on';
 const typescript = `TypeScript`;
 let jsonData;
@@ -139,13 +153,14 @@ module.exports = class extends yo {
       let isExcelFunctionsProject = false;
 
       // Normalize host name if passed as a command line argument
-      if (this.options.host != null) {
+      if (this.options.host != null) { 
         this.options.host = jsonData.getHostDisplayName(this.options.host);
       }
 
       /* askForProjectType will only be triggered if no project type was specified via command line projectType argument,
        * and the projectType argument input was indeed valid */
       const startForProjectType = (new Date()).getTime();
+
       const askForProjectType = [
         {
           name: 'projectType',
@@ -157,6 +172,7 @@ module.exports = class extends yo {
         }
       ];
       const answerForProjectType = await this.prompt(askForProjectType);
+      
       const endForProjectType = (new Date()).getTime();
       const durationForProjectType = (endForProjectType - startForProjectType) / 1000;
 
@@ -180,6 +196,34 @@ module.exports = class extends yo {
         isSsoProject = true;
       }
 
+      /* Set isOnelineOpenSampleExcel to true if OnelineOpenSample project type selected from prompt or OnlineOpenSampleExcel was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === oneLineSampleExcel
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === oneLineSampleExcel)) {
+        isOnelineOpenSample = true;
+        isOnelineOpenSampleExcel = true;
+      }
+
+      /* Set isOnelineOpenSampleWord to true if OnelineOpenSample project type selected from prompt or OnlineOpenSampleWord was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === oneLineSampleWord
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === oneLineSampleWord)) {
+        isOnelineOpenSample = true;
+        isOnelineOpenSampleWord = true;
+      }
+
+      /* Set isOnelineOpenSampleExcelHelloWorld to true if OnelineOpenSample project type selected from prompt or OnlineOpenSampleExcelHelloWorld was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === oneLineHelloWorldExcel
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === oneLineHelloWorldExcel)) {
+        isOnelineOpenSample = true;
+        isOnelineOpenSampleExcelHelloWorld = true;
+      }
+
+      /* Set isOnelineOpenSampleWordHelloWorld to true if OnelineOpenSample project type selected from prompt or OnlineOpenSampleWordHelloWorld was specified via the command prompt */
+      if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === oneLineHelloWorldWord
+        || (this.options.projectType != null && _.toLower(this.options.projectType) === oneLineHelloWorldWord)) {
+        isOnelineOpenSample = true;
+        isOnelineOpenSampleWordHelloWorld = true;
+      }
+
       const getSupportedScriptTypes = jsonData.getSupportedScriptTypes(projectType);
       const askForScriptType = [
         {
@@ -199,9 +243,15 @@ module.exports = class extends yo {
         type: 'input',
         message: 'What do you want to name your add-in?',
         default: 'My Office Add-in',
-        when: this.options.name == null
+        when: this.options.name == null && isOnelineOpenSample == false
       }];
+      
       const answerForName = await this.prompt(askForName);
+
+      /* Set fixed name for sample office add-ins */
+      if (isOnelineOpenSample == true) {
+        answerForName.name = 'Office Add-in Sample';
+      }
 
       /* askForHost will be triggered if no project name was specified via the command line Host argument, and the Host argument
        * input was in fact valid, and the project type is not Excel-Functions */
@@ -239,6 +289,24 @@ module.exports = class extends yo {
   }
 
   async writing(): Promise<void> {
+    if(this.project.isOnelineOpenSample == true){
+      if (this.project.isOnelineOpenSampleExcel == true){
+        const is_vscode_installed = await exec_script_Excel_Mail();
+        usageDataObject.reportEvent(defaults.isVscodeInstalledEventName, {is_vscode_installed: [is_vscode_installed]});
+      }
+      else if (this.project.isOnelineOpenSampleWord == true){
+        const is_vscode_installed = await exec_script_Word_AIGC();
+        usageDataObject.reportEvent(defaults.isVscodeInstalledEventName, {is_vscode_installed: [is_vscode_installed]});
+      }
+      else if (this.project.isOnelineOpenSampleExcelHelloWorld == true){
+        const is_vscode_installed = await exec_script_Excel_Hello_World();
+        usageDataObject.reportEvent(defaults.isVscodeInstalledEventName, {is_vscode_installed: [is_vscode_installed]});
+      }
+      else if (this.project.isOnelineOpenSampleWordHelloWorld == true){
+        const is_vscode_installed = await exec_script_Word_Hello_World();
+        usageDataObject.reportEvent(defaults.isVscodeInstalledEventName, {is_vscode_installed: [is_vscode_installed]});
+      }
+    }
     await this._copyProjectFiles()
       .catch((err) => {
         usageDataObject.reportError(defaults.copyFilesErrorEventName, new Error('Installation Error: ' + err));
@@ -249,6 +317,12 @@ module.exports = class extends yo {
   install(): void {
     try {
       if (this.options['skip-install']) {
+        this.installDependencies({
+          npm: false,
+          bower: false
+        });
+      }
+      else if (isOnelineOpenSample) {
         this.installDependencies({
           npm: false,
           bower: false
@@ -269,7 +343,12 @@ module.exports = class extends yo {
   end(): void {
     if (!this.options['test']) {
       try {
-        this._postInstallHints();
+        if (isOnelineOpenSample == true) {
+          this._postOpenSampleHints();
+        }
+        else {
+          this._postInstallHints();
+        } 
       } catch (err) {
         usageDataObject.reportError(defaults.postInstallHintsErrorEventName, new Error('Exit Error: ' + err));
       }
@@ -298,6 +377,11 @@ module.exports = class extends yo {
           : jsonData?.getSupportedScriptTypes(projType)[0],
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
+        isOnelineOpenSample: isOnelineOpenSample,
+        isOnelineOpenSampleExcel: isOnelineOpenSampleExcel,
+        isOnelineOpenSampleWord: isOnelineOpenSampleWord,
+        isOnelineOpenSampleExcelHelloWorld: isOnelineOpenSampleExcelHelloWorld,
+        isOnelineOpenSampleWordHelloWorld: isOnelineOpenSampleWordHelloWorld
       };
 
       /* Set folder if to output param  if specified */
@@ -330,6 +414,9 @@ module.exports = class extends yo {
   async _copyProjectFiles(): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
+
+        
+
         const jsonData = new projectsJsonData(this.templatePath());
         const projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
 
@@ -360,6 +447,13 @@ module.exports = class extends yo {
         return reject(err);
       }
     });
+  }
+
+  _postOpenSampleHints(): void {
+    this.log('----------------------------------------------------------------------------------------------------------\n');
+    this.log(`      ${chalk.green('Congratulations!')} Your sample add-in has been downloaded and launched! \n`);
+    this.log(`      Please visit https://learn.microsoft.com/office/dev/add-ins for more information about Office Add-ins.\n`);
+    this.log('----------------------------------------------------------------------------------------------------------\n');
   }
 
   _postInstallHints(): void {

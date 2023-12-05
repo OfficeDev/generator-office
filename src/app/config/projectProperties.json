@@ -1,5 +1,58 @@
 {
     "projectTypes": {
+
+        "excel_hello_world": {
+            "displayname": "[New] Excel Hello World Add-in project",
+            "manifestPath": "manifest.xml",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            },
+            "supportedHosts": [
+                "Excel"
+            ]
+        },
+
+        "word_hello_world": {
+            "displayname": "[New] Word Hello World Add-in project",
+            "manifestPath": "manifest.xml",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            },
+            "supportedHosts": [
+                "Word"
+            ]
+        },
+
+        "excel_sample": {
+            "displayname": "[New] Excel Mail merge Add-in project",
+            "manifestPath": "manifest.xml",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            },
+            "supportedHosts": [
+                "Excel"
+            ]
+        },
+
+        "word_sample": {
+            "displayname": "[New] Word AI generated content Add-in project",
+            "manifestPath": "manifest.xml",
+            "templates": {
+                "manifestonly": {
+                    "repository": ""
+                }
+            },
+            "supportedHosts": [
+                "Word"
+            ]
+        },
+
         "taskpane": {
             "displayname": "Office Add-in Task Pane project",
             "manifestPath": "manifest.xml",
