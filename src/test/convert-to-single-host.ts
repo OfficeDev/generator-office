@@ -85,6 +85,68 @@ describe('Office-Add-Taskpane-Ts projects', () => {
     });
 });
 
+// for Office-Addin-Taskpane Typescript project using Excel host
+describe('Office-Add-Taskpane-Ts prerelease projects', () => {
+    const testProjectName = "TaskpaneProject"
+    const expectedFiles = [
+        packageJsonFile,
+        manifestFile,
+        'src/taskpane/taskpane.ts',
+    ]
+    const unexpectedFiles = [
+        'src/taskpane/excel.ts',
+        'src/taskpane/onenote.ts',
+        'src/taskpane/outlook.ts',
+        'src/taskpane/powerpoint.ts',
+        'src/taskpane/project.ts',
+        'src/taskpane/word.ts'
+    ]
+    const answers = {
+        projectType: "taskpane",
+        scriptType: "TypeScript",
+        name: testProjectName,
+        host: hosts[0]
+    };
+
+     describe('Office-Add-Taskpane prerelease project', () => {
+        before((done) => {
+            helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true }).withPrompts(answers).on('end', done);
+        });
+
+        it('creates expected files', (done) => {
+            assert.file(expectedFiles);
+            assert.noFile(unexpectedFiles);
+            assert.noFile(unexpectedManifestFiles);
+            done();
+        });
+    });
+
+    describe('Package.json is updated appropriately', () => {
+        it('Package.json is updated properly', async () => {
+            const data: string = await readFileAsync(packageJsonFile, 'utf8');
+            const content = JSON.parse(data);
+            assert.equal(content.config["app_to_debug"], hosts[0]);
+
+            // Verify host-specific sideload and unload sripts have been removed
+            let unexexpectedScriptsFound = false;
+            Object.keys(content.scripts).forEach(function (key) {
+                if (key.includes("sideload:") || key.includes("unload:")) {
+                    unexexpectedScriptsFound = true;
+                }
+            });
+            assert.equal(unexexpectedScriptsFound, false);
+        });
+    });
+
+    describe('Manifest.xml is updated appropriately', () => {
+        it('Manifest.xml is updated appropriately', async () => {
+            const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestFile);
+            assert.equal(manifestInfo.hosts, "Workbook");
+            assert.equal(manifestInfo.displayName, testProjectName);
+        });
+    });
+});
+
 // Test to verify converting a project to a single host
 // for React Typescript project using PowerPoint host
 describe('Office-Add-Taskpane-React-Ts project', () => {
