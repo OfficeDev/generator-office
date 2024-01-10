@@ -113,19 +113,18 @@ module.exports = class extends yo {
   /* Prompt user for project options */
   async prompting(): Promise<void> {
     try {
-      const promptForUsageData = [
-        {
-          name: 'usageDataPromptAnswer',
-          message: usageDataOptions.promptQuestion,
-          type: 'list',
-          default: 'Continue',
-          choices: ['Continue', 'Exit'],
-          when: usageData.needToPromptForUsageData(usageDataOptions.groupName)
-        }
-      ];
-      const answerForUsageDataPrompt = await this.prompt(promptForUsageData);
-      if (answerForUsageDataPrompt.usageDataPromptAnswer) {
-        if (answerForUsageDataPrompt.usageDataPromptAnswer === 'Continue') {
+      if (usageData.needToPromptForUsageData(usageDataOptions.groupName)) {
+        const promptForUsageData = [
+          {
+            name: 'usageDataPromptAnswer',
+            message: usageDataOptions.promptQuestion,
+            type: 'list',
+            default: 'Continue',
+            choices: ['Continue', 'Exit'],
+          }
+        ];
+        const answerForUsageDataPrompt = await this.prompt(promptForUsageData);
+        if (answerForUsageDataPrompt?.usageDataPromptAnswer === 'Continue') {
           usageDataOptions.usageDataLevel = usageData.UsageDataLevel.on;
         } else {
           process.exit();
