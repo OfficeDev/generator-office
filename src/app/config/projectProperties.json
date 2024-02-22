@@ -153,10 +153,10 @@
     },
     "manifestTypes": {
         "xml": {
-            "displayname": "XML Manifest"
+            "displayname": "XML manifest"
         },
         "json": {
-            "displayname": "Unified manifest for Microsoft 365"
+            "displayname": "unified manifest for Microsoft 365"
         }
     }
 }
