@@ -8,6 +8,8 @@ import * as helpers from 'yeoman-test';
 import { OfficeAddinManifest } from "office-addin-manifest";
 import * as path from 'path';
 import { promisify } from "util";
+import projectsJsonData from '../app/config/projectsJsonData';
+
 
 const hosts = ["excel", "onenote", "outlook", "powerpoint", "project", "word"];
 const manifestXmlFile = "manifest.xml";
@@ -113,6 +115,19 @@ describe('Office-Addin-Taskpane-Ts prerelease projects', () => {
     };
 
     describe('Create prerelease project', () => {
+        const jsonData = new projectsJsonData("./src/app/config")
+        const projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(answers.projectType, "ts", true);
+
+        it('Finds right repo', (done) => {
+            projectRepoBranchInfo.repo, projectRepoBranchInfo.branch
+            assert.equal(projectRepoBranchInfo.repo, "https://github.com/OfficeDev/Office-Addin-TaskPane");
+            assert.equal(projectRepoBranchInfo.branch, "master");
+            done();
+        });
+    });
+
+    describe('Create prerelease project', () => {
+
         before((done) => {
             helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true }).withPrompts(answers).on('end', done);
         });
