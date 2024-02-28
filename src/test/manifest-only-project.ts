@@ -41,16 +41,14 @@ describe('manifest project - answers', () => {
     host: 'Excel',
   };
 
-  describe('manifest', () => {
-    before((done) => {
-      helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
-    });
+  before((done) => {
+    helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+  });
 
-    it('creates expected files', (done) => {
-      assert.file(expectedFiles);
-      assert.noFile(unexpectedFiles);
-      done();
-    });
+  it('creates expected files', (done) => {
+    assert.file(expectedFiles);
+    assert.noFile(unexpectedFiles);
+    done();
   });
 });
 
@@ -65,17 +63,15 @@ describe('manifest project - answers & args', () => {
   };
   const argument = [];
 
-  describe('argument: project', () => {
-    before((done) => {
-      argument[0] = manifestProject;
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
-    });
+  before((done) => {
+    argument[0] = manifestProject;
+    helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+  });
 
-    it('creates expected files', (done) => {
-      assert.file(expectedFiles);
-      assert.noFile(unexpectedFiles);
-      done();
-    });
+  it('creates expected files', (done) => {
+    assert.file(expectedFiles);
+    assert.noFile(unexpectedFiles);
+    done();
   });
 });
 
@@ -89,18 +85,16 @@ describe('manifest project - answers & args', () => {
   };
   const argument = [];
 
-  describe('argument: project', () => {
-    before((done) => {
-      argument[0] = manifestProject;
-      argument[1] = projectEscapedName;
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
-    });
+  before((done) => {
+    argument[0] = manifestProject;
+    argument[1] = projectEscapedName;
+    helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+  });
 
-    it('creates expected files', (done) => {
-      assert.file(expectedFiles);
-      assert.noFile(unexpectedFiles);
-      done();
-    });
+  it('creates expected files', (done) => {
+    assert.file(expectedFiles);
+    assert.noFile(unexpectedFiles);
+    done();
   });
 });
 
@@ -112,18 +106,16 @@ describe('manifest project - answers & args', () => {
   const answers = {};
   const argument = [];
 
-  describe('argument: project', () => {
-    before((done) => {
-      argument[0] = manifestProject;
-      argument[1] = projectEscapedName;
-      argument[2] = 'Excel';
-      helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
-    });
+  before((done) => {
+    argument[0] = manifestProject;
+    argument[1] = projectEscapedName;
+    argument[2] = 'Excel';
+    helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+  });
 
-    it('creates expected files', (done) => {
-      assert.file(expectedFiles);
-      assert.noFile(unexpectedFiles);
-      done();
-    });
+  it('creates expected files', (done) => {
+    assert.file(expectedFiles);
+    assert.noFile(unexpectedFiles);
+    done();
   });
 });
