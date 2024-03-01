@@ -459,7 +459,7 @@ module.exports = class extends yo {
     this.log(`    ${chalk.yellow('word:')} Creates an Office add-in for Word.\n`);
     this.log(`  ${chalk.bgGreen('manifestType')}:Specifies the manifest type to use for the add-in. Valid types include:`);
     this.log(`    ${chalk.yellow('xml:')}  Creates a XML manifest`);
-    this.log(`    ${chalk.yellow('json:')} Creates a Unified manifest for Microsoft 365.\n`);
+    this.log(`    ${chalk.yellow('json:')} Creates a unified manifest for Microsoft 365.\n`);
     this.log(`  ${chalk.bgMagenta('--output')}:Specifies the location in the file system where the project will be created.`);
     this.log(`    ${chalk.yellow('If the option is not specified, the project will be created in the current folder')}\n`);
     this.log(`  ${chalk.bgMagenta('--js')}:Specifies that the project will use JavaScript instead of TypeScript.`);
