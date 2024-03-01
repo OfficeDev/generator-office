@@ -48,42 +48,36 @@ describe('Office-Addin-Taskpane-Ts projects', () => {
         manifestType: "xml"
     };
 
-    describe('Create project', () => {
-        before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
-        });
-
-        it('creates expected files', (done) => {
-            assert.file(expectedFiles);
-            assert.noFile(unexpectedFiles);
-            assert.noFile(unexpectedManifestFiles);
-            done();
-        });
+    before((done) => {
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
     });
 
-    describe('Check Package.json', () => {
-        it('Package.json is updated properly', async () => {
-            const data: string = await readFileAsync(packageJsonFile, 'utf8');
-            const content = JSON.parse(data);
-            assert.equal(content.config["app_to_debug"], hosts[0]);
-
-            // Verify host-specific sideload and unload sripts have been removed
-            let unexexpectedScriptsFound = false;
-            Object.keys(content.scripts).forEach(function (key) {
-                if (key.includes("sideload:") || key.includes("unload:")) {
-                    unexexpectedScriptsFound = true;
-                }
-            });
-            assert.equal(unexexpectedScriptsFound, false);
-        });
+    it('creates expected files', (done) => {
+        assert.file(expectedFiles);
+        assert.noFile(unexpectedFiles);
+        assert.noFile(unexpectedManifestFiles);
+        done();
     });
 
-    describe('Check Manifest.xml', () => {
-        it('Manifest.xml is updated appropriately', async () => {
-            const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
-            assert.equal(manifestInfo.hosts, "Workbook");
-            assert.notEqual(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
+    it('Package.json is updated properly', async () => {
+        const data: string = await readFileAsync(packageJsonFile, 'utf8');
+        const content = JSON.parse(data);
+        assert.equal(content.config["app_to_debug"], hosts[0]);
+
+        // Verify host-specific sideload and unload sripts have been removed
+        let unexexpectedScriptsFound = false;
+        Object.keys(content.scripts).forEach(function (key) {
+            if (key.includes("sideload:") || key.includes("unload:")) {
+                unexexpectedScriptsFound = true;
+            }
         });
+        assert.equal(unexexpectedScriptsFound, false);
+    });
+
+    it('Manifest.xml is updated appropriately', async () => {
+        const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
+        assert.equal(manifestInfo.hosts, "Workbook");
+        assert.notEqual(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
     });
 });
 
@@ -112,42 +106,35 @@ describe('Office-Addin-Taskpane-Ts prerelease projects', () => {
         manifestType: "xml"
     };
 
-    describe('Create prerelease project', () => {
-        before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true }).withPrompts(answers).on('end', done);
-        });
-
-        it('creates expected files', (done) => {
-            assert.file(expectedFiles);
-            assert.noFile(unexpectedFiles);
-            assert.noFile(unexpectedManifestFiles);
-            done();
-        });
+    before((done) => {
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true }).withPrompts(answers).on('end', done);
     });
 
-    describe('Check Package.json ', () => {
-        it('Package.json is updated properly', async () => {
-            const data: string = await readFileAsync(packageJsonFile, 'utf8');
-            const content = JSON.parse(data);
-            assert.equal(content.config["app_to_debug"], hosts[0]);
-
-            // Verify host-specific sideload and unload sripts have been removed
-            let unexexpectedScriptsFound = false;
-            Object.keys(content.scripts).forEach(function (key) {
-                if (key.includes("sideload:") || key.includes("unload:")) {
-                    unexexpectedScriptsFound = true;
-                }
-            });
-            assert.equal(unexexpectedScriptsFound, false);
-        });
+    it('creates expected files', (done) => {
+        assert.file(expectedFiles);
+        assert.noFile(unexpectedFiles);
+        assert.noFile(unexpectedManifestFiles);
+        done();
     });
 
-    describe('Check Manifest.xml', () => {
-        it('Manifest.xml is updated appropriately', async () => {
-            const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
-            assert.equal(manifestInfo.hosts, "Workbook");
-            assert.equal(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
+    it('Package.json is updated properly', async () => {
+        const data: string = await readFileAsync(packageJsonFile, 'utf8');
+        const content = JSON.parse(data);
+        assert.equal(content.config["app_to_debug"], hosts[0]);
+
+        // Verify host-specific sideload and unload sripts have been removed
+        let unexexpectedScriptsFound = false;
+        Object.keys(content.scripts).forEach(function (key) {
+            if (key.includes("sideload:") || key.includes("unload:")) {
+                unexexpectedScriptsFound = true;
+            }
         });
+        assert.equal(unexexpectedScriptsFound, false);
+    });
+    it('Manifest.xml is updated appropriately', async () => {
+        const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
+        assert.equal(manifestInfo.hosts, "Workbook");
+        assert.equal(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
     });
 });
 
@@ -176,42 +163,36 @@ describe('Office-Addin-Taskpane-Ts json projects', () => {
         manifestType: "json"
     };
 
-    describe('Create json project', () => {
-        before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true }).withPrompts(answers).on('end', done);
-        });
-
-        it('creates expected files', (done) => {
-            assert.file(expectedFiles);
-            assert.noFile(unexpectedFiles);
-            assert.noFile(unexpectedManifestFiles);
-            done();
-        });
+    before((done) => {
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true }).withPrompts(answers).on('end', done);
     });
 
-    describe('Check Package.json ', () => {
-        it('Package.json is updated properly', async () => {
-            const data: string = await readFileAsync(packageJsonFile, 'utf8');
-            const content = JSON.parse(data);
-            assert.equal(content.config["app_to_debug"], hosts[2]);
-
-            // Verify host-specific sideload and unload sripts have been removed
-            let unexexpectedScriptsFound = false;
-            Object.keys(content.scripts).forEach(function (key) {
-                if (key.includes("sideload:") || key.includes("unload:")) {
-                    unexexpectedScriptsFound = true;
-                }
-            });
-            assert.equal(unexexpectedScriptsFound, false);
-        });
+    it('creates expected files', (done) => {
+        assert.file(expectedFiles);
+        assert.noFile(unexpectedFiles);
+        assert.noFile(unexpectedManifestFiles);
+        done();
     });
 
-    describe('Check Manifest.json', () => {
-        it('Manifest.json is updated appropriately', async () => {
-            const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestJsonFile);
-            assert.equal(manifestInfo.hosts, "mail");
-            assert.equal(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
+    it('Package.json is updated properly', async () => {
+        const data: string = await readFileAsync(packageJsonFile, 'utf8');
+        const content = JSON.parse(data);
+        assert.equal(content.config["app_to_debug"], hosts[2]);
+
+        // Verify host-specific sideload and unload sripts have been removed
+        let unexexpectedScriptsFound = false;
+        Object.keys(content.scripts).forEach(function (key) {
+            if (key.includes("sideload:") || key.includes("unload:")) {
+                unexexpectedScriptsFound = true;
+            }
         });
+        assert.equal(unexexpectedScriptsFound, false);
+    });
+
+    it('Manifest.json is updated appropriately', async () => {
+        const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestJsonFile);
+        assert.equal(manifestInfo.hosts, "mail");
+        assert.equal(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
     });
 });
 
@@ -239,41 +220,35 @@ describe('Office-Addin-Taskpane-React-Ts project', () => {
         manifestType: "xml"
     };
 
-    describe('Create project', () => {
-        before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
-        });
-
-        it('creates expected files', (done) => {
-            assert.file(expectedFiles);
-            assert.noFile(unexpectedFiles);
-            assert.noFile(unexpectedManifestFiles);
-            done();
-        });
+    before((done) => {
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
     });
 
-    describe('Check Package.json', () => {
-        it('Package.json is updated properly', async () => {
-            const data: string = await readFileAsync(packageJsonFile, 'utf8');
-            const content = JSON.parse(data);
-            assert.equal(content.config["app_to_debug"], hosts[3]);
-
-            // Verify host-specific sideload and unload sripts have been removed
-            let unexexpectedScriptsFound = false;
-            Object.keys(content.scripts).forEach(function (key) {
-                if (key.includes("sideload:") || key.includes("unload:")) {
-                    unexexpectedScriptsFound = true;
-                }
-            });
-            assert.equal(unexexpectedScriptsFound, false);
-        });
+    it('creates expected files', (done) => {
+        assert.file(expectedFiles);
+        assert.noFile(unexpectedFiles);
+        assert.noFile(unexpectedManifestFiles);
+        done();
     });
 
-    describe('Check Manifest.xml', () => {
-        it('Manifest.xml is updated appropriately', async () => {
-            const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
-            assert.equal(manifestInfo.hosts, "Presentation");
+    it('Package.json is updated properly', async () => {
+        const data: string = await readFileAsync(packageJsonFile, 'utf8');
+        const content = JSON.parse(data);
+        assert.equal(content.config["app_to_debug"], hosts[3]);
+
+        // Verify host-specific sideload and unload sripts have been removed
+        let unexexpectedScriptsFound = false;
+        Object.keys(content.scripts).forEach(function (key) {
+            if (key.includes("sideload:") || key.includes("unload:")) {
+                unexexpectedScriptsFound = true;
+            }
         });
+        assert.equal(unexexpectedScriptsFound, false);
+    });
+
+    it('Manifest.xml is updated appropriately', async () => {
+        const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
+        assert.equal(manifestInfo.hosts, "Presentation");
     });
 });
 
@@ -304,42 +279,36 @@ describe('Office-Addin-Taskpane-Ts projects via cli', () => {
     };
     const answers = {};
 
-    describe('Create project', () => {
-        before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions(options).withPrompts(answers).on('end', done);
-        });
-
-        it('creates expected files', (done) => {
-            assert.file(expectedFiles);
-            assert.noFile(unexpectedFiles);
-            assert.noFile(unexpectedManifestFiles);
-            done();
-        });
+    before((done) => {
+        helpers.run(path.join(__dirname, '../app')).withOptions(options).withPrompts(answers).on('end', done);
     });
 
-    describe('Check Package.json', () => {
-        it('Package.json is updated properly', async () => {
-            const data: string = await readFileAsync(packageJsonFile, 'utf8');
-            const content = JSON.parse(data);
-            assert.equal(content.config["app_to_debug"], hosts[0]);
-
-            // Verify host-specific sideload and unload sripts have been removed
-            let unexexpectedScriptsFound = false;
-            Object.keys(content.scripts).forEach(function (key) {
-                if (key.includes("sideload:") || key.includes("unload:")) {
-                    unexexpectedScriptsFound = true;
-                }
-            });
-            assert.equal(unexexpectedScriptsFound, false);
-        });
+    it('creates expected files', (done) => {
+        assert.file(expectedFiles);
+        assert.noFile(unexpectedFiles);
+        assert.noFile(unexpectedManifestFiles);
+        done();
     });
 
-    describe('Check Manifest.xml', () => {
-        it('Manifest.xml is updated appropriately', async () => {
-            const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
-            assert.equal(manifestInfo.hosts, "Workbook");
-            assert.notEqual(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
+    it('Package.json is updated properly', async () => {
+        const data: string = await readFileAsync(packageJsonFile, 'utf8');
+        const content = JSON.parse(data);
+        assert.equal(content.config["app_to_debug"], hosts[0]);
+
+        // Verify host-specific sideload and unload sripts have been removed
+        let unexexpectedScriptsFound = false;
+        Object.keys(content.scripts).forEach(function (key) {
+            if (key.includes("sideload:") || key.includes("unload:")) {
+                unexexpectedScriptsFound = true;
+            }
         });
+        assert.equal(unexexpectedScriptsFound, false);
+    });
+
+    it('Manifest.xml is updated appropriately', async () => {
+        const manifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
+        assert.equal(manifestInfo.hosts, "Workbook");
+        assert.notEqual(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
     });
 });
 
@@ -378,17 +347,15 @@ describe('Office-Addin-Taskpane-SSO-TS project', () => {
         manifestType: "xml"
     };
 
-    describe('Office-Addin-Taskpane-SSO-TS project', () => {
-        before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
-        });
+    before((done) => {
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+    });
 
-        it('creates expected files', (done) => {
-            assert.file(expectedFiles);
-            assert.noFile(unexpectedFiles);
-            assert.noFile(unexpectedManifestFiles);
-            done();
-        });
+    it('creates expected files', (done) => {
+        assert.file(expectedFiles);
+        assert.noFile(unexpectedFiles);
+        assert.noFile(unexpectedManifestFiles);
+        done();
     });
 });
 
@@ -428,16 +395,14 @@ describe('Office-Addin-Taskpane-SSO-JS project', () => {
         manifestType: "xml"
     };
 
-    describe('Office-Addin-Taskpane-SSO-JS project', () => {
-        before((done) => {
-            helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
-        });
+    before((done) => {
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+    });
 
-        it('creates expected files', (done) => {
-            assert.file(expectedFiles);
-            assert.noFile(unexpectedFiles);
-            assert.noFile(unexpectedManifestFiles);
-            done();
-        });
+    it('creates expected files', (done) => {
+        assert.file(expectedFiles);
+        assert.noFile(unexpectedFiles);
+        assert.noFile(unexpectedManifestFiles);
+        done();
     });
 });
