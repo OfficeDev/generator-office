@@ -3,7 +3,8 @@ steps:
     inputs:
       script: |
         echo Running Tests
-            
+        
+        npm install office-addin-manifest
         npm run test
             
         echo Done running tests
