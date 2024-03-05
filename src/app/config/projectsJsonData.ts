@@ -10,23 +10,31 @@ export default class projectsJsonData {
     this.m_projectJsonData = JSON.parse(jsonData.toString());
   }
 
-  isValidInput(input: string, isHostParam: boolean) {
-    if (isHostParam) {
-      for (const key in this.m_projectJsonData.hostTypes) {
-        if (_.toLower(input) == key) {
-          return true;
-        }
+  isValidProjectType(input: string) {
+    for (const key in this.m_projectJsonData.projectTypes) {
+      if (_.toLower(input) == key) {
+        return true;
       }
-      return false;
     }
-    else {
-      for (const key in this.m_projectJsonData.projectTypes) {
-        if (_.toLower(input) == key) {
-          return true;
-        }
+    return false;
+  }
+
+  isValidHost(input: string) {
+    for (const key in this.m_projectJsonData.hostTypes) {
+      if (_.toLower(input) == key) {
+        return true;
       }
-      return false;
     }
+    return false;
+  }
+
+  isValidManifestType(input: string) {
+    for (const key in this.m_projectJsonData.manifestTypes) {
+      if (_.toLower(input) == key) {
+        return true;
+      }
+    }
+    return false;
   }
 
   getProjectDisplayName(projectType: string) {
@@ -49,8 +57,17 @@ export default class projectsJsonData {
     return this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.javascript != undefined && this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.typescript != undefined;
   }
 
-  getManifestPath(projectType: string): string | undefined {
-    return this.m_projectJsonData.projectTypes[projectType].manifestPath;
+  // getManifestPath(projectType: string): string | undefined {
+  //   return this.m_projectJsonData.projectTypes[projectType].manifestPath;
+  // }
+  getManifestOptions(projectType: string): string[] {
+    let manifestOptions: string[] = [];
+    for (const key in this.m_projectJsonData.projectTypes) {
+      if (key === projectType) {
+        manifestOptions = this.m_projectJsonData.projectTypes[key].supportedManifestTypes;
+      }
+    }
+    return manifestOptions;
   }
 
   getHostTemplateNames(projectType: string) {
@@ -85,6 +102,10 @@ export default class projectsJsonData {
       }
     }
     return undefined;
+  }
+
+  getManifestDisplayName(hostKey: string) {
+    return this.m_projectJsonData.manifestTypes[hostKey]?.displayname;
   }
 
   getProjectTemplateRepository(projectTypeKey: string, scriptType: string) {

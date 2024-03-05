@@ -2,7 +2,6 @@
     "projectTypes": {
         "taskpane": {
             "displayname": "Office Add-in Task Pane project",
-            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-JS",
@@ -13,17 +12,21 @@
                     "branch": "yo-office"
                 }
             },
+            "supportedManifestTypes": [
+                "xml",
+                "json"
+            ],
             "supportedHosts": [
-                    "Excel",
-                    "Onenote",
-                    "Outlook",
-                    "Powerpoint",
-                    "Project",
-                    "Word"]
+                "Excel",
+                "Onenote",
+                "Outlook",
+                "Powerpoint",
+                "Project",
+                "Word"
+            ]
         },
         "react": {
             "displayname": "Office Add-in Task Pane project using React framework",
-            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-React-JS",
@@ -34,6 +37,9 @@
                     "branch": "yo-office"
                 }
             },
+            "supportedManifestTypes": [
+                "xml"
+            ],
             "supportedHosts": [
                 "Excel",
                 "Onenote",
@@ -45,7 +51,6 @@
         },
         "excel-functions-shared": {
             "displayname": "Excel Custom Functions using a Shared Runtime",
-            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
@@ -58,13 +63,15 @@
                     "prerelease": "shared-runtime"
                 }
             },
+            "supportedManifestTypes": [
+                "xml"
+            ],
             "supportedHosts": [
                 "Excel"
             ]
         },
         "excel-functions": {
             "displayname": "Excel Custom Functions using a JavaScript-only Runtime",
-            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
@@ -75,13 +82,15 @@
                     "branch": "yo-office"
                 }
             },
+            "supportedManifestTypes": [
+                "xml"
+            ],
             "supportedHosts": [
                 "Excel"
             ]
         },
         "single-sign-on": {
             "displayname": "Office Add-in Task Pane project supporting single sign-on",
-            "manifestPath": "manifest.xml",
             "templates": {
                 "javascript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-SSO-JS",
@@ -92,6 +101,9 @@
                     "branch": "yo-office"
                 }
             },
+            "supportedManifestTypes": [
+                "xml"
+            ],
             "supportedHosts": [
                 "Excel",
                 "Outlook",
@@ -99,28 +111,16 @@
                 "Word"
             ]
         },
-        "unified-manifest": {
-            "displayname": "Outlook Add-in with unified manifest for Microsoft 365 (preview)",
-            "manifestPath": "manifest.json",
-            "templates": {
-                "typescript": {
-                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
-                    "branch": "json-preview-yo-office",
-                    "prerelease": "json-preview"
-                }
-            },
-            "supportedHosts": [
-                "Outlook"
-            ]
-        },
         "manifest": {
             "displayname": "Office Add-in project containing the manifest only",
-            "manifestPath": "manifest.xml",
             "templates": {
                 "manifestonly": {
                     "repository": ""
                 }
             },
+            "supportedManifestTypes": [
+                "xml"
+            ],
             "supportedHosts": [
                 "Excel",
                 "Onenote",
@@ -149,6 +149,14 @@
         },
         "word": {
             "displayname": "Word"
+        }
+    },
+    "manifestTypes": {
+        "xml": {
+            "displayname": "XML manifest"
+        },
+        "json": {
+            "displayname": "unified manifest for Microsoft 365"
         }
     }
 }
