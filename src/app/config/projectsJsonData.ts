@@ -10,7 +10,7 @@ export default class projectsJsonData {
     this.m_projectJsonData = JSON.parse(jsonData.toString());
   }
 
-  isValidProjectType(input: string) {
+  isValidProjectType(input: string): boolean {
     for (const key in this.m_projectJsonData.projectTypes) {
       if (_.toLower(input) == key) {
         return true;
@@ -19,7 +19,7 @@ export default class projectsJsonData {
     return false;
   }
 
-  isValidHost(input: string) {
+  isValidHost(input: string): boolean {
     for (const key in this.m_projectJsonData.hostTypes) {
       if (_.toLower(input) == key) {
         return true;
@@ -28,7 +28,7 @@ export default class projectsJsonData {
     return false;
   }
 
-  isValidManifestType(input: string) {
+  isValidManifestType(input: string): boolean {
     for (const key in this.m_projectJsonData.manifestTypes) {
       if (_.toLower(input) == key) {
         return true;
@@ -37,7 +37,7 @@ export default class projectsJsonData {
     return false;
   }
 
-  getProjectDisplayName(projectType: string) {
+  getProjectDisplayName(projectType: string): string {
     return this.m_projectJsonData.projectTypes[_.toLower(projectType)].displayname;
   }
 
@@ -45,7 +45,7 @@ export default class projectsJsonData {
     return this.m_projectJsonData;
   }
 
-  getProjectTemplateNames() {
+  getProjectTemplateNames(): string[] {
     const projectTemplates: string[] = [];
     for (const key in this.m_projectJsonData.projectTypes) {
       projectTemplates.push(key);
@@ -53,34 +53,21 @@ export default class projectsJsonData {
     return projectTemplates;
   }
 
-  projectBothScriptTypes(projectType: string) {
+  projectBothScriptTypes(projectType: string): boolean {
     return this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.javascript != undefined && this.m_projectJsonData.projectTypes[_.toLower(projectType)].templates.typescript != undefined;
   }
 
-  // getManifestPath(projectType: string): string | undefined {
-  //   return this.m_projectJsonData.projectTypes[projectType].manifestPath;
-  // }
-  getManifestOptions(projectType: string): string[] {
-    let manifestOptions: string[] = [];
-    for (const key in this.m_projectJsonData.projectTypes) {
-      if (key === projectType) {
-        manifestOptions = this.m_projectJsonData.projectTypes[key].supportedManifestTypes;
-      }
-    }
-    return manifestOptions;
+  getManifestOptions(projectType: string, host: string): string[] {
+    const selectedHost = this.m_projectJsonData.projectTypes[projectType]?.supportedHosts[host];
+    return selectedHost ? selectedHost.supportedManifestTypes : [];
   }
 
-  getHostTemplateNames(projectType: string) {
-    let hosts: string[] = [];
-    for (const key in this.m_projectJsonData.projectTypes) {
-      if (key === projectType) {
-        hosts = this.m_projectJsonData.projectTypes[key].supportedHosts;
-      }
-    }
-    return hosts;
+  getHostOptions(projectType: string): string[] {
+    const selectedProjectType = this.m_projectJsonData.projectTypes[projectType];
+    return selectedProjectType ? Object.keys(selectedProjectType.supportedHosts) : [];
   }
 
-  getSupportedScriptTypes(projectType: string) {
+  getScriptTypeOptions(projectType: string): string[] {
     const scriptTypes: string[] = [];
     for (const template in this.m_projectJsonData.projectTypes[projectType].templates) {
       let scriptType: string;
@@ -95,7 +82,7 @@ export default class projectsJsonData {
     return scriptTypes;
   }
 
-  getHostDisplayName(hostKey: string) {
+  getHostDisplayName(hostKey: string): string {
     for (const key in this.m_projectJsonData.hostTypes) {
       if (_.toLower(hostKey) == key) {
         return this.m_projectJsonData.hostTypes[key].displayname;
@@ -104,11 +91,11 @@ export default class projectsJsonData {
     return undefined;
   }
 
-  getManifestDisplayName(hostKey: string) {
+  getManifestDisplayName(hostKey: string): string {
     return this.m_projectJsonData.manifestTypes[hostKey]?.displayname;
   }
 
-  getProjectTemplateRepository(projectTypeKey: string, scriptType: string) {
+  getProjectTemplateRepository(projectTypeKey: string, scriptType: string): string | undefined {
     for (const key in this.m_projectJsonData.projectTypes) {
       if (_.toLower(projectTypeKey) == key) {
         if (projectTypeKey == 'manifest') {
@@ -122,7 +109,7 @@ export default class projectsJsonData {
     return undefined;
   }
 
-  getProjectTemplateBranchName(projectTypeKey: string, scriptType: string, prerelease: boolean) {
+  getProjectTemplateBranchName(projectTypeKey: string, scriptType: string, prerelease: boolean): string | undefined {
     for (const key in this.m_projectJsonData.projectTypes) {
       if (_.toLower(projectTypeKey) == key) {
         if (projectTypeKey == 'manifest') {

@@ -23,11 +23,11 @@ const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 let isSsoProject = false;
 const javascript = `JavaScript`;
-let language;
+let language: string;
 const manifest = 'manifest';
 const sso = 'single-sign-on';
 const typescript = `TypeScript`;
-let jsonData;
+let jsonData: projectsJsonData;
 
 let usageDataObject: usageData.OfficeAddinUsageData;
 const usageDataOptions: usageData.IUsageDataOptions = {
@@ -178,7 +178,7 @@ module.exports = class extends yo {
         isSsoProject = true;
       }
 
-      const getSupportedScriptTypes = jsonData.getSupportedScriptTypes(projectType);
+      const getSupportedScriptTypes = jsonData.getScriptTypeOptions(projectType);
       const askForScriptType = [
         {
           name: 'scriptType',
@@ -204,7 +204,7 @@ module.exports = class extends yo {
       /* askForHost will be triggered if no project name was specified via the command line Host argument, and the Host argument
        * input was in fact valid, and the project type is not Excel-Functions */
       const startForHost = (new Date()).getTime();
-      const supportedHosts = jsonData.getHostTemplateNames(projectType);
+      const supportedHosts = jsonData.getHostOptions(projectType);
       const askForHost = [{
         name: 'host',
         message: 'Which Office client application would you like to support?',
@@ -218,11 +218,13 @@ module.exports = class extends yo {
       const endForHost = (new Date()).getTime();
       const durationForHost = (endForHost - startForHost) / 1000;
 
+      const selectedHost = this.options.host || answerForHost.host;
+
       usageDataObject = new usageData.OfficeAddinUsageData(usageDataOptions);
 
       /* aksForManifestType will be triggered if no type was specified via the command line manifestType argument */
       const startForManifestType = (new Date()).getTime();
-      const manifestOptions = jsonData.getManifestOptions(projectType);
+      const manifestOptions = jsonData.getManifestOptions(projectType, selectedHost);
       const askForManifestType = [{
         name: 'manifestType',
         message: 'Which manifest type would you like to use?',
@@ -230,7 +232,7 @@ module.exports = class extends yo {
         default: manifestOptions[0],
         choices: manifestOptions.map(manifestType => ({ name: jsonData.getManifestDisplayName(manifestType), value: manifestType })),
         when: (this.options.manifestType == null || this.options.manifestType != null && !jsonData.isValidManifestType(this.options.manifestType))
-          && jsonData.getHostTemplateNames(projectType).length > 1
+          && jsonData.getManifestOptions(projectType, selectedHost).length > 1
       }];
       const answerForManifestType = await this.prompt(askForManifestType);
       const endForManifestType = (new Date()).getTime();
@@ -296,7 +298,8 @@ module.exports = class extends yo {
 
   _configureProject(answerForProjectType, answerForManifestType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject): void {
     try {
-      const projType = _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType)
+      const projType = _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType);
+      const selectedHost = this.options.host || answerForHost.host;
 
       this.project = {
         folder: this.options.output || answerForName.name || this.options.name,
@@ -304,12 +307,12 @@ module.exports = class extends yo {
           ? answerForHost.host
           : this.options.host
           ? this.options.host
-          : jsonData?.getHostTemplateNames(projType)[0],
+          : jsonData?.getHostOptions(projType)[0],
         manifestType: answerForManifestType.manifestType
           ? answerForManifestType.manifestType
           : this.options.manifestType
           ? this.options.manifestType
-          : jsonData?.getManifestOptions(projType)[0],
+          : jsonData?.getManifestOptions(projType, selectedHost)[0],
         name: this.options.name || answerForName.name,
         projectType: projType,
         scriptType: answerForScriptType.scriptType
@@ -318,7 +321,7 @@ module.exports = class extends yo {
           ? typescript
           : this.options.js
           ? javascript
-          : jsonData?.getSupportedScriptTypes(projType)[0],
+          : jsonData?.getScriptTypeOptions(projType)[0],
         isManifestOnly: isManifestProject,
         isExcelFunctionsProject: isExcelFunctionsProject,
       };
