@@ -12,18 +12,39 @@
                     "branch": "yo-office"
                 }
             },
-            "supportedManifestTypes": [
-                "xml",
-                "json"
-            ],
-            "supportedHosts": [
-                "Excel",
-                "Onenote",
-                "Outlook",
-                "Powerpoint",
-                "Project",
-                "Word"
-            ]
+            "supportedHosts": {
+                "Excel": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Onenote": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Outlook": {
+                    "supportedManifestTypes": [
+                        "xml",
+                        "json"
+                    ]
+                },
+                "Powerpoint": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Project": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Word": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                }
+            }
         },
         "react": {
             "displayname": "Office Add-in Task Pane project using React framework",
@@ -37,17 +58,38 @@
                     "branch": "yo-office"
                 }
             },
-            "supportedManifestTypes": [
-                "xml"
-            ],
-            "supportedHosts": [
-                "Excel",
-                "Onenote",
-                "Outlook",
-                "Powerpoint",
-                "Project",
-                "Word"
-            ]
+            "supportedHosts": {
+                "Excel": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Onenote": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Outlook": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Powerpoint": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Project": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Word": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                }
+            }
         },
         "excel-functions-shared": {
             "displayname": "Excel Custom Functions using a Shared Runtime",
@@ -63,12 +105,13 @@
                     "prerelease": "shared-runtime"
                 }
             },
-            "supportedManifestTypes": [
-                "xml"
-            ],
-            "supportedHosts": [
-                "Excel"
-            ]
+            "supportedHosts": {
+                "Excel": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                }
+            }
         },
         "excel-functions": {
             "displayname": "Excel Custom Functions using a JavaScript-only Runtime",
@@ -82,12 +125,13 @@
                     "branch": "yo-office"
                 }
             },
-            "supportedManifestTypes": [
-                "xml"
-            ],
-            "supportedHosts": [
-                "Excel"
-            ]
+            "supportedHosts": {
+                "Excel": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                }
+            }
         },
         "single-sign-on": {
             "displayname": "Office Add-in Task Pane project supporting single sign-on",
@@ -101,15 +145,28 @@
                     "branch": "yo-office"
                 }
             },
-            "supportedManifestTypes": [
-                "xml"
-            ],
-            "supportedHosts": [
-                "Excel",
-                "Outlook",
-                "Powerpoint",
-                "Word"
-            ]
+            "supportedHosts": {
+                "Excel": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Outlook": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Powerpoint": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Word": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                }
+            }
         },
         "manifest": {
             "displayname": "Office Add-in project containing the manifest only",
@@ -118,17 +175,38 @@
                     "repository": ""
                 }
             },
-            "supportedManifestTypes": [
-                "xml"
-            ],
-            "supportedHosts": [
-                "Excel",
-                "Onenote",
-                "Outlook",
-                "Powerpoint",
-                "Project",
-                "Word"
-            ]
+            "supportedHosts": {
+                "Excel": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Onenote": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Outlook": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Powerpoint": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Project": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Word": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                }
+            }
         }
     },
     "hostTypes": {
