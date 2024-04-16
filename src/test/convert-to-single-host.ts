@@ -76,7 +76,7 @@ describe('Office-Addin-Taskpane-Ts projects', () => {
     it('Manifest.xml is updated appropriately', async () => {
         const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
         assert.equal(manifestInfo.hosts[0], "Workbook");
-        assert.notEqual(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
+        assert.equal(manifestInfo.displayName, testProjectName);
     });
 });
 
@@ -362,7 +362,7 @@ describe('Office-Addin-Taskpane-Ts projects via cli', () => {
     it('Manifest.xml is updated appropriately', async () => {
         const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
         assert.equal(manifestInfo.hosts[0], "Workbook");
-        assert.notEqual(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
+        assert.equal(manifestInfo.displayName, testProjectName);
     });
 });
 
