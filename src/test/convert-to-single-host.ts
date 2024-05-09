@@ -83,7 +83,7 @@ describe('Office-Addin-Taskpane-Ts projects', () => {
 // Test to verify converting a project to a single host
 // for Office-Addin-Taskpane Typescript project using Excel host and prerelease flag
 describe('Office-Addin-Taskpane-Ts prerelease projects', () => {
-    const testProjectName = "TaskpaneProject"
+    const testProjectName = "Taskpane Project"
     const expectedFiles = [
         packageJsonFile,
         manifestXmlFile,
@@ -456,5 +456,75 @@ describe('Office-Addin-Taskpane-SSO-JS project', () => {
         assert.noFile(unexpectedFiles);
         assert.noFile(unexpectedManifestFiles);
         done();
+    });
+});
+
+// Test to verify converting a project to a single host
+// for custom function Typescript project
+describe('Custom-Functions-Shared-TS project', () => {
+    const testProjectName = "CFTypeScriptProject"
+    const expectedFiles = [
+        packageJsonFile,
+        manifestXmlFile,
+        'src/functions/functions.ts',
+    ]
+    const unexpectedFiles = [
+        'manifest.json',
+    ]
+    const answers = {
+        projectType: "excel-functions-shared",
+        scriptType: "TypeScript",
+        name: testProjectName
+    };
+
+    before((done) => {
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+    });
+
+    it('creates expected files', (done) => {
+        assert.file(expectedFiles);
+        assert.noFile(unexpectedFiles);
+        assert.noFile(unexpectedManifestFiles);
+        done();
+    });
+    it('Manifest.xml is updated appropriately', async () => {
+        const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
+        assert.equal(manifestInfo.hosts[0], "Workbook");
+        assert.equal(manifestInfo.displayName, testProjectName);
+    });
+});
+
+// Test to verify converting a project to a single host
+// for custom functions JavaScript project
+describe('Custom-Functions-Shared-JS project', () => {
+    const testProjectName = "CFJavaScriptProject"
+    const expectedFiles = [
+        packageJsonFile,
+        manifestXmlFile,
+        'src/functions/functions.js',
+    ]
+    const unexpectedFiles = [
+        'manifest.json',
+    ]
+    const answers = {
+        projectType: "excel-functions-shared",
+        scriptType: "JavaScript",
+        name: testProjectName
+    };
+
+    before((done) => {
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+    });
+
+    it('creates expected files', (done) => {
+        assert.file(expectedFiles);
+        assert.noFile(unexpectedFiles);
+        assert.noFile(unexpectedManifestFiles);
+        done();
+    });
+    it('Manifest.xml is updated appropriately', async () => {
+        const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
+        assert.equal(manifestInfo.hosts[0], "Workbook");
+        assert.equal(manifestInfo.displayName, testProjectName);
     });
 });
