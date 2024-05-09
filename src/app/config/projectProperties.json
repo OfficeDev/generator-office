@@ -95,14 +95,14 @@
             "displayname": "Excel Custom Functions using a Shared Runtime",
             "templates": {
                 "javascript": {
-                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-JS",
-                    "branch": "shared-runtime-yo-office",
-                    "prerelease": "shared-runtime"
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-Shared-JS",
+                    "branch": "yo-office",
+                    "prerelease": "main"
                 },
                 "typescript": {
-                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions",
-                    "branch": "shared-runtime-yo-office",
-                    "prerelease": "shared-runtime"
+                    "repository": "https://github.com/OfficeDev/Excel-Custom-Functions-Shared",
+                    "branch": "yo-office",
+                    "prerelease": "main"
                 }
             },
             "supportedHosts": {
