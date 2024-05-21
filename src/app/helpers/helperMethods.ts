@@ -1,7 +1,7 @@
 import axios from "axios"
 import * as fs from "fs";
 import * as path from "path";
-import * as unzip from "unzipper";
+import * as AdmZip from "adm-zip";
 
 const zipFile = 'project.zip';
 
@@ -57,15 +57,14 @@ export namespace helperMethods {
     async function unzipProjectTemplate(projectFolder: string): Promise<void> {
         return new Promise(async (resolve, reject) => {
             const zipFile = 'project.zip';
-            const readStream = fs.createReadStream(`${projectFolder}/${zipFile}`);
-            readStream.pipe(unzip.Extract({ path: projectFolder }))
-                .on('error', function (err) {
-                    reject(`Unable to unzip project zip file for "${projectFolder}".\n${err}`);
-                })
-                .on('close', async () => {
-                    moveProjectFiles(projectFolder);
-                    resolve();
-                });
+            const zip = new AdmZip(`${projectFolder}/${zipFile}`);
+            try {
+                zip.extractAllTo(/*target path*/projectFolder, /*overwrite*/true);
+                moveProjectFiles(projectFolder);
+                resolve();
+            } catch (err) {
+                reject(`Unable to unzip project zip file for "${projectFolder}".\n${err}`);
+            }
         });
     }
 
