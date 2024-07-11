@@ -64,6 +64,7 @@ taskpane | Task Pane add-in using HTML
 react | Task Pane add-in using the React framework
 excel-functions | Task Pane add-in with Excel Custom Functions
 single-sign-on | Taskpane add-in supporting single-sign-on
+nested-app-auth | Taskpane add-in supporting Nested App Auth single sign-on (preview)
 manifest | Manifest and related files for an Office Add-in
 
 - Type: String
