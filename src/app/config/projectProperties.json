@@ -168,6 +168,32 @@
                 }
             }
         },
+        "nested-app-auth": {
+            "displayname": "Office Add-in Task Pane project supporting Nested App Auth single sign-on (preview)",
+            "templates": {
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane-SSO-NAA",
+                    "branch": "yo-office"
+                }
+            },
+            "supportedHosts": {
+                "Excel": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Powerpoint": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                },
+                "Word": {
+                    "supportedManifestTypes": [
+                        "xml"
+                    ]
+                }
+            }
+        },
         "manifest": {
             "displayname": "Office Add-in project containing the manifest only",
             "templates": {
