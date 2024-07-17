@@ -71,7 +71,8 @@
                 },
                 "Outlook": {
                     "supportedManifestTypes": [
-                        "xml"
+                        "xml",
+                        "json"
                     ]
                 },
                 "Powerpoint": {
@@ -153,7 +154,8 @@
                 },
                 "Outlook": {
                     "supportedManifestTypes": [
-                        "xml"
+                        "xml",
+                        "json"
                     ]
                 },
                 "Powerpoint": {
