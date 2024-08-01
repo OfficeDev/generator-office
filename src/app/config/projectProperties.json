@@ -259,10 +259,10 @@
     },
     "manifestTypes": {
         "xml": {
-            "displayname": "add-in only manifest"
+            "displayname": "Add-in only manifest"
         },
         "json": {
-            "displayname": "unified manifest for Microsoft 365"
+            "displayname": "Unified manifest for Microsoft 365"
         }
     }
 }
