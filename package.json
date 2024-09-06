@@ -38,8 +38,8 @@
     "project"
   ],
   "dependencies": {
-    "axios": "1.6.0",
     "adm-zip": "0.5.12",
+    "axios": "^1.7.7",
     "chalk": "^4.0.0",
     "lodash": "^4.17.21",
     "office-addin-usage-data": "^1.6.4",
