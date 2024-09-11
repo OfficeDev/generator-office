@@ -46,6 +46,38 @@
                 }
             }
         },
+        "taskpane-preview": {
+            "displayname": "Office Add-in Task Pane project (preview)",
+            "templates": {
+                "typescript": {
+                    "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
+                    "prerelease": "json-wxpo-preview",
+                    "branch": "json-wxpo-preview"
+                }
+            },
+            "supportedHosts": {
+                "All": {
+                    "supportedManifestTypes": [
+                        "json"
+                    ]
+                },
+                "Excel": {
+                    "supportedManifestTypes": [
+                        "json"
+                    ]
+                },
+                "Powerpoint": {
+                    "supportedManifestTypes": [
+                        "json"
+                    ]
+                },
+                "Word": {
+                    "supportedManifestTypes": [
+                        "json"
+                    ]
+                }
+            }
+        },
         "react": {
             "displayname": "Office Add-in Task Pane project using React framework",
             "templates": {
@@ -238,6 +270,9 @@
         }
     },
     "hostTypes": {
+        "wxpo": {
+            "displayname": "All"
+        },
         "excel": {
             "displayname": "Excel"
         },
