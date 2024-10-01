@@ -1,11 +1,11 @@
 steps:
-  - task: CmdLine@2
-    inputs:
-      script: |
-        echo Running Tests
-        
-        npm install office-addin-manifest
-        npm run test
-            
-        echo Done running tests
-    displayName: 'Run Tests'
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo Running Tests
+      
+      npm install office-addin-manifest
+      npm run test
+          
+      echo Done running tests
+  displayName: 'Run Tests'
