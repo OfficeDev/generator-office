@@ -19,8 +19,9 @@ extends:
       jobs:
       - job: Windows_10_Latest
         steps:
-        - template: /.azure-devops/npm-install.yaml@self
-        - template: /.azure-devops/build.yaml@self
+        - template: /.azure-devops/install.yml@self
+      # - template: ./lint.yml
+        - template: /.azure-devops/build.yml@self
         - template: /.azure-devops/devcerts.yml@self
         - template: /.azure-devops/edgewebview.yml@self
         - template: /.azure-devops/test.yml@self
@@ -30,6 +31,6 @@ extends:
           image: ubuntu-latest
           os: linux
         steps:
-        - template: /.azure-devops/npm-install.yaml@self
-        - template: /.azure-devops/build.yaml@self
+        - template: /.azure-devops/install.yml@self
+        - template: /.azure-devops/build.yml@self
         - template: /.azure-devops/test.yml@self
