@@ -1,7 +1,7 @@
 import axios from "axios"
 import * as fs from "fs";
 import * as path from "path";
-import * as AdmZip from "adm-zip";
+import AdmZip from "adm-zip";
 
 const zipFile = 'project.zip';
 

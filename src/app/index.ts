@@ -12,12 +12,13 @@ import { promisify } from "util";
 import * as usageData from "office-addin-usage-data";
 import { v4 as uuidv4 } from 'uuid';
 import * as yosay from 'yosay';
-import * as yo from "yeoman-generator"; // eslint-disable-line @typescript-eslint/no-var-requires
+import yo from 'yeoman-generator';
+
 
 // Workaround for generator-office breaking change (v4 => v5)
 // If we can figure out how to get the new packageManagerInstallTask to work 
 // with downloaded package.json then we won't need this or the installDependencies calls
--_.extend(yo.prototype, require('yeoman-generator/lib/actions/install')); // eslint-disable-line @typescript-eslint/no-var-requires
+-_.extend(yo.prototype, require('yeoman-generator/lib/actions/install'));
 
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
@@ -113,7 +114,7 @@ module.exports = class extends yo {
   /* Prompt user for project options */
   async prompting(): Promise<void> {
     try {
-      if (usageData.needToPromptForUsageData(usageDataOptions.groupName)) {
+      if (usageData.needToPromptForUsageData(usageDataOptions.groupName||"")) {
         const promptForUsageData = [
           {
             name: 'usageDataPromptAnswer',
@@ -130,7 +131,7 @@ module.exports = class extends yo {
           process.exit();
         }
       } else {
-        usageDataOptions.usageDataLevel = usageData.readUsageDataLevel(usageDataOptions.groupName);
+        usageDataOptions.usageDataLevel = usageData.readUsageDataLevel(usageDataOptions.groupName||"");
       }
 
       let isManifestProject = false;
@@ -361,7 +362,7 @@ module.exports = class extends yo {
         this._projectCreationMessage();
 
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
-        if (projectRepoBranchInfo.repo) {
+        if (projectRepoBranchInfo.repo && projectRepoBranchInfo.branch) {
           await helperMethods.downloadProjectTemplateZipFile(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
 
           // Call 'convert-to-single-host' npm script in generated project, passing in host parameter

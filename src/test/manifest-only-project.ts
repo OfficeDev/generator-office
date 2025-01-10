@@ -61,7 +61,7 @@ describe('manifest project - answers & args', () => {
     name: projectDisplayName,
     host: 'Excel',
   };
-  const argument = [];
+  const argument: string[] = [];
 
   before((done) => {
     argument[0] = manifestProject;
@@ -83,7 +83,7 @@ describe('manifest project - answers & args', () => {
   const answers = {
     host: 'Excel',
   };
-  const argument = [];
+  const argument: string[] = [];
 
   before((done) => {
     argument[0] = manifestProject;
@@ -104,7 +104,7 @@ describe('manifest project - answers & args', () => {
  */
 describe('manifest project - answers & args', () => {
   const answers = {};
-  const argument = [];
+  const argument: string[] = [];
 
   before((done) => {
     argument[0] = manifestProject;

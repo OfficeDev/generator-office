@@ -1,16 +1,21 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
         "module": "commonjs",
         "moduleResolution": "node",
-        "sourceMap": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "removeComments": false,
-        "noImplicitAny": false,
         "noEmitOnError": true,
-        "rootDir": "src",
+        "noImplicitAny": false,
         "outDir": "generators",
+        "removeComments": false,
+        "rootDir": "src",
+        "sourceMap": true,
+        "strict": true,
+        "target": "es6",
         "lib": [
             "dom",
             "es2015"

@@ -70,7 +70,7 @@ export default class projectsJsonData {
   getScriptTypeOptions(projectType: string): string[] {
     const scriptTypes: string[] = [];
     for (const template in this.m_projectJsonData.projectTypes[projectType].templates) {
-      let scriptType: string;
+      let scriptType: string = "unknown";
       if (template === "javascript") {
         scriptType = "JavaScript";
       } else if (template === "typescript") {
@@ -88,7 +88,7 @@ export default class projectsJsonData {
         return this.m_projectJsonData.hostTypes[key].displayname;
       }
     }
-    return undefined;
+    return "";
   }
 
   getManifestDisplayName(hostKey: string): string {
@@ -134,7 +134,7 @@ export default class projectsJsonData {
 
   getProjectRepoAndBranch(projectTypeKey: string, scriptType: string, prerelease: boolean) {
     scriptType = scriptType === 'ts' ? 'typescript' : 'javascript';
-    const repoBranchInfo = { repo: <string>null, branch: <string>null };
+    const repoBranchInfo = { repo: <string|undefined>undefined, branch: <string|undefined>undefined };
 
     repoBranchInfo.repo = this.getProjectTemplateRepository(projectTypeKey, scriptType);
     repoBranchInfo.branch = (repoBranchInfo.repo) ? this.getProjectTemplateBranchName(projectTypeKey, scriptType, prerelease) : undefined;
