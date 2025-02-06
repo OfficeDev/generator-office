@@ -1,5 +1,5 @@
-import * as fs from 'fs';
-import * as _ from 'lodash';
+import fs from 'fs';
+import _ from 'lodash';
 
 export default class projectsJsonData {
   m_projectJsonDataFile = '/projectProperties.json';

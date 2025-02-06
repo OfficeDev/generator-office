@@ -24,6 +24,7 @@
   "files": [
     "generators"
   ],
+  "type": "module",
   "main": "generators/index.js",
   "keywords": [
     "office",
@@ -40,21 +41,20 @@
   "dependencies": {
     "adm-zip": "0.5.12",
     "axios": "^1.7.7",
-    "chalk": "^4.0.0",
+    "chalk": "^5.4.1",
     "lodash": "^4.17.21",
-    "office-addin-usage-data": "^1.6.4",
+    "office-addin-usage-data": "^2.0.3",
     "open": "^8.4.0",
     "uuid": "^8.3.2",
-    "yeoman-generator": "^5.8.0",
+    "yeoman-generator": "^7.0.0",
     "yosay": "^2.0.2"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.5",
-    "@types/lodash": "^4.14.182",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^18.16.0",
+    "@types/lodash": "^4.17.14",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.10.6",
     "@types/request": "^2.48.8",
-    "@types/yeoman-generator": "^5.2.10",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "concurrently": "^9.1.2",
@@ -62,13 +62,13 @@
     "eslint": "^9.0.0",
     "eslint-config-prettier": "9.1.0",
     "mocha": "^11.0.0",
-    "office-addin-manifest": "^1.13.6",
-    "prettier": "^2.6.2",
+    "office-addin-manifest": "^2.0.3",
+    "prettier": "^3.4.2",
     "rimraf": "^6.0.1",
     "ts-node": "^10.7.0",
-    "typescript": "^4.8.2",
+    "typescript": "^5.2.2",
     "yeoman-assert": "^3.1.1",
-    "yeoman-environment": "^3.13.0",
-    "yeoman-test": "^6.3.0"
+    "yeoman-environment": "^4.4.3",
+    "yeoman-test": "^10.0.1"
   }
 }

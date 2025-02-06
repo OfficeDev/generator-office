@@ -2,23 +2,22 @@
 * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 * See LICENSE in the project root for license information.
 */
-import * as _ from 'lodash';
-import * as chalk from 'chalk';
-import * as childProcess from "child_process";
-import * as defaults from "./defaults";
-import { helperMethods } from './helpers/helperMethods';
-import projectsJsonData from './config/projectsJsonData';
+import _ from 'lodash';
+import chalk from 'chalk';
+import childProcess from "child_process";
+import * as defaults from "./defaults.js";
+import { helperMethods } from './helpers/helperMethods.js';
+import projectsJsonData from './config/projectsJsonData.js';
 import { promisify } from "util";
 import * as usageData from "office-addin-usage-data";
 import { v4 as uuidv4 } from 'uuid';
-import * as yosay from 'yosay';
-import yo from 'yeoman-generator';
-
+import yosay from 'yosay';
+import yo, { PromptQuestion } from 'yeoman-generator';
 
 // Workaround for generator-office breaking change (v4 => v5)
 // If we can figure out how to get the new packageManagerInstallTask to work 
 // with downloaded package.json then we won't need this or the installDependencies calls
--_.extend(yo.prototype, require('yeoman-generator/lib/actions/install'));
+//-_.extend(yo.prototype, await import('yeoman-generator/lib/actions/install'));
 
 const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
@@ -42,7 +41,7 @@ const usageDataOptions: usageData.IUsageDataOptions = {
   isForTesting: false
 }
 
-module.exports = class extends yo {
+export default class extends yo {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   project: any;
 
@@ -100,7 +99,7 @@ module.exports = class extends yo {
 
   /* Generator initalization */
   initializing(): void {
-    if (this.options.details) {
+    if (this.options["details"]) {
       this._detailedHelp();
     }
     if (this.options['test']) {
@@ -115,7 +114,7 @@ module.exports = class extends yo {
   async prompting(): Promise<void> {
     try {
       if (usageData.needToPromptForUsageData(usageDataOptions.groupName||"")) {
-        const promptForUsageData = [
+        const promptForUsageData: PromptQuestion[] = [
           {
             name: 'usageDataPromptAnswer',
             message: usageDataOptions.promptQuestion,
@@ -138,67 +137,67 @@ module.exports = class extends yo {
       let isExcelFunctionsProject = false;
 
       // Normalize host name if passed as a command line argument
-      if (this.options.host != null) {
-        this.options.host = jsonData.getHostDisplayName(this.options.host);
+      if (this.options["host"] != null) {
+        this.options["host"] = jsonData.getHostDisplayName(this.options["host"]);
       }
 
       /* askForProjectType will only be triggered if no project type was specified via command line projectType argument,
        * and the projectType argument input was indeed valid */
       const startForProjectType = (new Date()).getTime();
-      const askForProjectType = [
+      const askForProjectType: PromptQuestion[] = [
         {
           name: 'projectType',
           message: 'Choose a project type:',
           type: 'list',
           default: 'React',
           choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayName(template), value: template })),
-          when: this.options.projectType == null || !jsonData.isValidProjectType(this.options.projectType)
+          when: this.options["projectType"] == null || !jsonData.isValidProjectType(this.options["projectType"])
         }
       ];
       const answerForProjectType = await this.prompt(askForProjectType);
       const endForProjectType = (new Date()).getTime();
       const durationForProjectType = (endForProjectType - startForProjectType) / 1000;
 
-      const projectType = _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType);
+      const projectType = _.toLower(this.options["projectType"]) || _.toLower(answerForProjectType.projectType);
 
       /* Set isManifestProject to true if Manifest project type selected from prompt or Manifest was specified via the command prompt */
       if ((answerForProjectType.projectType != null && _.toLower(answerForProjectType.projectType) === manifest)
-        || (this.options.projectType != null && _.toLower(this.options.projectType)) === manifest) {
+        || (this.options["projectType"] != null && _.toLower(this.options["projectType"])) === manifest) {
         isManifestProject = true;
       }
 
       /* Set isExcelFunctionsProject to true if ExcelFunctions project type selected from prompt or Excel Functions was specified via the command prompt */
       if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === excelCustomFunctions
-        || (this.options.projectType != null && _.toLower(this.options.projectType) === excelCustomFunctions)) {
+        || (this.options["projectType"] != null && _.toLower(this.options["projectType"]) === excelCustomFunctions)) {
         isExcelFunctionsProject = true;
       }
 
       /* Set isSsoProject to true if SSO project type selected from prompt or Single Sign-On was specified via the command prompt */
       if ((answerForProjectType.projectType != null && answerForProjectType.projectType) === sso
-        || (this.options.projectType != null && _.toLower(this.options.projectType) === sso)) {
+        || (this.options["projectType"] != null && _.toLower(this.options["projectType"]) === sso)) {
         isSsoProject = true;
       }
 
       const getSupportedScriptTypes = jsonData.getScriptTypeOptions(projectType);
-      const askForScriptType = [
+      const askForScriptType: PromptQuestion[] = [
         {
           name: 'scriptType',
           type: 'list',
           message: 'Choose a script type:',
           choices: getSupportedScriptTypes,
           default: getSupportedScriptTypes[0],
-          when: !this.options.js && !this.options.ts && !isManifestProject && getSupportedScriptTypes.length > 1
+          when: !this.options["js"] && !this.options["ts"] && !isManifestProject && getSupportedScriptTypes.length > 1
         }
       ];
       const answerForScriptType = await this.prompt(askForScriptType);
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
-      const askForName = [{
+      const askForName: PromptQuestion[] = [{
         name: 'name',
         type: 'input',
         message: 'What do you want to name your add-in?',
         default: 'My Office Add-in',
-        when: this.options.name == null
+        when: this.options["name"] == null
       }];
       const answerForName = await this.prompt(askForName);
 
@@ -206,33 +205,33 @@ module.exports = class extends yo {
        * input was in fact valid, and the project type is not Excel-Functions */
       const startForHost = (new Date()).getTime();
       const supportedHosts = jsonData.getHostOptions(projectType);
-      const askForHost = [{
+      const askForHost: PromptQuestion[] = [{
         name: 'host',
         message: 'Which Office client application would you like to support?',
         type: 'list',
         default: supportedHosts[0],
         choices: supportedHosts.map(host => ({ name: host, value: host })),
-        when: (this.options.host == null || this.options.host != null && !jsonData.isValidHost(this.options.host))
+        when: (this.options["host"] == null || this.options["host"] != null && !jsonData.isValidHost(this.options["host"]))
           && supportedHosts.length > 1
       }];
       const answerForHost = await this.prompt(askForHost);
       const endForHost = (new Date()).getTime();
       const durationForHost = (endForHost - startForHost) / 1000;
 
-      const selectedHost = this.options.host || answerForHost.host;
+      const selectedHost = this.options["host"] || answerForHost.host;
 
       usageDataObject = new usageData.OfficeAddinUsageData(usageDataOptions);
 
       /* aksForManifestType will be triggered if no type was specified via the command line manifestType argument */
       const startForManifestType = (new Date()).getTime();
       const manifestOptions = jsonData.getManifestOptions(projectType, selectedHost);
-      const askForManifestType = [{
+      const askForManifestType: PromptQuestion[] = [{
         name: 'manifestType',
         message: 'Which manifest type would you like to use?',
         type: 'list',
         default: manifestOptions[0],
         choices: manifestOptions.map(manifestType => ({ name: jsonData.getManifestDisplayName(manifestType), value: manifestType })),
-        when: (this.options.manifestType == null || this.options.manifestType != null && !jsonData.isValidManifestType(this.options.manifestType))
+        when: (this.options["manifestType"] == null || this.options["manifestType"] != null && !jsonData.isValidManifestType(this.options["manifestType"]))
           && jsonData.getManifestOptions(projectType, selectedHost).length > 1
       }];
       const answerForManifestType = await this.prompt(askForManifestType);
@@ -268,23 +267,23 @@ module.exports = class extends yo {
   }
 
   install(): void {
-    try {
-      if (this.options['skip-install']) {
-        this.installDependencies({
-          npm: false,
-          bower: false
-        });
-      }
-      else {
-        this.installDependencies({
-          npm: true,
-          bower: false
-        });
-      }
-    } catch (err) {
-      usageDataObject.reportError(defaults.installDependenciesErrorEventName, new Error('Installation Error: ' + err));
-      process.exitCode = 1;
-    }
+    // try {
+    //   if (this.options['skip-install']) {
+    //     this.installDependencies({
+    //       npm: false,
+    //       bower: false
+    //     });
+    //   }
+    //   else {
+    //     this.installDependencies({
+    //       npm: true,
+    //       bower: false
+    //     });
+    //   }
+    // } catch (err) {
+    //   usageDataObject.reportError(defaults.installDependenciesErrorEventName, new Error('Installation Error: ' + err));
+    //   process.exitCode = 1;
+    // }
   }
 
   end(): void {
@@ -299,28 +298,28 @@ module.exports = class extends yo {
 
   _configureProject(answerForProjectType, answerForManifestType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject): void {
     try {
-      const projType = _.toLower(this.options.projectType) || _.toLower(answerForProjectType.projectType);
-      const selectedHost = this.options.host || answerForHost.host;
+      const projType = _.toLower(this.options["projectType"]) || _.toLower(answerForProjectType.projectType);
+      const selectedHost = this.options["host"] || answerForHost.host;
 
       this.project = {
-        folder: this.options.output || answerForName.name || this.options.name,
+        folder: this.options["output"] || answerForName.name || this.options["name"],
         host: answerForHost.host
           ? answerForHost.host
-          : this.options.host
-          ? this.options.host
+          : this.options["host"]
+          ? this.options["host"]
           : jsonData?.getHostOptions(projType)[0],
         manifestType: answerForManifestType.manifestType
           ? answerForManifestType.manifestType
-          : this.options.manifestType
-          ? this.options.manifestType
+          : this.options["manifestType"]
+          ? this.options["manifestType"]
           : jsonData?.getManifestOptions(projType, selectedHost)[0],
-        name: this.options.name || answerForName.name,
+        name: this.options["name"] || answerForName.name,
         projectType: projType,
         scriptType: answerForScriptType.scriptType
           ? answerForScriptType.scriptType
-          : this.options.ts
+          : this.options["ts"]
           ? typescript
-          : this.options.js
+          : this.options["js"]
           ? javascript
           : jsonData?.getScriptTypeOptions(projType)[0],
         isManifestOnly: isManifestProject,
@@ -328,8 +327,8 @@ module.exports = class extends yo {
       };
 
       /* Set folder if to output param  if specified */
-      if (this.options.output != null) {
-        this.project.folder = this.options.output;
+      if (this.options["output"] != null) {
+        this.project.folder = this.options["output"];
       }
 
       /* Set language variable */
@@ -357,7 +356,7 @@ module.exports = class extends yo {
   async _copyProjectFiles(): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
-        const projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options.prerelease);
+        const projectRepoBranchInfo = jsonData.getProjectRepoAndBranch(this.project.projectType, language, this.options["prerelease"]);
 
         this._projectCreationMessage();
 
@@ -485,4 +484,4 @@ module.exports = class extends yo {
   _exitProcess(): void {
     process.exit();
   }
-} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+};
