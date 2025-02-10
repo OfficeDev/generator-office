@@ -4,11 +4,9 @@
 */
 import _ from 'lodash';
 import chalk from 'chalk';
-import childProcess from "child_process";
 import * as defaults from "./defaults.js";
 import { helperMethods } from './helpers/helperMethods.js';
 import projectsJsonData from './config/projectsJsonData.js';
-import { promisify } from "util";
 import * as usageData from "office-addin-usage-data";
 import { v4 as uuidv4 } from 'uuid';
 import yosay from 'yosay';
@@ -19,7 +17,6 @@ import yo, { PromptQuestion } from 'yeoman-generator';
 // with downloaded package.json then we won't need this or the installDependencies calls
 //-_.extend(yo.prototype, await import('yeoman-generator/lib/actions/install'));
 
-const childProcessExec = promisify(childProcess.exec);
 const excelCustomFunctions = `excel-functions`;
 let isSsoProject = false;
 const javascript = `JavaScript`;
@@ -365,8 +362,7 @@ export default class extends yo {
           await helperMethods.downloadProjectTemplateZipFile(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
 
           // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
-          const cmdLine = `npm run convert-to-single-host --if-present -- ${_.toLower(this.project.hostInternalName)} ${this.project.manifestType} "${this.project.name}"`;
-          await childProcessExec(cmdLine);
+          await this.spawn("npm", ["run", "convert-to-single-host", "--if-present", "--", _.toLower(this.project.hostInternalName), this.project.manifestType, this.project.name]);
         }
         else {
           // Manifest-only project
