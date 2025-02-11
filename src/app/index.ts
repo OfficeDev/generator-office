@@ -95,15 +95,15 @@ export default class extends yo {
   }
 
   /* Generator initalization */
-  initializing(): void {
+  async initializing(): Promise<void> {
     if (this.options["details"]) {
-      this._detailedHelp();
+      await this._detailedHelp();
     }
     if (this.options['test']) {
       usageDataOptions.isForTesting = true;
     }
     const message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
-    this.log(yosay(message));
+    await this.log(yosay(message));
     jsonData = new projectsJsonData(this.templatePath());
   }
 
@@ -283,10 +283,10 @@ export default class extends yo {
     // }
   }
 
-  end(): void {
+  async end(): Promise<void> {
     if (!this.options['test']) {
       try {
-        this._postInstallHints();
+        await this._postInstallHints();
       } catch (err) {
         usageDataObject.reportError(defaults.postInstallHintsErrorEventName, new Error('Exit Error: ' + err));
       }
@@ -380,98 +380,98 @@ export default class extends yo {
     });
   }
 
-  _postInstallHints(): void {
+  async _postInstallHints(): Promise<void> {
     const projFolder: string = /\s/.test(this.destinationRoot()) ? "\"" + this.destinationRoot() + "\"" : this.destinationRoot();
     let stepNumber = 1;
 
     /* Next steps and npm commands */
-    this.log('----------------------------------------------------------------------------------------------------------\n');
-    this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
-    this.log(`      ${stepNumber++}. Go the directory where your project was created:\n`);
-    this.log(`         ${chalk.bold('cd ' + projFolder)}\n`);
+    await this.log('----------------------------------------------------------------------------------------------------------\n');
+    await this.log(`      ${chalk.green('Congratulations!')} Your add-in has been created! Your next steps:\n`);
+    await this.log(`      ${stepNumber++}. Go the directory where your project was created:\n`);
+    await this.log(`         ${chalk.bold('cd ' + projFolder)}\n`);
     
     if (isSsoProject) {
-      this.log(`      ${stepNumber++}. Configure your SSO taskpane add-in:\n`);
-      this.log(`         ${chalk.bold('npm run configure-sso')}\n`);
+      await this.log(`      ${stepNumber++}. Configure your SSO taskpane add-in:\n`);
+      await this.log(`         ${chalk.bold('npm run configure-sso')}\n`);
     } else if (this.project.isExcelFunctionsProject) {
-      this.log(`      ${stepNumber++}. Build your Excel Custom Functions taskpane add-in:\n`);
-      this.log(`         ${chalk.bold('npm run build')}\n`);
+      await this.log(`      ${stepNumber++}. Build your Excel Custom Functions taskpane add-in:\n`);
+      await this.log(`         ${chalk.bold('npm run build')}\n`);
     }
     
     if (!this.project.isManifestOnly) {
       if (this.project.host === "Excel" || this.project.host === "Word" || this.project.host === "Powerpoint" || this.project.host === "Outlook") {
-        this.log(`      ${stepNumber++}. Start the local web server and sideload the add-in:\n`);
-        this.log(`         ${chalk.bold('npm start')}\n`);
+        await this.log(`      ${stepNumber++}. Start the local web server and sideload the add-in:\n`);
+        await this.log(`         ${chalk.bold('npm start')}\n`);
       } else {
-        this.log(`      ${stepNumber++}. Start the local web server:\n`);
-        this.log(`         ${chalk.bold('npm run dev-server')}\n`);
-        this.log(`      ${stepNumber++}. Sideload the the add-in:\n`);
-        this.log(`         ${chalk.bold('Follow these instructions:')}`);
-        this.log(`         ${defaults.networkShareSideloadingSteps}\n`);
+        await this.log(`      ${stepNumber++}. Start the local web server:\n`);
+        await this.log(`         ${chalk.bold('npm run dev-server')}\n`);
+        await this.log(`      ${stepNumber++}. Sideload the the add-in:\n`);
+        await this.log(`         ${chalk.bold('Follow these instructions:')}`);
+        await this.log(`         ${defaults.networkShareSideloadingSteps}\n`);
       }
     }
 
-    this.log(`      ${stepNumber++}. Open the project in VS Code:\n`);
-    this.log(`         ${chalk.bold('code .')}\n`);
-    this.log(`         For more information, visit http://code.visualstudio.com.\n`);
-    this.log(`      Please visit https://learn.microsoft.com/office/dev/add-ins for more information about Office Add-ins.\n`);
+    await this.log(`      ${stepNumber++}. Open the project in VS Code:\n`);
+    await this.log(`         ${chalk.bold('code .')}\n`);
+    await this.log(`         For more information, visit http://code.visualstudio.com.\n`);
+    await this.log(`      Please visit https://learn.microsoft.com/office/dev/add-ins for more information about Office Add-ins.\n`);
     if(this.project.host === "Outlook") {
-      this.log(`      Please visit ${defaults.outlookSideloadingSteps} for more information about Outlook sideloading.\n`);
+      await this.log(`      Please visit ${defaults.outlookSideloadingSteps} for more information about Outlook sideloading.\n`);
     }
-    this.log('----------------------------------------------------------------------------------------------------------\n');
+    await this.log('----------------------------------------------------------------------------------------------------------\n');
     this._exitProcess();
   }
 
-  _projectCreationMessage(): void {
+  async _projectCreationMessage(): Promise<void> {
     /* Log to console the type of project being created */
     if (this.project.isManifestOnly) {
-      this.log('----------------------------------------------------------------------------------\n');
-      this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this.destinationRoot())}\n`);
-      this.log('----------------------------------------------------------------------------------');
+      await this.log('----------------------------------------------------------------------------------\n');
+      await this.log(`      Creating manifest for ${chalk.bold.green(this.project.projectDisplayName)} at ${chalk.bold.magenta(this.destinationRoot())}\n`);
+      await this.log('----------------------------------------------------------------------------------');
     }
     else {
-      this.log('\n----------------------------------------------------------------------------------\n');
-      this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(_.capitalize(this.project.host))}`);
-      this.log(`      using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.magenta(jsonData.getProjectDisplayName(this.project.projectType))} and ${chalk.bold.yellow(jsonData.getManifestDisplayName(this.project.manifestType))}`);
-      this.log(`      at ${chalk.bold.magenta(this.destinationRoot())}\n`);
-      this.log('----------------------------------------------------------------------------------');
+      await this.log('\n----------------------------------------------------------------------------------\n');
+      await this.log(`      Creating ${chalk.bold.green(this.project.projectDisplayName)} add-in for ${chalk.bold.magenta(_.capitalize(this.project.host))}`);
+      await this.log(`      using ${chalk.bold.yellow(this.project.scriptType)} and ${chalk.bold.magenta(jsonData.getProjectDisplayName(this.project.projectType))} and ${chalk.bold.yellow(jsonData.getManifestDisplayName(this.project.manifestType))}`);
+      await this.log(`      at ${chalk.bold.magenta(this.destinationRoot())}\n`);
+      await this.log('----------------------------------------------------------------------------------');
     }
   }
 
-  _detailedHelp(): void {
-    this.log(`\nYo Office ${chalk.bgGreen('Arguments')} and ${chalk.bgMagenta('Options.')}\n`);
-    this.log(`NOTE: ${chalk.bgGreen('Arguments')} must be specified in the order below, and ${chalk.bgMagenta('Options')} must follow ${chalk.bgGreen('Arguments')}.\n`);
-    this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create. Valid project types include:`);
-    this.log(`    ${chalk.yellow('taskpane:')} Creates an 'Office Add-in Task Pane project' project.`);
-    this.log(`    ${chalk.yellow('react:')} Creates an 'Office add-in using React framework' project.`);
-    this.log(`    ${chalk.yellow('excel-functions-shared:')} Creates an 'Office add-in for Excel custom functions using a Shared Runtime' project.`);
-    this.log(`    ${chalk.yellow('excel-functions:')} Creates an 'Office add-in for Excel custom functions using a JavaScript-only Runtime' project.`);
-    this.log(`    ${chalk.yellow('single-sign-on:')} Creates an 'Office Add-in Task Pane project supporting single sign-on' project.`);
-    this.log(`    ${chalk.yellow('nested-app-auth:')} Creates an 'Office Add-in Task Pane project supporting Nested App Auth single sign-on (preview)' project.`);
-    this.log(`    ${chalk.yellow('manifest:')} Creates an only the manifest file for an Office add-in project.\n`);
-    this.log(`  ${chalk.bgGreen('name')}:Specifies the name for the project that will be created.\n`);
-    this.log(`  ${chalk.bgGreen('host')}:Specifies the host app in the add-in manifest. Valid hosts include:`);
-    this.log(`    ${chalk.yellow('excel:')}  Creates an Office add-in for Excel.`);
-    this.log(`    ${chalk.yellow('onenote:')} Creates an Office add-in for OneNote.`);
-    this.log(`    ${chalk.yellow('outlook:')} Creates an Office add-in for Outlook.`);
-    this.log(`    ${chalk.yellow('powerpoint:')} Creates an Office add-in for PowerPoint.`);
-    this.log(`    ${chalk.yellow('project:')} Creates an Office add-in for Project.`);
-    this.log(`    ${chalk.yellow('word:')} Creates an Office add-in for Word.\n`);
-    this.log(`  ${chalk.bgGreen('manifestType')}:Specifies the manifest type to use for the add-in. Valid types include:`);
-    this.log(`    ${chalk.yellow('xml:')}  Creates a XML manifest`);
-    this.log(`    ${chalk.yellow('json:')} Creates a unified manifest for Microsoft 365.\n`);
-    this.log(`  ${chalk.bgMagenta('--output')}:Specifies the location in the file system where the project will be created.`);
-    this.log(`    ${chalk.yellow('If the option is not specified, the project will be created in the current folder')}\n`);
-    this.log(`  ${chalk.bgMagenta('--js')}:Specifies that the project will use JavaScript instead of TypeScript.`);
-    this.log(`    ${chalk.yellow('If the option is not specified, Yo Office will prompt for TypeScript or JavaScript')}\n`);
-    this.log(`  ${chalk.bgMagenta('--ts')}:Specifies that the project will use TypeScript instead of JavaScript.`);
-    this.log(`    ${chalk.yellow('If the option is not specified, Yo Office will prompt for TypeScript or JavaScript')}\n`);
+  async _detailedHelp(): Promise<void> {
+    await this.log(`\nYo Office ${chalk.bgGreen('Arguments')} and ${chalk.bgMagenta('Options.')}\n`);
+    await this.log(`NOTE: ${chalk.bgGreen('Arguments')} must be specified in the order below, and ${chalk.bgMagenta('Options')} must follow ${chalk.bgGreen('Arguments')}.\n`);
+    await this.log(`  ${chalk.bgGreen('projectType')}:Specifies the type of project to create. Valid project types include:`);
+    await this.log(`    ${chalk.yellow('taskpane:')} Creates an 'Office Add-in Task Pane project' project.`);
+    await this.log(`    ${chalk.yellow('react:')} Creates an 'Office add-in using React framework' project.`);
+    await this.log(`    ${chalk.yellow('excel-functions-shared:')} Creates an 'Office add-in for Excel custom functions using a Shared Runtime' project.`);
+    await this.log(`    ${chalk.yellow('excel-functions:')} Creates an 'Office add-in for Excel custom functions using a JavaScript-only Runtime' project.`);
+    await this.log(`    ${chalk.yellow('single-sign-on:')} Creates an 'Office Add-in Task Pane project supporting single sign-on' project.`);
+    await this.log(`    ${chalk.yellow('nested-app-auth:')} Creates an 'Office Add-in Task Pane project supporting Nested App Auth single sign-on (preview)' project.`);
+    await this.log(`    ${chalk.yellow('manifest:')} Creates an only the manifest file for an Office add-in project.\n`);
+    await this.log(`  ${chalk.bgGreen('name')}:Specifies the name for the project that will be created.\n`);
+    await this.log(`  ${chalk.bgGreen('host')}:Specifies the host app in the add-in manifest. Valid hosts include:`);
+    await this.log(`    ${chalk.yellow('excel:')}  Creates an Office add-in for Excel.`);
+    await this.log(`    ${chalk.yellow('onenote:')} Creates an Office add-in for OneNote.`);
+    await this.log(`    ${chalk.yellow('outlook:')} Creates an Office add-in for Outlook.`);
+    await this.log(`    ${chalk.yellow('powerpoint:')} Creates an Office add-in for PowerPoint.`);
+    await this.log(`    ${chalk.yellow('project:')} Creates an Office add-in for Project.`);
+    await this.log(`    ${chalk.yellow('word:')} Creates an Office add-in for Word.\n`);
+    await this.log(`  ${chalk.bgGreen('manifestType')}:Specifies the manifest type to use for the add-in. Valid types include:`);
+    await this.log(`    ${chalk.yellow('xml:')}  Creates a XML manifest`);
+    await this.log(`    ${chalk.yellow('json:')} Creates a unified manifest for Microsoft 365.\n`);
+    await this.log(`  ${chalk.bgMagenta('--output')}:Specifies the location in the file system where the project will be created.`);
+    await this.log(`    ${chalk.yellow('If the option is not specified, the project will be created in the current folder')}\n`);
+    await this.log(`  ${chalk.bgMagenta('--js')}:Specifies that the project will use JavaScript instead of TypeScript.`);
+    await this.log(`    ${chalk.yellow('If the option is not specified, Yo Office will prompt for TypeScript or JavaScript')}\n`);
+    await this.log(`  ${chalk.bgMagenta('--ts')}:Specifies that the project will use TypeScript instead of JavaScript.`);
+    await this.log(`    ${chalk.yellow('If the option is not specified, Yo Office will prompt for TypeScript or JavaScript')}\n`);
     this._exitProcess();
   }
 
-  _exitYoOfficeIfProjectFolderExists(): boolean {
+  async _exitYoOfficeIfProjectFolderExists(): Promise<boolean> {
     if (helperMethods.doesProjectFolderExist(this.destinationRoot())) {
-      this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this.destinationRoot())} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`);
+      await this.log(`${chalk.bold.red(`\nFolder already exists at ${chalk.bold.green(this.destinationRoot())} and is not empty. To avoid accidentally overwriting any files, please start over and choose a different project name or destination folder via the ${chalk.bold.magenta(`--output`)} parameter`)}\n`);
       this._exitProcess();
     }
     return false;
