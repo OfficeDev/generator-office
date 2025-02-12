@@ -10,12 +10,9 @@ import projectsJsonData from './config/projectsJsonData.js';
 import * as usageData from "office-addin-usage-data";
 import { v4 as uuidv4 } from 'uuid';
 import yosay from 'yosay';
-import yo, { PromptQuestion } from 'yeoman-generator';
-
-// Workaround for generator-office breaking change (v4 => v5)
-// If we can figure out how to get the new packageManagerInstallTask to work 
-// with downloaded package.json then we won't need this or the installDependencies calls
-//-_.extend(yo.prototype, await import('yeoman-generator/lib/actions/install'));
+import Generator, { PromptQuestion } from 'yeoman-generator';
+import * as fs from "fs";
+import * as path from "path";
 
 const excelCustomFunctions = `excel-functions`;
 let isSsoProject = false;
@@ -38,7 +35,7 @@ const usageDataOptions: usageData.IUsageDataOptions = {
   isForTesting: false
 }
 
-export default class extends yo {
+export default class extends Generator {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   project: any;
 
@@ -102,6 +99,9 @@ export default class extends yo {
     if (this.options['test']) {
       usageDataOptions.isForTesting = true;
     }
+    if (this.options['skip-install']) {
+      this.options.skipInstall = true;
+    }
     const message = `Welcome to the ${chalk.bold.green('Office Add-in')} generator, by ${chalk.bold.green('@OfficeDev')}! Let\'s create a project together!`;
     await this.log(yosay(message));
     jsonData = new projectsJsonData(this.templatePath());
@@ -114,7 +114,7 @@ export default class extends yo {
         const promptForUsageData: PromptQuestion[] = [
           {
             name: 'usageDataPromptAnswer',
-            message: usageDataOptions.promptQuestion,
+            message: usageDataOptions.promptQuestion || defaults.usageDataPromptMessage,
             type: 'list',
             default: 'Continue',
             choices: ['Continue', 'Exit'],
@@ -263,24 +263,10 @@ export default class extends yo {
       });
   }
 
-  install(): void {
-    // try {
-    //   if (this.options['skip-install']) {
-    //     this.installDependencies({
-    //       npm: false,
-    //       bower: false
-    //     });
-    //   }
-    //   else {
-    //     this.installDependencies({
-    //       npm: true,
-    //       bower: false
-    //     });
-    //   }
-    // } catch (err) {
-    //   usageDataObject.reportError(defaults.installDependenciesErrorEventName, new Error('Installation Error: ' + err));
-    //   process.exitCode = 1;
-    // }
+  async install(): Promise<void> {
+    // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
+    // Need to call this here after package.json was written to disk, but before npm install is called
+    await this.spawn("npm", ["run", "convert-to-single-host", "--if-present", "--", _.toLower(this.project.hostInternalName), this.project.manifestType, this.project.name]);
   }
 
   async end(): Promise<void> {
@@ -359,10 +345,31 @@ export default class extends yo {
 
         // Copy project template files from project repository (currently only custom functions has its own separate repo)
         if (projectRepoBranchInfo.repo && projectRepoBranchInfo.branch) {
-          await helperMethods.downloadProjectTemplateZipFile(this.destinationPath(), projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
+          const projectFolder: string = this.destinationPath();
+          const zipFile: string = await helperMethods.downloadProjectTemplateZipFile(projectFolder, projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
+          const unzippedFolder: string = await helperMethods.unzipProjectTemplate(projectFolder);
+          const moveFromFolder: string = this.destinationPath(unzippedFolder);
 
-          // Call 'convert-to-single-host' npm script in generated project, passing in host parameter
-          await this.spawn("npm", ["run", "convert-to-single-host", "--if-present", "--", _.toLower(this.project.hostInternalName), this.project.manifestType, this.project.name]);
+        // delete original zip file
+        if (fs.existsSync(zipFile)) {
+            fs.unlinkSync(zipFile);
+        }
+
+        // loop through all the files and folders in the unzipped folder and move them to project root
+        fs.readdirSync(moveFromFolder)
+          .filter((file) => !file.includes(".gitignore") && !file.includes("package.json"))
+          .forEach(function (file) {
+            const fromPath = path.join(moveFromFolder, file);
+            const toPath = path.join(projectFolder, file);
+            fs.renameSync(fromPath, toPath);
+        });
+
+        // copy package.json file to new project directory and trigger npm install
+        this.fs.copyTpl(path.join(moveFromFolder, "package.json"), path.join(projectFolder, "package.json"));
+     
+        // delete project zipped folder
+        helperMethods.deleteFolderRecursively(this.destinationPath(unzippedFolder));
+ 
         }
         else {
           // Manifest-only project
