@@ -1,34 +1,36 @@
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://learn.microsoft.com/azure/devops/pipelines/languages/javascript
-
-jobs:
-  - job: Windows_10_Latest
+resources:
+  repositories:
+  - repository: CustomPipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/OfficePipelineTemplates
+    ref: refs/tags/release
+extends:
+  template: /v1/Office.Unofficial.PipelineTemplate.yml@CustomPipelineTemplates
+  parameters:
     pool:
       name: OE-OfficeClientApps
-    steps:
-      - template: ./install.yml
+    sdl:
+      eslint:
+        configuration: required
+        parser: '@typescript-eslint/parser'
+        parserOptions: sourceType:module
+    stages:
+    - stage: stage
+      jobs:
+      - job: Windows_10_Latest
+        steps:
+        - template: /.azure-devops/install.yml@self
       # - template: ./lint.yml
-      - template: ./build.yml
-      - template: ./devcerts.yml
-      - template: ./edgewebview.yml
-      - template: ./test.yml
-
-  - job: Mac
-    pool:
-      name: OPX Mac Dogfood Pool
-    steps:
-    - template: ./install.yml
-    # - template: ./lint.yml
-    - template: ./build.yml
-    - template: ./test.yml
-    - template: ./cleanup.yaml
-
-  - job: Linux
-    pool:
-      name: Azure Pipelines
-      vmImage: ubuntu-latest
-    steps:
-    - template: ./install.yml
-    - template: ./build.yml
-    - template: ./test.yml
+        - template: /.azure-devops/build.yml@self
+        - template: /.azure-devops/devcerts.yml@self
+        - template: /.azure-devops/edgewebview.yml@self
+        - template: /.azure-devops/test.yml@self
+      - job: Linux
+        pool:
+          name: Azure-Pipelines-1ESPT-ExDShared
+          image: ubuntu-latest
+          os: linux
+        steps:
+        - template: /.azure-devops/install.yml@self
+        - template: /.azure-devops/build.yml@self
+        - template: /.azure-devops/test.yml@self
