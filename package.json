@@ -39,7 +39,7 @@
     "project"
   ],
   "dependencies": {
-    "adm-zip": "0.5.12",
+    "adm-zip": "0.5.16",
     "axios": "^1.7.7",
     "chalk": "^5.4.1",
     "lodash": "^4.17.21",
@@ -50,7 +50,7 @@
     "yosay": "^2.0.2"
   },
   "devDependencies": {
-    "@types/adm-zip": "^0.5.5",
+    "@types/adm-zip": "^0.5.7",
     "@types/lodash": "^4.17.14",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.6",

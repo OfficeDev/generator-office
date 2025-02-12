@@ -215,7 +215,7 @@ export default class extends Generator {
       const endForHost = (new Date()).getTime();
       const durationForHost = (endForHost - startForHost) / 1000;
 
-      const selectedHost = this.options["host"] || answerForHost.host;
+      const selectedHost = this.options["host"] || answerForHost.host || supportedHosts[0];
 
       usageDataObject = new usageData.OfficeAddinUsageData(usageDataOptions);
 
@@ -282,7 +282,8 @@ export default class extends Generator {
   _configureProject(answerForProjectType, answerForManifestType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject): void {
     try {
       const projType = _.toLower(this.options["projectType"]) || _.toLower(answerForProjectType.projectType);
-      const selectedHost = this.options["host"] || answerForHost.host;
+      const supportedHosts = jsonData.getHostOptions(projType);
+      const selectedHost = this.options["host"] || answerForHost.host  || supportedHosts[0];
 
       this.project = {
         folder: this.options["output"] || answerForName.name || this.options["name"],
@@ -465,7 +466,7 @@ export default class extends Generator {
     await this.log(`    ${chalk.yellow('project:')} Creates an Office add-in for Project.`);
     await this.log(`    ${chalk.yellow('word:')} Creates an Office add-in for Word.\n`);
     await this.log(`  ${chalk.bgGreen('manifestType')}:Specifies the manifest type to use for the add-in. Valid types include:`);
-    await this.log(`    ${chalk.yellow('xml:')}  Creates a XML manifest`);
+    await this.log(`    ${chalk.yellow('xml:')}  Creates a Add-in only manifest`);
     await this.log(`    ${chalk.yellow('json:')} Creates a unified manifest for Microsoft 365.\n`);
     await this.log(`  ${chalk.bgMagenta('--output')}:Specifies the location in the file system where the project will be created.`);
     await this.log(`    ${chalk.yellow('If the option is not specified, the project will be created in the current folder')}\n`);
