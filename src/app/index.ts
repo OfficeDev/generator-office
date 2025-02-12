@@ -320,7 +320,7 @@ export default class extends Generator {
       this.project.projectInternalName = _.kebabCase(this.project.name);
       this.project.projectDisplayName = this.project.name;
       this.project.projectId = uuidv4();
-      this.project.hostInternalName = this.project.host;
+      this.project.hostInternalName = this.project.host == "All" ? "wxpo" : this.project.host;
 
       this.destinationRoot(this.project.folder);
       process.chdir(this.destinationRoot());
@@ -406,7 +406,7 @@ export default class extends Generator {
     }
     
     if (!this.project.isManifestOnly) {
-      if (this.project.host === "Excel" || this.project.host === "Word" || this.project.host === "Powerpoint" || this.project.host === "Outlook") {
+      if (this.project.host === "Excel" || this.project.host === "Word" || this.project.host === "Powerpoint" || this.project.host === "Outlook" || this.project.host === "All") {
         await this.log(`      ${stepNumber++}. Start the local web server and sideload the add-in:\n`);
         await this.log(`         ${chalk.bold('npm start')}\n`);
       } else {
