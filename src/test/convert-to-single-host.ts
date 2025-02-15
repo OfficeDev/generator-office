@@ -514,7 +514,7 @@ describe('Custom-Functions-Shared-JS project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any as any).withPrompts(answers).on('end', done);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
