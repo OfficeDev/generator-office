@@ -1,13 +1,13 @@
 import axios from "axios"
 import * as fs from "fs";
 import * as path from "path";
-import * as AdmZip from "adm-zip";
+import AdmZip from "adm-zip";
 
 const zipFile = 'project.zip';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace helperMethods {
-    function deleteFolderRecursively(projectFolder: string) {
+    export function deleteFolderRecursively(projectFolder: string) {
         try {
             if (fs.existsSync(projectFolder)) {
                 fs.readdirSync(projectFolder).forEach(function (file) {
@@ -34,66 +34,43 @@ export namespace helperMethods {
         return false;
     };
 
-    export async function downloadProjectTemplateZipFile(projectFolder: string, projectRepo: string, projectBranch: string): Promise<void> {
+    export async function downloadProjectTemplateZipFile(projectFolder: string, projectRepo: string, projectBranch: string): Promise<string> {
         const projectTemplateZipFile = `${projectRepo}/archive/${projectBranch}.zip`;
         return axios({
             method: 'get',
             url: projectTemplateZipFile,
             responseType: 'stream',
         }).then(response => {
-            return new Promise<void>((resolve, reject) => {
+            return new Promise<string>((resolve, reject) => {
                 response.data.pipe(fs.createWriteStream(zipFile))
                 .on('error', function (err) {
                     reject(`Unable to download project zip file for "${projectTemplateZipFile}".\n${err}`);
                 })
                 .on('close', async () => {
-                    await unzipProjectTemplate(projectFolder);
-                    resolve();
+                    resolve(path.resolve(`${projectFolder}/project.zip`));
                 });
             });
-        }).catch(err => { console.log(`Unable to download project zip file for "${projectTemplateZipFile}".\n${err}`); });
+        }).catch(err => {
+            const error: string = `Unable to download project zip file for "${projectTemplateZipFile}".\n${err}`;
+            console.log(error)
+            return Promise.reject(error); 
+        });
     }
 
-    async function unzipProjectTemplate(projectFolder: string): Promise<void> {
+    export async function unzipProjectTemplate(projectFolder: string): Promise<string> {
         return new Promise(async (resolve, reject) => {
             const zipFile = 'project.zip';
             const zip = new AdmZip(`${projectFolder}/${zipFile}`);
             try {
                 zip.extractAllTo(/*target path*/projectFolder, /*overwrite*/true);
-                moveProjectFiles(projectFolder);
-                resolve();
+                // get path to unzipped folder
+                const unzippedFolder = fs.readdirSync(projectFolder).filter(function (file) {
+                    return fs.statSync(`${projectFolder}/${file}`).isDirectory();
+                });
+                resolve(unzippedFolder[0]);
             } catch (err) {
                 reject(`Unable to unzip project zip file for "${projectFolder}".\n${err}`);
             }
         });
-    }
-
-    function moveProjectFiles(projectFolder: string): void {
-        // delete original zip file
-        const zipFilePath = path.resolve(`${projectFolder}/${zipFile}`);
-        if (fs.existsSync(zipFilePath)) {
-            fs.unlinkSync(zipFilePath);
-        }
-
-        // get path to unzipped folder
-        const unzippedFolder = fs.readdirSync(projectFolder).filter(function (file) {
-            return fs.statSync(`${projectFolder}/${file}`).isDirectory();
-        });
-
-        // construct paths to move files out of unzipped folder into project root folder
-        const moveFromFolder = path.resolve(`${projectFolder}/${unzippedFolder[0]}`);
-
-        // loop through all the files and folders in the unzipped folder and move them to project root
-        fs.readdirSync(moveFromFolder).forEach(function (file) {
-            const fromPath = path.join(moveFromFolder, file);
-            const toPath = path.join(projectFolder, file);
-
-            if (fs.existsSync(fromPath) && !fromPath.includes(".gitignore")) {
-                fs.renameSync(fromPath, toPath);
-            }
-        });
-
-        // delete project zipped folder
-        deleteFolderRecursively(moveFromFolder);
     }
 }

@@ -2,12 +2,13 @@
  * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
-import * as assert from 'yeoman-assert';
+import assert from 'yeoman-assert';
 import * as fs from "fs";
-import * as helpers from 'yeoman-test';
+import helpers from 'yeoman-test';
 import { OfficeAddinManifest, ManifestInfo } from "office-addin-manifest";
 import * as path from 'path';
 import { promisify } from "util";
+import { __dirname } from './utils.js';
 
 const hosts = ["Excel", "Onenote", "Outlook", "Powerpoint", "Project", "Word"];
 const manifestXmlFile = "manifest.xml";
@@ -48,7 +49,7 @@ describe('Office-Addin-Taskpane-Ts projects', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -75,7 +76,7 @@ describe('Office-Addin-Taskpane-Ts projects', () => {
 
     it('Manifest.xml is updated appropriately', async () => {
         const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
-        assert.equal(manifestInfo.hosts[0], "Workbook");
+        assert.equal(manifestInfo.hosts?.[0], "Workbook");
         assert.equal(manifestInfo.displayName, testProjectName);
     });
 });
@@ -105,7 +106,7 @@ describe('Office-Addin-Taskpane-Ts prerelease projects', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true }).withPrompts(answers).on('end', done);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true } as any).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -131,7 +132,7 @@ describe('Office-Addin-Taskpane-Ts prerelease projects', () => {
     });
     it('Manifest.xml is updated appropriately', async () => {
         const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
-        assert.equal(manifestInfo.hosts[0], "Workbook");
+        assert.equal(manifestInfo.hosts?.[0], "Workbook");
         assert.equal(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
     });
 });
@@ -162,7 +163,7 @@ describe('Office-Addin-Taskpane-Ts Outlook json project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true }).withPrompts(answers).on('end', done);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true } as any).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -189,7 +190,7 @@ describe('Office-Addin-Taskpane-Ts Outlook json project', () => {
 
     it('Manifest.json is updated appropriately', async () => {
         const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestJsonFile);
-        assert.equal(manifestInfo.hosts[0], "mail");
+        assert.equal(manifestInfo.hosts?.[0], "mail");
         assert.equal(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
     });
 });
@@ -220,7 +221,7 @@ describe('Office-Addin-Taskpane-Ts Outlook xml project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true }).withPrompts(answers).on('end', done);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true } as any).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -247,7 +248,7 @@ describe('Office-Addin-Taskpane-Ts Outlook xml project', () => {
 
     it('Manifest.xml is updated appropriately', async () => {
         const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
-        assert.equal(manifestInfo.hosts[0], "Mailbox");
+        assert.equal(manifestInfo.hosts?.[0], "Mailbox");
         assert.equal(manifestInfo.displayName, testProjectName); // TODO: update when new convert script is in yo-office template branches
     });
 });
@@ -276,7 +277,7 @@ describe('Office-Addin-Taskpane-React-Ts project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -303,7 +304,7 @@ describe('Office-Addin-Taskpane-React-Ts project', () => {
 
     it('Manifest.xml is updated appropriately', async () => {
         const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
-        assert.equal(manifestInfo.hosts[0], "Presentation");
+        assert.equal(manifestInfo.hosts?.[0], "Presentation");
     });
 });
 
@@ -324,7 +325,7 @@ describe('Office-Addin-Taskpane-Ts projects via cli', () => {
         'src/taskpane/project.ts',
         'src/taskpane/word.ts'
     ]
-    const options = {
+    const options: any = {
         projectType: "taskpane",
         name: testProjectName,
         host: hosts[0],
@@ -361,7 +362,7 @@ describe('Office-Addin-Taskpane-Ts projects via cli', () => {
 
     it('Manifest.xml is updated appropriately', async () => {
         const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
-        assert.equal(manifestInfo.hosts[0], "Workbook");
+        assert.equal(manifestInfo.hosts?.[0], "Workbook");
         assert.equal(manifestInfo.displayName, testProjectName);
     });
 });
@@ -401,7 +402,7 @@ describe('Office-Addin-Taskpane-SSO-TS project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -448,7 +449,7 @@ describe('Office-Addin-Taskpane-SSO-JS project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -478,7 +479,7 @@ describe('Custom-Functions-Shared-TS project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -489,7 +490,7 @@ describe('Custom-Functions-Shared-TS project', () => {
     });
     it('Manifest.xml is updated appropriately', async () => {
         const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
-        assert.equal(manifestInfo.hosts[0], "Workbook");
+        assert.equal(manifestInfo.hosts?.[0], "Workbook");
         assert.equal(manifestInfo.displayName, testProjectName);
     });
 });
@@ -513,7 +514,7 @@ describe('Custom-Functions-Shared-JS project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
     });
 
     it('creates expected files', (done) => {
@@ -524,7 +525,7 @@ describe('Custom-Functions-Shared-JS project', () => {
     });
     it('Manifest.xml is updated appropriately', async () => {
         const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
-        assert.equal(manifestInfo.hosts[0], "Workbook");
+        assert.equal(manifestInfo.hosts?.[0], "Workbook");
         assert.equal(manifestInfo.displayName, testProjectName);
     });
 });

@@ -3,9 +3,10 @@
  * See LICENSE in the project root for license information.
  */
 
-import * as helpers from 'yeoman-test';
-import * as assert from 'yeoman-assert';
+import helpers from 'yeoman-test';
+import assert from 'yeoman-assert';
 import * as path from 'path';
+import { __dirname } from './utils.js';
 
 const manifestProject = 'manifest';
 const projectDisplayName = 'My Office Add-in';
@@ -42,7 +43,7 @@ describe('manifest project - answers', () => {
   };
 
   before((done) => {
-    helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+    helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
   });
 
   it('creates expected files', (done) => {
@@ -61,11 +62,11 @@ describe('manifest project - answers & args', () => {
     name: projectDisplayName,
     host: 'Excel',
   };
-  const argument = [];
+  const argument: string[] = [];
 
   before((done) => {
     argument[0] = manifestProject;
-    helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+    helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
   });
 
   it('creates expected files', (done) => {
@@ -83,12 +84,12 @@ describe('manifest project - answers & args', () => {
   const answers = {
     host: 'Excel',
   };
-  const argument = [];
+  const argument: string[] = [];
 
   before((done) => {
     argument[0] = manifestProject;
     argument[1] = projectEscapedName;
-    helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+    helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
   });
 
   it('creates expected files', (done) => {
@@ -104,13 +105,13 @@ describe('manifest project - answers & args', () => {
  */
 describe('manifest project - answers & args', () => {
   const answers = {};
-  const argument = [];
+  const argument: string[] = [];
 
   before((done) => {
     argument[0] = manifestProject;
     argument[1] = projectEscapedName;
     argument[2] = 'Excel';
-    helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true }).withPrompts(answers).on('end', done);
+    helpers.run(path.join(__dirname, '../app')).withArguments(argument).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
   });
 
   it('creates expected files', (done) => {

@@ -1,4 +1,4 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 export const configurationErrorEventName = "configuration-error-generator-office";
 export const copyFilesErrorEventName = "copy-files-error-generator-office";
