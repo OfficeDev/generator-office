@@ -47,7 +47,7 @@
             }
         },
         "taskpane-preview": {
-            "displayname": "Excel, PowerPoint, or Word Task Pane with unified manifest for Microsoft 365 (preview)",
+            "displayname": "Excel, PowerPoint, amd/or Word Task Pane with unified manifest for Microsoft 365 (preview)",
             "templates": {
                 "typescript": {
                     "repository": "https://github.com/OfficeDev/Office-Addin-TaskPane",
