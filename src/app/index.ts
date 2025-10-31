@@ -13,6 +13,11 @@ import yosay from 'yosay';
 import Generator, { PromptQuestion } from 'yeoman-generator';
 import * as fs from "fs";
 import * as path from "path";
+import debug from "debug"
+import { globSync } from 'node:fs';
+
+const log = debug("genOffice")
+const trace = log.extend("trace")
 
 const excelCustomFunctions = `excel-functions`;
 let isSsoProject = false;
@@ -348,28 +353,44 @@ export default class extends Generator {
         if (projectRepoBranchInfo.repo && projectRepoBranchInfo.branch) {
           const projectFolder: string = this.destinationPath();
           const zipFile: string = await helperMethods.downloadProjectTemplateZipFile(projectFolder, projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
+          log("Zip File %s",zipFile);
           const unzippedFolder: string = await helperMethods.unzipProjectTemplate(projectFolder);
+          log("Unzipped Folder: %s",unzippedFolder)
           const moveFromFolder: string = this.destinationPath(unzippedFolder);
+          log("Moved From Folder: %s",moveFromFolder)
 
-        // delete original zip file
-        if (fs.existsSync(zipFile)) {
-            fs.unlinkSync(zipFile);
-        }
+          // delete original zip file
+          if (fs.existsSync(zipFile)) {
+              log("Deleting original zip file %s",zipFile)
+              fs.unlinkSync(zipFile);
+          }
 
-        // loop through all the files and folders in the unzipped folder and move them to project root
-        fs.readdirSync(moveFromFolder)
-          .filter((file) => !file.includes(".gitignore") && !file.includes("package.json"))
-          .forEach(function (file) {
-            const fromPath = path.join(moveFromFolder, file);
-            const toPath = path.join(projectFolder, file);
-            fs.renameSync(fromPath, toPath);
-        });
+          log("Moving files from %s to %s",moveFromFolder,projectFolder)
+          // loop through all the files and folders in the unzipped folder and move them to project root
+          fs.readdirSync(moveFromFolder)
+            .filter((file) => {
+              let check = !file.includes(".gitignore") && !file.includes("package.json")
+              if(!check) {
+                log("Excluding %s",file);
+              }
+              return check;
+            })
+            .forEach(function (file) {
+              trace("Moving %s",file)
+              const fromPath = path.join(moveFromFolder, file);
+              const toPath = path.join(projectFolder, file);
+              if(fs.existsSync(fromPath)) {
+                fs.renameSync(fromPath, toPath);
+              }
+            });
 
-        // copy package.json file to new project directory and trigger npm install
-        this.fs.copyTpl(path.join(moveFromFolder, "package.json"), path.join(projectFolder, "package.json"));
-     
-        // delete project zipped folder
-        helperMethods.deleteFolderRecursively(this.destinationPath(unzippedFolder));
+          log("Copying package.json from %s to %s",moveFromFolder,projectFolder)
+          // copy package.json file to new project directory and trigger npm install
+          this.fs.copyTpl(path.join(moveFromFolder, "package.json"), path.join(projectFolder, "package.json"));
+      
+          log("Deleting folder: %s",unzippedFolder)
+          // delete project zipped folder
+          helperMethods.deleteFolderRecursively(this.destinationPath(unzippedFolder));
  
         }
         else {

@@ -9,6 +9,9 @@ import { OfficeAddinManifest, ManifestInfo } from "office-addin-manifest";
 import * as path from 'path';
 import { promisify } from "util";
 import { __dirname } from './utils.js';
+import debug from 'debug'
+
+const log = debug("genOffice").extend("test");
 
 const hosts = ["Excel", "Onenote", "Outlook", "Powerpoint", "Project", "Word"];
 const manifestXmlFile = "manifest.xml";
@@ -23,6 +26,79 @@ const unexpectedManifestFiles = [
     'manifest.project.xml',
     'manifest.word.xml',
 ]
+
+// Test to verify converting a project to a single host
+// for Office-Addin-Taskpane Typescript project using Excel host
+describe('Projects configured with proxy', () => {
+
+    const testProjectName = "TaskpaneProject"
+    const useProxyFirst = process.env.GENERATOR_OFFICE_USE_PROXY === "true";
+    const proxyBackup = `${process.env.HTTPS_PROXY}`;
+    const expectedFiles = [
+        packageJsonFile,
+        manifestXmlFile,
+        'src/taskpane/taskpane.ts',
+    ]
+    const unexpectedFiles = [
+        'src/taskpane/excel.ts',
+        'src/taskpane/onenote.ts',
+        'src/taskpane/outlook.ts',
+        'src/taskpane/powerpoint.ts',
+        'src/taskpane/project.ts',
+        'src/taskpane/word.ts'
+    ]
+    const answers = {
+        projectType: "taskpane",
+        scriptType: "TypeScript",
+        name: testProjectName,
+        host: hosts[0]
+    };
+
+    before((done) => {
+        if(proxyBackup === "undefined") {
+            process.env.HTTPS_PROXY='http://localhost:83/'
+        }
+        process.env.GENERATOR_OFFICE_USE_PROXY = `${!useProxyFirst}`
+        log("Running helper for %s",answers.name)
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s",answers.name);done();});
+    });
+    after((done) => {
+        if(proxyBackup === "undefined") {
+            delete process.env['HTTPS_PROXY']
+        }
+        process.env.GENERATOR_OFFICE_USE_PROXY = `${useProxyFirst}`
+        done();
+    });
+
+    it('creates expected files', (done) => {
+        assert.file(expectedFiles);
+        assert.noFile(unexpectedFiles);
+        assert.noFile(unexpectedManifestFiles);
+        done();
+    });
+
+    it('Package.json is updated properly', async () => {
+        const data: string = await readFileAsync(packageJsonFile, 'utf8');
+        const content = JSON.parse(data);
+        assert.equal(content.config["app_to_debug"], hosts[0].toLowerCase());
+
+        // Verify host-specific sideload and unload sripts have been removed
+        let unexexpectedScriptsFound = false;
+        Object.keys(content.scripts).forEach(function (key) {
+            if (key.includes("sideload:") || key.includes("unload:")) {
+                unexexpectedScriptsFound = true;
+            }
+        });
+        assert.equal(unexexpectedScriptsFound, false);
+    });
+
+    it('Manifest.xml is updated appropriately', async () => {
+        const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
+        assert.equal(manifestInfo.hosts?.[0], "Workbook");
+        assert.equal(manifestInfo.displayName, testProjectName);
+    });
+});
+
 
 // Test to verify converting a project to a single host
 // for Office-Addin-Taskpane Typescript project using Excel host
@@ -49,7 +125,8 @@ describe('Office-Addin-Taskpane-Ts projects', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s",answers.name)
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s",answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -106,7 +183,8 @@ describe('Office-Addin-Taskpane-Ts prerelease projects', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s",answers.name)
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s",answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -163,7 +241,8 @@ describe('Office-Addin-Taskpane-Ts Outlook json project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s",answers.name)
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s",answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -221,7 +300,8 @@ describe('Office-Addin-Taskpane-Ts Outlook xml project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s",answers.name)
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s",answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -277,7 +357,8 @@ describe('Office-Addin-Taskpane-React-Ts project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s",answers.name)
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s",answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -335,7 +416,9 @@ describe('Office-Addin-Taskpane-Ts projects via cli', () => {
     const answers = {};
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions(options).withPrompts(answers).on('end', done);
+        log("Running helper for %s",options.name)
+        helpers.run(path.join(__dirname, '../app')).withOptions(options).withAnswers(answers).on('end', done);
+        log("Finished helper for %s",options.name)
     });
 
     it('creates expected files', (done) => {
@@ -402,7 +485,8 @@ describe('Office-Addin-Taskpane-SSO-TS project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s",answers.name)
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s",answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -449,7 +533,8 @@ describe('Office-Addin-Taskpane-SSO-JS project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s",answers.name)
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s",answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -479,7 +564,8 @@ describe('Custom-Functions-Shared-TS project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s",answers.name)
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s",answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -514,7 +600,8 @@ describe('Custom-Functions-Shared-JS project', () => {
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s",answers.name)
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s",answers.name);done();});
     });
 
     it('creates expected files', (done) => {
