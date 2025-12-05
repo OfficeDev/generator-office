@@ -15,7 +15,8 @@
     "build": "npm run clean && concurrently \"npm run tsc\" \"npm run copy\"",
     "clean": "rimraf generators",
     "test": "env-cmd -- mocha generators/test/*.js --timeout 0",
-    "watch-test": "npm run build && npm test",
+    "testSpec": "env-cmd -- mocha generators/test/*.js --timeout 0 --grep Office-Addin-Taskpane-React-Ts",
+    "watch-test": "npm run build && npm run test",
     "release-local": "npm run build && npm link"
   },
   "watch": {
@@ -57,6 +58,7 @@
     "axios": "^1.7.7",
     "chalk": "^5.4.1",
     "debug": "^4.4.3",
+    "global-agent": "^3.0.0",
     "https-proxy-agent": "^7.0.6",
     "lodash": "^4.17.21",
     "office-addin-usage-data": "^2.0.3",
@@ -68,6 +70,7 @@
   "devDependencies": {
     "@types/adm-zip": "^0.5.7",
     "@types/debug": "^4.1.12",
+    "@types/global-agent": "^3.0.0",
     "@types/lodash": "^4.17.14",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.6",

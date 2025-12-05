@@ -10,6 +10,7 @@ import * as path from 'path';
 import { promisify } from "util";
 import { __dirname } from './utils.js';
 import debug from 'debug'
+import { getProxyURL } from '../app/helpers/requestHelpers.js';
 
 const log = debug("genOffice").extend("test");
 
@@ -33,11 +34,11 @@ describe('Projects configured with proxy', () => {
 
     const testProjectName = "TaskpaneProject"
     const useProxyFirst = process.env.GENERATOR_OFFICE_USE_PROXY === "true";
-    const proxyBackup = `${process.env.HTTPS_PROXY}`;
+    const proxyBackup = getProxyURL();
     const expectedFiles = [
         packageJsonFile,
         manifestXmlFile,
-        'src/taskpane/taskpane.ts',
+        'src/taskpane/taskpane.ts', 
     ]
     const unexpectedFiles = [
         'src/taskpane/excel.ts',
@@ -55,7 +56,7 @@ describe('Projects configured with proxy', () => {
     };
 
     before((done) => {
-        if(proxyBackup === "undefined") {
+        if(proxyBackup === undefined) {
             process.env.HTTPS_PROXY='http://localhost:83/'
         }
         process.env.GENERATOR_OFFICE_USE_PROXY = `${!useProxyFirst}`
@@ -63,7 +64,7 @@ describe('Projects configured with proxy', () => {
         helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s",answers.name);done();});
     });
     after((done) => {
-        if(proxyBackup === "undefined") {
+        if(proxyBackup === undefined) {
             delete process.env['HTTPS_PROXY']
         }
         process.env.GENERATOR_OFFICE_USE_PROXY = `${useProxyFirst}`
@@ -98,7 +99,6 @@ describe('Projects configured with proxy', () => {
         assert.equal(manifestInfo.displayName, testProjectName);
     });
 });
-
 
 // Test to verify converting a project to a single host
 // for Office-Addin-Taskpane Typescript project using Excel host
