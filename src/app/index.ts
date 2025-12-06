@@ -14,7 +14,6 @@ import Generator, { PromptQuestion } from 'yeoman-generator';
 import * as fs from "fs";
 import * as path from "path";
 import debug from "debug"
-import { globSync } from 'node:fs';
 
 const log = debug("genOffice")
 const trace = log.extend("trace")
