@@ -7,6 +7,8 @@ resources:
 extends:
   template: /v1/Office.Unofficial.PipelineTemplate.yml@OfficePipelineTemplates
   parameters:
+    settings:
+      skipBuildTagsForGitHubPullRequests: true
     pool:
       name: OE-OfficeClientApps
     sdl:
