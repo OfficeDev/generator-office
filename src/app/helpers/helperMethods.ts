@@ -41,10 +41,10 @@ export namespace helperMethods {
     export async function downloadProjectTemplateZipFile(projectFolder: string, projectRepo: string, projectBranch: string): Promise<string> {
         const useProxyFirst = process.env.GENERATOR_OFFICE_USE_PROXY === "true";
         const projectTemplateZipFile = `${projectRepo}/archive/${projectBranch}.zip`;
-        log("Setting up config for %s",projectTemplateZipFile);
+        log("Setting up config for %s", projectTemplateZipFile);
         const config : AttemptAwareConfig ={
-            method: 'get',
-            url: projectTemplateZipFile,
+            method: 'get', 
+            url: projectTemplateZipFile, 
             responseType: 'stream'
         };
         if(useProxyFirst && hasProxy()) {
@@ -52,14 +52,14 @@ export namespace helperMethods {
             addProxy(config);
         }
         addLogger(config);
-        log("Creating axios instance with config %s",config);
+        log("Creating axios instance with config %s", config);
         let instance = axios.create(config);
         await addInterceptor(instance);
 
-        log("Instance details %o",instance);
-        log("Downloading %s",projectTemplateZipFile);
+        log("Instance details %o", instance);
+        log("Downloading %s", projectTemplateZipFile);
         return await instance(config).then(response => {
-            log("Finished Downloading %s",projectTemplateZipFile);
+            log("Finished Downloading %s", projectTemplateZipFile);
             console.log("Downloaded Successfully!");
             return new Promise<string>((resolve, reject) => {
                 response.data.pipe(fs.createWriteStream(zipFile))
@@ -71,7 +71,7 @@ export namespace helperMethods {
                     });
             });
         }).catch(err => {
-            log("Failed Downloading %s. Error: %o",projectTemplateZipFile,err);
+            log("Failed Downloading %s. Error: %o", projectTemplateZipFile, err);
             const error: string = `Unable to download project zip file for "${config.url}".\n${err}`;
             console.log(error);
             return Promise.reject(error);

@@ -41,12 +41,12 @@ export function getProxyURL() {
 export function addProxy(config: AxiosRequestConfig) {
     const httpsProxy = getProxyURL();
     if(hasProxy()) {
-        log("Adding Proxy %s",httpsProxy)
+        log("Adding Proxy %s", httpsProxy)
         global.GLOBAL_AGENT_FORCE_GLOBAL_AGENT=true;
         if(global.GLOBAL_AGENT) {
             global.GLOBAL_AGENT.HTTP_PROXY=httpsProxy;
         }
-        config.httpsAgent = new HttpsProxyAgent(httpsProxy!,{keepAlive:false});
+        config.httpsAgent = new HttpsProxyAgent(httpsProxy!, {keepAlive:false});
     }
     addLogging(config);
 }
@@ -55,38 +55,38 @@ export function addProxy(config: AxiosRequestConfig) {
 function debugTlsSocket(tlsSocket : TLSSocket) {
     return {
         // Basic connection info
-        authorized: tlsSocket.authorized,
-        authorizationError: tlsSocket.authorizationError,
-        protocol: tlsSocket.getProtocol(),
-        cipher: clean(tlsSocket.getCipher()),
+        authorized: tlsSocket.authorized, 
+        authorizationError: tlsSocket.authorizationError, 
+        protocol: tlsSocket.getProtocol(), 
+        cipher: clean(tlsSocket.getCipher()), 
         certificate: clean(tlsSocket.getPeerCertificate(true)), // verbose=true
-        localCertificate: clean(tlsSocket.getCertificate()),
+        localCertificate: clean(tlsSocket.getCertificate()), 
 
         // Connection details
-        remoteAddress: tlsSocket.remoteAddress,
-        remotePort: tlsSocket.remotePort,
-        localAddress: tlsSocket.localAddress,
-        localPort: tlsSocket.localPort,
+        remoteAddress: tlsSocket.remoteAddress, 
+        remotePort: tlsSocket.remotePort, 
+        localAddress: tlsSocket.localAddress, 
+        localPort: tlsSocket.localPort, 
 
         // SSL/TLS session info
-        sessionId: tlsSocket.getSession()?.toString('hex'),
-        tlsRenegotiated: tlsSocket.isSessionReused(),
+        sessionId: tlsSocket.getSession()?.toString('hex'), 
+        tlsRenegotiated: tlsSocket.isSessionReused(), 
 
         // Socket state
-        connecting: tlsSocket.connecting,
-        destroyed: tlsSocket.destroyed,
-        readable: tlsSocket.readable,
-        writable: tlsSocket.writable,
+        connecting: tlsSocket.connecting, 
+        destroyed: tlsSocket.destroyed, 
+        readable: tlsSocket.readable, 
+        writable: tlsSocket.writable, 
 
         // ALPN/NPN protocols
-        alpnProtocol: tlsSocket.alpnProtocol,
+        alpnProtocol: tlsSocket.alpnProtocol, 
 
         // Timeout settings
-        timeout: tlsSocket.timeout,
+        timeout: tlsSocket.timeout, 
         symbols : Object.getOwnPropertySymbols(tlsSocket)
             .filter(symbol => { return typeof symbol !== "function"})
             .map(symbol => {
-                return {name:symbol.toString(),value:JSON.parse(JSON.stringify(tlsSocket[symbol], getCircularReplacer()))}
+                return {name:symbol.toString(), value:JSON.parse(JSON.stringify(tlsSocket[symbol], getCircularReplacer()))}
             })
     };
 }
@@ -133,7 +133,7 @@ export function addLogger(config: AxiosRequestConfig) {
 
 
 export interface AttemptAwareConfig extends AxiosRequestConfig {
-    attempts?: number,
+    attempts?: number, 
     useProxyFirst?: boolean
 }
 
@@ -148,7 +148,7 @@ export async function addInterceptor(instance : AxiosInstance) {
             } else {
                 config.attempts++;
             }
-            log("Failed attempt %s with code for config %s",config.attempts,err.code,err.config);
+            log("Failed attempt %s with code for config %s", config.attempts, err.code, err.config);
             if(global.GLOBAL_AGENT_FORCE_GLOBAL_AGENT) {
                 removeProxy(config);
             } else {
