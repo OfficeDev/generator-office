@@ -1,11 +1,11 @@
 import {bootstrap} from 'global-agent';
-import {AxiosError, AxiosInstance, AxiosRequestConfig} from "axios"
+import {AxiosError, AxiosInstance, AxiosRequestConfig} from "axios";
 import {HttpsProxyAgent} from "https-proxy-agent";
-import {globalAgent} from "node:https"
-import debug from "debug"
+import {globalAgent} from "node:https";
+import debug from "debug";
 import { TLSSocket } from "node:tls";
-const log = debug("genOffice").extend("requestHelper")
-global.GLOBAL_AGENT_FORCE_GLOBAL_AGENT=false
+const log = debug("genOffice").extend("requestHelper");
+global.GLOBAL_AGENT_FORCE_GLOBAL_AGENT=false;
 bootstrap();
 
 // Helper to handle circular references when logging
@@ -44,7 +44,7 @@ export function addProxy(config: AxiosRequestConfig) {
         log("Adding Proxy %s",httpsProxy)
         global.GLOBAL_AGENT_FORCE_GLOBAL_AGENT=true;
         if(global.GLOBAL_AGENT) {
-            global.GLOBAL_AGENT.HTTP_PROXY=httpsProxy
+            global.GLOBAL_AGENT.HTTP_PROXY=httpsProxy;
         }
         config.httpsAgent = new HttpsProxyAgent(httpsProxy!,{keepAlive:false});
     }
@@ -100,12 +100,12 @@ export function hasProxy() {
 
 //Replace config https agent with global agent and remove global-proxy settings.
 export function removeProxy(config: AxiosRequestConfig) {
-    log("Removing Proxy")
+    log("Removing Proxy");
     config.proxy = false;
     config.httpsAgent = globalAgent;
     global.GLOBAL_AGENT_FORCE_GLOBAL_AGENT=false;
     if(global.GLOBAL_AGENT) {
-        delete global.GLOBAL_AGENT.HTTP_PROXY
+        delete global.GLOBAL_AGENT.HTTP_PROXY;
     }
 }
 
@@ -116,7 +116,7 @@ function addLogging(agent: any) {
             try {
                 log!("line: %s tlsSocket: %o", line, debugTlsSocket(tlsSocket));
             } catch (err) {
-                log!("Unable to trace line: %s with error: %o", line, err)
+                log!("Unable to trace line: %s with error: %o", line, err);
             }
         });
     }
@@ -140,7 +140,7 @@ export interface AttemptAwareConfig extends AxiosRequestConfig {
 //Adds proxy on/off switch to an axios instance
 export async function addInterceptor(instance : AxiosInstance) {
     instance.interceptors.response.use(undefined, async (err) => {
-        log("Error encountered.")
+        log("Error encountered.");
         if(err instanceof AxiosError  && hasProxy()) {
             const config = err.config as AttemptAwareConfig;
             if(config.attempts === undefined) {
@@ -148,14 +148,14 @@ export async function addInterceptor(instance : AxiosInstance) {
             } else {
                 config.attempts++;
             }
-            log("Failed attempt %s with code for config %s",config.attempts,err.code,err.config)
+            log("Failed attempt %s with code for config %s",config.attempts,err.code,err.config);
             if(global.GLOBAL_AGENT_FORCE_GLOBAL_AGENT) {
                 removeProxy(config);
             } else {
                 addProxy(config);
             }
             if(config.attempts <= 2 && hasProxy() && err instanceof AxiosError && err.code && err.code.search(/[ECONNRESET|ECONNREFUSED|ENOENT]/) >= 0) {
-                console.log(`Download failed for file ${config.url}. Attempting ${global.GLOBAL_AGENT_FORCE_GLOBAL_AGENT ? 'without' : 'with'} proxy. Previous Error: ${err}`)
+                console.log(`Download failed for file ${config.url}. Attempting ${global.GLOBAL_AGENT_FORCE_GLOBAL_AGENT ? 'without' : 'with'} proxy. Previous Error: ${err}`);
                 return await instance(err.config!);
             }
         }
