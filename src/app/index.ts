@@ -13,6 +13,10 @@ import yosay from 'yosay';
 import Generator, { PromptQuestion } from 'yeoman-generator';
 import * as fs from "fs";
 import * as path from "path";
+import debug from "debug";
+
+const log = debug("genOffice");
+const trace = log.extend("trace");
 
 const excelCustomFunctions = `excel-functions`;
 let isSsoProject = false;
@@ -25,13 +29,13 @@ let jsonData: projectsJsonData;
 
 let usageDataObject: usageData.OfficeAddinUsageData;
 const usageDataOptions: usageData.IUsageDataOptions = {
-  groupName: usageData.groupName,
-  projectName: defaults.usageDataProjectName,
-  raisePrompt: false,
-  instrumentationKey: usageData.instrumentationKeyForOfficeAddinCLITools,
-  promptQuestion: defaults.usageDataPromptMessage,
-  usageDataLevel: usageData.UsageDataLevel.off,
-  method: usageData.UsageDataReportingMethod.applicationInsights,
+  groupName: usageData.groupName, 
+  projectName: defaults.usageDataProjectName, 
+  raisePrompt: false, 
+  instrumentationKey: usageData.instrumentationKeyForOfficeAddinCLITools, 
+  promptQuestion: defaults.usageDataPromptMessage, 
+  usageDataLevel: usageData.UsageDataLevel.off, 
+  method: usageData.UsageDataReportingMethod.applicationInsights, 
   isForTesting: false
 }
 
@@ -54,39 +58,39 @@ export default class extends Generator {
     this.argument('manifestType', { type: String, required: false });
 
     this.option('skip-install', {
-      type: Boolean,
+      type: Boolean, 
       description: 'Skip running `npm install` post scaffolding.'
     });
 
     this.option('js', {
-      type: Boolean,
+      type: Boolean, 
       description: 'Project uses JavaScript instead of TypeScript.'
     });
 
     this.option('ts', {
-      type: Boolean,
+      type: Boolean, 
       description: 'Project uses TypeScript instead of JavaScript.'
     });
 
     this.option('output', {
-      alias: 'o',
-      type: String,
+      alias: 'o', 
+      type: String, 
       description: 'Project folder name if different from project name.'
     });
 
     this.option('prerelease', {
-      type: String,
+      type: String, 
       description: 'Use the prerelease version of the project template.'
     });
 
     this.option('test', {
-      type: String,
+      type: String, 
       description: 'Project is created in the context of unit tests.'
     });
 
     this.option('details', {
-      alias: 'd',
-      type: Boolean,
+      alias: 'd', 
+      type: Boolean, 
       description: 'Get more details on Yo Office arguments.'
     });
   }
@@ -113,11 +117,11 @@ export default class extends Generator {
       if (usageData.needToPromptForUsageData(usageDataOptions.groupName||"")) {
         const promptForUsageData: PromptQuestion[] = [
           {
-            name: 'usageDataPromptAnswer',
-            message: usageDataOptions.promptQuestion || defaults.usageDataPromptMessage,
-            type: 'list',
-            default: 'Continue',
-            choices: ['Continue', 'Exit'],
+            name: 'usageDataPromptAnswer', 
+            message: usageDataOptions.promptQuestion || defaults.usageDataPromptMessage, 
+            type: 'list', 
+            default: 'Continue', 
+            choices: ['Continue', 'Exit'], 
           }
         ];
         const answerForUsageDataPrompt = await this.prompt(promptForUsageData);
@@ -138,16 +142,16 @@ export default class extends Generator {
         this.options["host"] = jsonData.getHostDisplayName(this.options["host"]);
       }
 
-      /* askForProjectType will only be triggered if no project type was specified via command line projectType argument,
+      /* askForProjectType will only be triggered if no project type was specified via command line projectType argument, 
        * and the projectType argument input was indeed valid */
       const startForProjectType = (new Date()).getTime();
       const askForProjectType: PromptQuestion[] = [
         {
-          name: 'projectType',
-          message: 'Choose a project type:',
-          type: 'list',
-          default: 'React',
-          choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayName(template), value: template })),
+          name: 'projectType', 
+          message: 'Choose a project type:', 
+          type: 'list', 
+          default: 'React', 
+          choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayName(template), value: template })), 
           when: this.options["projectType"] == null || !jsonData.isValidProjectType(this.options["projectType"])
         }
       ];
@@ -178,11 +182,11 @@ export default class extends Generator {
       const getSupportedScriptTypes = jsonData.getScriptTypeOptions(projectType);
       const askForScriptType: PromptQuestion[] = [
         {
-          name: 'scriptType',
-          type: 'list',
-          message: 'Choose a script type:',
-          choices: getSupportedScriptTypes,
-          default: getSupportedScriptTypes[0],
+          name: 'scriptType', 
+          type: 'list', 
+          message: 'Choose a script type:', 
+          choices: getSupportedScriptTypes, 
+          default: getSupportedScriptTypes[0], 
           when: !this.options["js"] && !this.options["ts"] && !isManifestProject && getSupportedScriptTypes.length > 1
         }
       ];
@@ -190,10 +194,10 @@ export default class extends Generator {
 
       /* askforName will be triggered if no project name was specified via command line Name argument */
       const askForName: PromptQuestion[] = [{
-        name: 'name',
-        type: 'input',
-        message: 'What do you want to name your add-in?',
-        default: 'My Office Add-in',
+        name: 'name', 
+        type: 'input', 
+        message: 'What do you want to name your add-in?', 
+        default: 'My Office Add-in', 
         when: this.options["name"] == null
       }];
       const answerForName = await this.prompt(askForName);
@@ -203,11 +207,11 @@ export default class extends Generator {
       const startForHost = (new Date()).getTime();
       const supportedHosts = jsonData.getHostOptions(projectType);
       const askForHost: PromptQuestion[] = [{
-        name: 'host',
-        message: 'Which Office client application would you like to support?',
-        type: 'list',
-        default: supportedHosts[0],
-        choices: supportedHosts.map(host => ({ name: host, value: host })),
+        name: 'host', 
+        message: 'Which Office client application would you like to support?', 
+        type: 'list', 
+        default: supportedHosts[0], 
+        choices: supportedHosts.map(host => ({ name: host, value: host })), 
         when: (this.options["host"] == null || this.options["host"] != null && !jsonData.isValidHost(this.options["host"]))
           && supportedHosts.length > 1
       }];
@@ -223,11 +227,11 @@ export default class extends Generator {
       const startForManifestType = (new Date()).getTime();
       const manifestOptions = jsonData.getManifestOptions(projectType, selectedHost);
       const askForManifestType: PromptQuestion[] = [{
-        name: 'manifestType',
-        message: 'Which manifest type would you like to use?',
-        type: 'list',
-        default: manifestOptions[0],
-        choices: manifestOptions.map(manifestType => ({ name: jsonData.getManifestDisplayName(manifestType), value: manifestType })),
+        name: 'manifestType', 
+        message: 'Which manifest type would you like to use?', 
+        type: 'list', 
+        default: manifestOptions[0], 
+        choices: manifestOptions.map(manifestType => ({ name: jsonData.getManifestDisplayName(manifestType), value: manifestType })), 
         when: (this.options["manifestType"] == null || this.options["manifestType"] != null && !jsonData.isValidManifestType(this.options["manifestType"]))
           && jsonData.getManifestOptions(projectType, selectedHost).length > 1
       }];
@@ -240,11 +244,11 @@ export default class extends Generator {
       /* Configure project properties based on user input or answers to prompts */
       this._configureProject(answerForProjectType, answerForManifestType, answerForScriptType, answerForHost, answerForName, isManifestProject, isExcelFunctionsProject);
       const projectInfo = {
-        Host: [this.project.host, durationForHost],
-        ScriptType: [this.project.scriptType],
-        IsManifestOnly: [this.project.isManifestOnly.toString()],
-        ProjectType: [this.project.projectType, durationForProjectType],
-        ManifestType: [this.project.manifestType, durationForManifestType],
+        Host: [this.project.host, durationForHost], 
+        ScriptType: [this.project.scriptType], 
+        IsManifestOnly: [this.project.isManifestOnly.toString()], 
+        ProjectType: [this.project.projectType, durationForProjectType], 
+        ManifestType: [this.project.manifestType, durationForManifestType], 
         isForTesting: [usageDataOptions.isForTesting]
       };
       // Send usage data for project created
@@ -286,28 +290,28 @@ export default class extends Generator {
       const selectedHost = this.options["host"] || answerForHost.host  || supportedHosts[0];
 
       this.project = {
-        folder: this.options["output"] || answerForName.name || this.options["name"],
+        folder: this.options["output"] || answerForName.name || this.options["name"], 
         host: answerForHost.host
           ? answerForHost.host
           : this.options["host"]
           ? this.options["host"]
-          : jsonData?.getHostOptions(projType)[0],
+          : jsonData?.getHostOptions(projType)[0], 
         manifestType: answerForManifestType.manifestType
           ? answerForManifestType.manifestType
           : this.options["manifestType"]
           ? this.options["manifestType"]
-          : jsonData?.getManifestOptions(projType, selectedHost)[0],
-        name: this.options["name"] || answerForName.name,
-        projectType: projType,
+          : jsonData?.getManifestOptions(projType, selectedHost)[0], 
+        name: this.options["name"] || answerForName.name, 
+        projectType: projType, 
         scriptType: answerForScriptType.scriptType
           ? answerForScriptType.scriptType
           : this.options["ts"]
           ? typescript
           : this.options["js"]
           ? javascript
-          : jsonData?.getScriptTypeOptions(projType)[0],
-        isManifestOnly: isManifestProject,
-        isExcelFunctionsProject: isExcelFunctionsProject,
+          : jsonData?.getScriptTypeOptions(projType)[0], 
+        isManifestOnly: isManifestProject, 
+        isExcelFunctionsProject: isExcelFunctionsProject, 
       };
 
       /* Set folder if to output param  if specified */
@@ -348,28 +352,44 @@ export default class extends Generator {
         if (projectRepoBranchInfo.repo && projectRepoBranchInfo.branch) {
           const projectFolder: string = this.destinationPath();
           const zipFile: string = await helperMethods.downloadProjectTemplateZipFile(projectFolder, projectRepoBranchInfo.repo, projectRepoBranchInfo.branch);
+          log("Zip File %s", zipFile);
           const unzippedFolder: string = await helperMethods.unzipProjectTemplate(projectFolder);
+          log("Unzipped Folder: %s", unzippedFolder);
           const moveFromFolder: string = this.destinationPath(unzippedFolder);
+          log("Moved From Folder: %s", moveFromFolder);
 
-        // delete original zip file
-        if (fs.existsSync(zipFile)) {
-            fs.unlinkSync(zipFile);
-        }
+          // delete original zip file
+          if (fs.existsSync(zipFile)) {
+              log("Deleting original zip file %s", zipFile)
+              fs.unlinkSync(zipFile);
+          }
 
-        // loop through all the files and folders in the unzipped folder and move them to project root
-        fs.readdirSync(moveFromFolder)
-          .filter((file) => !file.includes(".gitignore") && !file.includes("package.json"))
-          .forEach(function (file) {
-            const fromPath = path.join(moveFromFolder, file);
-            const toPath = path.join(projectFolder, file);
-            fs.renameSync(fromPath, toPath);
-        });
+          // loop through all the files and folders in the unzipped folder and move them to project root
+          log("Moving files from %s to %s", moveFromFolder, projectFolder);
+          fs.readdirSync(moveFromFolder)
+            .filter((file) => {
+              let check = !file.includes(".gitignore") && !file.includes("package.json");
+              if(!check) {
+                log("Excluding %s", file);
+              }
+              return check;
+            })
+            .forEach(function (file) {
+              trace("Moving %s", file);
+              const fromPath = path.join(moveFromFolder, file);
+              const toPath = path.join(projectFolder, file);
+              if(fs.existsSync(fromPath)) {
+                fs.renameSync(fromPath, toPath);
+              }
+            });
 
-        // copy package.json file to new project directory and trigger npm install
-        this.fs.copyTpl(path.join(moveFromFolder, "package.json"), path.join(projectFolder, "package.json"));
-     
-        // delete project zipped folder
-        helperMethods.deleteFolderRecursively(this.destinationPath(unzippedFolder));
+          // copy package.json file to new project directory and trigger npm install
+          log("Copying package.json from %s to %s", moveFromFolder, projectFolder);
+          this.fs.copyTpl(path.join(moveFromFolder, "package.json"), path.join(projectFolder, "package.json"));
+      
+          // delete project zipped folder
+          log("Deleting folder: %s", unzippedFolder)
+          helperMethods.deleteFolderRecursively(this.destinationPath(unzippedFolder));
  
         }
         else {
@@ -379,7 +399,7 @@ export default class extends Generator {
           this.fs.copyTpl(this.templatePath(`manifest-only/**`), this.destinationPath(), templateFills);
         }
 
-        return resolve()
+        return resolve();
       }
       catch (err) {
         usageDataObject.reportError(defaults.copyFilesErrorEventName, new Error("File Copy Error: " + err));

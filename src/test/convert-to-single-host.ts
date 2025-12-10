@@ -9,6 +9,10 @@ import { OfficeAddinManifest, ManifestInfo } from "office-addin-manifest";
 import * as path from 'path';
 import { promisify } from "util";
 import { __dirname } from './utils.js';
+import debug from 'debug';
+import { getProxyURL } from '../app/helpers/requestHelpers.js';
+
+const log = debug("genOffice").extend("test");
 
 const hosts = ["Excel", "Onenote", "Outlook", "Powerpoint", "Project", "Word"];
 const manifestXmlFile = "manifest.xml";
@@ -16,40 +20,113 @@ const manifestJsonFile = "manifest.json";
 const packageJsonFile = "package.json";
 const readFileAsync = promisify(fs.readFile);
 const unexpectedManifestFiles = [
-    'manifest.excel.xml',
-    'manifest.onenote.xml',
-    'manifest.outlook.xml',
-    'manifest.powerpoint.xml',
-    'manifest.project.xml',
-    'manifest.word.xml',
+    'manifest.excel.xml', 
+    'manifest.onenote.xml', 
+    'manifest.outlook.xml', 
+    'manifest.powerpoint.xml', 
+    'manifest.project.xml', 
+    'manifest.word.xml', 
 ]
+
+// Test to verify converting a project to a single host
+// for Office-Addin-Taskpane Typescript project using Excel host
+describe('Projects configured with proxy', () => {
+
+    const testProjectName = "TaskpaneProject";
+    const useProxyFirst = process.env.GENERATOR_OFFICE_USE_PROXY === "true";
+    const proxyBackup = getProxyURL();
+    const expectedFiles = [
+        packageJsonFile, 
+        manifestXmlFile, 
+        'src/taskpane/taskpane.ts', 
+    ]
+    const unexpectedFiles = [
+        'src/taskpane/excel.ts', 
+        'src/taskpane/onenote.ts', 
+        'src/taskpane/outlook.ts', 
+        'src/taskpane/powerpoint.ts', 
+        'src/taskpane/project.ts', 
+        'src/taskpane/word.ts'
+    ]
+    const answers = {
+        projectType: "taskpane", 
+        scriptType: "TypeScript", 
+        name: testProjectName, 
+        host: hosts[0]
+    };
+
+    before((done) => {
+        if(proxyBackup === undefined) {
+            process.env.HTTPS_PROXY='http://localhost:83/';
+        }
+        process.env.GENERATOR_OFFICE_USE_PROXY = `${!useProxyFirst}`;
+        log("Running helper for %s", answers.name);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s", answers.name);done();});
+    });
+    after((done) => {
+        if(proxyBackup === undefined) {
+            delete process.env['HTTPS_PROXY'];
+        }
+        process.env.GENERATOR_OFFICE_USE_PROXY = `${useProxyFirst}`;
+        done();
+    });
+
+    it('creates expected files', (done) => {
+        assert.file(expectedFiles);
+        assert.noFile(unexpectedFiles);
+        assert.noFile(unexpectedManifestFiles);
+        done();
+    });
+
+    it('Package.json is updated properly', async () => {
+        const data: string = await readFileAsync(packageJsonFile, 'utf8');
+        const content = JSON.parse(data);
+        assert.equal(content.config["app_to_debug"], hosts[0].toLowerCase());
+
+        // Verify host-specific sideload and unload sripts have been removed
+        let unexexpectedScriptsFound = false;
+        Object.keys(content.scripts).forEach(function (key) {
+            if (key.includes("sideload:") || key.includes("unload:")) {
+                unexexpectedScriptsFound = true;
+            }
+        });
+        assert.equal(unexexpectedScriptsFound, false);
+    });
+
+    it('Manifest.xml is updated appropriately', async () => {
+        const manifestInfo : ManifestInfo = await OfficeAddinManifest.readManifestFile(manifestXmlFile);
+        assert.equal(manifestInfo.hosts?.[0], "Workbook");
+        assert.equal(manifestInfo.displayName, testProjectName);
+    });
+});
 
 // Test to verify converting a project to a single host
 // for Office-Addin-Taskpane Typescript project using Excel host
 describe('Office-Addin-Taskpane-Ts projects', () => {
     const testProjectName = "TaskpaneProject"
     const expectedFiles = [
-        packageJsonFile,
-        manifestXmlFile,
-        'src/taskpane/taskpane.ts',
+        packageJsonFile, 
+        manifestXmlFile, 
+        'src/taskpane/taskpane.ts', 
     ]
     const unexpectedFiles = [
-        'src/taskpane/excel.ts',
-        'src/taskpane/onenote.ts',
-        'src/taskpane/outlook.ts',
-        'src/taskpane/powerpoint.ts',
-        'src/taskpane/project.ts',
+        'src/taskpane/excel.ts', 
+        'src/taskpane/onenote.ts', 
+        'src/taskpane/outlook.ts', 
+        'src/taskpane/powerpoint.ts', 
+        'src/taskpane/project.ts', 
         'src/taskpane/word.ts'
     ]
     const answers = {
-        projectType: "taskpane",
-        scriptType: "TypeScript",
-        name: testProjectName,
+        projectType: "taskpane", 
+        scriptType: "TypeScript", 
+        name: testProjectName, 
         host: hosts[0]
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s", answers.name);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s", answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -86,27 +163,28 @@ describe('Office-Addin-Taskpane-Ts projects', () => {
 describe('Office-Addin-Taskpane-Ts prerelease projects', () => {
     const testProjectName = "Taskpane Project"
     const expectedFiles = [
-        packageJsonFile,
-        manifestXmlFile,
-        'src/taskpane/taskpane.ts',
+        packageJsonFile, 
+        manifestXmlFile, 
+        'src/taskpane/taskpane.ts', 
     ]
     const unexpectedFiles = [
-        'src/taskpane/excel.ts',
-        'src/taskpane/onenote.ts',
-        'src/taskpane/outlook.ts',
-        'src/taskpane/powerpoint.ts',
-        'src/taskpane/project.ts',
+        'src/taskpane/excel.ts', 
+        'src/taskpane/onenote.ts', 
+        'src/taskpane/outlook.ts', 
+        'src/taskpane/powerpoint.ts', 
+        'src/taskpane/project.ts', 
         'src/taskpane/word.ts'
     ]
     const answers = {
-        projectType: "taskpane",
-        scriptType: "TypeScript",
-        name: testProjectName,
+        projectType: "taskpane", 
+        scriptType: "TypeScript", 
+        name: testProjectName, 
         host: hosts[0]
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s", answers.name);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s", answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -142,28 +220,29 @@ describe('Office-Addin-Taskpane-Ts prerelease projects', () => {
 describe('Office-Addin-Taskpane-Ts Outlook json project', () => {
     const testProjectName = "TaskpaneProject"
     const expectedFiles = [
-        packageJsonFile,
-        manifestJsonFile,
-        'src/taskpane/taskpane.ts',
+        packageJsonFile, 
+        manifestJsonFile, 
+        'src/taskpane/taskpane.ts', 
     ]
     const unexpectedFiles = [
-        'src/taskpane/excel.ts',
-        'src/taskpane/onenote.ts',
-        'src/taskpane/outlook.ts',
-        'src/taskpane/powerpoint.ts',
-        'src/taskpane/project.ts',
+        'src/taskpane/excel.ts', 
+        'src/taskpane/onenote.ts', 
+        'src/taskpane/outlook.ts', 
+        'src/taskpane/powerpoint.ts', 
+        'src/taskpane/project.ts', 
         'src/taskpane/word.ts'
     ]
     const answers = {
-        projectType: "taskpane",
-        scriptType: "TypeScript",
-        name: testProjectName,
-        host: hosts[2],
+        projectType: "taskpane", 
+        scriptType: "TypeScript", 
+        name: testProjectName, 
+        host: hosts[2], 
         manifestType: "json"
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s", answers.name);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s", answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -200,28 +279,29 @@ describe('Office-Addin-Taskpane-Ts Outlook json project', () => {
 describe('Office-Addin-Taskpane-Ts Outlook xml project', () => {
     const testProjectName = "TaskpaneProject"
     const expectedFiles = [
-        packageJsonFile,
-        manifestXmlFile,
-        'src/taskpane/taskpane.ts',
+        packageJsonFile, 
+        manifestXmlFile, 
+        'src/taskpane/taskpane.ts', 
     ]
     const unexpectedFiles = [
-        'src/taskpane/excel.ts',
-        'src/taskpane/onenote.ts',
-        'src/taskpane/outlook.ts',
-        'src/taskpane/powerpoint.ts',
-        'src/taskpane/project.ts',
+        'src/taskpane/excel.ts', 
+        'src/taskpane/onenote.ts', 
+        'src/taskpane/outlook.ts', 
+        'src/taskpane/powerpoint.ts', 
+        'src/taskpane/project.ts', 
         'src/taskpane/word.ts'
     ]
     const answers = {
-        projectType: "taskpane",
-        scriptType: "TypeScript",
-        name: testProjectName,
-        host: hosts[2],
+        projectType: "taskpane", 
+        scriptType: "TypeScript", 
+        name: testProjectName, 
+        host: hosts[2], 
         manifestType: "xml"
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true, 'prerelease': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s", answers.name);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s", answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -257,27 +337,28 @@ describe('Office-Addin-Taskpane-Ts Outlook xml project', () => {
 // for React Typescript project using PowerPoint host
 describe('Office-Addin-Taskpane-React-Ts project', () => {
     const expectedFiles = [
-        packageJsonFile,
-        manifestXmlFile,
-        'src/taskpane/components/App.tsx', ,
+        packageJsonFile, 
+        manifestXmlFile, 
+        'src/taskpane/components/App.tsx', , 
     ]
     const unexpectedFiles = [
-        'src/taskpane/components/Excel.App.tsx',
-        'src/taskpane/components/Onenote.App.tsx',
-        'src/taskpane/components/Outlook.App.tsx',
-        'src/taskpane/components/PowerPoint.App.tsx',
-        'src/taskpane/components/Project.App.tsx',
-        'src/taskpane/components/Word.App.tsx',
+        'src/taskpane/components/Excel.App.tsx', 
+        'src/taskpane/components/Onenote.App.tsx', 
+        'src/taskpane/components/Outlook.App.tsx', 
+        'src/taskpane/components/PowerPoint.App.tsx', 
+        'src/taskpane/components/Project.App.tsx', 
+        'src/taskpane/components/Word.App.tsx', 
     ]
     const answers = {
-        projectType: "react",
-        scriptType: "TypeScript",
-        name: "ReactProject",
+        projectType: "react", 
+        scriptType: "TypeScript", 
+        name: "ReactProject", 
         host: hosts[3]
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s", answers.name);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s", answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -313,29 +394,30 @@ describe('Office-Addin-Taskpane-React-Ts project', () => {
 describe('Office-Addin-Taskpane-Ts projects via cli', () => {
     const testProjectName = "TaskpaneProject"
     const expectedFiles = [
-        packageJsonFile,
-        manifestXmlFile,
-        'src/taskpane/taskpane.ts',
+        packageJsonFile, 
+        manifestXmlFile, 
+        'src/taskpane/taskpane.ts', 
     ]
     const unexpectedFiles = [
-        'src/taskpane/excel.ts',
-        'src/taskpane/onenote.ts',
-        'src/taskpane/outlook.ts',
-        'src/taskpane/powerpoint.ts',
-        'src/taskpane/project.ts',
+        'src/taskpane/excel.ts', 
+        'src/taskpane/onenote.ts', 
+        'src/taskpane/outlook.ts', 
+        'src/taskpane/powerpoint.ts', 
+        'src/taskpane/project.ts', 
         'src/taskpane/word.ts'
     ]
     const options: any = {
-        projectType: "taskpane",
-        name: testProjectName,
-        host: hosts[0],
-        ts: true,
+        projectType: "taskpane", 
+        name: testProjectName, 
+        host: hosts[0], 
+        ts: true, 
         test: true
     };
     const answers = {};
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions(options).withPrompts(answers).on('end', done);
+        log("Running helper for %s", options.name);
+        helpers.run(path.join(__dirname, '../app')).withOptions(options).withAnswers(answers).on('end', () => { log("Finished helper for %s", options.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -371,38 +453,39 @@ describe('Office-Addin-Taskpane-Ts projects via cli', () => {
 // for SSO Typescript project using Excel host
 describe('Office-Addin-Taskpane-SSO-TS project', () => {
     const expectedFiles = [
-        packageJsonFile,
-        manifestXmlFile,
-        '.ENV',
-        'src/taskpane/taskpane.ts',
-        'src/taskpane/taskpane.html',
-        'src/taskpane/taskpane.css',
-        'src/helpers/fallbackauthdialog.html',
-        'src/helpers/fallbackauthdialog.ts',
-        'src/helpers/message-helper.ts',
-        'src/helpers/middle-tier-calls.ts',
-        'src/helpers/sso-helper.ts',
-        'src/middle-tier/app.ts',
-        'src/middle-tier/msgraph-helper.ts',
+        packageJsonFile, 
+        manifestXmlFile, 
+        '.ENV', 
+        'src/taskpane/taskpane.ts', 
+        'src/taskpane/taskpane.html', 
+        'src/taskpane/taskpane.css', 
+        'src/helpers/fallbackauthdialog.html', 
+        'src/helpers/fallbackauthdialog.ts', 
+        'src/helpers/message-helper.ts', 
+        'src/helpers/middle-tier-calls.ts', 
+        'src/helpers/sso-helper.ts', 
+        'src/middle-tier/app.ts', 
+        'src/middle-tier/msgraph-helper.ts', 
         'src/middle-tier/ssoauth-helper.ts'
     ]
     const unexpectedFiles = [
-        'src/taskpane/excel.ts',
-        'src/taskpane/word.ts',
-        'src/taskpane/powerpoint.ts',
-        'manifest.excel.xml',
-        'manifest.word.xml',
+        'src/taskpane/excel.ts', 
+        'src/taskpane/word.ts', 
+        'src/taskpane/powerpoint.ts', 
+        'manifest.excel.xml', 
+        'manifest.word.xml', 
         'manifest.powerpoint.xml'
     ]
     const answers = {
-        projectType: "single-sign-on",
-        scriptType: "TypeScript",
-        name: "SSOTypeScriptProject",
+        projectType: "single-sign-on", 
+        scriptType: "TypeScript", 
+        name: "SSOTypeScriptProject", 
         host: hosts[0]
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s", answers.name);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s", answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -417,39 +500,40 @@ describe('Office-Addin-Taskpane-SSO-TS project', () => {
 // for SSO JavaScript project using PowerPoint host
 describe('Office-Addin-Taskpane-SSO-JS project', () => {
     const expectedFiles = [
-        packageJsonFile,
-        manifestXmlFile,
-        '.ENV',
-        'src/taskpane/taskpane.js',
-        'src/taskpane/taskpane.html',
-        'src/taskpane/taskpane.css',
-        'src/helpers/documenthelper.js',
-        'src/helpers/fallbackauthdialog.html',
-        'src/helpers/fallbackauthdialog.js',
-        'src/helpers/message-helper.js',
-        'src/helpers/middle-tier-calls.js',
-        'src/helpers/sso-helper.js',
-        'src/middle-tier/app.js',
-        'src/middle-tier/msgraph-helper.js',
+        packageJsonFile, 
+        manifestXmlFile, 
+        '.ENV', 
+        'src/taskpane/taskpane.js', 
+        'src/taskpane/taskpane.html', 
+        'src/taskpane/taskpane.css', 
+        'src/helpers/documenthelper.js', 
+        'src/helpers/fallbackauthdialog.html', 
+        'src/helpers/fallbackauthdialog.js', 
+        'src/helpers/message-helper.js', 
+        'src/helpers/middle-tier-calls.js', 
+        'src/helpers/sso-helper.js', 
+        'src/middle-tier/app.js', 
+        'src/middle-tier/msgraph-helper.js', 
         'src/middle-tier/ssoauth-helper.js'
     ]
     const unexpectedFiles = [
-        'src/taskpane/excel.js',
-        'src/taskpane/word.js',
-        'src/taskpane/powerpoint.js',
-        'manifest.excel.xml',
-        'manifest.word.xml',
+        'src/taskpane/excel.js', 
+        'src/taskpane/word.js', 
+        'src/taskpane/powerpoint.js', 
+        'manifest.excel.xml', 
+        'manifest.word.xml', 
         'manifest.powerpoint.xml'
     ]
     const answers = {
-        projectType: "single-sign-on",
-        scriptType: "JavaScript",
-        name: "SSOJavaScriptProject",
+        projectType: "single-sign-on", 
+        scriptType: "JavaScript", 
+        name: "SSOJavaScriptProject", 
         host: hosts[3]
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s", answers.name);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s", answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -465,21 +549,22 @@ describe('Office-Addin-Taskpane-SSO-JS project', () => {
 describe('Custom-Functions-Shared-TS project', () => {
     const testProjectName = "CFTypeScriptProject"
     const expectedFiles = [
-        packageJsonFile,
-        manifestXmlFile,
-        'src/functions/functions.ts',
+        packageJsonFile, 
+        manifestXmlFile, 
+        'src/functions/functions.ts', 
     ]
     const unexpectedFiles = [
-        'manifest.json',
+        'manifest.json', 
     ]
     const answers = {
-        projectType: "excel-functions-shared",
-        scriptType: "TypeScript",
+        projectType: "excel-functions-shared", 
+        scriptType: "TypeScript", 
         name: testProjectName
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s", answers.name);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s", answers.name);done();});
     });
 
     it('creates expected files', (done) => {
@@ -500,21 +585,22 @@ describe('Custom-Functions-Shared-TS project', () => {
 describe('Custom-Functions-Shared-JS project', () => {
     const testProjectName = "CFJavaScriptProject"
     const expectedFiles = [
-        packageJsonFile,
-        manifestXmlFile,
-        'src/functions/functions.js',
+        packageJsonFile, 
+        manifestXmlFile, 
+        'src/functions/functions.js', 
     ]
     const unexpectedFiles = [
-        'manifest.json',
+        'manifest.json', 
     ]
     const answers = {
-        projectType: "excel-functions-shared",
-        scriptType: "JavaScript",
+        projectType: "excel-functions-shared", 
+        scriptType: "JavaScript", 
         name: testProjectName
     };
 
     before((done) => {
-        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withPrompts(answers).on('end', done);
+        log("Running helper for %s", answers.name);
+        helpers.run(path.join(__dirname, '../app')).withOptions({ 'test': true } as any).withAnswers(answers).on('end', () => { log("Finished helper for %s", answers.name);done();});
     });
 
     it('creates expected files', (done) => {
