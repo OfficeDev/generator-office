@@ -2,10 +2,10 @@ import axios from "axios"
 import * as fs from "fs";
 import * as path from "path";
 import AdmZip from "adm-zip";
-import debug from "debug"
+import debug from "debug";
 import { AttemptAwareConfig, hasProxy, addProxy, addLogger, addInterceptor } from "./requestHelpers.js";
 
-const log = debug("genOffice").extend("helper")
+const log = debug("genOffice").extend("helper");
 
 const zipFile = 'project.zip';
 // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -41,7 +41,7 @@ export namespace helperMethods {
     export async function downloadProjectTemplateZipFile(projectFolder: string, projectRepo: string, projectBranch: string): Promise<string> {
         const useProxyFirst = process.env.GENERATOR_OFFICE_USE_PROXY === "true";
         const projectTemplateZipFile = `${projectRepo}/archive/${projectBranch}.zip`;
-        log("Setting up config for %s",projectTemplateZipFile)
+        log("Setting up config for %s",projectTemplateZipFile);
         const config : AttemptAwareConfig ={
             method: 'get',
             url: projectTemplateZipFile,
@@ -57,10 +57,10 @@ export namespace helperMethods {
         await addInterceptor(instance);
 
         log("Instance details %o",instance);
-        log("Downloading %s",projectTemplateZipFile)
+        log("Downloading %s",projectTemplateZipFile);
         return await instance(config).then(response => {
-            log("Finished Downloading %s",projectTemplateZipFile)
-            console.log("Downloaded Successfully!")
+            log("Finished Downloading %s",projectTemplateZipFile);
+            console.log("Downloaded Successfully!");
             return new Promise<string>((resolve, reject) => {
                 response.data.pipe(fs.createWriteStream(zipFile))
                     .on('error', function (err) {
@@ -73,7 +73,7 @@ export namespace helperMethods {
         }).catch(err => {
             log("Failed Downloading %s. Error: %o",projectTemplateZipFile,err);
             const error: string = `Unable to download project zip file for "${config.url}".\n${err}`;
-            console.log(error)
+            console.log(error);
             return Promise.reject(error);
         });
     }
