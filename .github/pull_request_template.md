@@ -26,3 +26,4 @@ Thank you for your pull request. Please provide the following information.
 
     > * [ ] Windows
     > * [ ] Mac
+✂
