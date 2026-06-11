@@ -5,6 +5,7 @@ pipelines:
     retail:
       source:
         eslint:
-          lastModifiedDate: 2025-07-09
+          lastModifiedDate: 2026-06-11
         armory:
-          lastModifiedDate: 2025-07-09
+          lastModifiedDate: 2026-06-11
+    usedNonDefaultBranch: true
