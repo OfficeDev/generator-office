@@ -119,7 +119,7 @@ export default class extends Generator {
           {
             name: 'usageDataPromptAnswer', 
             message: usageDataOptions.promptQuestion || defaults.usageDataPromptMessage, 
-            type: 'list', 
+            type: 'select', 
             default: 'Continue', 
             choices: ['Continue', 'Exit'], 
           }
@@ -149,7 +149,7 @@ export default class extends Generator {
         {
           name: 'projectType', 
           message: 'Choose a project type:', 
-          type: 'list', 
+          type: 'select', 
           default: 'React', 
           choices: jsonData.getProjectTemplateNames().map(template => ({ name: jsonData.getProjectDisplayName(template), value: template })), 
           when: this.options["projectType"] == null || !jsonData.isValidProjectType(this.options["projectType"])
@@ -183,7 +183,7 @@ export default class extends Generator {
       const askForScriptType: PromptQuestion[] = [
         {
           name: 'scriptType', 
-          type: 'list', 
+          type: 'select', 
           message: 'Choose a script type:', 
           choices: getSupportedScriptTypes, 
           default: getSupportedScriptTypes[0], 
@@ -209,7 +209,7 @@ export default class extends Generator {
       const askForHost: PromptQuestion[] = [{
         name: 'host', 
         message: 'Which Office client application would you like to support?', 
-        type: 'list', 
+        type: 'select', 
         default: supportedHosts[0], 
         choices: supportedHosts.map(host => ({ name: host, value: host })), 
         when: (this.options["host"] == null || this.options["host"] != null && !jsonData.isValidHost(this.options["host"]))
@@ -229,7 +229,7 @@ export default class extends Generator {
       const askForManifestType: PromptQuestion[] = [{
         name: 'manifestType', 
         message: 'Which manifest type would you like to use?', 
-        type: 'list', 
+        type: 'select', 
         default: manifestOptions[0], 
         choices: manifestOptions.map(manifestType => ({ name: jsonData.getManifestDisplayName(manifestType), value: manifestType })), 
         when: (this.options["manifestType"] == null || this.options["manifestType"] != null && !jsonData.isValidManifestType(this.options["manifestType"]))
