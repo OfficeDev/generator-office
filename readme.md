@@ -165,6 +165,13 @@ Install [Yeoman](http://yeoman.io/).
 npm install -g yo
 ```
 
+## npm registry auth
+Run the following command to get the authenticator for the first time:
+
+`npm install --global @microsoft/artifacts-npm-credprovider --registry https://pkgs.dev.azure.com/artifacts-public/23934c1b-a3b5-4b70-9dd3-d1bef4cc72a0/_packaging/AzureArtifacts/npm/registry/`
+
+Run `artifacts-npm-credprovider` to authenticate for the npm registry.
+
 #### Initialize the repo
 
 ```bash
