@@ -1,4 +1,8 @@
 steps:
+- task: npmAuthenticate@0
+  inputs:
+    workingFile: .npmrc
+  displayName: 'Authenticate npm feed'
 - script: |
     echo Install Office-AddinDev-Certs at machine level
     call npm install office-addin-dev-certs
