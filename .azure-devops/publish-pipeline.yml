@@ -1,0 +1,32 @@
+resources:
+  repositories:
+  - repository: OfficePipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/OfficePipelineTemplates
+    ref: refs/tags/release
+extends:
+  template: /v1/Office.Official.PipelineTemplate.yml@OfficePipelineTemplates
+  parameters:
+    settings:
+      skipBuildTagsForGitHubPullRequests: true
+    pool:
+      name: OE-OfficeClientApps
+    sdl:
+      eslint:
+        configuration: required
+        parser: '@typescript-eslint/parser'
+        parserOptions: sourceType:module
+    stages:
+    - stage: stage
+      jobs:
+      - job: Publish
+        steps:
+        - template: /.azure-devops/install.yml@self
+        - template: /.azure-devops/build.yml@self
+        - script: npm pack
+          displayName: Create package
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(System.DefaultWorkingDirectory)'
+            artifactName: 'npm-package'
+          displayName: 'Create artifacts'

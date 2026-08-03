@@ -19,7 +19,7 @@ extends:
     stages:
     - stage: stage
       jobs:
-      - job: Windows_10_Latest
+      - job: Windows_Latest
         steps:
         - template: /.azure-devops/install.yml@self
       # - template: ./lint.yml
