@@ -368,7 +368,7 @@ export default class extends Generator {
           log("Moving files from %s to %s", moveFromFolder, projectFolder);
           fs.readdirSync(moveFromFolder)
             .filter((file) => {
-              let check = !file.includes(".gitignore") && !file.includes("package.json");
+              const check = !file.includes(".gitignore") && !file.includes("package.json");
               if(!check) {
                 log("Excluding %s", file);
               }

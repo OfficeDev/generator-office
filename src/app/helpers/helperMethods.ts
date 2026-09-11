@@ -53,7 +53,7 @@ export namespace helperMethods {
         }
         addLogger(config);
         log("Creating axios instance with config %s", config);
-        let instance = axios.create(config);
+        const instance = axios.create(config);
         await addInterceptor(instance);
 
         log("Instance details %o", instance);

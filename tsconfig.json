@@ -19,6 +19,10 @@
         "lib": [
             "dom",
             "esnext"
+        ],
+        "types": [
+            "node", 
+            "mocha"
         ]
     },
     "exclude": [
