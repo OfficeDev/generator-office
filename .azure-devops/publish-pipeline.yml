@@ -4,6 +4,9 @@ resources:
     type: git
     name: 1ESPipelineTemplates/OfficePipelineTemplates
     ref: refs/tags/release
+variables:
+  - name: npmPackagesDir
+    value: '$(Build.SourcesDirectory)/npm-packages'
 extends:
   template: /v1/Office.Official.PipelineTemplate.yml@OfficePipelineTemplates
   parameters:
@@ -21,12 +24,40 @@ extends:
       jobs:
       - job: Publish
         steps:
+        - pwsh: |
+            $localVersion = (node -p "require('./package.json').version")
+            $packageName = (node -p "require('./package.json').name")
+            $publishedVersion = (npm view $packageName version 2>$null)
+            if (-not $publishedVersion) { $publishedVersion = "0.0.0" }
+            Write-Host "Local version: $localVersion"
+            Write-Host "Published 'latest' version: $publishedVersion"
+            $highest = ([System.Management.Automation.SemanticVersion]$localVersion, [System.Management.Automation.SemanticVersion]$publishedVersion | Sort-Object)[-1].ToString()
+            if ($localVersion -eq $publishedVersion -or $highest -ne $localVersion) {
+              Write-Host "##vso[task.logissue type=error]Local version ($localVersion) must be newer than the published 'latest' version ($publishedVersion)."
+              exit 1
+            }
+          displayName: Verify version is newer than published
         - template: /.azure-devops/install.yml@self
         - template: /.azure-devops/build.yml@self
-        - script: npm pack
+        - script: npm pack --pack-destination '$(npmPackagesDir)'
           displayName: Create package
-        - task: PublishPipelineArtifact@1
+        - task: EsrpRelease@12
+          displayName: Publish npm packages through ESRP
           inputs:
-            targetPath: '$(System.DefaultWorkingDirectory)'
-            artifactName: 'npm-package'
-          displayName: 'Create artifacts'
+            connectedservicename: 'ESRP-Addin-DevX-Publish'
+            # The service connection uses a federated credential to let the
+            # onboarded managed identity authenticate without stored secrets.
+            usemanagedidentity: true
+            keyvaultname: 'ATK-ESRP-KEY-VAULT'
+            signcertname: 'ATK-ESRP-CERT'
+            clientid: '62d1b680-312a-4484-9737-fc13f2f7e6f3'
+            intent: 'PackageDistribution'
+            contenttype: 'PyPi' # testing with other case . . . should be 'npm'
+            contentsource: 'Folder'
+            folderlocation: '$(npmPackagesDir)'
+            waitforreleasecompletion: true
+            owners: 'darrmill@microsoft.com'
+            approvers: 'darrmill@microsoft.com'
+            serviceendpointurl: 'https://api.esrp.microsoft.com'
+            mainpublisher: 'ESRPRELPACMAN'
+            domaintenantid: '975f013f-7f24-47e8-a7d3-abc4752bf346'
