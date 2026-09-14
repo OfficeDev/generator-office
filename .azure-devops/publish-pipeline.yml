@@ -27,8 +27,9 @@ extends:
         - powershell: |
             $localVersion = (node -p "require('./package.json').version")
             $packageName = (node -p "require('./package.json').name")
-            $publishedVersion = (npm view $packageName version 2>$null)
-            if (-not $publishedVersion) { $publishedVersion = "0.0.0" }
+            $npmOutput = (npm view $packageName version 2>&1 | Out-String)
+            $versionMatch = [regex]::Match($npmOutput, '\d+\.\d+\.\d+')
+            $publishedVersion = if ($LASTEXITCODE -eq 0 -and $versionMatch.Success) { $versionMatch.Value } else { "0.0.0" }
             Write-Host "Local version: $localVersion"
             Write-Host "Published 'latest' version: $publishedVersion"
             $highest = ([System.Management.Automation.SemanticVersion]$localVersion, [System.Management.Automation.SemanticVersion]$publishedVersion | Sort-Object)[-1].ToString()
@@ -37,6 +38,7 @@ extends:
               exit 1
             }
           displayName: Verify version is newer than published
+          errorActionPreference: continue
         - template: /.azure-devops/install.yml@self
         - template: /.azure-devops/build.yml@self
         - script: npm pack --pack-destination '$(npmPackagesDir)'
