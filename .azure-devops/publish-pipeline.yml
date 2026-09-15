@@ -27,7 +27,8 @@ extends:
         - powershell: |
             $localVersion = (node -p "require('./package.json').version")
             $packageName = (node -p "require('./package.json').name")
-            $npmOutput = (npm view $packageName version --registry https://registry.npmjs.org/ 2>&1 | Out-String)
+            $npmOutput = (npm view $packageName version 2>&1 | Out-String)
+            Write-Host "npm view exit code: $LASTEXITCODE"
             Write-Host "npm view output: $npmOutput"
             $versionMatch = [regex]::Match($npmOutput, '\d+\.\d+\.\d+')
             $publishedVersion = if ($LASTEXITCODE -eq 0 -and $versionMatch.Success) { $versionMatch.Value } else { "0.0.0" }
