@@ -43,6 +43,8 @@ extends:
         #   errorActionPreference: continue
         - template: /.azure-devops/install.yml@self
         - template: /.azure-devops/build.yml@self
+        - powershell: New-Item -ItemType Directory -Force -Path '$(npmPackagesDir)'
+          displayName: Create npm packages directory
         - script: npm pack --pack-destination $(npmPackagesDir)
           displayName: Create package
         - task: EsrpRelease@12
