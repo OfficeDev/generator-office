@@ -11,7 +11,7 @@ bootstrap();
 // Helper to handle circular references when logging
 function getCircularReplacer() {
     const seen = new WeakSet();
-    return (key : any, value : any) => {
+    return (key : unknown, value : unknown) => {
         if (typeof value === "object" && value !== null) {
             if (seen.has(value)) {
                 return "[Circular]";
@@ -23,7 +23,7 @@ function getCircularReplacer() {
 }
 
 //Cleans objects for use in log entries
-function clean(object :any) {
+function clean(object: unknown) {
     if(object) {
         return JSON.parse(JSON.stringify(object, getCircularReplacer()));
     }
@@ -110,9 +110,9 @@ export function removeProxy(config: AxiosRequestConfig) {
 }
 
 //Add logging to a http proxy agent
-function addLogging(agent: any) {
-    if(agent && agent.on) {
-        agent.on('keylog', (line : string, tlsSocket: TLSSocket) => {
+function addLogging(agent: unknown) {
+    if (typeof agent === "object" && agent !== null && "on" in agent && typeof agent.on === "function") {
+        agent.on('keylog', (line: string, tlsSocket: TLSSocket) => {
             try {
                 log!("line: %s tlsSocket: %o", line, debugTlsSocket(tlsSocket));
             } catch (err) {

@@ -12,12 +12,17 @@
         "outDir": "generators",
         "removeComments": false,
         "rootDir": "src",
+        "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
         "target": "es2022",
         "lib": [
             "dom",
-            "es2022"
+            "esnext"
+        ],
+        "types": [
+            "node", 
+            "mocha"
         ]
     },
     "exclude": [

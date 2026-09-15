@@ -1,6 +1,6 @@
 {
   "name": "generator-office",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Yeoman generator for creating Microsoft Office projects using any text editor.",
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
     }
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=20.12.0"
   },
   "homepage": "https://github.com/officedev/generator-office",
   "license": "MIT",
@@ -54,7 +54,7 @@
     "project"
   ],
   "dependencies": {
-    "adm-zip": "0.5.16",
+    "adm-zip": "0.6.0",
     "axios": "^1.13.2",
     "chalk": "^5.4.1",
     "debug": "^4.4.3",
@@ -82,7 +82,7 @@
     "env-cmd": "^11.0.0",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "9.1.0",
-    "mocha": "^11.7.6",
+    "mocha": "^12.0.0",
     "npm-watch": "^0.13.0",
     "office-addin-manifest": "^2.1.2",
     "prettier": "^3.4.2",
