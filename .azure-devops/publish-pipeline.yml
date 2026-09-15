@@ -44,7 +44,7 @@ extends:
             signcertname: 'ATK-ESRP-CERT'
             clientid: '62d1b680-312a-4484-9737-fc13f2f7e6f3'
             intent: 'PackageDistribution'
-            contenttype: 'PyPi' # testing with other case . . . should be 'npm'
+            contenttype: 'npm'
             contentsource: 'Folder'
             folderlocation: '$(npmPackagesDir)'
             waitforreleasecompletion: true
