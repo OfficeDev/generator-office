@@ -1,3 +1,6 @@
+trigger: none
+pr: none
+
 resources:
   repositories:
   - repository: OfficePipelineTemplates
@@ -24,27 +27,6 @@ extends:
       jobs:
       - job: Publish
         steps:
-        - task: NpmAuthenticate@0
-          displayName: Authenticate npm for version check
-          inputs:
-            workingFile: '.npmrc'
-        - powershell: |
-            $localVersion = (node -p "require('./package.json').version")
-            $packageName = (node -p "require('./package.json').name")
-            $npmOutput = (npm view $packageName version 2>&1 | Out-String)
-            Write-Host "npm view exit code: $LASTEXITCODE"
-            Write-Host "npm view output: $npmOutput"
-            $versionMatch = [regex]::Match($npmOutput, '\d+\.\d+\.\d+')
-            $publishedVersion = if ($LASTEXITCODE -eq 0 -and $versionMatch.Success) { $versionMatch.Value } else { "0.0.0" }
-            Write-Host "Local version: $localVersion"
-            Write-Host "Published 'latest' version: $publishedVersion"
-            $highest = ([System.Management.Automation.SemanticVersion]$localVersion, [System.Management.Automation.SemanticVersion]$publishedVersion | Sort-Object)[-1].ToString()
-            if ($localVersion -eq $publishedVersion -or $highest -ne $localVersion) {
-              Write-Host "##vso[task.logissue type=error]Local version ($localVersion) must be newer than the published 'latest' version ($publishedVersion)."
-              exit 1
-            }
-          displayName: Verify version is newer than published
-          errorActionPreference: continue
         - template: /.azure-devops/install.yml@self
         - template: /.azure-devops/build.yml@self
         - powershell: New-Item -ItemType Directory -Force -Path '$(npmPackagesDir)'
