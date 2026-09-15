@@ -43,7 +43,7 @@ extends:
         #   errorActionPreference: continue
         - template: /.azure-devops/install.yml@self
         - template: /.azure-devops/build.yml@self
-        - script: npm pack --pack-destination '$(npmPackagesDir)'
+        - script: npm pack --pack-destination $(npmPackagesDir)
           displayName: Create package
         - task: EsrpRelease@12
           displayName: Publish npm packages through ESRP
