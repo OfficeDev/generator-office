@@ -9,3 +9,14 @@ pipelines:
         armory:
           lastModifiedDate: 2026-06-11
     usedNonDefaultBranch: true
+  39041:
+    retail:
+      source:
+        eslint:
+          lastModifiedDate: 2026-09-17
+        bandit:
+          lastModifiedDate: 2026-09-17
+        psscriptanalyzer:
+          lastModifiedDate: 2026-09-17
+        armory:
+          lastModifiedDate: 2026-09-17
