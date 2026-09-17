@@ -1,0 +1,55 @@
+trigger: none
+pr: none
+
+resources:
+  repositories:
+  - repository: OfficePipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/OfficePipelineTemplates
+    ref: refs/tags/release
+variables:
+  - name: npmPackagesDir
+    value: '$(Build.SourcesDirectory)/npm-packages'
+extends:
+  template: /v1/Office.Official.PipelineTemplate.yml@OfficePipelineTemplates
+  parameters:
+    settings:
+      skipBuildTagsForGitHubPullRequests: true
+    pool:
+      name: OE-OfficeClientApps
+    sdl:
+      eslint:
+        configuration: required
+        parser: '@typescript-eslint/parser'
+        parserOptions: sourceType:module
+    stages:
+    - stage: stage
+      jobs:
+      - job: Publish
+        steps:
+        - template: /.azure-devops/install.yml@self
+        - template: /.azure-devops/build.yml@self
+        - powershell: New-Item -ItemType Directory -Force -Path '$(npmPackagesDir)'
+          displayName: Create npm packages directory
+        - script: npm pack --pack-destination $(npmPackagesDir)
+          displayName: Create package
+        - task: EsrpRelease@12
+          displayName: Publish npm packages through ESRP
+          inputs:
+            connectedservicename: 'ESRP-Addin-DevX-Publish'
+            # The service connection uses a federated credential to let the
+            # onboarded managed identity authenticate without stored secrets.
+            usemanagedidentity: true
+            keyvaultname: 'ATK-ESRP-KEY-VAULT'
+            signcertname: 'ATK-ESRP-CERT'
+            clientid: '62d1b680-312a-4484-9737-fc13f2f7e6f3'
+            intent: 'PackageDistribution'
+            contenttype: 'npm'
+            contentsource: 'Folder'
+            folderlocation: '$(npmPackagesDir)'
+            waitforreleasecompletion: true
+            owners: 'darrmill@microsoft.com'
+            approvers: 'darrmill@microsoft.com'
+            serviceendpointurl: 'https://api.esrp.microsoft.com'
+            mainpublisher: 'ESRPRELPACMAN'
+            domaintenantid: '975f013f-7f24-47e8-a7d3-abc4752bf346'
