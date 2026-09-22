@@ -23,9 +23,14 @@ extends:
         parser: '@typescript-eslint/parser'
         parserOptions: sourceType:module
     stages:
-    - stage: stage
+    - stage: BuildPackages
       jobs:
-      - job: Publish
+      - job: BuildPackages # Produce npm packages
+        templateContext:
+          outputs: 
+            - output: pipelineArtifact
+              targetPath: $(npmPackagesDir)
+              artifactName: npm-packages
         steps:
         - template: /.azure-devops/install.yml@self
         - template: /.azure-devops/build.yml@self
@@ -33,6 +38,19 @@ extends:
           displayName: Create npm packages directory
         - script: npm pack --pack-destination $(npmPackagesDir)
           displayName: Create package
+
+    - stage: PublishToNpm
+      dependsOn: BuildPackages
+      jobs:
+      - job: PublishThroughESRP # Publish to npm
+        templateContext:
+          type: releaseJob
+          isProduction: true
+          inputs:
+          - input: pipelineArtifact
+            artifactName: npm-packages
+            targetPath: $(npmPackagesDir)
+        steps:
         - task: EsrpRelease@12
           displayName: Publish npm packages through ESRP
           inputs:
