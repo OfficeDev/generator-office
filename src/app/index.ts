@@ -328,6 +328,7 @@ export default class extends Generator {
       this.project.hostInternalName = this.project.host == "All" ? "wxpo" : this.project.host;
 
       this.destinationRoot(this.project.folder);
+      fs.mkdirSync(this.destinationRoot(), { recursive: true });
       process.chdir(this.destinationRoot());
       this.env.cwd = this.destinationRoot();
 

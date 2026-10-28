@@ -31,7 +31,7 @@
     }
   },
   "engines": {
-    "node": ">=20.12.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "homepage": "https://github.com/officedev/generator-office",
   "license": "MIT",
@@ -54,7 +54,7 @@
     "project"
   ],
   "dependencies": {
-    "adm-zip": "0.6.0",
+    "adm-zip": "0.6.1",
     "axios": "^1.13.2",
     "chalk": "^5.4.1",
     "debug": "^4.4.3",
@@ -64,7 +64,7 @@
     "office-addin-usage-data": "^3.0.0",
     "open": "^8.4.0",
     "uuid": "^14.0.0",
-    "yeoman-generator": "^7.0.0",
+    "yeoman-generator": "^10.2.0",
     "yosay": "^2.0.2"
   },
   "devDependencies": {
@@ -84,13 +84,13 @@
     "eslint-config-prettier": "9.1.0",
     "mocha": "^12.0.0",
     "npm-watch": "^0.13.0",
-    "office-addin-manifest": "^3.0.0",
+    "office-addin-manifest": "^3.0.1",
     "prettier": "^3.4.2",
     "rimraf": "^6.0.1",
     "ts-node": "^10.7.0",
     "typescript": "^5.2.2",
     "yeoman-assert": "^3.1.1",
     "yeoman-environment": "^6.1.0",
-    "yeoman-test": "^11.6.0"
+    "yeoman-test": "^11.8.2"
   }
 }
