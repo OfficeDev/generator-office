@@ -8,3 +8,21 @@ pipelines:
           lastModifiedDate: 2026-10-28
         armory:
           lastModifiedDate: 2026-10-28
+  39041:
+    retail:
+      source:
+        eslint:
+          lastModifiedDate: 2026-10-30
+        bandit:
+          lastModifiedDate: 2026-10-30
+        psscriptanalyzer:
+          lastModifiedDate: 2026-10-30
+        armory:
+          lastModifiedDate: 2026-10-30
+      binary:
+        binskim:
+          lastModifiedDate: 2026-10-30
+        prefast:
+          lastModifiedDate: 2026-10-30
+        roslyn:
+          lastModifiedDate: 2026-10-30
