@@ -92,5 +92,11 @@
     "yeoman-assert": "^3.1.1",
     "yeoman-environment": "^6.1.0",
     "yeoman-test": "^11.8.2"
+  },
+  "overrides": {
+    "minimatch@^10.0.0": "^11.0.1",
+    "@yeoman/transform": {
+      "minimatch": "^11.0.1"
+    }
   }
 }
