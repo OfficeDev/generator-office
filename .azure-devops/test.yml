@@ -1,4 +1,12 @@
 steps:
+# Generated projects rename their manifest with `npx office-addin-manifest`, which can't
+# download packages under network isolation. A global install lets npx run it offline.
+# The registry is explicit because global installs ignore the project .npmrc.
+- task: Npm@1
+  displayName: 'Install office-addin-manifest globally'
+  inputs:
+    command: custom
+    customCommand: 'install -g office-addin-manifest@3.0.1 --registry=https://office.pkgs.visualstudio.com/_packaging/OfficeDev/npm/registry/'
 - task: CmdLine@2
   inputs:
     script: |
